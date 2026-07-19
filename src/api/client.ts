@@ -1,5 +1,5 @@
 import { config } from "../config";
-import { getFetch } from "./http";
+import { getFetch, isTauri } from "./http";
 
 /** Erreur renvoyée par l'API Joutes. */
 export class ApiError extends Error {
@@ -58,6 +58,13 @@ class ApiClient {
     };
     if (options.body !== undefined) {
       headers["Content-Type"] = "application/json";
+    }
+    // La protection CSRF de Better Auth exige un Origin de confiance sur les
+    // écritures authentifiées. Le transport natif Tauri n'en envoie aucun par
+    // défaut ; dans un navigateur, l'en-tête est interdit et celui du
+    // navigateur s'applique.
+    if (isTauri()) {
+      headers["Origin"] = config.trustedOrigin;
     }
 
     const fetch = await getFetch();

@@ -38,7 +38,11 @@ Points clés :
 - **Contenus publics sans compte** : news, jeux, événements, decks et lairs sont accessibles anonymement ; la collection et les fonctionnalités sociales demandent une session.
 - **URL de l'API surchargeable** : `VITE_JOUTES_API_URL` (défaut : `https://api.joutes.app/api`).
 
-Particularité de l'API constatée : `GET /games` renvoie les identifiants dans `_id` (la spec indique `id`) ; le détail d'un jeu est accessible par id **ou** par slug.
+Particularités de l'API constatées (testées contre la production le 2026-07-19, connexion OTP réelle incluse) :
+
+- `GET /games` renvoie les identifiants dans `_id` (la spec indique `id`) ; le détail d'un jeu est accessible par id **ou** par slug.
+- Le cookie de session s'appelle `__Secure-better-auth.session_token` (préfixe `__Secure-`, la spec mentionne `better-auth.session_token`).
+- Les écritures authentifiées (ex. `POST /auth/sign-out`) exigent un en-tête `Origin` de confiance, sinon 403 `INVALID_ORIGIN`. `https://www.joutes.app` est accepté ; `https://joutes.app`, `https://api.joutes.app` et `tauri://localhost` sont rejetés. Le client l'envoie donc explicitement dans l'app (voir `src/api/client.ts`).
 
 ## Prérequis
 

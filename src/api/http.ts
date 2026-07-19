@@ -7,7 +7,7 @@
  * (`npm run dev` ouvert hors Tauri), on retombe sur `window.fetch`.
  */
 
-function isTauri(): boolean {
+export function isTauri(): boolean {
   return typeof window !== "undefined" && "__TAURI_INTERNALS__" in window;
 }
 
