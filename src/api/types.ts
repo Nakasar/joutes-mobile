@@ -62,6 +62,72 @@ export interface Game extends GameSummary {
   [key: string]: unknown;
 }
 
+// ---- Cartes ----
+
+/**
+ * Carte du catalogue d'un jeu. Outre les champs communs ci-dessous, l'API
+ * renvoie des attributs propres à chaque jeu (ex. `Domain`, `Set`, `face`
+ * pour Riftbound) — accessibles via la signature d'index.
+ */
+export interface Card {
+  id: string;
+  name: string;
+  subtitle?: string;
+  type?: string;
+  cost?: number;
+  image?: string;
+  setCode?: string;
+  collectorNumber?: string;
+  lang?: string;
+  text?: string;
+  banned?: boolean;
+  isToken?: boolean;
+  [key: string]: unknown;
+}
+
+export interface CardsSearchResponse {
+  cards: Card[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  /** Facettes disponibles pour filtrer. */
+  setCodes?: string[];
+  types?: string[];
+  languages?: string[];
+}
+
+export type ErrataType = "errata" | "clarification" | "ruling";
+
+export interface Errata {
+  id: string;
+  cardIds?: string[];
+  type: ErrataType;
+  /** Texte original (markdown). */
+  details: string;
+  originalLang?: string;
+  translations?: { lang: string; details: string; updatedAt?: string }[];
+  source?: string;
+  errataDate?: string;
+  contentUpdatedAt?: string;
+  deprecatedAt?: string;
+  votes?: { positive?: number; negative?: number; userVote?: string };
+}
+
+export interface CardDetail extends Card {
+  game?: { id?: string; name?: string; slug?: string };
+  erratas?: Errata[];
+  /** Liens nom de carte → id, pour résoudre les références dans les erratas. */
+  cardIdByName?: Record<string, string>;
+}
+
+export interface GameSet {
+  setCode: string;
+  name: string;
+  maxCollectorNumber?: number;
+  cardMaxNumber?: number;
+}
+
 // ---- News ----
 
 export interface NewsGameRef {

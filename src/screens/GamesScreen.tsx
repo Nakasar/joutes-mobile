@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { listGames } from "../api/games";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
@@ -17,7 +18,11 @@ export function GamesScreen() {
         empty={data?.length === 0 ? "Aucun jeu." : undefined}
       />
       {data?.map((game) => (
-        <div key={game._id} className="card game-card">
+        <Link
+          key={game._id}
+          to={`/games/${game.slug}/cards`}
+          className="card game-card game-card--link"
+        >
           {game.icon && (
             <img src={game.icon} alt="" className="game-card__icon" loading="lazy" />
           )}
@@ -26,7 +31,10 @@ export function GamesScreen() {
             {game.description && <p className="muted">{game.description}</p>}
             {game.type && <span className="chip">{game.type}</span>}
           </div>
-        </div>
+          <span className="game-card__chevron" aria-hidden>
+            ›
+          </span>
+        </Link>
       ))}
     </div>
   );

@@ -6,6 +6,8 @@ Application mobile (et desktop) pour [Joutes](https://joutes.app) — plateforme
 
 - **Actualités** : fil des news (bannières, jeux liés, likes)
 - **Jeux** : catalogue des jeux (Magic, Star Wars Unlimited, Riftbound…)
+- **Galerie de cartes** : exploration du catalogue de cartes d'un jeu — recherche plein texte (Meilisearch), filtres par set et par type, pagination
+- **Détail d'une carte** : image, coût/type/set, et ses **erratas, clarifications et rulings** (markdown rendu, traduction française affichée quand elle existe, votes, obsolescence)
 - **Événements** : calendrier mensuel des tournois/événements avec navigation par mois
 - **Collection** : vue d'ensemble de la collection par jeu avec taux de complétion (connexion requise)
 - **Connexion** : par code OTP e-mail (Better Auth), session persistante
