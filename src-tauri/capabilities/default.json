@@ -6,11 +6,10 @@
   "permissions": [
     "core:default",
     "opener:default",
-    "store:default",
     {
       "identifier": "http:default",
       "allow": [
-        { "url": "https://api.joutes.app/*" },
+        { "url": "https://joutes.app/*" },
         { "url": "https://*.joutes.app/*" }
       ]
     }

@@ -9,106 +9,81 @@ import {
 } from "react";
 import { api } from "../api/client";
 import * as authApi from "../api/auth";
-import type { User } from "../api/types";
-import { storageGet, storageRemove, storageSet } from "../storage";
-
-const TOKEN_KEY = "auth.token";
+import type { SessionUser } from "../api/types";
 
 interface AuthContextValue {
-  /** null tant que la restauration de session n'est pas terminée. */
+  /** false tant que la vérification de session au démarrage n'est pas finie. */
   ready: boolean;
-  user: User | null;
+  user: SessionUser | null;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
+  /** Étape 1 de la connexion : envoi du code OTP par e-mail. */
+  sendOtp: (email: string) => Promise<void>;
+  /** Étape 2 : validation du code. Met à jour la session en cas de succès. */
+  signInWithOtp: (email: string, otp: string) => Promise<void>;
+  signOut: () => Promise<void>;
+  /** Recharge la session depuis l'API. */
+  refresh: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
-  const [hasToken, setHasToken] = useState(false);
+  const [user, setUser] = useState<SessionUser | null>(null);
 
-  const clearSession = useCallback(() => {
-    api.setToken(null);
-    setHasToken(false);
-    setUser(null);
-    void storageRemove(TOKEN_KEY);
-  }, []);
-
-  // Restaure la session au démarrage de l'application.
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const token = await storageGet(TOKEN_KEY);
-        if (token && !cancelled) {
-          api.setToken(token);
-          setHasToken(true);
-          try {
-            const me = await authApi.fetchCurrentUser();
-            if (!cancelled) setUser(me);
-          } catch {
-            // Token invalide ou API injoignable : on reste connecté
-            // localement, le handler 401 fera le ménage si besoin.
-          }
-        }
-      } finally {
-        if (!cancelled) setReady(true);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  // Déconnecte automatiquement si l'API répond 401.
-  useEffect(() => {
-    api.setUnauthorizedHandler(clearSession);
-    return () => api.setUnauthorizedHandler(null);
-  }, [clearSession]);
-
-  const login = useCallback(async (email: string, password: string) => {
-    const response = await authApi.login({ email, password });
-    const token = authApi.extractToken(response);
-    if (!token) {
-      throw new Error(
-        "Réponse de connexion inattendue : aucun token trouvé. Vérifiez le mapping avec la doc de l'API.",
-      );
-    }
-    api.setToken(token);
-    await storageSet(TOKEN_KEY, token);
-    setHasToken(true);
-    if (response.user) {
-      setUser(response.user);
-    } else {
-      try {
-        setUser(await authApi.fetchCurrentUser());
-      } catch {
-        // Le profil pourra être rechargé plus tard.
-      }
-    }
-  }, []);
-
-  const logout = useCallback(async () => {
+  const refresh = useCallback(async () => {
     try {
-      await authApi.logout();
+      const session = await authApi.getSession();
+      setUser(session?.user ?? null);
     } catch {
-      // Même si l'appel échoue (hors-ligne…), on efface la session locale.
+      // API injoignable : on conserve l'état courant, l'app reste utilisable
+      // sur les contenus publics.
     }
-    clearSession();
-  }, [clearSession]);
+  }, []);
+
+  // Restaure la session au démarrage (cookie persisté par la couche native).
+  useEffect(() => {
+    void refresh().finally(() => setReady(true));
+  }, [refresh]);
+
+  // Si l'API répond 401, la session a expiré : on repasse en anonyme.
+  useEffect(() => {
+    api.setUnauthorizedHandler(() => setUser(null));
+    return () => api.setUnauthorizedHandler(null);
+  }, []);
+
+  const sendOtp = useCallback(async (email: string) => {
+    await authApi.sendSignInOtp(email);
+  }, []);
+
+  const signInWithOtp = useCallback(
+    async (email: string, otp: string) => {
+      await authApi.signInWithOtp(email, otp);
+      await refresh();
+    },
+    [refresh],
+  );
+
+  const signOut = useCallback(async () => {
+    try {
+      await authApi.signOut();
+    } catch {
+      // Même si l'appel échoue (hors-ligne…), on repasse en anonyme côté app.
+    }
+    setUser(null);
+  }, []);
 
   const value = useMemo(
     () => ({
       ready,
       user,
-      isAuthenticated: hasToken,
-      login,
-      logout,
+      isAuthenticated: user !== null,
+      sendOtp,
+      signInWithOtp,
+      signOut,
+      refresh,
     }),
-    [ready, user, hasToken, login, logout],
+    [ready, user, sendOtp, signInWithOtp, signOut, refresh],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

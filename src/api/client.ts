@@ -18,25 +18,21 @@ type QueryParams = Record<string, string | number | boolean | undefined>;
 interface RequestOptions {
   query?: QueryParams;
   body?: unknown;
-  /** Ne pas envoyer le token même si l'utilisateur est connecté. */
-  anonymous?: boolean;
 }
 
 /**
- * Client HTTP de l'API Joutes : gère l'URL de base, la sérialisation JSON,
- * le token d'authentification (Bearer) et la conversion des erreurs.
+ * Client HTTP de l'API Joutes : URL de base, sérialisation JSON et conversion
+ * des erreurs.
+ *
+ * L'authentification repose sur le cookie de session Better Auth
+ * (`better-auth.session_token`) posé par les endpoints `/auth/*` :
+ * - dans l'app Tauri, le cookie est géré et persisté nativement par le plugin
+ *   HTTP (feature `cookies` de reqwest), le JS n'y touche jamais ;
+ * - en développement navigateur, `credentials: "include"` laisse le
+ *   navigateur gérer le cookie (soumis au CORS du serveur).
  */
 class ApiClient {
-  private token: string | null = null;
   private onUnauthorized: (() => void) | null = null;
-
-  setToken(token: string | null) {
-    this.token = token;
-  }
-
-  getToken(): string | null {
-    return this.token;
-  }
 
   /** Callback appelé quand l'API répond 401 (session expirée). */
   setUnauthorizedHandler(handler: (() => void) | null) {
@@ -48,7 +44,9 @@ class ApiClient {
     path: string,
     options: RequestOptions = {},
   ): Promise<T> {
-    const url = new URL(path, config.apiBaseUrl);
+    // Concaténation simple : `new URL(path, base)` écraserait le préfixe
+    // `/api` de l'URL de base avec un chemin absolu.
+    const url = new URL(config.apiBaseUrl.replace(/\/$/, "") + path);
     if (options.query) {
       for (const [key, value] of Object.entries(options.query)) {
         if (value !== undefined) url.searchParams.set(key, String(value));
@@ -61,9 +59,6 @@ class ApiClient {
     if (options.body !== undefined) {
       headers["Content-Type"] = "application/json";
     }
-    if (this.token && !options.anonymous) {
-      headers["Authorization"] = `Bearer ${this.token}`;
-    }
 
     const fetch = await getFetch();
     let response: Response;
@@ -71,6 +66,7 @@ class ApiClient {
       response = await fetch(url.toString(), {
         method,
         headers,
+        credentials: "include",
         body:
           options.body !== undefined ? JSON.stringify(options.body) : undefined,
       });
@@ -82,7 +78,7 @@ class ApiClient {
       );
     }
 
-    if (response.status === 401 && !options.anonymous) {
+    if (response.status === 401) {
       this.onUnauthorized?.();
     }
 
@@ -110,24 +106,24 @@ class ApiClient {
     return data as T;
   }
 
-  get<T>(path: string, options?: RequestOptions): Promise<T> {
-    return this.request<T>("GET", path, options);
+  get<T>(path: string, query?: QueryParams): Promise<T> {
+    return this.request<T>("GET", path, { query });
   }
 
-  post<T>(path: string, body?: unknown, options?: RequestOptions): Promise<T> {
-    return this.request<T>("POST", path, { ...options, body });
+  post<T>(path: string, body?: unknown, query?: QueryParams): Promise<T> {
+    return this.request<T>("POST", path, { body, query });
   }
 
-  put<T>(path: string, body?: unknown, options?: RequestOptions): Promise<T> {
-    return this.request<T>("PUT", path, { ...options, body });
+  put<T>(path: string, body?: unknown): Promise<T> {
+    return this.request<T>("PUT", path, { body });
   }
 
-  patch<T>(path: string, body?: unknown, options?: RequestOptions): Promise<T> {
-    return this.request<T>("PATCH", path, { ...options, body });
+  patch<T>(path: string, body?: unknown): Promise<T> {
+    return this.request<T>("PATCH", path, { body });
   }
 
-  delete<T>(path: string, options?: RequestOptions): Promise<T> {
-    return this.request<T>("DELETE", path, options);
+  delete<T>(path: string, query?: QueryParams): Promise<T> {
+    return this.request<T>("DELETE", path, { query });
   }
 }
 
