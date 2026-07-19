@@ -49,6 +49,7 @@ export function LoginScreen() {
   return (
     <div className="screen screen--centered">
       <div className="login-card">
+        <img src="/joutes-logo.png" alt="" className="login-card__logo" />
         <h1 className="login-card__title">Joutes</h1>
         <p className="login-card__subtitle">
           {step === "email"

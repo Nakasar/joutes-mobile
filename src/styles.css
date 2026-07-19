@@ -1,16 +1,30 @@
+/*
+ * Thème Joutes — palette reprise des tokens shadcn/ui de joutes.app
+ * (extraits du CSS de production le 2026-07-19), mode sombre inclus.
+ */
+
 :root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Geist, Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 1.5;
   font-weight: 400;
 
-  --color-bg: #f6f6f6;
-  --color-surface: #ffffff;
-  --color-text: #0f0f0f;
-  --color-text-muted: #6b7280;
-  --color-primary: #396cd8;
-  --color-danger: #d83939;
-  --color-border: #e5e7eb;
+  --color-bg: #f3faff;
+  --color-surface: #f7fdff;
+  --color-text: #081822;
+  --color-text-muted: #546673;
+  --color-primary: #0079b6;
+  --color-primary-fg: #f7fdff;
+  --color-secondary: #6cbec2;
+  --color-accent: #00a692;
+  --color-accent-fg: #f7fdff;
+  --color-danger: #e40014;
+  --color-danger-fg: #f7fdff;
+  --color-border: #bbd2de;
+  --color-input: #c4dce8;
+  --color-muted: #d8e7f0;
+  --color-tabbar: #e5f5fd;
+  --radius: 10px;
 
   color: var(--color-text);
   background-color: var(--color-bg);
@@ -23,11 +37,21 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #1c1c1e;
-    --color-surface: #2c2c2e;
-    --color-text: #f6f6f6;
-    --color-text-muted: #9ca3af;
-    --color-border: #3a3a3c;
+    --color-bg: #040c13;
+    --color-surface: #0e171e;
+    --color-text: #e8f0f3;
+    --color-text-muted: #7495a0;
+    --color-primary: #25afd2;
+    --color-primary-fg: #040c13;
+    --color-secondary: #0d3242;
+    --color-accent: #004447;
+    --color-accent-fg: #e8f0f3;
+    --color-danger: #f14d4c;
+    --color-danger-fg: #040c13;
+    --color-border: #20303b;
+    --color-input: #1b2b36;
+    --color-muted: #14242f;
+    --color-tabbar: #09131a;
   }
 }
 
@@ -60,10 +84,11 @@ a {
 }
 
 code {
-  background: var(--color-border);
+  background: var(--color-muted);
   border-radius: 4px;
   padding: 0.1em 0.35em;
   font-size: 0.9em;
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 .muted {
@@ -106,7 +131,7 @@ code {
 .tab-bar {
   display: flex;
   border-top: 1px solid var(--color-border);
-  background: var(--color-surface);
+  background: var(--color-tabbar);
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
@@ -134,7 +159,7 @@ code {
 .card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
+  border-radius: var(--radius);
   padding: 16px;
   margin-bottom: 16px;
 }
@@ -150,6 +175,14 @@ code {
   width: 100%;
   max-width: 360px;
   padding: 24px;
+}
+
+.login-card__logo {
+  display: block;
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 12px;
+  object-fit: contain;
 }
 
 .login-card__title {
@@ -181,8 +214,8 @@ code {
 }
 
 input {
-  border-radius: 8px;
-  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  border: 1px solid var(--color-input);
   padding: 0.7em 0.9em;
   font-size: 1em;
   font-family: inherit;
@@ -196,7 +229,7 @@ input:focus {
 }
 
 button {
-  border-radius: 8px;
+  border-radius: var(--radius);
   border: 1px solid transparent;
   padding: 0.7em 1.2em;
   font-size: 1em;
@@ -206,7 +239,7 @@ button {
 }
 
 .button-primary {
-  color: #ffffff;
+  color: var(--color-primary-fg);
   background-color: var(--color-primary);
 }
 
@@ -216,7 +249,7 @@ button {
 }
 
 .button-danger {
-  color: #ffffff;
+  color: var(--color-danger-fg);
   background-color: var(--color-danger);
 }
 
@@ -234,9 +267,9 @@ button {
 .button-link {
   display: inline-block;
   text-align: center;
-  color: #ffffff;
+  color: var(--color-primary-fg);
   padding: 0.7em 1.2em;
-  border-radius: 8px;
+  border-radius: var(--radius);
   font-weight: 500;
 }
 
@@ -247,7 +280,7 @@ button {
 
 .chip {
   display: inline-block;
-  background: var(--color-border);
+  background: var(--color-muted);
   border-radius: 999px;
   padding: 2px 10px;
   font-size: 0.75rem;
@@ -256,7 +289,7 @@ button {
 
 .chip--warning {
   background: var(--color-danger);
-  color: #ffffff;
+  color: var(--color-danger-fg);
 }
 
 /* ---- Actualités ---- */
@@ -321,13 +354,13 @@ button {
 .progress {
   height: 6px;
   border-radius: 3px;
-  background: var(--color-border);
+  background: var(--color-muted);
   overflow: hidden;
 }
 
 .progress__bar {
   height: 100%;
-  background: var(--color-primary);
+  background: var(--color-accent);
   border-radius: 3px;
 }
 
@@ -378,8 +411,8 @@ button {
 .card-filters__row select {
   flex: 1;
   min-width: 0;
-  border-radius: 8px;
-  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  border: 1px solid var(--color-input);
   padding: 0.55em 0.6em;
   font-size: 0.9em;
   font-family: inherit;
@@ -410,14 +443,14 @@ button {
   aspect-ratio: 5 / 7;
   object-fit: contain;
   border-radius: 8px;
-  background: var(--color-border);
+  background: var(--color-muted);
 }
 
 .card-tile__placeholder {
   width: 100%;
   aspect-ratio: 5 / 7;
   border-radius: 8px;
-  background: var(--color-border);
+  background: var(--color-muted);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -499,7 +532,7 @@ button {
   margin: 0 0 8px;
   padding: 6px 12px;
   border-left: 3px solid var(--color-primary);
-  background: var(--color-border);
+  background: var(--color-muted);
   border-radius: 0 8px 8px 0;
 }
 
@@ -510,17 +543,17 @@ button {
 
 .chip--errata {
   background: var(--color-danger);
-  color: #ffffff;
+  color: var(--color-danger-fg);
 }
 
 .chip--clarification {
   background: var(--color-primary);
-  color: #ffffff;
+  color: var(--color-primary-fg);
 }
 
 .chip--ruling {
-  background: #6b21a8;
-  color: #ffffff;
+  background: var(--color-accent);
+  color: var(--color-accent-fg);
 }
 
 .game-card--link {
