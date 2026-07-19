@@ -78,3 +78,26 @@ npm run tauri build            # desktop
 npm run tauri android build    # APK / AAB
 npm run tauri ios build        # IPA
 ```
+
+## CI/CD (GitHub Actions)
+
+- **`ci.yml`** — sur chaque push/PR : typecheck TypeScript + build du frontend.
+- **`mobile-build.yml`** — sur tag `v*` ou déclenchement manuel :
+  - **Android** (Ubuntu) : `tauri android init` puis build **APK + AAB** (arm64). Non signés par défaut ; signés si les secrets sont présents.
+  - **iOS / iPadOS** (macOS) : `tauri ios init` puis build **IPA** signé (export `app-store-connect`) si les secrets Apple sont présents ; sinon build non signé (`CODE_SIGNING_ALLOWED=NO`) pour valider la compilation, empaqueté en `.ipa` d'artefact.
+  - Sur un tag, les artefacts signés sont attachés à la release GitHub.
+
+Secrets à configurer dans le dépôt pour la signature :
+
+| Plateforme | Secret | Contenu |
+|---|---|---|
+| Android | `ANDROID_KEYSTORE` | keystore `.jks` encodé en base64 |
+| Android | `ANDROID_KEYSTORE_PASSWORD` | mot de passe du keystore |
+| Android | `ANDROID_KEY_ALIAS` | alias de la clé |
+| Android | `ANDROID_KEY_PASSWORD` | mot de passe de la clé |
+| iOS | `IOS_CERTIFICATE` | certificat de distribution `.p12` en base64 |
+| iOS | `IOS_CERTIFICATE_PASSWORD` | mot de passe du `.p12` |
+| iOS | `IOS_MOBILE_PROVISION` | profil `.mobileprovision` en base64 |
+| iOS | `APPLE_DEVELOPMENT_TEAM` | identifiant d'équipe Apple (ex. `ABCDE12345`) |
+
+L'IPA App Store nécessite un profil de provisionnement de distribution correspondant à l'identifiant `app.joutes.mobile`.
