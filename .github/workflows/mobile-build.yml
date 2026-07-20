@@ -9,16 +9,15 @@ name: Mobile build
 #   Android : ANDROID_KEYSTORE (base64 du .jks), ANDROID_KEYSTORE_PASSWORD,
 #             ANDROID_KEY_ALIAS, ANDROID_KEY_PASSWORD
 #   iOS     : IOS_CERTIFICATE (base64 du .p12), IOS_CERTIFICATE_PASSWORD,
-#             APPLE_DEVELOPMENT_TEAM (identifiant d'équipe),
-#             + la clé API App Store Connect ci-dessous (nécessaire pour
-#             que xcodebuild puisse résoudre/créer le provisioning profile
-#             correspondant au certificat)
+#             IOS_MOBILE_PROVISION (base64 du .mobileprovision, doit
+#             correspondre exactement au certificat ci-dessus),
+#             APPLE_DEVELOPMENT_TEAM (identifiant d'équipe)
 # Sans secrets, le build produit des artefacts non signés (Android) ou un
 # .app non signé (iOS) qui valide la compilation.
 #
 # Clé API App Store Connect (Users and Access > Integrations > App Store
-# Connect API), utilisée à la fois pour l'auto-provisioning iOS pendant le
-# build et pour l'upload sur tag :
+# Connect API), utilisée pour renouveler automatiquement le provisioning
+# profile ci-dessus s'il expire pendant le build, et pour l'upload sur tag :
 #   ASC_KEY_ID (Key ID), ASC_ISSUER_ID (Issuer ID),
 #   ASC_API_KEY (base64 du fichier .p8)
 
@@ -167,10 +166,9 @@ jobs:
           ASC_API_KEY: ${{ secrets.ASC_API_KEY }}
         run: |
           set -euo pipefail
-          # Permet à xcodebuild (via -allowProvisioningUpdates) de créer ou
-          # récupérer automatiquement un provisioning profile valide pour le
-          # certificat importé, au lieu de dépendre d'un .mobileprovision
-          # statique qui peut se désynchroniser du certificat.
+          # Permet à xcodebuild (via -allowProvisioningUpdates) de renouveler
+          # automatiquement le provisioning profile fourni ci-dessous s'il
+          # expire, sans nécessiter de compte Apple connecté dans Xcode.
           KEY_PATH="$RUNNER_TEMP/AuthKey_${ASC_KEY_ID}.p8"
           echo "$ASC_API_KEY" | base64 -d > "$KEY_PATH"
           {
@@ -185,13 +183,17 @@ jobs:
           # `tauri ios build` importe lui-même le certificat dans un trousseau
           # temporaire (via signing_from_env / tauri-macos-sign), puis
           # configure automatiquement la signature manuelle (CODE_SIGN_STYLE,
-          # CODE_SIGN_IDENTITY) dans le projet Xcode. Il faut donc lui
-          # fournir ces secrets directement, au niveau de l'étape de build.
-          # Le provisioning profile n'est volontairement pas fourni ici :
-          # avec la clé API configurée ci-dessus, xcodebuild le résout/crée
-          # lui-même pour ce certificat via -allowProvisioningUpdates.
+          # CODE_SIGN_IDENTITY, PROVISIONING_PROFILE_SPECIFIER) dans le projet
+          # Xcode. Le profil DOIT être fourni ici : en signature manuelle,
+          # l'étape d'export (xcodebuild -exportArchive) ne résout pas de
+          # profil tout seul et échoue avec "Missing Provisioning Profile"
+          # (90174) si aucun n'est associé au bundle ID dans exportOptions.
+          # La clé API (étape précédente) sert de filet de sécurité pour
+          # renouveler ce profil s'il expire, elle ne remplace pas le besoin
+          # de fournir un profil correspondant exactement au certificat.
           IOS_CERTIFICATE: ${{ secrets.IOS_CERTIFICATE }}
           IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+          IOS_MOBILE_PROVISION: ${{ secrets.IOS_MOBILE_PROVISION }}
           APPLE_DEVELOPMENT_TEAM: ${{ secrets.APPLE_DEVELOPMENT_TEAM }}
         run: npm run tauri -- ios build --export-method app-store-connect
 
