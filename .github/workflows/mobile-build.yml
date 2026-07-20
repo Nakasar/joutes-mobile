@@ -237,9 +237,9 @@ jobs:
           ASC_API_KEY: ${{ secrets.ASC_API_KEY }}
         run: |
           set -euo pipefail
-          KEYS_DIR="$HOME/private_keys"
+          KEYS_DIR="./private_keys"
           mkdir -p "$KEYS_DIR"
-          echo "$ASC_API_KEY" | base64 -d > "$KEYS_DIR/AuthKey_${ASC_KEY_ID}.p8"
+          echo "$ASC_API_KEY" | base64 -d > "$KEYS_DIR/AuthKey\_${ASC_KEY_ID}.p8"
 
           IPA=$(find src-tauri/gen/apple/build -name '*.ipa' | head -n1)
           if [ -z "$IPA" ]; then
