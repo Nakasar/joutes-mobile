@@ -1,10 +1,13 @@
+import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { getCard } from "../api/cards";
 import type { Errata } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
-import { Markdown } from "../components/Markdown";
+import { GameMarkdown } from "../components/GameMarkdown";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
+import { annotateCardText } from "../lib/card-text-markdown";
+import { annotateErrataMarkdown } from "../lib/errata-markdown";
 
 const errataTypeLabels: Record<string, string> = {
   errata: "Errata",
@@ -27,8 +30,21 @@ function errataText(errata: Errata): string {
   return fr?.details ?? errata.details;
 }
 
-function ErrataCard({ errata }: { errata: Errata }) {
+function ErrataCard({
+  errata,
+  gameSlug,
+  cardIdByName,
+}: {
+  errata: Errata;
+  gameSlug: string;
+  cardIdByName: Map<string, string>;
+}) {
   const deprecated = Boolean(errata.deprecatedAt);
+  const markdown = useMemo(
+    () => annotateErrataMarkdown(errataText(errata), cardIdByName),
+    [errata, cardIdByName],
+  );
+
   return (
     <div className={`card errata${deprecated ? " errata--deprecated" : ""}`}>
       <p className="errata__header">
@@ -43,7 +59,7 @@ function ErrataCard({ errata }: { errata: Errata }) {
         )}
       </p>
       <div className="errata__details">
-        <Markdown text={errataText(errata)} />
+        <GameMarkdown markdown={markdown} gameSlug={gameSlug} />
       </div>
       <p className="errata__footer muted">
         {errata.source && <span>Source : {errata.source}</span>}
@@ -64,6 +80,15 @@ export function CardDetailScreen() {
   const { data, loading, error, reload } = useApi(
     () => getCard(gameSlug, cardId),
     [gameSlug, cardId],
+  );
+
+  const cardIdByName = useMemo(
+    () => new Map(Object.entries(data?.cardIdByName ?? {})),
+    [data?.cardIdByName],
+  );
+  const cardTextMarkdown = useMemo(
+    () => (data?.text ? annotateCardText(data.text) : null),
+    [data?.text],
   );
 
   const erratas = data?.erratas ?? [];
@@ -102,7 +127,14 @@ export function CardDetailScreen() {
                   <span className="chip chip--warning">Bannie</span>
                 )}
               </p>
-              {data.text && <p className="card-detail__text">{data.text}</p>}
+              {cardTextMarkdown && (
+                <div className="card-detail__text">
+                  <GameMarkdown
+                    markdown={cardTextMarkdown}
+                    gameSlug={gameSlug}
+                  />
+                </div>
+              )}
             </div>
           </div>
           <section>
@@ -116,7 +148,12 @@ export function CardDetailScreen() {
               </p>
             ) : (
               erratas.map((errata) => (
-                <ErrataCard key={errata.id} errata={errata} />
+                <ErrataCard
+                  key={errata.id}
+                  errata={errata}
+                  gameSlug={gameSlug}
+                  cardIdByName={cardIdByName}
+                />
               ))
             )}
           </section>

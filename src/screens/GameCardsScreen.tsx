@@ -74,7 +74,18 @@ export function GameCardsScreen() {
 
   return (
     <div className="screen">
-      <BackHeader title="Cartes" />
+      <BackHeader
+        title="Cartes"
+        action={
+          <Link
+            to={`/games/${gameSlug}/rules`}
+            className="header-link"
+            aria-label="Consulter les règles"
+          >
+            📖 Règles
+          </Link>
+        }
+      />
       <div className="card-filters">
         <input
           type="search"

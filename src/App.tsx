@@ -7,6 +7,8 @@ import { GameCardsScreen } from "./screens/GameCardsScreen";
 import { GamesScreen } from "./screens/GamesScreen";
 import { HomeScreen } from "./screens/HomeScreen";
 import { LoginScreen } from "./screens/LoginScreen";
+import { NewsDetailScreen } from "./screens/NewsDetailScreen";
+import { RulesScreen } from "./screens/RulesScreen";
 import { SettingsScreen } from "./screens/SettingsScreen";
 import { AuthProvider, useAuth } from "./store/auth";
 import "./styles.css";
@@ -33,6 +35,7 @@ function Shell() {
             <main className="app-shell__content">
               <Routes>
                 <Route path="/" element={<HomeScreen />} />
+                <Route path="/news/:newsId" element={<NewsDetailScreen />} />
                 <Route path="/games" element={<GamesScreen />} />
                 <Route
                   path="/games/:gameSlug/cards"
@@ -41,6 +44,10 @@ function Shell() {
                 <Route
                   path="/games/:gameSlug/cards/:cardId"
                   element={<CardDetailScreen />}
+                />
+                <Route
+                  path="/games/:gameSlug/rules"
+                  element={<RulesScreen />}
                 />
                 <Route path="/events" element={<EventsScreen />} />
                 <Route path="/collection" element={<CollectionScreen />} />
