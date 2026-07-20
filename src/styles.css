@@ -182,7 +182,9 @@ code {
   width: 96px;
   height: 96px;
   margin: 0 auto 12px;
-  object-fit: contain;
+  object-fit: cover;
+  border-radius: 22px;
+  box-shadow: 0 6px 18px rgba(8, 24, 34, 0.18);
 }
 
 .login-card__title {
