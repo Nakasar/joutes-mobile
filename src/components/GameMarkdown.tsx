@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ReactMarkdown, { defaultUrlTransform } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { KeywordBadge } from "./KeywordBadge";
@@ -66,13 +66,12 @@ export function GameMarkdown({
 
             if (href?.startsWith("card://")) {
               const id = href.slice("card://".length);
+              // `Link` rend un vrai <a href> (focusable clavier, sémantique)
+              // tout en gérant la navigation côté routeur.
               return (
-                <a
-                  className="card-link"
-                  onClick={() => navigate(`/games/${gameSlug}/cards/${id}`)}
-                >
+                <Link className="card-link" to={`/games/${gameSlug}/cards/${id}`}>
                   {children}
-                </a>
+                </Link>
               );
             }
 

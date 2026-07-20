@@ -159,7 +159,11 @@ function TableOfContents({
         <a
           key={sec.start}
           className="rules-toc__item"
-          onClick={() => onNavigate(sec.anchorId)}
+          href={`#${sec.anchorId}`}
+          onClick={(e) => {
+            e.preventDefault();
+            onNavigate(sec.anchorId);
+          }}
         >
           {sec.start > 0 ? `${sec.start}– ` : ""}
           {sec.label}
@@ -319,12 +323,18 @@ export function RulesScreen() {
             <button
               className={lang === "fr" ? "segmented__item segmented__item--active" : "segmented__item"}
               onClick={() => setParam("lang", "fr")}
+              aria-label="Afficher les règles en français"
+              aria-pressed={lang === "fr"}
+              title="Français"
             >
               🇫🇷
             </button>
             <button
               className={lang === "en" ? "segmented__item segmented__item--active" : "segmented__item"}
               onClick={() => setParam("lang", "en")}
+              aria-label="Afficher les règles en anglais"
+              aria-pressed={lang === "en"}
+              title="English"
             >
               🇬🇧
             </button>

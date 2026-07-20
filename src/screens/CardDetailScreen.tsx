@@ -101,7 +101,15 @@ export function CardDetailScreen() {
   );
 
   const cardIdByName = useMemo(
-    () => new Map(Object.entries(data?.cardIdByName ?? {})),
+    // `annotateErrataMarkdown` cherche par nom en minuscules : on normalise
+    // les clés à la construction, au cas où l'API renverrait la casse d'origine.
+    () =>
+      new Map(
+        Object.entries(data?.cardIdByName ?? {}).map(([name, id]) => [
+          name.toLowerCase(),
+          id,
+        ]),
+      ),
     [data?.cardIdByName],
   );
   const cardTextMarkdown = useMemo(

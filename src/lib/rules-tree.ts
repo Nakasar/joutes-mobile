@@ -61,7 +61,10 @@ export function getRuleSections(roots: RuleTreeNode[]): RuleSection[] {
     const firstTitle = sec.nodes.find((n) => n.isTitle);
     const titleNode = exactTitle || firstTitle || sec.nodes[0];
     sec.label = titleNode.content;
-    sec.anchorId = `rule-${titleNode.id.padStart(3, "0")}`;
+    // Doit correspondre exactement à l'id DOM rendu par `RuleNode`
+    // (`rule-${node.id}`, sans padding) pour que le défilement du sommaire
+    // fonctionne quelle que soit la longueur de l'id.
+    sec.anchorId = `rule-${titleNode.id}`;
   }
 
   return [...sections.values()].sort((a, b) => a.start - b.start);

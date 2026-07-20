@@ -21,7 +21,11 @@ function renderNodes(
         <a
           key={key}
           className="rule-link"
-          onClick={() => onNavigate(node.id)}
+          href={`#rule-${node.id}`}
+          onClick={(e) => {
+            e.preventDefault();
+            onNavigate(node.id);
+          }}
         >
           {renderNodes(node.children, key, onNavigate)}
         </a>
