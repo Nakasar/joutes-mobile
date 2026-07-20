@@ -182,7 +182,9 @@ code {
   width: 96px;
   height: 96px;
   margin: 0 auto 12px;
-  object-fit: contain;
+  object-fit: cover;
+  border-radius: 22px;
+  box-shadow: 0 6px 18px rgba(8, 24, 34, 0.18);
 }
 
 .login-card__title {
@@ -493,7 +495,6 @@ button {
 }
 
 .card-detail__text {
-  white-space: pre-wrap;
   margin: 0;
 }
 
@@ -524,21 +525,22 @@ button {
   margin: 0 0 8px;
 }
 
-.markdown p {
-  margin: 0 0 8px;
-}
-
-.markdown blockquote {
-  margin: 0 0 8px;
-  padding: 6px 12px;
-  border-left: 3px solid var(--color-primary);
-  background: var(--color-muted);
-  border-radius: 0 8px 8px 0;
-}
-
 .errata__footer {
   margin: 0;
   font-size: 0.8rem;
+}
+
+.errata__source {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.external-link-icon {
+  vertical-align: -0.1em;
+  flex-shrink: 0;
 }
 
 .chip--errata {
@@ -618,4 +620,437 @@ button {
 
 .event-card__meta {
   margin: 0;
+}
+
+/* ---- Markdown de jeu (erratas, news, texte de carte, règles) ---- */
+
+.markdown p {
+  margin: 0 0 8px;
+}
+
+.markdown p:last-child {
+  margin-bottom: 0;
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  margin: 12px 0 8px;
+  line-height: 1.25;
+}
+
+.markdown h1 {
+  font-size: 1.3rem;
+}
+.markdown h2 {
+  font-size: 1.15rem;
+}
+.markdown h3 {
+  font-size: 1rem;
+}
+
+.markdown ul,
+.markdown ol {
+  margin: 0 0 8px;
+  padding-left: 1.25em;
+}
+
+.markdown li {
+  margin: 2px 0;
+}
+
+.markdown blockquote {
+  margin: 0 0 8px;
+  padding: 6px 12px;
+  border-left: 3px solid var(--color-primary);
+  background: var(--color-muted);
+  border-radius: 0 8px 8px 0;
+}
+
+.markdown hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 12px 0;
+}
+
+.markdown a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.markdown__image {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+/* Tables GFM, défilables horizontalement si trop larges. */
+.markdown table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 0 0 8px;
+  font-size: 0.9em;
+}
+
+.markdown th,
+.markdown td {
+  border: 1px solid var(--color-border);
+  padding: 6px 10px;
+  text-align: left;
+}
+
+.markdown th {
+  background: var(--color-muted);
+  font-weight: 600;
+}
+
+/* Glyphe inline Riftbound (:rb_x:, [M], [1]…). */
+.rb-glyph {
+  display: inline-block;
+  height: 1em;
+  width: auto;
+  vertical-align: -0.15em;
+  margin: 0 0.1em;
+}
+
+/* Lien de nom de carte (mention [Carte] résolue). */
+.card-link {
+  color: var(--color-primary);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+/* ---- Badges de mots-clés ---- */
+
+.keyword-badge {
+  display: inline-block;
+  text-decoration: none;
+  line-height: 1.5;
+  vertical-align: baseline;
+}
+
+.keyword-badge--skew {
+  transform: skewX(-12deg);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+@media (prefers-color-scheme: dark) {
+  .keyword-badge--skew {
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+}
+
+.keyword-badge--skew .keyword-badge__label {
+  transform: skewX(12deg);
+}
+
+.keyword-badge__label {
+  display: inline-block;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.keyword-badge--inline .keyword-badge__label {
+  font-size: 0.82em;
+  padding: 0 0.35em;
+}
+
+.keyword-badge--inline.keyword-badge--arrow .keyword-badge__label {
+  padding: 0 1em 0 0.35em;
+}
+
+.keyword-badge--heading .keyword-badge__label {
+  font-size: 0.95rem;
+  padding: 1px 0.55em;
+}
+
+.keyword-badge--heading.keyword-badge--arrow .keyword-badge__label {
+  padding: 1px 1.25em 1px 0.55em;
+}
+
+.keyword-badge--link {
+  cursor: pointer;
+}
+
+/* ---- News détail ---- */
+
+.news-card--link {
+  display: block;
+  color: var(--color-text);
+}
+
+.news-detail__banner {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  display: block;
+  margin-bottom: 12px;
+}
+
+.news-detail__title {
+  margin: 0 0 6px;
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.news-detail__meta {
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+}
+
+.news-detail__tags {
+  margin: 0 0 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.news-detail__summary {
+  font-size: 1.05rem;
+  color: var(--color-text-muted);
+  margin: 0 0 16px;
+}
+
+.news-detail__content {
+  margin-bottom: 16px;
+}
+
+.news-detail__actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* ---- En-tête : action à droite + lien d'en-tête ---- */
+
+.back-header__action {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.header-link {
+  display: inline-block;
+  padding: 0.35em 0.7em;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* ---- Écran des règles ---- */
+
+.rules-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.rules-controls__row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.segmented {
+  display: inline-flex;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.segmented__item {
+  border: none;
+  border-radius: 0;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  padding: 0.45em 0.7em;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.segmented__item--active {
+  background: var(--color-primary);
+  color: var(--color-primary-fg);
+}
+
+.rules-search {
+  flex: 1;
+  min-width: 0;
+}
+
+.rules-toc-toggle {
+  flex-shrink: 0;
+  border: 1px solid var(--color-border);
+  font-size: 0.85rem;
+  padding: 0.55em 0.8em;
+}
+
+.rules-toc-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin-bottom: 12px;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+.rules-toc__heading {
+  margin: 0 0 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+.rules-toc__item {
+  display: block;
+  padding: 6px 8px;
+  border-radius: 6px;
+  color: var(--color-text);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.rules-toc__item:hover {
+  background: var(--color-muted);
+}
+
+.rules-results {
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+}
+
+.rules-content {
+  padding-bottom: 24px;
+}
+
+.rules-section {
+  margin-bottom: 20px;
+}
+
+.rule-section-title {
+  margin-top: 20px;
+  scroll-margin-top: 12px;
+  border-radius: var(--radius);
+  transition: opacity 0.2s;
+}
+
+.rule-section-title--framed {
+  background: var(--color-muted);
+  padding: 8px;
+  outline: 2px solid var(--color-primary);
+}
+
+.rule-section-title--dimmed {
+  opacity: 0.4;
+}
+
+.rule-section-title h2 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 1.15rem;
+  color: var(--color-primary);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 4px;
+  margin: 0 0 8px;
+}
+
+.rule-toggle {
+  background: none;
+  border: none;
+  padding: 0 2px;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.rule-id {
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.rule-id--mono {
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.75rem;
+  min-width: 3.5em;
+  text-align: right;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.rule-node {
+  scroll-margin-top: 12px;
+  padding: 2px 0;
+}
+
+.rule-node--d2 {
+  margin-left: 12px;
+}
+.rule-node--d3 {
+  margin-left: 24px;
+}
+.rule-node--d4 {
+  margin-left: 36px;
+}
+.rule-node--d5 {
+  margin-left: 44px;
+}
+.rule-node--d6 {
+  margin-left: 52px;
+}
+
+.rule-row {
+  display: flex;
+  gap: 8px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.rule-text {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  color: var(--color-text);
+}
+
+.rule-text--strong {
+  font-weight: 600;
+}
+
+.rule-children {
+  margin-top: 2px;
+}
+
+.rule-link {
+  color: var(--color-primary);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.rule-match {
+  background: #fde68a;
+  color: #161616;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .rule-match {
+    background: #a16207;
+    color: #fff;
+  }
 }

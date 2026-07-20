@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { listNews } from "../api/news";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
@@ -26,7 +27,11 @@ export function HomeScreen() {
         empty={data?.news.length === 0 ? "Aucune actualité." : undefined}
       />
       {data?.news.map((item) => (
-        <article key={item.id} className="card news-card">
+        <Link
+          key={item.id}
+          to={`/news/${item.id}`}
+          className="card news-card news-card--link"
+        >
           {item.banner && (
             <img
               src={item.banner}
@@ -47,7 +52,7 @@ export function HomeScreen() {
                 ` · ❤️ ${item.likesCount}`}
             </p>
           </div>
-        </article>
+        </Link>
       ))}
     </div>
   );

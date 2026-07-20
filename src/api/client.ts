@@ -100,13 +100,17 @@ class ApiClient {
     }
 
     if (!response.ok) {
+      // L'API Joutes renvoie le libellé d'erreur tantôt dans `message`
+      // (Better Auth), tantôt dans `error` (routes REST).
+      const field = (key: "message" | "error"): string | undefined =>
+        typeof data === "object" &&
+        data !== null &&
+        key in data &&
+        typeof (data as Record<string, unknown>)[key] === "string"
+          ? (data as Record<string, string>)[key]
+          : undefined;
       const message =
-        (typeof data === "object" &&
-          data !== null &&
-          "message" in data &&
-          typeof (data as { message: unknown }).message === "string" &&
-          (data as { message: string }).message) ||
-        `Erreur ${response.status}`;
+        field("message") || field("error") || `Erreur ${response.status}`;
       throw new ApiError(response.status, message, data);
     }
 

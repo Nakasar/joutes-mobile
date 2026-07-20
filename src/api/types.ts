@@ -128,6 +128,30 @@ export interface GameSet {
   cardMaxNumber?: number;
 }
 
+// ---- Règles ----
+
+export type RuleDocument = "TR" | "CR";
+export type RuleLang = "en" | "fr";
+
+/**
+ * Entrée d'un document de règles (titre / mot-clé / paragraphe). `markup`
+ * utilise un petit format de pseudo-balises (`{{rule id="…"}}`,
+ * `{{keyword id="…"}}`, `{{match}}…{{/match}}`), à parser côté client — jamais
+ * du HTML. Voir `lib/rules-markup.ts`.
+ */
+export interface RuleEntry {
+  id: string;
+  content: string;
+  markup: string;
+  isTitle: boolean;
+  isKeyword: boolean;
+  depth: number;
+  document: RuleDocument;
+  /** Présents uniquement en mode recherche. */
+  sectionId?: string;
+  matched?: boolean;
+}
+
 // ---- News ----
 
 export interface NewsGameRef {
