@@ -150,11 +150,6 @@ jobs:
 
       - run: npm ci
 
-      - name: Initialize iOS project
-        env:
-          APPLE_DEVELOPMENT_TEAM: ${{ secrets.APPLE_DEVELOPMENT_TEAM }}
-        run: npm run tauri -- ios init --ci
-
       - name: Configure App Store Connect API key
         if: env.HAS_ASC_API_KEY == 'true'
         env:
@@ -175,6 +170,11 @@ jobs:
             echo "APPLE_API_KEY_PATH=$KEY_PATH"
           } >> "$GITHUB_ENV"
 
+      - name: Initialize iOS project
+        env:
+          APPLE_DEVELOPMENT_TEAM: ${{ secrets.APPLE_DEVELOPMENT_TEAM }}
+        run: npm run tauri -- ios init --ci
+
       - name: Build signed IPA
         if: env.HAS_ASC_API_KEY == 'true'
         env:
@@ -187,7 +187,7 @@ jobs:
           # avec la clé API configurée ci-dessus, xcodebuild le résout/crée
           # lui-même pour ce certificat via -allowProvisioningUpdates.
           APPLE_DEVELOPMENT_TEAM: ${{ secrets.APPLE_DEVELOPMENT_TEAM }}
-        run: npm run tauri -- ios build --export-method app-store-connect
+        run: npm run tauri ios build -- --export-method app-store-connect
 
       - name: Build unsigned app (no signing secrets)
         if: env.HAS_ASC_API_KEY != 'true'
