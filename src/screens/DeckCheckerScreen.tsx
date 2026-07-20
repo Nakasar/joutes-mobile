@@ -3,7 +3,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import { checkDeck } from "../api/deck-checker";
 import type { DeckCheckResponse, DeckList, DeckListCard } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
-import { ChevronIcon, ExternalLinkIcon } from "../components/icons";
+import { CardDetailModal } from "../components/CardDetailModal";
+import {
+  AlertTriangleIcon,
+  ChevronIcon,
+  ExternalLinkIcon,
+} from "../components/icons";
+
+/** Carte à prévisualiser en modale (image + détails + erratas). */
+type PreviewCard = { cardId: string; name: string; image?: string };
 
 // Règles de construction Riftbound (reprises du vérificateur web).
 type SectionRule = { min: number; max: number };
@@ -37,9 +45,11 @@ function ruleNote(rule: SectionRule): string {
 function DeckCard({
   card,
   gameSlug,
+  onPreview,
 }: {
   card: DeckListCard;
   gameSlug: string;
+  onPreview: (card: PreviewCard) => void;
 }) {
   const navigate = useNavigate();
   const clickable = card.recognized !== false && card.cardId;
@@ -62,11 +72,29 @@ function DeckCard({
       >
         {card.name}
       </span>
-      {card.banned && <span className="deck-badge deck-badge--banned">Bannie</span>}
+      {card.banned && (
+        <span className="deck-badge deck-badge--banned">Bannie</span>
+      )}
       {card.recognized === false && (
         <span className="deck-badge deck-badge--unknown">Inconnue</span>
       )}
-      {hasErratas && <span className="deck-badge deck-badge--errata">Errata</span>}
+      {hasErratas && card.cardId && (
+        <button
+          className="deck-alert"
+          aria-label="Erratas / rulings à lire"
+          title="Erratas / rulings à lire"
+          onClick={(e) => {
+            e.stopPropagation();
+            onPreview({
+              cardId: card.cardId!,
+              name: card.name,
+              image: card.image,
+            });
+          }}
+        >
+          <AlertTriangleIcon size={18} />
+        </button>
+      )}
       {clickable && (
         <span className="chevron">
           <ChevronIcon size={16} />
@@ -79,9 +107,11 @@ function DeckCard({
 function DeckResult({
   result,
   gameSlug,
+  onPreview,
 }: {
   result: DeckCheckResponse;
   gameSlug: string;
+  onPreview: (card: PreviewCard) => void;
 }) {
   const deck = result.deck;
   const allCards = SECTIONS.flatMap((s) => deck[s.key] ?? []);
@@ -161,7 +191,12 @@ function DeckResult({
               )}
             </div>
             {cards.map((card, i) => (
-              <DeckCard key={`${card.name}-${i}`} card={card} gameSlug={gameSlug} />
+              <DeckCard
+                key={`${card.name}-${i}`}
+                card={card}
+                gameSlug={gameSlug}
+                onPreview={onPreview}
+              />
             ))}
           </section>
         );
@@ -176,6 +211,7 @@ export function DeckCheckerScreen() {
   const [result, setResult] = useState<DeckCheckResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [preview, setPreview] = useState<PreviewCard | null>(null);
 
   function submit() {
     const value = input.trim();
@@ -223,8 +259,22 @@ export function DeckCheckerScreen() {
 
       {result && (
         <div style={{ marginTop: 18 }}>
-          <DeckResult result={result} gameSlug={gameSlug} />
+          <DeckResult
+            result={result}
+            gameSlug={gameSlug}
+            onPreview={setPreview}
+          />
         </div>
+      )}
+
+      {preview && (
+        <CardDetailModal
+          gameSlug={gameSlug}
+          cardId={preview.cardId}
+          fallbackName={preview.name}
+          fallbackImage={preview.image}
+          onClose={() => setPreview(null)}
+        />
       )}
     </div>
   );

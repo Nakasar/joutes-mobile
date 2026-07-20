@@ -1860,6 +1860,92 @@ textarea:focus {
   color: var(--gold);
 }
 
+/* Icône d'alerte errata (triangle ambre) */
+.deck-alert {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  transition: transform 0.12s;
+}
+
+.deck-alert:active {
+  transform: scale(0.9);
+}
+
+/* ---- Feuille modale (vue de carte en contexte) ---- */
+
+@keyframes jtSheetIn {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.sheet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(3, 12, 19, 0.55);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: flex-end;
+  animation: jtIn 0.2s ease;
+}
+
+.sheet {
+  position: relative;
+  width: 100%;
+  max-height: 88vh;
+  background: var(--bg);
+  border-radius: 24px 24px 0 0;
+  box-shadow: 0 -12px 40px -12px rgba(0, 0, 0, 0.5);
+  animation: jtSheetIn 0.28s cubic-bezier(0.2, 0.7, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.sheet__handle {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  margin: 10px auto 0;
+  flex-shrink: 0;
+}
+
+.sheet__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  z-index: 1;
+}
+
+.sheet__body {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px 16px calc(env(safe-area-inset-bottom, 0px) + 24px);
+}
+
 /* ---- Markdown de jeu (erratas, news, texte de carte, règles) ---- */
 
 .markdown p {
