@@ -28,8 +28,8 @@ jobs:
     name: Android (APK + AAB)
     runs-on: ubuntu-latest
     env:
-      # `secrets` n'est pas autorisé dans les conditions `if:` des jobs/steps ;
-      # on le rend disponible via une variable d'environnement de job.
+      # Expose la présence des secrets de signature via un flag `env` ('true'/'false')
+      # afin de simplifier les conditions `if:` des steps.
       HAS_ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE != '' }}
     steps:
       - uses: actions/checkout@v4
