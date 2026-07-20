@@ -8,11 +8,8 @@ name: Mobile build
 # Signature (optionnelle, via les secrets du dépôt) :
 #   Android : ANDROID_KEYSTORE (base64 du .jks), ANDROID_KEYSTORE_PASSWORD,
 #             ANDROID_KEY_ALIAS, ANDROID_KEY_PASSWORD
-#   iOS     : IOS_CERTIFICATE (base64 du .p12), IOS_CERTIFICATE_PASSWORD,
-#             APPLE_DEVELOPMENT_TEAM (identifiant d'équipe),
-#             + la clé API App Store Connect ci-dessous (nécessaire pour
-#             que xcodebuild puisse résoudre/créer le provisioning profile
-#             correspondant au certificat)
+#   iOS     : ASC_KEY_ID (Key ID), ASC_ISSUER_ID (Issuer ID), ASC_API_KEY (base64 du fichier .p8),
+#             APPLE_DEVELOPMENT_TEAM (identifiant d'équipe)
 # Sans secrets, le build produit des artefacts non signés (Android) ou un
 # .app non signé (iOS) qui valide la compilation.
 #
@@ -134,7 +131,6 @@ jobs:
     env:
       # Expose la présence des secrets de signature via un flag `env` ('true'/'false')
       # afin de simplifier les conditions `if:` des steps.
-      HAS_IOS_CERTIFICATE: ${{ secrets.IOS_CERTIFICATE != '' }}
       HAS_ASC_API_KEY: ${{ secrets.ASC_KEY_ID != '' && secrets.ASC_ISSUER_ID != '' && secrets.ASC_API_KEY != '' }}
     steps:
       - uses: actions/checkout@v4
@@ -180,7 +176,7 @@ jobs:
           } >> "$GITHUB_ENV"
 
       - name: Build signed IPA
-        if: env.HAS_IOS_CERTIFICATE == 'true'
+        if: env.HAS_ASC_API_KEY == 'true'
         env:
           # `tauri ios build` importe lui-même le certificat dans un trousseau
           # temporaire (via signing_from_env / tauri-macos-sign), puis
@@ -190,13 +186,11 @@ jobs:
           # Le provisioning profile n'est volontairement pas fourni ici :
           # avec la clé API configurée ci-dessus, xcodebuild le résout/crée
           # lui-même pour ce certificat via -allowProvisioningUpdates.
-          IOS_CERTIFICATE: ${{ secrets.IOS_CERTIFICATE }}
-          IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
           APPLE_DEVELOPMENT_TEAM: ${{ secrets.APPLE_DEVELOPMENT_TEAM }}
         run: npm run tauri -- ios build --export-method app-store-connect
 
       - name: Build unsigned app (no signing secrets)
-        if: env.HAS_IOS_CERTIFICATE != 'true'
+        if: env.HAS_ASC_API_KEY != 'true'
         run: |
           set -euo pipefail
           PROJECT=$(find src-tauri/gen/apple -maxdepth 1 -name '*.xcodeproj')
@@ -224,13 +218,13 @@ jobs:
           if-no-files-found: error
 
       - name: Attach to release
-        if: ${{ startsWith(github.ref, 'refs/tags/') && env.HAS_IOS_CERTIFICATE == 'true' }}
+        if: ${{ startsWith(github.ref, 'refs/tags/') && env.HAS_ASC_API_KEY == 'true' }}
         uses: softprops/action-gh-release@v2
         with:
           files: src-tauri/gen/apple/build/**/*.ipa
 
       - name: Upload to App Store Connect
-        if: ${{ startsWith(github.ref, 'refs/tags/') && env.HAS_IOS_CERTIFICATE == 'true' && env.HAS_ASC_API_KEY == 'true' }}
+        if: ${{ startsWith(github.ref, 'refs/tags/') && env.HAS_ASC_API_KEY == 'true' }}
         env:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
