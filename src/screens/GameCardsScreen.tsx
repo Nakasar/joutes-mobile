@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { searchCards } from "../api/cards";
+import { getGame } from "../api/games";
 import type { Card } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
+import { BookIcon, SearchIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
+import { useApi } from "../hooks/useApi";
 
 const PAGE_SIZE = 30;
 
@@ -38,6 +41,8 @@ export function GameCardsScreen() {
   useEffect(() => {
     setPage(1);
   }, [searchQuery, setCode, type, gameSlug]);
+
+  const game = useApi(() => getGame(gameSlug), [gameSlug]);
 
   const requestId = useRef(0);
   useEffect(() => {
@@ -75,25 +80,28 @@ export function GameCardsScreen() {
   return (
     <div className="screen">
       <BackHeader
-        title="Cartes"
+        title={game.data?.name ?? "Cartes"}
         action={
           <Link
             to={`/games/${gameSlug}/rules`}
             className="header-link"
             aria-label="Consulter les règles"
           >
-            📖 Règles
+            <BookIcon size={16} />
+            Règles
           </Link>
         }
       />
       <div className="card-filters">
-        <input
-          type="search"
-          placeholder="Rechercher une carte…"
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.currentTarget.value)}
-          className="card-filters__search"
-        />
+        <div className="search-field">
+          <SearchIcon size={18} className="search-field__icon" />
+          <input
+            type="search"
+            placeholder="Rechercher une carte…"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.currentTarget.value)}
+          />
+        </div>
         <div className="card-filters__row">
           <select
             value={setCode}
@@ -117,8 +125,8 @@ export function GameCardsScreen() {
         </div>
       </div>
       {!loading && !error && (
-        <p className="muted card-count">
-          {total} carte{total > 1 ? "s" : ""}
+        <p className="card-count">
+          <strong>{total}</strong> carte{total > 1 ? "s" : ""}
         </p>
       )}
       <div className="card-grid">
@@ -128,22 +136,27 @@ export function GameCardsScreen() {
             to={`/games/${gameSlug}/cards/${card.id}`}
             className="card-tile"
           >
-            {card.image ? (
-              <img
-                src={card.image}
-                alt={card.name}
-                loading="lazy"
-                className="card-tile__image"
-              />
-            ) : (
-              <div className="card-tile__placeholder">{card.name}</div>
-            )}
-            <span className="card-tile__name">
-              {card.name}
-              {card.collectorNumber && (
-                <span className="muted"> · {card.setCode} {card.collectorNumber}</span>
+            <span className="card-tile__frame">
+              {card.image ? (
+                <img
+                  src={card.image}
+                  alt={card.name}
+                  loading="lazy"
+                  className="card-tile__image"
+                />
+              ) : (
+                <span className="card-tile__placeholder">{card.name}</span>
+              )}
+              {typeof card.cost === "number" && (
+                <span className="card-tile__cost">{card.cost}</span>
               )}
             </span>
+            <span className="card-tile__name">{card.name}</span>
+            {card.collectorNumber && (
+              <span className="card-tile__set">
+                {card.setCode} {card.collectorNumber}
+              </span>
+            )}
           </Link>
         ))}
       </div>
@@ -159,7 +172,7 @@ export function GameCardsScreen() {
       />
       {!loading && !error && page < totalPages && (
         <button
-          className="button-primary load-more"
+          className="btn btn--grad load-more"
           onClick={() => setPage((p) => p + 1)}
         >
           Charger plus

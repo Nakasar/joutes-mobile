@@ -1,17 +1,18 @@
 import { useState } from "react";
 import { listEvents } from "../api/events";
+import { BackIcon, ChevronIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 
-function formatEventDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("fr-FR", {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-  });
+function dow(iso: string): string {
+  return new Date(iso)
+    .toLocaleDateString("fr-FR", { weekday: "short" })
+    .replace(".", "");
 }
-
-function formatTime(iso: string): string {
+function dayNum(iso: string): string {
+  return new Date(iso).toLocaleDateString("fr-FR", { day: "numeric" });
+}
+function time(iso: string): string {
   return new Date(iso).toLocaleTimeString("fr-FR", {
     hour: "2-digit",
     minute: "2-digit",
@@ -46,50 +47,70 @@ export function EventsScreen() {
 
   return (
     <div className="screen">
-      <header className="screen__header">
-        <h1>Événements</h1>
-      </header>
+      <div className="screen-head">
+        <div className="screen-head__titles">
+          <h1 className="screen-title">Événements</h1>
+        </div>
+      </div>
+
       <div className="month-nav">
-        <button onClick={() => shiftMonth(-1)} aria-label="Mois précédent">
-          ←
+        <button
+          className="month-nav__button"
+          onClick={() => shiftMonth(-1)}
+          aria-label="Mois précédent"
+        >
+          <BackIcon size={18} />
         </button>
         <span className="month-nav__label">{monthLabel}</span>
-        <button onClick={() => shiftMonth(1)} aria-label="Mois suivant">
-          →
+        <button
+          className="month-nav__button"
+          onClick={() => shiftMonth(1)}
+          aria-label="Mois suivant"
+        >
+          <ChevronIcon size={18} />
         </button>
       </div>
+
       <StatusView
         loading={loading}
         error={error}
         onRetry={reload}
         empty={data?.length === 0 ? "Aucun événement ce mois-ci." : undefined}
       />
+
       {data?.map((event) => (
-        <div key={event.id} className="card event-card">
-          <div className="event-card__date">
-            <span>{formatEventDate(event.startDateTime)}</span>
-            <span className="muted">{formatTime(event.startDateTime)}</span>
+        <div key={event.id} className="event-card">
+          <div className="event-date">
+            <span className="event-date__dow">{dow(event.startDateTime)}</span>
+            <span className="event-date__day">
+              {dayNum(event.startDateTime)}
+            </span>
+            <span className="event-date__time">
+              {time(event.startDateTime)}
+            </span>
           </div>
           <div className="event-card__body">
-            <h2>{event.name}</h2>
-            <p className="muted">
+            <h2 className="event-card__name">{event.name}</h2>
+            <p className="event-card__where">
               {[event.game?.name ?? event.gameName, event.lair?.name]
                 .filter(Boolean)
                 .join(" · ")}
             </p>
             <p className="event-card__meta">
-              {event.status && statusLabels[event.status] && (
-                <span className="chip chip--warning">
+              {event.status && statusLabels[event.status] ? (
+                <span className="chip chip--danger">
                   {statusLabels[event.status]}
                 </span>
+              ) : (
+                <span className="chip chip--accent">Ouvert</span>
               )}
               {typeof event.price === "number" && event.price > 0 && (
                 <span className="chip">{event.price} €</span>
               )}
               {typeof event.maxParticipants === "number" && (
                 <span className="chip">
-                  {event.registeredParticipantsCount ?? 0}/{event.maxParticipants}{" "}
-                  joueurs
+                  {event.registeredParticipantsCount ?? 0}/
+                  {event.maxParticipants}
                 </span>
               )}
             </p>

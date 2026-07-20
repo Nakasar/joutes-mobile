@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
+import { BackIcon } from "./icons";
 
 /** En-tête d'écran secondaire avec bouton retour et action optionnelle à droite. */
 export function BackHeader({
@@ -17,7 +18,7 @@ export function BackHeader({
         onClick={() => navigate(-1)}
         aria-label="Retour"
       >
-        ←
+        <BackIcon size={20} />
       </button>
       <h1 className="back-header__title">{title}</h1>
       {action && <div className="back-header__action">{action}</div>}

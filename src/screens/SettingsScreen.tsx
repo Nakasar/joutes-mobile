@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { config } from "../config";
+import { BackHeader } from "../components/BackHeader";
 import { useAuth } from "../store/auth";
 
 export function SettingsScreen() {
@@ -7,11 +8,9 @@ export function SettingsScreen() {
 
   return (
     <div className="screen">
-      <header className="screen__header">
-        <h1>Réglages</h1>
-      </header>
+      <BackHeader title="Réglages" />
       <section className="card">
-        <h2>Compte</h2>
+        <h2 className="card__title">Compte</h2>
         {isAuthenticated ? (
           <>
             <p>
@@ -19,21 +18,27 @@ export function SettingsScreen() {
               {user?.discriminator ? `#${user.discriminator}` : ""}
             </p>
             {user?.email && <p className="muted">{user.email}</p>}
-            <button className="button-danger" onClick={() => void signOut()}>
+            <button
+              className="btn btn--danger"
+              style={{ marginTop: 12 }}
+              onClick={() => void signOut()}
+            >
               Se déconnecter
             </button>
           </>
         ) : (
           <>
-            <p className="muted">Vous n'êtes pas connecté.</p>
-            <Link to="/login" className="button-primary button-link">
+            <p className="muted" style={{ marginBottom: 12 }}>
+              Vous n'êtes pas connecté.
+            </p>
+            <Link to="/login" className="btn btn--grad btn--block">
               Se connecter
             </Link>
           </>
         )}
       </section>
       <section className="card">
-        <h2>À propos</h2>
+        <h2 className="card__title">À propos</h2>
         <p>
           Client mobile de <a href={config.webUrl}>joutes.app</a>, construit
           avec Tauri&nbsp;2 et React.

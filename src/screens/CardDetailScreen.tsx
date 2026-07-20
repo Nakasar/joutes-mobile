@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { getCard } from "../api/cards";
 import type { Errata } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
-import { ExternalLinkIcon } from "../components/ExternalLinkIcon";
+import { ExternalLinkIcon } from "../components/icons";
 import { GameMarkdown } from "../components/GameMarkdown";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
@@ -51,22 +51,22 @@ function ErrataCard({
   );
 
   return (
-    <div className={`card errata${deprecated ? " errata--deprecated" : ""}`}>
+    <div
+      className={`errata errata--${errata.type}${deprecated ? " errata--deprecated" : ""}`}
+    >
       <p className="errata__header">
-        <span className={`chip chip--${errata.type}`}>
+        <span className={`errata__type errata__type--${errata.type}`}>
           {errataTypeLabels[errata.type] ?? errata.type}
         </span>
-        {deprecated && <span className="chip chip--warning">Obsolète</span>}
+        {deprecated && <span className="chip chip--danger">Obsolète</span>}
         {errata.errataDate && (
-          <span className="muted errata__date">
-            {formatDate(errata.errataDate)}
-          </span>
+          <span className="errata__date">{formatDate(errata.errataDate)}</span>
         )}
       </p>
       <div className="errata__details">
         <GameMarkdown markdown={markdown} gameSlug={gameSlug} />
       </div>
-      <p className="errata__footer muted">
+      <p className="errata__footer">
         {errata.source &&
           (isUrl(errata.source) ? (
             <a
@@ -84,8 +84,7 @@ function ErrataCard({
         {errata.votes &&
           (errata.votes.positive ?? 0) + (errata.votes.negative ?? 0) > 0 && (
             <span>
-              {" "}
-              · 👍 {errata.votes.positive ?? 0} · 👎 {errata.votes.negative ?? 0}
+              👍 {errata.votes.positive ?? 0} · 👎 {errata.votes.negative ?? 0}
             </span>
           )}
       </p>
@@ -125,48 +124,43 @@ export function CardDetailScreen() {
       <StatusView loading={loading} error={error} onRetry={reload} />
       {data && (
         <>
-          <div className="card-detail">
-            {data.image && (
+          {data.image && (
+            <div className="card-hero">
               <img
                 src={data.image}
                 alt={data.name}
-                className="card-detail__image"
+                className="card-hero__image"
               />
-            )}
-            <div className="card-detail__info">
-              <h2>
-                {data.name}
-                {data.subtitle ? `, ${data.subtitle}` : ""}
-              </h2>
-              <p className="card-detail__badges">
-                {data.type && <span className="chip">{data.type}</span>}
-                {typeof data.cost === "number" && (
-                  <span className="chip">Coût {data.cost}</span>
-                )}
-                {data.setCode && (
-                  <span className="chip">
-                    {data.setCode}
-                    {data.collectorNumber ? ` ${data.collectorNumber}` : ""}
-                  </span>
-                )}
-                {data.banned && (
-                  <span className="chip chip--warning">Bannie</span>
-                )}
-              </p>
-              {cardTextMarkdown && (
-                <div className="card-detail__text">
-                  <GameMarkdown
-                    markdown={cardTextMarkdown}
-                    gameSlug={gameSlug}
-                  />
-                </div>
-              )}
             </div>
-          </div>
+          )}
+          <h2 className="card-title">{data.name}</h2>
+          {data.subtitle && <p className="card-subtitle">{data.subtitle}</p>}
+          <p className="card-badges">
+            {data.type && <span className="chip">{data.type}</span>}
+            {typeof data.cost === "number" && (
+              <span className="chip">Coût {data.cost}</span>
+            )}
+            {data.setCode && (
+              <span className="chip">
+                {data.setCode}
+                {data.collectorNumber ? ` ${data.collectorNumber}` : ""}
+              </span>
+            )}
+            {data.banned && <span className="chip chip--danger">Bannie</span>}
+          </p>
+          {cardTextMarkdown && (
+            <div className="card-text-block">
+              <GameMarkdown markdown={cardTextMarkdown} gameSlug={gameSlug} />
+            </div>
+          )}
           <section>
             <h2 className="section-title">
               Erratas &amp; rulings
-              {erratas.length > 0 && ` (${erratas.length})`}
+              {erratas.length > 0 && (
+                <span className="section-title__count muted">
+                  ({erratas.length})
+                </span>
+              )}
             </h2>
             {erratas.length === 0 ? (
               <p className="muted">

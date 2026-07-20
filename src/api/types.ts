@@ -215,6 +215,40 @@ export interface EventsListResponse {
   events: JoutesEvent[];
 }
 
+// ---- Social (amis, groupes) ----
+
+export interface PublicUser {
+  id: string;
+  username?: string;
+  displayName?: string;
+  discriminator?: string;
+  avatar?: string;
+}
+
+export interface FriendRequest {
+  id: string;
+  requester?: PublicUser;
+  [key: string]: unknown;
+}
+
+export interface PlayGroupMember {
+  userId?: string;
+  role?: string;
+  user?: PublicUser;
+  [key: string]: unknown;
+}
+
+export interface PlayGroup {
+  id: string;
+  name: string;
+  description?: string;
+  ownerId?: string;
+  enabledGameIds?: string[] | null;
+  members?: PlayGroupMember[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 // ---- Lairs (boutiques / lieux) ----
 
 export interface Lair {

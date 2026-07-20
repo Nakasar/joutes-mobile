@@ -1,11 +1,21 @@
 import { NavLink } from "react-router-dom";
+import type { ReactElement, SVGProps } from "react";
+import {
+  CalendarIcon,
+  GridIcon,
+  HomeIcon,
+  LayersIcon,
+  UsersIcon,
+} from "./icons";
 
-const tabs = [
-  { to: "/", label: "Accueil", icon: "🏠" },
-  { to: "/games", label: "Jeux", icon: "🎴" },
-  { to: "/events", label: "Événements", icon: "📅" },
-  { to: "/collection", label: "Collection", icon: "📚" },
-  { to: "/settings", label: "Réglages", icon: "⚙️" },
+type TabIcon = (p: SVGProps<SVGSVGElement> & { size?: number }) => ReactElement;
+
+const tabs: { to: string; label: string; Icon: TabIcon }[] = [
+  { to: "/", label: "Accueil", Icon: HomeIcon },
+  { to: "/games", label: "Jeux", Icon: LayersIcon },
+  { to: "/events", label: "Événements", Icon: CalendarIcon },
+  { to: "/collection", label: "Collection", Icon: GridIcon },
+  { to: "/social", label: "Social", Icon: UsersIcon },
 ];
 
 export function TabBar() {
@@ -20,10 +30,14 @@ export function TabBar() {
             `tab-bar__item${isActive ? " tab-bar__item--active" : ""}`
           }
         >
-          <span className="tab-bar__icon" aria-hidden>
-            {tab.icon}
-          </span>
-          <span className="tab-bar__label">{tab.label}</span>
+          {({ isActive }) => (
+            <>
+              <span className="tab-bar__icon-wrap">
+                <tab.Icon size={22} strokeWidth={isActive ? 2.4 : 1.9} />
+              </span>
+              <span className="tab-bar__label">{tab.label}</span>
+            </>
+          )}
         </NavLink>
       ))}
     </nav>
