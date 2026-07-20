@@ -145,61 +145,25 @@ jobs:
 
       - run: npm ci
 
-      - name: Import signing certificate
-        if: env.HAS_IOS_CERTIFICATE == 'true'
-        env:
-          IOS_CERTIFICATE: ${{ secrets.IOS_CERTIFICATE }}
-          IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
-          IOS_MOBILE_PROVISION: ${{ secrets.IOS_MOBILE_PROVISION }}
-        run: |
-          set -euo pipefail
-          # Trousseau temporaire dédié au job
-          KEYCHAIN="$RUNNER_TEMP/build.keychain-db"
-          KEYCHAIN_PASSWORD="$(uuidgen)"
-          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
-          security set-keychain-settings -lut 21600 "$KEYCHAIN"
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
-          security list-keychains -d user -s "$KEYCHAIN" login.keychain-db
-
-          CERT="$RUNNER_TEMP/certificate.p12"
-          echo "$IOS_CERTIFICATE" | base64 -d > "$CERT"
-          security import "$CERT" -k "$KEYCHAIN" \
-            -P "$IOS_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple: \
-            -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
-          rm -f "$CERT"
-
-          # Profil de provisionnement
-          PROFILES="$HOME/Library/MobileDevice/Provisioning Profiles"
-          mkdir -p "$PROFILES"
-          echo "$IOS_MOBILE_PROVISION" | base64 -d \
-            > "$PROFILES/joutes-mobile.mobileprovision"
-
       - name: Initialize iOS project
         env:
           APPLE_DEVELOPMENT_TEAM: ${{ secrets.APPLE_DEVELOPMENT_TEAM }}
         run: npm run tauri -- ios init --ci
 
-      - name: Configure manual code signing
-        if: env.HAS_IOS_CERTIFICATE == 'true'
-        run: |
-          set -euo pipefail
-          # Le projet Xcode généré force CODE_SIGN_STYLE = Automatic, qui a
-          # besoin d'un compte Apple connecté dans Xcode (absent sur le
-          # runner CI) et ignore le profil importé manuellement. On bascule
-          # en signature manuelle avec le certificat et le profil déjà
-          # présents dans le trousseau / Provisioning Profiles.
-          PROFILE="$HOME/Library/MobileDevice/Provisioning Profiles/joutes-mobile.mobileprovision"
-          security cms -D -i "$PROFILE" > "$RUNNER_TEMP/profile.plist"
-          PROFILE_NAME=$(/usr/libexec/PlistBuddy -c "Print :Name" "$RUNNER_TEMP/profile.plist")
-          echo "Provisioning profile détecté : $PROFILE_NAME"
-
-          PBXPROJ="$(find src-tauri/gen/apple -maxdepth 1 -name '*.xcodeproj')/project.pbxproj"
-          perl -pi -e "s/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;\n\t\t\t\tCODE_SIGN_IDENTITY = \"Apple Distribution\";\n\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = \"$PROFILE_NAME\";/g" "$PBXPROJ"
-
       - name: Build signed IPA
         if: env.HAS_IOS_CERTIFICATE == 'true'
         env:
+          # `tauri ios build` importe lui-même le certificat dans un trousseau
+          # temporaire et installe le profil de provisionnement (via
+          # signing_from_env / tauri-macos-sign), puis configure
+          # automatiquement la signature manuelle (CODE_SIGN_STYLE,
+          # CODE_SIGN_IDENTITY, PROVISIONING_PROFILE_SPECIFIER) dans le
+          # projet Xcode. Il faut donc lui fournir ces secrets directement,
+          # au niveau de l'étape de build (et pas seulement à une étape
+          # d'import antérieure) pour qu'il les prenne en compte.
+          IOS_CERTIFICATE: ${{ secrets.IOS_CERTIFICATE }}
+          IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+          IOS_MOBILE_PROVISION: ${{ secrets.IOS_MOBILE_PROVISION }}
           APPLE_DEVELOPMENT_TEAM: ${{ secrets.APPLE_DEVELOPMENT_TEAM }}
         run: npm run tauri -- ios build --export-method app-store-connect
 
