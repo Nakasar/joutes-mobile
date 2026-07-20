@@ -1,8 +1,9 @@
 import { useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getNews, toggleNewsLike } from "../api/news";
 import { BackHeader } from "../components/BackHeader";
 import { GameMarkdown } from "../components/GameMarkdown";
+import { BackIcon, HeartIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { annotateErrataMarkdown } from "../lib/errata-markdown";
@@ -24,6 +25,7 @@ const EMPTY_CARD_MAP = new Map<string, string>();
 
 export function NewsDetailScreen() {
   const { newsId = "" } = useParams();
+  const navigate = useNavigate();
   const { data, loading, error, reload } = useApi(
     () => getNews(newsId),
     [newsId],
@@ -33,64 +35,87 @@ export function NewsDetailScreen() {
   const gameSlug = data?.games?.[0]?.slug ?? "riftbound";
 
   const contentMarkdown = useMemo(
-    () => (data?.content ? annotateErrataMarkdown(data.content, EMPTY_CARD_MAP) : null),
+    () =>
+      data?.content ? annotateErrataMarkdown(data.content, EMPTY_CARD_MAP) : null,
     [data?.content],
   );
 
+  function like() {
+    if (!data) return;
+    toggleNewsLike(data.id)
+      .then(() => reload())
+      .catch(() => {
+        /* silencieux : le like échoue si non connecté */
+      });
+  }
+
+  if (!data) {
+    return (
+      <div className="screen">
+        <BackHeader title="Actualité" />
+        <StatusView loading={loading} error={error} onRetry={reload} />
+      </div>
+    );
+  }
+
   return (
-    <div className="screen">
-      <BackHeader title={data?.title ?? "Actualité"} />
-      <StatusView loading={loading} error={error} onRetry={reload} />
-      {data && (
-        <article className="news-detail">
-          {data.banner && (
-            <img
-              src={data.banner}
-              alt=""
-              className="news-detail__banner"
-              loading="lazy"
-            />
-          )}
-          <h1 className="news-detail__title">{data.title}</h1>
-          <p className="news-detail__meta muted">
-            {data.games?.map((game) => game.name).join(" · ")}
-            {data.games?.length ? " — " : ""}
-            {formatDate(data.createdAt)}
-            {data.author?.displayName ? ` · ${data.author.displayName}` : ""}
-          </p>
-          {data.tags && data.tags.length > 0 && (
-            <p className="news-detail__tags">
-              {data.tags.map((tag) => (
-                <span key={tag} className="chip">
-                  {tag}
-                </span>
-              ))}
-            </p>
-          )}
-          {data.summary && (
-            <p className="news-detail__summary">{data.summary}</p>
-          )}
-          {contentMarkdown && (
-            <div className="news-detail__content">
-              <GameMarkdown markdown={contentMarkdown} gameSlug={gameSlug} />
-            </div>
-          )}
-          <div className="news-detail__actions">
-            <button
-              className="button-ghost"
-              onClick={() => {
-                toggleNewsLike(data.id)
-                  .then(() => reload())
-                  .catch(() => {
-                    /* silencieux : le like échoue si non connecté */
-                  });
-              }}
-            >
-              {data.userHasLiked ? "❤️" : "🤍"} {data.likesCount ?? 0}
-            </button>
+    <div className="screen" style={{ paddingTop: 0, paddingLeft: 16, paddingRight: 16 }}>
+      <div className="news-detail__banner">
+        <button
+          className="floating-back"
+          onClick={() => navigate(-1)}
+          aria-label="Retour"
+        >
+          <BackIcon size={20} />
+        </button>
+        {data.banner ? (
+          <img src={data.banner} alt="" loading="lazy" />
+        ) : (
+          <div className="shimmer" style={{ width: "100%", height: "100%" }} />
+        )}
+      </div>
+
+      <article className="news-detail__body">
+        {((data.games && data.games.length > 0) ||
+          (data.tags && data.tags.length > 0)) && (
+          <div className="news-detail__tags">
+            {data.games?.map((game) => (
+              <span key={game.id} className="chip chip--grad">
+                {game.name}
+              </span>
+            ))}
+            {data.tags?.map((tag) => (
+              <span key={tag} className="chip">
+                {tag}
+              </span>
+            ))}
           </div>
-        </article>
-      )}
+        )}
+
+        <h1 className="news-detail__title">{data.title}</h1>
+        <p className="news-detail__meta">
+          {formatDate(data.createdAt)}
+          {data.author?.displayName ? ` · ${data.author.displayName}` : ""}
+        </p>
+
+        {data.summary && (
+          <p className="news-detail__summary">{data.summary}</p>
+        )}
+        {contentMarkdown && (
+          <div className="news-detail__content">
+            <GameMarkdown markdown={contentMarkdown} gameSlug={gameSlug} />
+          </div>
+        )}
+
+        <button className="like-button" onClick={like}>
+          <span
+            className={`like-button__heart${data.userHasLiked ? " like-button__heart--on" : ""}`}
+          >
+            <HeartIcon size={18} filled={data.userHasLiked} />
+          </span>
+          {data.likesCount ?? 0}
+        </button>
+      </article>
     </div>
   );
 }

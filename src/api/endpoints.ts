@@ -32,6 +32,13 @@ export const endpoints = {
   lairs: {
     list: "/lairs",
   },
+  friends: {
+    list: "/friends",
+    requests: "/friends/requests",
+  },
+  playGroups: {
+    list: "/play-groups",
+  },
   decks: {
     list: "/decks",
     detail: (deckId: string) => `/decks/${deckId}`,

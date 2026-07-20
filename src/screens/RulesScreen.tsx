@@ -74,7 +74,7 @@ function RuleNode({
           >
             {isOpen ? "▾" : "▸"}
           </button>
-          <span className="rule-id">{node.id}.</span>
+          <span className="rule-id rule-id--badge">{node.id}</span>
           {node.isKeyword ? (
             <KeywordBadge id={node.id} size="heading">
               <RuleMarkup
@@ -349,7 +349,7 @@ export function RulesScreen() {
             className="rules-search"
           />
           <button
-            className="button-ghost rules-toc-toggle"
+            className="btn btn--outline rules-toc-toggle"
             onClick={() => setTocOpen((v) => !v)}
           >
             {tocOpen ? "Fermer" : "Sommaire"}

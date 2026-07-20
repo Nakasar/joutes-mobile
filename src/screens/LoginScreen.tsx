@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { BackIcon } from "../components/icons";
 import { useAuth } from "../store/auth";
 
 /**
@@ -47,7 +48,14 @@ export function LoginScreen() {
   }
 
   return (
-    <div className="screen screen--centered">
+    <div className="login-screen">
+      <button
+        className="floating-back"
+        onClick={() => navigate(-1)}
+        aria-label="Retour"
+      >
+        <BackIcon size={20} />
+      </button>
       <div className="login-card">
         <img src="/joutes-logo.png" alt="" className="login-card__logo" />
         <h1 className="login-card__title">Joutes</h1>
@@ -69,7 +77,11 @@ export function LoginScreen() {
               />
             </label>
             {error && <p className="form-error">{error}</p>}
-            <button type="submit" className="button-primary" disabled={loading}>
+            <button
+              type="submit"
+              className="btn btn--grad btn--block"
+              disabled={loading}
+            >
               {loading ? "Envoi…" : "Recevoir un code"}
             </button>
           </form>
@@ -81,18 +93,23 @@ export function LoginScreen() {
                 type="text"
                 inputMode="numeric"
                 autoComplete="one-time-code"
+                className="otp-input"
                 value={otp}
                 onChange={(e) => setOtp(e.currentTarget.value)}
                 required
               />
             </label>
             {error && <p className="form-error">{error}</p>}
-            <button type="submit" className="button-primary" disabled={loading}>
+            <button
+              type="submit"
+              className="btn btn--grad btn--block"
+              disabled={loading}
+            >
               {loading ? "Connexion…" : "Se connecter"}
             </button>
             <button
               type="button"
-              className="button-ghost"
+              className="btn btn--ghost"
               onClick={() => {
                 setStep("email");
                 setOtp("");
@@ -103,13 +120,6 @@ export function LoginScreen() {
             </button>
           </form>
         )}
-        <button
-          type="button"
-          className="button-ghost"
-          onClick={() => navigate(-1)}
-        >
-          Retour
-        </button>
       </div>
     </div>
   );

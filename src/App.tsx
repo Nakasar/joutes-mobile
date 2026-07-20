@@ -10,6 +10,7 @@ import { LoginScreen } from "./screens/LoginScreen";
 import { NewsDetailScreen } from "./screens/NewsDetailScreen";
 import { RulesScreen } from "./screens/RulesScreen";
 import { SettingsScreen } from "./screens/SettingsScreen";
+import { SocialScreen } from "./screens/SocialScreen";
 import { AuthProvider, useAuth } from "./store/auth";
 import "./styles.css";
 
@@ -51,6 +52,7 @@ function Shell() {
                 />
                 <Route path="/events" element={<EventsScreen />} />
                 <Route path="/collection" element={<CollectionScreen />} />
+                <Route path="/social" element={<SocialScreen />} />
                 <Route path="/settings" element={<SettingsScreen />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>

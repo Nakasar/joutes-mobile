@@ -16,7 +16,11 @@ export function StatusView({ loading, error, onRetry, empty }: StatusViewProps) 
       <div className="status">
         <p className="form-error">{error}</p>
         {onRetry && (
-          <button className="button-primary" onClick={onRetry}>
+          <button
+            className="btn btn--grad"
+            style={{ marginTop: 12 }}
+            onClick={onRetry}
+          >
             Réessayer
           </button>
         )}
