@@ -180,6 +180,23 @@ jobs:
           APPLE_DEVELOPMENT_TEAM: ${{ secrets.APPLE_DEVELOPMENT_TEAM }}
         run: npm run tauri -- ios init --ci
 
+      - name: Configure manual code signing
+        if: env.HAS_IOS_CERTIFICATE == 'true'
+        run: |
+          set -euo pipefail
+          # Le projet Xcode généré force CODE_SIGN_STYLE = Automatic, qui a
+          # besoin d'un compte Apple connecté dans Xcode (absent sur le
+          # runner CI) et ignore le profil importé manuellement. On bascule
+          # en signature manuelle avec le certificat et le profil déjà
+          # présents dans le trousseau / Provisioning Profiles.
+          PROFILE="$HOME/Library/MobileDevice/Provisioning Profiles/joutes-mobile.mobileprovision"
+          security cms -D -i "$PROFILE" > "$RUNNER_TEMP/profile.plist"
+          PROFILE_NAME=$(/usr/libexec/PlistBuddy -c "Print :Name" "$RUNNER_TEMP/profile.plist")
+          echo "Provisioning profile détecté : $PROFILE_NAME"
+
+          PBXPROJ="$(find src-tauri/gen/apple -maxdepth 1 -name '*.xcodeproj')/project.pbxproj"
+          perl -pi -e "s/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;\n\t\t\t\tCODE_SIGN_IDENTITY = \"Apple Distribution\";\n\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = \"$PROFILE_NAME\";/g" "$PBXPROJ"
+
       - name: Build signed IPA
         if: env.HAS_IOS_CERTIFICATE == 'true'
         env:
