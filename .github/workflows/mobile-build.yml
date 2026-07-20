@@ -124,8 +124,8 @@ jobs:
     name: iOS / iPadOS (IPA)
     runs-on: macos-latest
     env:
-      # `secrets` n'est pas autorisé dans les conditions `if:` des jobs/steps ;
-      # on le rend disponible via une variable d'environnement de job.
+      # Expose la présence des secrets de signature via un flag `env` ('true'/'false')
+      # afin de simplifier les conditions `if:` des steps.
       HAS_IOS_CERTIFICATE: ${{ secrets.IOS_CERTIFICATE != '' }}
     steps:
       - uses: actions/checkout@v4
