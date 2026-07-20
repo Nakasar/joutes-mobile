@@ -1,0 +1,213 @@
+name: Mobile build
+
+# Construit l'application pour Android (APK + AAB) et iOS/iPadOS (IPA).
+#
+# Déclencheurs : manuel (workflow_dispatch) et tags de version `v*`.
+# Sur un tag, les artefacts sont aussi attachés à une release GitHub.
+#
+# Signature (optionnelle, via les secrets du dépôt) :
+#   Android : ANDROID_KEYSTORE (base64 du .jks), ANDROID_KEYSTORE_PASSWORD,
+#             ANDROID_KEY_ALIAS, ANDROID_KEY_PASSWORD
+#   iOS     : IOS_CERTIFICATE (base64 du .p12), IOS_CERTIFICATE_PASSWORD,
+#             IOS_MOBILE_PROVISION (base64 du .mobileprovision),
+#             APPLE_DEVELOPMENT_TEAM (identifiant d'équipe)
+# Sans secrets, le build produit des artefacts non signés (Android) ou un
+# .app non signé (iOS) qui valide la compilation.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+concurrency:
+  group: mobile-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  android:
+    name: Android (APK + AAB)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Configure Android NDK
+        run: echo "NDK_HOME=$ANDROID_NDK_LATEST_HOME" >> "$GITHUB_ENV"
+
+      - run: npm ci
+
+      - name: Initialize Android project
+        run: npm run tauri -- android init --ci
+
+      - name: Build APK and AAB (arm64)
+        run: npm run tauri -- android build --target aarch64 --apk --aab
+
+      - name: Sign artifacts
+        if: ${{ secrets.ANDROID_KEYSTORE != '' }}
+        env:
+          ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          KEYSTORE="$RUNNER_TEMP/keystore.jks"
+          echo "$ANDROID_KEYSTORE" | base64 -d > "$KEYSTORE"
+          BUILD_TOOLS="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)"
+
+          find src-tauri/gen/android -name '*-unsigned.apk' | while read -r APK; do
+            ALIGNED="${APK%-unsigned.apk}-aligned.apk"
+            SIGNED="${APK%-unsigned.apk}-signed.apk"
+            "$BUILD_TOOLS/zipalign" -f -p 4 "$APK" "$ALIGNED"
+            "$BUILD_TOOLS/apksigner" sign \
+              --ks "$KEYSTORE" \
+              --ks-pass "pass:$ANDROID_KEYSTORE_PASSWORD" \
+              --ks-key-alias "$ANDROID_KEY_ALIAS" \
+              --key-pass "pass:$ANDROID_KEY_PASSWORD" \
+              --out "$SIGNED" "$ALIGNED"
+            rm -f "$ALIGNED"
+          done
+
+          find src-tauri/gen/android -name '*.aab' | while read -r AAB; do
+            jarsigner -keystore "$KEYSTORE" \
+              -storepass "$ANDROID_KEYSTORE_PASSWORD" \
+              -keypass "$ANDROID_KEY_PASSWORD" \
+              "$AAB" "$ANDROID_KEY_ALIAS"
+          done
+
+          rm -f "$KEYSTORE"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: joutes-android-apk
+          path: src-tauri/gen/android/app/build/outputs/apk/**/release/*.apk
+          if-no-files-found: error
+
+      - name: Upload AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: joutes-android-aab
+          path: src-tauri/gen/android/app/build/outputs/bundle/**/*.aab
+          if-no-files-found: error
+
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            src-tauri/gen/android/app/build/outputs/apk/**/release/*.apk
+            src-tauri/gen/android/app/build/outputs/bundle/**/*.aab
+
+  ios:
+    name: iOS / iPadOS (IPA)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-ios
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - run: npm ci
+
+      - name: Import signing certificate
+        if: ${{ secrets.IOS_CERTIFICATE != '' }}
+        env:
+          IOS_CERTIFICATE: ${{ secrets.IOS_CERTIFICATE }}
+          IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+          IOS_MOBILE_PROVISION: ${{ secrets.IOS_MOBILE_PROVISION }}
+        run: |
+          set -euo pipefail
+          # Trousseau temporaire dédié au job
+          KEYCHAIN="$RUNNER_TEMP/build.keychain-db"
+          KEYCHAIN_PASSWORD="$(uuidgen)"
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
+          security list-keychains -d user -s "$KEYCHAIN" login.keychain-db
+
+          CERT="$RUNNER_TEMP/certificate.p12"
+          echo "$IOS_CERTIFICATE" | base64 -d > "$CERT"
+          security import "$CERT" -k "$KEYCHAIN" \
+            -P "$IOS_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: \
+            -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
+          rm -f "$CERT"
+
+          # Profil de provisionnement
+          PROFILES="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$PROFILES"
+          echo "$IOS_MOBILE_PROVISION" | base64 -d \
+            > "$PROFILES/joutes-mobile.mobileprovision"
+
+      - name: Initialize iOS project
+        env:
+          APPLE_DEVELOPMENT_TEAM: ${{ secrets.APPLE_DEVELOPMENT_TEAM }}
+        run: npm run tauri -- ios init --ci
+
+      - name: Build signed IPA
+        if: ${{ secrets.IOS_CERTIFICATE != '' }}
+        env:
+          APPLE_DEVELOPMENT_TEAM: ${{ secrets.APPLE_DEVELOPMENT_TEAM }}
+        run: npm run tauri -- ios build --export-method app-store-connect
+
+      - name: Build unsigned app (no signing secrets)
+        if: ${{ secrets.IOS_CERTIFICATE == '' }}
+        run: |
+          set -euo pipefail
+          PROJECT=$(find src-tauri/gen/apple -maxdepth 1 -name '*.xcodeproj')
+          SCHEME=$(xcodebuild -project "$PROJECT" -list -json \
+            | jq -r '.project.schemes[] | select(endswith("_iOS"))')
+          xcodebuild \
+            -project "$PROJECT" \
+            -scheme "$SCHEME" \
+            -configuration release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="" build
+          # Empaquette le .app non signé dans un pseudo-IPA pour l'artefact
+          mkdir -p Payload
+          cp -R build/Build/Products/release-iphoneos/*.app Payload/
+          zip -qr joutes-ios-unsigned.ipa Payload
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: joutes-ios-ipa
+          path: |
+            src-tauri/gen/apple/build/**/*.ipa
+            joutes-ios-unsigned.ipa
+          if-no-files-found: error
+
+      - name: Attach to release
+        if: ${{ startsWith(github.ref, 'refs/tags/') && secrets.IOS_CERTIFICATE != '' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          files: src-tauri/gen/apple/build/**/*.ipa
