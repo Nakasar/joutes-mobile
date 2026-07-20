@@ -2,6 +2,7 @@ import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import { TabBar } from "./components/TabBar";
 import { CardDetailScreen } from "./screens/CardDetailScreen";
 import { CollectionScreen } from "./screens/CollectionScreen";
+import { DeckCheckerScreen } from "./screens/DeckCheckerScreen";
 import { EventsScreen } from "./screens/EventsScreen";
 import { GameCardsScreen } from "./screens/GameCardsScreen";
 import { GamesScreen } from "./screens/GamesScreen";
@@ -49,6 +50,10 @@ function Shell() {
                 <Route
                   path="/games/:gameSlug/rules"
                   element={<RulesScreen />}
+                />
+                <Route
+                  path="/games/:gameSlug/deck-checker"
+                  element={<DeckCheckerScreen />}
                 />
                 <Route path="/events" element={<EventsScreen />} />
                 <Route path="/collection" element={<CollectionScreen />} />

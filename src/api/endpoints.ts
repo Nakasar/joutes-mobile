@@ -20,6 +20,7 @@ export const endpoints = {
     news: (idOrSlug: string) => `/games/${idOrSlug}/news`,
     sets: (idOrSlug: string) => `/games/${idOrSlug}/sets`,
     rules: (idOrSlug: string) => `/games/${idOrSlug}/rules`,
+    deckChecker: (idOrSlug: string) => `/games/${idOrSlug}/deck-checker`,
   },
   news: {
     list: "/news",

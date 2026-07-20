@@ -4,7 +4,7 @@ import { searchCards } from "../api/cards";
 import { getGame } from "../api/games";
 import type { Card } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
-import { BookIcon, SearchIcon } from "../components/icons";
+import { BookIcon, DeckCheckIcon, SearchIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 
@@ -82,14 +82,24 @@ export function GameCardsScreen() {
       <BackHeader
         title={game.data?.name ?? "Cartes"}
         action={
-          <Link
-            to={`/games/${gameSlug}/rules`}
-            className="header-link"
-            aria-label="Consulter les règles"
-          >
-            <BookIcon size={16} />
-            Règles
-          </Link>
+          <div className="head-actions">
+            <Link
+              to={`/games/${gameSlug}/deck-checker`}
+              className="icon-button"
+              aria-label="Vérificateur de deck"
+              title="Vérificateur de deck"
+            >
+              <DeckCheckIcon size={20} />
+            </Link>
+            <Link
+              to={`/games/${gameSlug}/rules`}
+              className="header-link"
+              aria-label="Consulter les règles"
+            >
+              <BookIcon size={16} />
+              Règles
+            </Link>
+          </div>
         }
       />
       <div className="card-filters">

@@ -1,96 +1,12 @@
 import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { getCard } from "../api/cards";
-import type { Errata } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
-import { ExternalLinkIcon } from "../components/icons";
+import { ErrataCard } from "../components/ErrataCard";
 import { GameMarkdown } from "../components/GameMarkdown";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { annotateCardText } from "../lib/card-text-markdown";
-import { annotateErrataMarkdown } from "../lib/errata-markdown";
-
-const errataTypeLabels: Record<string, string> = {
-  errata: "Errata",
-  clarification: "Clarification",
-  ruling: "Ruling",
-};
-
-function formatDate(iso?: string): string {
-  if (!iso) return "";
-  return new Date(iso).toLocaleDateString("fr-FR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
-
-/** Texte de l'errata, en français si une traduction existe. */
-function errataText(errata: Errata): string {
-  const fr = errata.translations?.find((t) => t.lang === "fr");
-  return fr?.details ?? errata.details;
-}
-
-function isUrl(value: string): boolean {
-  return /^https?:\/\//i.test(value.trim());
-}
-
-function ErrataCard({
-  errata,
-  gameSlug,
-  cardIdByName,
-}: {
-  errata: Errata;
-  gameSlug: string;
-  cardIdByName: Map<string, string>;
-}) {
-  const deprecated = Boolean(errata.deprecatedAt);
-  const markdown = useMemo(
-    () => annotateErrataMarkdown(errataText(errata), cardIdByName),
-    [errata, cardIdByName],
-  );
-
-  return (
-    <div
-      className={`errata errata--${errata.type}${deprecated ? " errata--deprecated" : ""}`}
-    >
-      <p className="errata__header">
-        <span className={`errata__type errata__type--${errata.type}`}>
-          {errataTypeLabels[errata.type] ?? errata.type}
-        </span>
-        {deprecated && <span className="chip chip--danger">Obsolète</span>}
-        {errata.errataDate && (
-          <span className="errata__date">{formatDate(errata.errataDate)}</span>
-        )}
-      </p>
-      <div className="errata__details">
-        <GameMarkdown markdown={markdown} gameSlug={gameSlug} />
-      </div>
-      <p className="errata__footer">
-        {errata.source &&
-          (isUrl(errata.source) ? (
-            <a
-              className="errata__source"
-              href={errata.source}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Source
-              <ExternalLinkIcon />
-            </a>
-          ) : (
-            <span>Source : {errata.source}</span>
-          ))}
-        {errata.votes &&
-          (errata.votes.positive ?? 0) + (errata.votes.negative ?? 0) > 0 && (
-            <span>
-              👍 {errata.votes.positive ?? 0} · 👎 {errata.votes.negative ?? 0}
-            </span>
-          )}
-      </p>
-    </div>
-  );
-}
 
 export function CardDetailScreen() {
   const { gameSlug = "", cardId = "" } = useParams();

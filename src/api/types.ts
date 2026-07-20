@@ -294,6 +294,36 @@ export interface DecksListResponse {
   totalPages: number;
 }
 
+// ---- Vérificateur de deck (Riftbound) ----
+
+export interface DeckListCard {
+  name: string;
+  quantity: number;
+  cardId?: string;
+  image?: string;
+  banned?: boolean;
+  /** false si l'entrée n'a pas pu être associée à une carte connue. */
+  recognized?: boolean;
+  erratas?: Errata[];
+}
+
+export interface DeckList {
+  champions: DeckListCard[];
+  legends: DeckListCard[];
+  maindeck: DeckListCard[];
+  sideboard: DeckListCard[];
+  battlefields: DeckListCard[];
+  runes: DeckListCard[];
+}
+
+export interface DeckCheckResponse {
+  deck: DeckList;
+  /** Lien Piltover Archive normalisé, si disponible. */
+  link?: string;
+  /** Code de deck Piltover, si disponible. */
+  code?: string;
+}
+
 // ---- Collection ----
 
 export interface SetCompletion {
