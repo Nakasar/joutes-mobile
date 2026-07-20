@@ -155,6 +155,16 @@ export function ExternalLinkIcon(p: IconProps) {
   );
 }
 
+export function DeckCheckIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <rect x="4" y="3" width="16" height="18" rx="2.5" />
+      <path d="M8 3.5h8" />
+      <path d="m8.5 12.5 2.2 2.2 4.3-4.3" />
+    </Icon>
+  );
+}
+
 export function LockIcon(p: IconProps) {
   return (
     <Icon {...p}>

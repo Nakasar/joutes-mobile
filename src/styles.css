@@ -1683,6 +1683,183 @@ textarea:focus {
   gap: 12px;
 }
 
+/* ---- Vérificateur de deck ---- */
+
+.deck-input {
+  width: 100%;
+  min-height: 130px;
+  resize: vertical;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.deck-summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  border: 1px solid var(--border);
+}
+
+.deck-summary--ok {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+.deck-summary--ko {
+  background: color-mix(in srgb, var(--danger) 12%, transparent);
+  border-color: color-mix(in srgb, var(--danger) 40%, transparent);
+}
+
+.deck-summary__icon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  color: #fff;
+}
+
+.deck-summary--ok .deck-summary__icon {
+  background: var(--accent);
+}
+.deck-summary--ko .deck-summary__icon {
+  background: var(--danger);
+}
+
+.deck-summary__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  margin: 0;
+}
+
+.deck-summary__sub {
+  margin: 2px 0 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.deck-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.deck-section {
+  margin-bottom: 18px;
+}
+
+.deck-section__head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.deck-section__title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.deck-section__count {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--surface-2);
+  border-radius: 6px;
+  padding: 1px 7px;
+}
+
+.deck-section__count--bad {
+  color: var(--danger-fg);
+  background: var(--danger);
+}
+
+.deck-section__rule {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.deck-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+.deck-card--link {
+  cursor: pointer;
+  transition: transform 0.12s;
+}
+
+.deck-card--link:active {
+  transform: scale(0.99);
+}
+
+.deck-card__qty {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--primary);
+  flex-shrink: 0;
+  min-width: 2.2em;
+}
+
+.deck-card__name {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.deck-card__name--unknown {
+  color: var(--danger);
+}
+
+.deck-badge {
+  flex-shrink: 0;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 999px;
+  padding: 2px 7px;
+}
+
+.deck-badge--banned {
+  background: var(--danger);
+  color: var(--danger-fg);
+}
+
+.deck-badge--unknown {
+  background: color-mix(in srgb, var(--danger) 16%, transparent);
+  color: var(--danger);
+}
+
+.deck-badge--errata {
+  background: color-mix(in srgb, var(--gold) 22%, transparent);
+  color: var(--gold);
+}
+
 /* ---- Markdown de jeu (erratas, news, texte de carte, règles) ---- */
 
 .markdown p {
