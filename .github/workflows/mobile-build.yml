@@ -178,14 +178,10 @@ jobs:
       - name: Build signed IPA
         if: env.HAS_ASC_API_KEY == 'true'
         env:
-          # `tauri ios build` importe lui-même le certificat dans un trousseau
-          # temporaire (via signing_from_env / tauri-macos-sign), puis
-          # configure automatiquement la signature manuelle (CODE_SIGN_STYLE,
-          # CODE_SIGN_IDENTITY) dans le projet Xcode. Il faut donc lui
-          # fournir ces secrets directement, au niveau de l'étape de build.
-          # Le provisioning profile n'est volontairement pas fourni ici :
-          # avec la clé API configurée ci-dessus, xcodebuild le résout/crée
-          # lui-même pour ce certificat via -allowProvisioningUpdates.
+          # Aucun certificat ni provisioning profile fournis ici : avec la
+          # clé API configurée ci-dessus et -allowProvisioningUpdates (activé
+          # par tauri ios build), Xcode gère lui-même la signature ("Cloud
+          # signing", cf. https://tauri.app/distribute/app-store/#ios).
           APPLE_DEVELOPMENT_TEAM: ${{ secrets.APPLE_DEVELOPMENT_TEAM }}
         run: npm run tauri ios build -- --export-method app-store-connect
 
