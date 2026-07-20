@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { getCard } from "../api/cards";
 import type { Errata } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
+import { ExternalLinkIcon } from "../components/ExternalLinkIcon";
 import { GameMarkdown } from "../components/GameMarkdown";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
@@ -28,6 +29,10 @@ function formatDate(iso?: string): string {
 function errataText(errata: Errata): string {
   const fr = errata.translations?.find((t) => t.lang === "fr");
   return fr?.details ?? errata.details;
+}
+
+function isUrl(value: string): boolean {
+  return /^https?:\/\//i.test(value.trim());
 }
 
 function ErrataCard({
@@ -62,7 +67,20 @@ function ErrataCard({
         <GameMarkdown markdown={markdown} gameSlug={gameSlug} />
       </div>
       <p className="errata__footer muted">
-        {errata.source && <span>Source : {errata.source}</span>}
+        {errata.source &&
+          (isUrl(errata.source) ? (
+            <a
+              className="errata__source"
+              href={errata.source}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Source
+              <ExternalLinkIcon />
+            </a>
+          ) : (
+            <span>Source : {errata.source}</span>
+          ))}
         {errata.votes &&
           (errata.votes.positive ?? 0) + (errata.votes.negative ?? 0) > 0 && (
             <span>
