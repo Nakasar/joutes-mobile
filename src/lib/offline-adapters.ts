@@ -18,8 +18,14 @@ import { hyperlinkEntries, searchHyperlinkedEntries } from "./rules-hyperlink";
 interface Indices {
   cardsById: Map<string, Card>;
   nameToId: Map<string, string>;
-  /** cardId → erratas associés (via `cardIds` + mentions dans le texte). */
-  erratasByCardId: Map<string, Errata[]>;
+  /**
+   * Nom de carte (minuscule) → erratas associés. Indexé par nom (et non par id)
+   * pour refléter le comportement de l'API : les erratas sont liés via
+   * `cardIds`, mais le détail carte regroupe toutes les cartes de même nom —
+   * une carte et sa variante d'illustration (ex. `UNL079` / `UNL079a`)
+   * partagent donc leurs erratas.
+   */
+  erratasByName: Map<string, Errata[]>;
 }
 
 const indexCache = new WeakMap<GameExport, Indices>();
@@ -52,18 +58,6 @@ function toCard(raw: Record<string, unknown>): Card {
   } as Card;
 }
 
-/** Noms de cartes mentionnés dans un errata via `<<Nom>>` ou `[Nom]`. */
-function mentionsOf(errata: Errata): string[] {
-  const text = [
-    errata.details,
-    ...(errata.translations ?? []).map((t) => t.details),
-  ].join("\n");
-  const names: string[] = [];
-  for (const m of text.matchAll(/<<([^<>]+)>>/g)) names.push(m[1].trim());
-  for (const m of text.matchAll(/\[([^\][]+)\]/g)) names.push(m[1].trim());
-  return names;
-}
-
 function buildIndices(exp: GameExport): Indices {
   const cached = indexCache.get(exp);
   if (cached) return cached;
@@ -76,30 +70,29 @@ function buildIndices(exp: GameExport): Indices {
     if (card.name) nameToId.set(card.name.toLowerCase(), card.id);
   }
 
-  // Liaison errata → carte : ids explicites (`cardIds`) + mentions dans le
-  // texte (`<<Nom>>` / `[Nom]`) résolues contre les noms de cartes. Les
-  // `cardIds` restent la source privilégiée ; les mentions comblent l'absence
-  // de liaison explicite dans l'export.
-  const erratasByCardId = new Map<string, Errata[]>();
-  const add = (cardId: string, errata: Errata) => {
-    const list = erratasByCardId.get(cardId);
+  // Liaison errata → carte via `cardIds` (source de vérité de l'API, désormais
+  // complète dans l'export). On indexe par nom de carte : un errata lié à une
+  // seule impression (ex. `UNL079`) doit apparaître sur toutes les cartes de
+  // même nom (ex. la variante `UNL079a`), comme le fait le détail carte en
+  // ligne (`getErratasByCardId` regroupe par nom).
+  const erratasByName = new Map<string, Errata[]>();
+  const add = (name: string, errata: Errata) => {
+    const key = name.toLowerCase();
+    const list = erratasByName.get(key);
     if (list) {
       if (!list.includes(errata)) list.push(errata);
     } else {
-      erratasByCardId.set(cardId, [errata]);
+      erratasByName.set(key, [errata]);
     }
   };
   for (const errata of exp.erratas ?? []) {
     for (const id of errata.cardIds ?? []) {
-      if (cardsById.has(id)) add(id, errata);
-    }
-    for (const name of mentionsOf(errata)) {
-      const id = nameToId.get(name.toLowerCase());
-      if (id) add(id, errata);
+      const card = cardsById.get(id);
+      if (card?.name) add(card.name, errata);
     }
   }
 
-  const indices: Indices = { cardsById, nameToId, erratasByCardId };
+  const indices: Indices = { cardsById, nameToId, erratasByName };
   indexCache.set(exp, indices);
   return indices;
 }
@@ -182,11 +175,13 @@ export function offlineGetCard(
   exp: GameExport,
   cardId: string,
 ): CardDetail | null {
-  const { cardsById, nameToId, erratasByCardId } = buildIndices(exp);
+  const { cardsById, nameToId, erratasByName } = buildIndices(exp);
   const card = cardsById.get(cardId);
   if (!card) return null;
 
-  const erratas = erratasByCardId.get(cardId) ?? [];
+  const erratas = card.name
+    ? (erratasByName.get(card.name.toLowerCase()) ?? [])
+    : [];
   // `cardIdByName` permet aux mentions `[Carte]` dans les erratas de devenir
   // des liens ; on fournit l'index global nom → id.
   const cardIdByName: Record<string, string> = {};
