@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { getCard } from "../api/cards";
 import { useApi } from "../hooks/useApi";
 import { annotateCardText } from "../lib/card-text-markdown";
@@ -25,6 +26,7 @@ export function CardDetailModal({
   fallbackImage?: string;
   onClose: () => void;
 }) {
+  const { t } = useTranslation();
   const { data, loading, error, reload } = useApi(
     () => getCard(gameSlug, cardId),
     [gameSlug, cardId],
@@ -68,7 +70,11 @@ export function CardDetailModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sheet__handle" />
-        <button className="sheet__close" onClick={onClose} aria-label="Fermer">
+        <button
+          className="sheet__close"
+          onClick={onClose}
+          aria-label={t("common.close")}
+        >
           <BackIcon size={20} />
         </button>
 
@@ -84,7 +90,7 @@ export function CardDetailModal({
             <p className="card-badges">
               {data.type && <span className="chip">{data.type}</span>}
               {typeof data.cost === "number" && (
-                <span className="chip">Coût {data.cost}</span>
+                <span className="chip">{t("card.cost", { cost: data.cost })}</span>
               )}
               {data.setCode && (
                 <span className="chip">
@@ -92,7 +98,9 @@ export function CardDetailModal({
                   {data.collectorNumber ? ` ${data.collectorNumber}` : ""}
                 </span>
               )}
-              {data.banned && <span className="chip chip--danger">Bannie</span>}
+              {data.banned && (
+                <span className="chip chip--danger">{t("card.banned")}</span>
+              )}
             </p>
           )}
           {cardTextMarkdown && (
@@ -104,7 +112,7 @@ export function CardDetailModal({
           <StatusView loading={loading} error={error} onRetry={reload} />
 
           <h2 className="section-title">
-            Erratas &amp; rulings
+            {t("card.errataSection")}
             {erratas.length > 0 && (
               <span className="section-title__count muted">
                 ({erratas.length})
@@ -112,7 +120,7 @@ export function CardDetailModal({
             )}
           </h2>
           {!loading && erratas.length === 0 ? (
-            <p className="muted">Aucun errata pour cette carte.</p>
+            <p className="muted">{t("card.noErrataModal")}</p>
           ) : (
             erratas.map((errata) => (
               <ErrataCard

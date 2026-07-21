@@ -6,6 +6,7 @@ import {
   useState,
 } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { getRules, searchRules } from "../api/rules";
 import type { RuleDocument, RuleEntry, RuleLang } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
@@ -13,6 +14,7 @@ import { KeywordBadge } from "../components/KeywordBadge";
 import { RuleMarkup } from "../components/RuleMarkup";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
+import { currentLocale } from "../i18n";
 import {
   buildRuleTree,
   getRuleSections,
@@ -50,6 +52,7 @@ function RuleNode({
   resultsById: Map<string, RuleEntry>;
   framedSectionIds: Set<string>;
 }) {
+  const { t } = useTranslation();
   const markup = searchActive
     ? resultsById.get(node.id)?.markup ?? node.markup
     : node.markup;
@@ -70,7 +73,7 @@ function RuleNode({
           <button
             className="rule-toggle"
             onClick={() => onToggle(node.id)}
-            aria-label={isOpen ? "Replier" : "Déplier"}
+            aria-label={isOpen ? t("rules.collapse") : t("rules.expand")}
           >
             {isOpen ? "▾" : "▸"}
           </button>
@@ -152,9 +155,10 @@ function TableOfContents({
   sections: RuleSection[];
   onNavigate: (anchorId: string) => void;
 }) {
+  const { t } = useTranslation();
   return (
     <nav className="rules-toc">
-      <p className="rules-toc__heading">Sommaire</p>
+      <p className="rules-toc__heading">{t("rules.tocHeading")}</p>
       {sections.map((sec) => (
         <a
           key={sec.start}
@@ -174,6 +178,7 @@ function TableOfContents({
 }
 
 export function RulesScreen() {
+  const { t } = useTranslation();
   const { gameSlug = "" } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -183,7 +188,13 @@ export function RulesScreen() {
   const ruleDocument: RuleDocument = isDocument(documentParam)
     ? documentParam
     : "CR";
-  const lang: RuleLang = isLang(langParam) ? langParam : "fr";
+  // Les règles n'existent qu'en FR/EN : on suit la langue de l'app quand c'est
+  // possible, sinon anglais (de/it → en). L'utilisateur garde le choix manuel.
+  const lang: RuleLang = isLang(langParam)
+    ? langParam
+    : currentLocale().startsWith("fr")
+      ? "fr"
+      : "en";
 
   const { data, loading, error, reload } = useApi(
     () => getRules(gameSlug, { document: ruleDocument, lang }),
@@ -301,7 +312,7 @@ export function RulesScreen() {
 
   return (
     <div className="screen rules-screen">
-      <BackHeader title="Règles" />
+      <BackHeader title={t("rules.title")} />
 
       <div className="rules-controls">
         <div className="rules-controls__row">
@@ -310,20 +321,20 @@ export function RulesScreen() {
               className={ruleDocument === "CR" ? "segmented__item segmented__item--active" : "segmented__item"}
               onClick={() => setParam("doc", "CR")}
             >
-              Règles complètes
+              {t("rules.docComplete")}
             </button>
             <button
               className={ruleDocument === "TR" ? "segmented__item segmented__item--active" : "segmented__item"}
               onClick={() => setParam("doc", "TR")}
             >
-              Tournoi
+              {t("rules.docTournament")}
             </button>
           </div>
           <div className="segmented">
             <button
               className={lang === "fr" ? "segmented__item segmented__item--active" : "segmented__item"}
               onClick={() => setParam("lang", "fr")}
-              aria-label="Afficher les règles en français"
+              aria-label={t("rules.showInFrench")}
               aria-pressed={lang === "fr"}
               title="Français"
             >
@@ -332,7 +343,7 @@ export function RulesScreen() {
             <button
               className={lang === "en" ? "segmented__item segmented__item--active" : "segmented__item"}
               onClick={() => setParam("lang", "en")}
-              aria-label="Afficher les règles en anglais"
+              aria-label={t("rules.showInEnglish")}
               aria-pressed={lang === "en"}
               title="English"
             >
@@ -343,7 +354,7 @@ export function RulesScreen() {
         <div className="rules-controls__row">
           <input
             type="search"
-            placeholder="Rechercher dans les règles…"
+            placeholder={t("rules.searchPlaceholder")}
             value={searchInput}
             onChange={(e) => setSearchInput(e.currentTarget.value)}
             className="rules-search"
@@ -352,7 +363,7 @@ export function RulesScreen() {
             className="btn btn--outline rules-toc-toggle"
             onClick={() => setTocOpen((v) => !v)}
           >
-            {tocOpen ? "Fermer" : "Sommaire"}
+            {tocOpen ? t("rules.tocClose") : t("rules.tocOpen")}
           </button>
         </div>
       </div>
@@ -365,8 +376,7 @@ export function RulesScreen() {
 
       {debouncedQuery && searchActive && (
         <p className="muted rules-results">
-          {totalMatches} résultat{totalMatches > 1 ? "s" : ""} pour «{" "}
-          {debouncedQuery} »
+          {t("rules.results", { count: totalMatches, query: debouncedQuery })}
         </p>
       )}
 

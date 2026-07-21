@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { listGames } from "../api/games";
 import type { GameSummary } from "../api/types";
 import { CachedImage } from "../components/CachedImage";
@@ -17,6 +18,7 @@ function GameRow({
   game: GameSummary;
   browsable: boolean;
 }) {
+  const { t } = useTranslation();
   const color = colorFor(game.slug, (game as { color?: string }).color);
 
   const inner = (
@@ -40,7 +42,7 @@ function GameRow({
         {browsable ? (
           game.type && <span className="chip">{game.type}</span>
         ) : (
-          <span className="chip">Indisponible hors ligne</span>
+          <span className="chip">{t("games.unavailableOffline")}</span>
         )}
       </div>
       {browsable && (
@@ -57,7 +59,7 @@ function GameRow({
       <div
         className="game-row game-row--offline"
         aria-disabled="true"
-        title="Téléchargez ce jeu (Réglages › Hors ligne) pour y accéder sans connexion"
+        title={t("games.offlineHint")}
       >
         {inner}
       </div>
@@ -72,6 +74,7 @@ function GameRow({
 }
 
 export function GamesScreen() {
+  const { t } = useTranslation();
   const online = useOnline();
   const { data, loading, error, reload } = useApi(() => listGames());
   const offline = useApi(() => listMeta());
@@ -85,8 +88,8 @@ export function GamesScreen() {
     <div className="screen">
       <div className="screen-head">
         <div className="screen-head__titles">
-          <h1 className="screen-title">Jeux</h1>
-          <p className="screen-subtitle">Catalogues, cartes et règles</p>
+          <h1 className="screen-title">{t("games.title")}</h1>
+          <p className="screen-subtitle">{t("games.subtitle")}</p>
         </div>
       </div>
 
@@ -94,7 +97,7 @@ export function GamesScreen() {
         loading={loading}
         error={error}
         onRetry={reload}
-        empty={data?.length === 0 ? "Aucun jeu." : undefined}
+        empty={data?.length === 0 ? t("games.empty") : undefined}
       />
 
       {data?.map((game) => (

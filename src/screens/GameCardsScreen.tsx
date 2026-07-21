@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { searchCards } from "../api/cards";
 import { getGame } from "../api/games";
 import type { Card } from "../api/types";
@@ -15,6 +16,7 @@ const PAGE_SIZE = 30;
  * par type (facettes renvoyées par l'API), chargement par pages.
  */
 export function GameCardsScreen() {
+  const { t } = useTranslation();
   const { gameSlug = "" } = useParams();
 
   const [searchInput, setSearchInput] = useState("");
@@ -68,9 +70,7 @@ export function GameCardsScreen() {
       })
       .catch((err: unknown) => {
         if (id !== requestId.current) return;
-        setError(
-          err instanceof Error ? err.message : "Une erreur est survenue.",
-        );
+        setError(err instanceof Error ? err.message : t("cards.error"));
       })
       .finally(() => {
         if (id === requestId.current) setLoading(false);
@@ -80,24 +80,24 @@ export function GameCardsScreen() {
   return (
     <div className="screen">
       <BackHeader
-        title={game.data?.name ?? "Cartes"}
+        title={game.data?.name ?? t("cards.fallbackTitle")}
         action={
           <div className="head-actions">
             <Link
               to={`/games/${gameSlug}/deck-checker`}
               className="icon-button"
-              aria-label="Vérificateur de deck"
-              title="Vérificateur de deck"
+              aria-label={t("cards.deckChecker")}
+              title={t("cards.deckChecker")}
             >
               <DeckCheckIcon size={20} />
             </Link>
             <Link
               to={`/games/${gameSlug}/rules`}
               className="header-link"
-              aria-label="Consulter les règles"
+              aria-label={t("cards.rulesAria")}
             >
               <BookIcon size={16} />
-              Règles
+              {t("cards.rulesLink")}
             </Link>
           </div>
         }
@@ -107,7 +107,7 @@ export function GameCardsScreen() {
           <SearchIcon size={18} className="search-field__icon" />
           <input
             type="search"
-            placeholder="Rechercher une carte…"
+            placeholder={t("cards.searchPlaceholder")}
             value={searchInput}
             onChange={(e) => setSearchInput(e.currentTarget.value)}
           />
@@ -117,7 +117,7 @@ export function GameCardsScreen() {
             value={setCode}
             onChange={(e) => setSetCode(e.currentTarget.value)}
           >
-            <option value="">Tous les sets</option>
+            <option value="">{t("cards.allSets")}</option>
             {setCodes.map((code) => (
               <option key={code} value={code}>
                 {code}
@@ -125,7 +125,7 @@ export function GameCardsScreen() {
             ))}
           </select>
           <select value={type} onChange={(e) => setType(e.currentTarget.value)}>
-            <option value="">Tous les types</option>
+            <option value="">{t("cards.allTypes")}</option>
             {types.map((t) => (
               <option key={t} value={t}>
                 {t}
@@ -136,7 +136,7 @@ export function GameCardsScreen() {
       </div>
       {!loading && !error && (
         <p className="card-count">
-          <strong>{total}</strong> carte{total > 1 ? "s" : ""}
+          <strong>{total}</strong> {t("cards.countWord", { count: total })}
         </p>
       )}
       <div className="card-grid">
@@ -176,7 +176,7 @@ export function GameCardsScreen() {
         onRetry={() => setPage(1)}
         empty={
           !loading && !error && cards.length === 0
-            ? "Aucune carte ne correspond à la recherche."
+            ? t("cards.empty")
             : undefined
         }
       />
@@ -185,7 +185,7 @@ export function GameCardsScreen() {
           className="btn btn--grad load-more"
           onClick={() => setPage((p) => p + 1)}
         >
-          Charger plus
+          {t("cards.loadMore")}
         </button>
       )}
     </div>

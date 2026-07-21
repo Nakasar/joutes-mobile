@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { listGames } from "../api/games";
 import { listNews } from "../api/news";
 import type { News } from "../api/types";
@@ -7,16 +8,18 @@ import { CachedImage } from "../components/CachedImage";
 import { HeartIcon, SearchIcon, SettingsIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
+import { currentLocale } from "../i18n";
 
 function formatDate(iso?: string): string {
   if (!iso) return "";
-  return new Date(iso).toLocaleDateString("fr-FR", {
+  return new Date(iso).toLocaleDateString(currentLocale(), {
     day: "numeric",
     month: "short",
   });
 }
 
 function FeaturedCard({ item }: { item: News }) {
+  const { t } = useTranslation();
   const game = item.games?.[0]?.name;
   return (
     <Link to={`/news/${item.id}`} className="featured">
@@ -32,7 +35,8 @@ function FeaturedCard({ item }: { item: News }) {
       )}
       <div className="featured__overlay">
         <span className="chip chip--grad featured__badge">
-          À LA UNE{game ? ` · ${game}` : ""}
+          {t("home.featuredBadge")}
+          {game ? ` · ${game}` : ""}
         </span>
         <h2 className="featured__title">{item.title}</h2>
         <p className="featured__meta">
@@ -81,6 +85,7 @@ function NewsItem({ item }: { item: News }) {
 
 export function HomeScreen() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [gameId, setGameId] = useState<string | null>(null);
 
   const games = useApi(() => listGames());
@@ -98,17 +103,17 @@ export function HomeScreen() {
         <div className="screen-head__titles">
           <p className="eyebrow">
             <img src="/joutes-logo.png" alt="" className="eyebrow__logo" />
-            Joutes
+            {t("home.eyebrow")}
           </p>
-          <h1 className="screen-title">Actualités</h1>
+          <h1 className="screen-title">{t("home.title")}</h1>
         </div>
         <div className="head-actions">
-          <button className="icon-button" aria-label="Rechercher">
+          <button className="icon-button" aria-label={t("common.search")}>
             <SearchIcon size={20} />
           </button>
           <button
             className="icon-button"
-            aria-label="Réglages"
+            aria-label={t("common.settings")}
             onClick={() => navigate("/settings")}
           >
             <SettingsIcon size={20} />
@@ -122,7 +127,7 @@ export function HomeScreen() {
             className={`chip-filter${gameId === null ? " chip-filter--active" : ""}`}
             onClick={() => setGameId(null)}
           >
-            Tous
+            {t("home.filterAll")}
           </button>
           {games.data.map((game) => (
             <button
@@ -140,7 +145,7 @@ export function HomeScreen() {
         loading={loading}
         error={error}
         onRetry={reload}
-        empty={data && news.length === 0 ? "Aucune actualité." : undefined}
+        empty={data && news.length === 0 ? t("home.empty") : undefined}
       />
 
       {featured && <FeaturedCard item={featured} />}

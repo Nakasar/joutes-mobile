@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { BackIcon } from "../components/icons";
 import { useAuth } from "../store/auth";
 
@@ -9,6 +10,7 @@ import { useAuth } from "../store/auth";
  * 2. il saisit le code, le serveur pose le cookie de session.
  */
 export function LoginScreen() {
+  const { t } = useTranslation();
   const { sendOtp, signInWithOtp } = useAuth();
   const navigate = useNavigate();
   const [step, setStep] = useState<"email" | "otp">("email");
@@ -25,9 +27,7 @@ export function LoginScreen() {
       await sendOtp(email);
       setStep("otp");
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Impossible d'envoyer le code.",
-      );
+      setError(err instanceof Error ? err.message : t("login.errorSendCode"));
     } finally {
       setLoading(false);
     }
@@ -41,7 +41,7 @@ export function LoginScreen() {
       await signInWithOtp(email, otp);
       navigate("/collection", { replace: true });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Code invalide.");
+      setError(err instanceof Error ? err.message : t("login.errorInvalidCode"));
     } finally {
       setLoading(false);
     }
@@ -52,7 +52,7 @@ export function LoginScreen() {
       <button
         className="floating-back"
         onClick={() => navigate(-1)}
-        aria-label="Retour"
+        aria-label={t("common.back")}
       >
         <BackIcon size={20} />
       </button>
@@ -61,13 +61,13 @@ export function LoginScreen() {
         <h1 className="login-card__title">Joutes</h1>
         <p className="login-card__subtitle">
           {step === "email"
-            ? "Connectez-vous avec votre compte joutes.app"
-            : `Un code a été envoyé à ${email}`}
+            ? t("login.subtitleEmail")
+            : t("login.subtitleOtp", { email })}
         </p>
         {step === "email" ? (
           <form onSubmit={handleSendOtp} className="login-card__form">
             <label className="field">
-              <span className="field__label">E-mail</span>
+              <span className="field__label">{t("login.emailLabel")}</span>
               <input
                 type="email"
                 value={email}
@@ -82,13 +82,13 @@ export function LoginScreen() {
               className="btn btn--grad btn--block"
               disabled={loading}
             >
-              {loading ? "Envoi…" : "Recevoir un code"}
+              {loading ? t("login.sending") : t("login.sendCode")}
             </button>
           </form>
         ) : (
           <form onSubmit={handleSignIn} className="login-card__form">
             <label className="field">
-              <span className="field__label">Code reçu par e-mail</span>
+              <span className="field__label">{t("login.otpLabel")}</span>
               <input
                 type="text"
                 inputMode="numeric"
@@ -105,7 +105,7 @@ export function LoginScreen() {
               className="btn btn--grad btn--block"
               disabled={loading}
             >
-              {loading ? "Connexion…" : "Se connecter"}
+              {loading ? t("login.signingIn") : t("common.signIn")}
             </button>
             <button
               type="button"
@@ -116,7 +116,7 @@ export function LoginScreen() {
                 setError(null);
               }}
             >
-              Changer d'adresse e-mail
+              {t("login.changeEmail")}
             </button>
           </form>
         )}

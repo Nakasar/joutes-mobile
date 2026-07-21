@@ -1,30 +1,33 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { listEvents } from "../api/events";
 import { BackIcon, ChevronIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
+import { currentLocale } from "../i18n";
 
 function dow(iso: string): string {
   return new Date(iso)
-    .toLocaleDateString("fr-FR", { weekday: "short" })
+    .toLocaleDateString(currentLocale(), { weekday: "short" })
     .replace(".", "");
 }
 function dayNum(iso: string): string {
-  return new Date(iso).toLocaleDateString("fr-FR", { day: "numeric" });
+  return new Date(iso).toLocaleDateString(currentLocale(), { day: "numeric" });
 }
 function time(iso: string): string {
-  return new Date(iso).toLocaleTimeString("fr-FR", {
+  return new Date(iso).toLocaleTimeString(currentLocale(), {
     hour: "2-digit",
     minute: "2-digit",
   });
 }
 
-const statusLabels: Record<string, string> = {
-  "sold-out": "Complet",
-  cancelled: "Annulé",
+const statusLabelKeys: Record<string, string> = {
+  "sold-out": "events.statusSoldOut",
+  cancelled: "events.statusCancelled",
 };
 
 export function EventsScreen() {
+  const { t } = useTranslation();
   const now = new Date();
   const [month, setMonth] = useState(now.getMonth() + 1);
   const [year, setYear] = useState(now.getFullYear());
@@ -40,16 +43,19 @@ export function EventsScreen() {
     setYear(date.getFullYear());
   }
 
-  const monthLabel = new Date(year, month - 1, 1).toLocaleDateString("fr-FR", {
-    month: "long",
-    year: "numeric",
-  });
+  const monthLabel = new Date(year, month - 1, 1).toLocaleDateString(
+    currentLocale(),
+    {
+      month: "long",
+      year: "numeric",
+    },
+  );
 
   return (
     <div className="screen">
       <div className="screen-head">
         <div className="screen-head__titles">
-          <h1 className="screen-title">Événements</h1>
+          <h1 className="screen-title">{t("events.title")}</h1>
         </div>
       </div>
 
@@ -57,7 +63,7 @@ export function EventsScreen() {
         <button
           className="month-nav__button"
           onClick={() => shiftMonth(-1)}
-          aria-label="Mois précédent"
+          aria-label={t("events.prevMonth")}
         >
           <BackIcon size={18} />
         </button>
@@ -65,7 +71,7 @@ export function EventsScreen() {
         <button
           className="month-nav__button"
           onClick={() => shiftMonth(1)}
-          aria-label="Mois suivant"
+          aria-label={t("events.nextMonth")}
         >
           <ChevronIcon size={18} />
         </button>
@@ -75,7 +81,7 @@ export function EventsScreen() {
         loading={loading}
         error={error}
         onRetry={reload}
-        empty={data?.length === 0 ? "Aucun événement ce mois-ci." : undefined}
+        empty={data?.length === 0 ? t("events.empty") : undefined}
       />
 
       {data?.map((event) => (
@@ -97,12 +103,14 @@ export function EventsScreen() {
                 .join(" · ")}
             </p>
             <p className="event-card__meta">
-              {event.status && statusLabels[event.status] ? (
+              {event.status && statusLabelKeys[event.status] ? (
                 <span className="chip chip--danger">
-                  {statusLabels[event.status]}
+                  {t(statusLabelKeys[event.status])}
                 </span>
               ) : (
-                <span className="chip chip--accent">Ouvert</span>
+                <span className="chip chip--accent">
+                  {t("events.statusOpen")}
+                </span>
               )}
               {typeof event.price === "number" && event.price > 0 && (
                 <span className="chip">{event.price} €</span>
