@@ -1,4 +1,5 @@
 import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { TabBar } from "./components/TabBar";
 import { CardDetailScreen } from "./screens/CardDetailScreen";
 import { CollectionScreen } from "./screens/CollectionScreen";
@@ -17,11 +18,12 @@ import "./styles.css";
 
 function Shell() {
   const { ready } = useAuth();
+  const { t } = useTranslation();
 
   if (!ready) {
     return (
       <div className="screen screen--centered">
-        <p className="muted">Chargement…</p>
+        <p className="muted">{t("common.loading")}</p>
       </div>
     );
   }

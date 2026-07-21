@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import type { TFunction } from "i18next";
 import { checkDeck } from "../api/deck-checker";
 import type { DeckCheckResponse, DeckList, DeckListCard } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
@@ -23,23 +25,23 @@ const RULES: Partial<Record<keyof DeckList, SectionRule>> = {
   runes: { min: 12, max: 12 },
 };
 
-const SECTIONS: { key: keyof DeckList; label: string }[] = [
-  { key: "legends", label: "Légende" },
-  { key: "champions", label: "Champion" },
-  { key: "battlefields", label: "Champs de bataille" },
-  { key: "runes", label: "Runes" },
-  { key: "maindeck", label: "Deck principal" },
-  { key: "sideboard", label: "Réserve" },
+const SECTIONS: { key: keyof DeckList; labelKey: string }[] = [
+  { key: "legends", labelKey: "deck.sectionLegends" },
+  { key: "champions", labelKey: "deck.sectionChampions" },
+  { key: "battlefields", labelKey: "deck.sectionBattlefields" },
+  { key: "runes", labelKey: "deck.sectionRunes" },
+  { key: "maindeck", labelKey: "deck.sectionMaindeck" },
+  { key: "sideboard", labelKey: "deck.sectionSideboard" },
 ];
 
 function total(cards: DeckListCard[]): number {
   return cards.reduce((sum, c) => sum + (c.quantity ?? 0), 0);
 }
 
-function ruleNote(rule: SectionRule): string {
+function ruleNote(rule: SectionRule, t: TFunction): string {
   return rule.min === rule.max
-    ? `${rule.min} requis`
-    : `${rule.min} à ${rule.max}`;
+    ? t("deck.ruleRequired", { count: rule.min })
+    : t("deck.ruleRange", { min: rule.min, max: rule.max });
 }
 
 function DeckCard({
@@ -51,6 +53,7 @@ function DeckCard({
   gameSlug: string;
   onPreview: (card: PreviewCard) => void;
 }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const clickable = card.recognized !== false && card.cardId;
   const hasErratas = (card.erratas?.length ?? 0) > 0;
@@ -73,16 +76,20 @@ function DeckCard({
         {card.name}
       </span>
       {card.banned && (
-        <span className="deck-badge deck-badge--banned">Bannie</span>
+        <span className="deck-badge deck-badge--banned">
+          {t("deck.badgeBanned")}
+        </span>
       )}
       {card.recognized === false && (
-        <span className="deck-badge deck-badge--unknown">Inconnue</span>
+        <span className="deck-badge deck-badge--unknown">
+          {t("deck.badgeUnknown")}
+        </span>
       )}
       {hasErratas && card.cardId && (
         <button
           className="deck-alert"
-          aria-label="Erratas / rulings à lire"
-          title="Erratas / rulings à lire"
+          aria-label={t("deck.alert")}
+          title={t("deck.alert")}
           onClick={(e) => {
             e.stopPropagation();
             onPreview({
@@ -113,6 +120,7 @@ function DeckResult({
   gameSlug: string;
   onPreview: (card: PreviewCard) => void;
 }) {
+  const { t } = useTranslation();
   const deck = result.deck;
   const allCards = SECTIONS.flatMap((s) => deck[s.key] ?? []);
   const banned = allCards.filter((c) => c.banned);
@@ -133,16 +141,18 @@ function DeckResult({
         <span className="deck-summary__icon">{legal ? "✓" : "✕"}</span>
         <div>
           <p className="deck-summary__title">
-            {legal ? "Deck valide" : "Deck non conforme"}
+            {legal ? t("deck.validTitle") : t("deck.invalidTitle")}
           </p>
           <p className="deck-summary__sub">
             {legal
-              ? "Toutes les règles de construction sont respectées."
+              ? t("deck.validSub")
               : [
-                  sectionInvalid ? "sections hors quota" : null,
-                  banned.length > 0 ? `${banned.length} carte(s) bannie(s)` : null,
+                  sectionInvalid ? t("deck.sectionsOutOfQuota") : null,
+                  banned.length > 0
+                    ? t("deck.bannedCount", { count: banned.length })
+                    : null,
                   unrecognized.length > 0
-                    ? `${unrecognized.length} non reconnue(s)`
+                    ? t("deck.unrecognizedCount", { count: unrecognized.length })
                     : null,
                 ]
                   .filter(Boolean)
@@ -168,26 +178,28 @@ function DeckResult({
         </div>
       )}
 
-      {SECTIONS.map(({ key, label }) => {
+      {SECTIONS.map(({ key, labelKey }) => {
         const cards = deck[key] ?? [];
         const rule = RULES[key];
         if (cards.length === 0 && (!rule || rule.min === 0)) return null;
-        const t = total(cards);
-        const invalid = rule ? t < rule.min || t > rule.max : false;
+        const count = total(cards);
+        const invalid = rule ? count < rule.min || count > rule.max : false;
         return (
           <section key={key} className="deck-section">
             <div className="deck-section__head">
-              <h2 className="deck-section__title">{label}</h2>
+              <h2 className="deck-section__title">{t(labelKey)}</h2>
               <span
                 className={`deck-section__count${invalid ? " deck-section__count--bad" : ""}`}
               >
-                {t}
+                {count}
               </span>
               {rule && (
-                <span className="deck-section__rule">{ruleNote(rule)}</span>
+                <span className="deck-section__rule">{ruleNote(rule, t)}</span>
               )}
               {invalid && (
-                <span className="deck-badge deck-badge--banned">Hors quota</span>
+                <span className="deck-badge deck-badge--banned">
+                  {t("deck.badgeOutOfQuota")}
+                </span>
               )}
             </div>
             {cards.map((card, i) => (
@@ -206,6 +218,7 @@ function DeckResult({
 }
 
 export function DeckCheckerScreen() {
+  const { t } = useTranslation();
   const { gameSlug = "" } = useParams();
   const [input, setInput] = useState("");
   const [result, setResult] = useState<DeckCheckResponse | null>(null);
@@ -222,22 +235,22 @@ export function DeckCheckerScreen() {
       .then((res) => setResult(res))
       .catch((err: unknown) => {
         setResult(null);
-        setError(err instanceof Error ? err.message : "Vérification impossible.");
+        setError(err instanceof Error ? err.message : t("deck.error"));
       })
       .finally(() => setLoading(false));
   }
 
   return (
     <div className="screen">
-      <BackHeader title="Vérificateur de deck" />
+      <BackHeader title={t("deck.title")} />
 
       <p className="screen-subtitle" style={{ marginBottom: 12 }}>
-        Collez une liste, un code de deck ou un lien Piltover Archive.
+        {t("deck.intro")}
       </p>
 
       <textarea
         className="deck-input"
-        placeholder={"1 Immortal Phoenix\n3 Blazing Scorcher\n…\n\nou un lien / code Piltover"}
+        placeholder={t("deck.placeholder")}
         value={input}
         onChange={(e) => setInput(e.currentTarget.value)}
         rows={6}
@@ -248,7 +261,7 @@ export function DeckCheckerScreen() {
         onClick={submit}
         disabled={loading || input.trim().length === 0}
       >
-        {loading ? "Vérification…" : "Vérifier le deck"}
+        {loading ? t("deck.checking") : t("deck.check")}
       </button>
 
       {error && (

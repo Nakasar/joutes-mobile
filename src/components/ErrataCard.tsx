@@ -1,28 +1,33 @@
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import type { Errata } from "../api/types";
 import { GameMarkdown } from "./GameMarkdown";
 import { ExternalLinkIcon } from "./icons";
 import { annotateErrataMarkdown } from "../lib/errata-markdown";
+import { currentLocale } from "../i18n";
 
-const errataTypeLabels: Record<string, string> = {
-  errata: "Errata",
-  clarification: "Clarification",
-  ruling: "Ruling",
+const errataTypeLabelKeys: Record<string, string> = {
+  errata: "errata.typeErrata",
+  clarification: "errata.typeClarification",
+  ruling: "errata.typeRuling",
 };
 
 function formatDate(iso?: string): string {
   if (!iso) return "";
-  return new Date(iso).toLocaleDateString("fr-FR", {
+  return new Date(iso).toLocaleDateString(currentLocale(), {
     day: "numeric",
     month: "long",
     year: "numeric",
   });
 }
 
-/** Texte de l'errata, en français si une traduction existe. */
-function errataText(errata: Errata): string {
-  const fr = errata.translations?.find((t) => t.lang === "fr");
-  return fr?.details ?? errata.details;
+/**
+ * Texte de l'errata dans la langue de l'app si une traduction existe, sinon le
+ * texte original. Les erratas ne sont pas toujours traduits dans les 4 langues.
+ */
+function errataText(errata: Errata, lang: string): string {
+  const match = errata.translations?.find((t) => t.lang === lang);
+  return match?.details ?? errata.details;
 }
 
 function isUrl(value: string): boolean {
@@ -40,10 +45,12 @@ export function ErrataCard({
   gameSlug: string;
   cardIdByName: Map<string, string>;
 }) {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.resolvedLanguage ?? i18n.language;
   const deprecated = Boolean(errata.deprecatedAt);
   const markdown = useMemo(
-    () => annotateErrataMarkdown(errataText(errata), cardIdByName),
-    [errata, cardIdByName],
+    () => annotateErrataMarkdown(errataText(errata, lang), cardIdByName),
+    [errata, cardIdByName, lang],
   );
 
   return (
@@ -52,9 +59,13 @@ export function ErrataCard({
     >
       <p className="errata__header">
         <span className={`errata__type errata__type--${errata.type}`}>
-          {errataTypeLabels[errata.type] ?? errata.type}
+          {errataTypeLabelKeys[errata.type]
+            ? t(errataTypeLabelKeys[errata.type])
+            : errata.type}
         </span>
-        {deprecated && <span className="chip chip--danger">Obsolète</span>}
+        {deprecated && (
+          <span className="chip chip--danger">{t("errata.deprecated")}</span>
+        )}
         {errata.errataDate && (
           <span className="errata__date">{formatDate(errata.errataDate)}</span>
         )}
@@ -71,11 +82,11 @@ export function ErrataCard({
               target="_blank"
               rel="noopener noreferrer"
             >
-              Source
+              {t("errata.source")}
               <ExternalLinkIcon />
             </a>
           ) : (
-            <span>Source : {errata.source}</span>
+            <span>{t("errata.sourceLabel", { source: errata.source })}</span>
           ))}
         {errata.votes &&
           (errata.votes.positive ?? 0) + (errata.votes.negative ?? 0) > 0 && (

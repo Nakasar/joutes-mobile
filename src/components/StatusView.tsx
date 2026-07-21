@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 interface StatusViewProps {
   loading?: boolean;
   error?: string | null;
@@ -8,8 +10,9 @@ interface StatusViewProps {
 
 /** Affichage uniforme des états chargement / erreur / vide d'un écran. */
 export function StatusView({ loading, error, onRetry, empty }: StatusViewProps) {
+  const { t } = useTranslation();
   if (loading) {
-    return <p className="status muted">Chargement…</p>;
+    return <p className="status muted">{t("common.loading")}</p>;
   }
   if (error) {
     return (
@@ -21,7 +24,7 @@ export function StatusView({ loading, error, onRetry, empty }: StatusViewProps) 
             style={{ marginTop: 12 }}
             onClick={onRetry}
           >
-            Réessayer
+            {t("common.retry")}
           </button>
         )}
       </div>

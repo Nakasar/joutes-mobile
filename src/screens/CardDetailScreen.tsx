@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { getCard } from "../api/cards";
 import { BackHeader } from "../components/BackHeader";
 import { ErrataCard } from "../components/ErrataCard";
@@ -9,6 +10,7 @@ import { useApi } from "../hooks/useApi";
 import { annotateCardText } from "../lib/card-text-markdown";
 
 export function CardDetailScreen() {
+  const { t } = useTranslation();
   const { gameSlug = "", cardId = "" } = useParams();
   const { data, loading, error, reload } = useApi(
     () => getCard(gameSlug, cardId),
@@ -36,7 +38,7 @@ export function CardDetailScreen() {
 
   return (
     <div className="screen">
-      <BackHeader title={data?.name ?? "Carte"} />
+      <BackHeader title={data?.name ?? t("card.fallbackTitle")} />
       <StatusView loading={loading} error={error} onRetry={reload} />
       {data && (
         <>
@@ -54,7 +56,7 @@ export function CardDetailScreen() {
           <p className="card-badges">
             {data.type && <span className="chip">{data.type}</span>}
             {typeof data.cost === "number" && (
-              <span className="chip">Coût {data.cost}</span>
+              <span className="chip">{t("card.cost", { cost: data.cost })}</span>
             )}
             {data.setCode && (
               <span className="chip">
@@ -62,7 +64,9 @@ export function CardDetailScreen() {
                 {data.collectorNumber ? ` ${data.collectorNumber}` : ""}
               </span>
             )}
-            {data.banned && <span className="chip chip--danger">Bannie</span>}
+            {data.banned && (
+              <span className="chip chip--danger">{t("card.banned")}</span>
+            )}
           </p>
           {cardTextMarkdown && (
             <div className="card-text-block">
@@ -71,7 +75,7 @@ export function CardDetailScreen() {
           )}
           <section>
             <h2 className="section-title">
-              Erratas &amp; rulings
+              {t("card.errataSection")}
               {erratas.length > 0 && (
                 <span className="section-title__count muted">
                   ({erratas.length})
@@ -79,9 +83,7 @@ export function CardDetailScreen() {
               )}
             </h2>
             {erratas.length === 0 ? (
-              <p className="muted">
-                Aucun errata, clarification ou ruling pour cette carte.
-              </p>
+              <p className="muted">{t("card.noErrataDetail")}</p>
             ) : (
               erratas.map((errata) => (
                 <ErrataCard

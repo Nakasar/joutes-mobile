@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { getNews, toggleNewsLike } from "../api/news";
 import { BackHeader } from "../components/BackHeader";
 import { CachedImage } from "../components/CachedImage";
@@ -8,10 +9,11 @@ import { BackIcon, HeartIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { annotateErrataMarkdown } from "../lib/errata-markdown";
+import { currentLocale } from "../i18n";
 
 function formatDate(iso?: string): string {
   if (!iso) return "";
-  return new Date(iso).toLocaleDateString("fr-FR", {
+  return new Date(iso).toLocaleDateString(currentLocale(), {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -25,6 +27,7 @@ function formatDate(iso?: string): string {
 const EMPTY_CARD_MAP = new Map<string, string>();
 
 export function NewsDetailScreen() {
+  const { t } = useTranslation();
   const { newsId = "" } = useParams();
   const navigate = useNavigate();
   const { data, loading, error, reload } = useApi(
@@ -53,7 +56,7 @@ export function NewsDetailScreen() {
   if (!data) {
     return (
       <div className="screen">
-        <BackHeader title="Actualité" />
+        <BackHeader title={t("news.detailTitle")} />
         <StatusView loading={loading} error={error} onRetry={reload} />
       </div>
     );
@@ -65,7 +68,7 @@ export function NewsDetailScreen() {
         <button
           className="floating-back"
           onClick={() => navigate(-1)}
-          aria-label="Retour"
+          aria-label={t("common.back")}
         >
           <BackIcon size={20} />
         </button>

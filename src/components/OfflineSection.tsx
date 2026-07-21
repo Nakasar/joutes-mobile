@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { listGames } from "../api/games";
 import type { GameSummary, OfflineMeta } from "../api/types";
 import { downloadGameData } from "../lib/offline-download";
 import { deleteExport, listMeta } from "../lib/offline-store";
+import { currentLocale } from "../i18n";
 import { DeckCheckIcon } from "./icons";
 
 function formatSize(bytes: number): string {
@@ -14,7 +16,7 @@ function formatSize(bytes: number): string {
 
 function formatDate(iso?: string): string {
   if (!iso) return "";
-  return new Date(iso).toLocaleDateString("fr-FR", {
+  return new Date(iso).toLocaleDateString(currentLocale(), {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -35,6 +37,7 @@ function GameRow({
   meta?: OfflineMeta;
   onChanged: () => void;
 }) {
+  const { t } = useTranslation();
   const [state, setState] = useState<State>({ status: "idle" });
 
   async function download() {
@@ -46,8 +49,7 @@ function GameRow({
     } catch (err) {
       setState({
         status: "error",
-        message:
-          err instanceof Error ? err.message : "Téléchargement impossible.",
+        message: err instanceof Error ? err.message : t("offline.error"),
       });
     }
   }
@@ -64,17 +66,20 @@ function GameRow({
       <div className="offline-row__body">
         <p className="offline-row__name">{game.name}</p>
         {downloading ? (
-          <p className="offline-row__sub">Téléchargement…</p>
+          <p className="offline-row__sub">{t("offline.downloading")}</p>
         ) : meta ? (
           <p className="offline-row__sub">
-            {formatSize(meta.size)} · à jour le {formatDate(meta.generatedAt)}
+            {t("offline.upToDate", {
+              size: formatSize(meta.size),
+              date: formatDate(meta.generatedAt),
+            })}
           </p>
         ) : state.status === "error" ? (
           <p className="offline-row__sub offline-row__sub--error">
             {state.message}
           </p>
         ) : (
-          <p className="offline-row__sub">Non téléchargé</p>
+          <p className="offline-row__sub">{t("offline.notDownloaded")}</p>
         )}
         {downloading && (
           <div className="progress progress--indeterminate" style={{ marginTop: 6 }}>
@@ -88,8 +93,8 @@ function GameRow({
           <button
             className="icon-button"
             onClick={remove}
-            aria-label="Supprimer les données hors ligne"
-            title="Supprimer"
+            aria-label={t("offline.delete")}
+            title={t("offline.deleteShort")}
           >
             🗑
           </button>
@@ -100,13 +105,13 @@ function GameRow({
           disabled={downloading}
         >
           {downloading ? (
-            "En cours…"
+            t("offline.inProgress")
           ) : meta ? (
-            "Mettre à jour"
+            t("offline.update")
           ) : (
             <>
               <DeckCheckIcon size={16} />
-              Télécharger
+              {t("offline.download")}
             </>
           )}
         </button>
@@ -116,6 +121,7 @@ function GameRow({
 }
 
 export function OfflineSection() {
+  const { t } = useTranslation();
   const [games, setGames] = useState<GameSummary[]>([]);
   const [metaBySlug, setMetaBySlug] = useState<Record<string, OfflineMeta>>({});
 
@@ -151,10 +157,9 @@ export function OfflineSection() {
 
   return (
     <section className="card">
-      <h2 className="card__title">Hors ligne</h2>
+      <h2 className="card__title">{t("offline.title")}</h2>
       <p className="muted" style={{ marginTop: 0, fontSize: "0.9rem" }}>
-        Téléchargez les règles (FR/EN), les cartes et les erratas d'un jeu pour
-        les consulter sans connexion.
+        {t("offline.description")}
       </p>
       {rows.map((game) => (
         <GameRow
@@ -166,7 +171,7 @@ export function OfflineSection() {
       ))}
       {totalSize > 0 && (
         <p className="offline-total muted">
-          Total téléchargé : {formatSize(totalSize)}
+          {t("offline.total", { size: formatSize(totalSize) })}
         </p>
       )}
     </section>

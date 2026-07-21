@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { listGames } from "../api/games";
 import {
   listFriendRequests,
@@ -16,8 +17,8 @@ import { useAuth } from "../store/auth";
 
 type Tab = "amis" | "groups" | "lairs";
 
-function friendName(u: PublicUser): string {
-  return u.displayName || u.username || "Joueur";
+function friendName(u: PublicUser, fallback: string): string {
+  return u.displayName || u.username || fallback;
 }
 function friendTag(u: PublicUser): string {
   if (u.username) return `@${u.username}`;
@@ -26,20 +27,20 @@ function friendTag(u: PublicUser): string {
 }
 
 function AuthGate() {
+  const { t } = useTranslation();
   return (
     <div className="card gate">
-      <h2 className="gate__title">Connexion requise</h2>
-      <p className="gate__text">
-        Connectez-vous pour retrouver vos amis et vos groupes de jeu.
-      </p>
+      <h2 className="gate__title">{t("common.loginRequiredTitle")}</h2>
+      <p className="gate__text">{t("social.gateText")}</p>
       <Link to="/login" className="btn btn--grad btn--block">
-        Se connecter
+        {t("common.signIn")}
       </Link>
     </div>
   );
 }
 
 function FriendsTab() {
+  const { t } = useTranslation();
   const friends = useApi(() => listFriends());
   const requests = useApi(() => listFriendRequests());
   const reqCount = requests.data?.length ?? 0;
@@ -50,10 +51,9 @@ function FriendsTab() {
         <div className="request-banner">
           <span className="request-banner__count">{reqCount}</span>
           <div className="request-banner__body">
-            <p className="request-banner__title">Demandes d'amis</p>
+            <p className="request-banner__title">{t("social.requestsTitle")}</p>
             <p className="request-banner__sub">
-              {reqCount} joueur{reqCount > 1 ? "s veulent" : " veut"} vous
-              ajouter
+              {t("social.requestsSub", { count: reqCount })}
             </p>
           </div>
           <span className="chevron">
@@ -62,14 +62,16 @@ function FriendsTab() {
         </div>
       )}
 
-      <p className="section-label">Mes amis · {friends.data?.length ?? 0}</p>
+      <p className="section-label">
+        {t("social.myFriends", { count: friends.data?.length ?? 0 })}
+      </p>
       <StatusView
         loading={friends.loading}
         error={friends.error}
         onRetry={friends.reload}
         empty={
           friends.data && friends.data.length === 0
-            ? "Vous n'avez pas encore d'amis."
+            ? t("social.friendsEmpty")
             : undefined
         }
       />
@@ -87,12 +89,14 @@ function FriendsTab() {
                 />
               ) : (
                 <span className="avatar avatar--sm" style={tintStyle(color)}>
-                  {initialOf(friendName(friend))}
+                  {initialOf(friendName(friend, t("social.friendDefault")))}
                 </span>
               )}
             </div>
             <div className="friend-row__body">
-              <p className="friend-row__name">{friendName(friend)}</p>
+              <p className="friend-row__name">
+                {friendName(friend, t("social.friendDefault"))}
+              </p>
               <p className="friend-row__sub">{friendTag(friend)}</p>
             </div>
             <span className="chevron">
@@ -110,6 +114,7 @@ function membersCount(group: PlayGroup): number {
 }
 
 function GroupsTab() {
+  const { t } = useTranslation();
   const groups = useApi(() => listPlayGroups());
   return (
     <>
@@ -119,7 +124,7 @@ function GroupsTab() {
         onRetry={groups.reload}
         empty={
           groups.data && groups.data.length === 0
-            ? "Vous n'êtes dans aucun groupe."
+            ? t("social.groupsEmpty")
             : undefined
         }
       />
@@ -134,9 +139,9 @@ function GroupsTab() {
             <div className="friend-row__body">
               <p className="friend-row__name">{group.name}</p>
               <p className="friend-row__sub">
-                {n} membre{n > 1 ? "s" : ""}
+                {t("social.members", { count: n })}
                 {group.enabledGameIds && group.enabledGameIds.length > 0
-                  ? ` · ${group.enabledGameIds.length} jeu${group.enabledGameIds.length > 1 ? "x" : ""}`
+                  ? ` · ${t("social.groupGames", { count: group.enabledGameIds.length })}`
                   : ""}
               </p>
             </div>
@@ -151,6 +156,7 @@ function GroupsTab() {
 }
 
 function LairsTab() {
+  const { t } = useTranslation();
   const lairs = useApi(() => listLairs());
   const games = useApi(() => listGames());
   const gameName = useMemo(() => {
@@ -167,7 +173,7 @@ function LairsTab() {
         onRetry={lairs.reload}
         empty={
           lairs.data && lairs.data.lairs.length === 0
-            ? "Aucune boutique."
+            ? t("social.lairsEmpty")
             : undefined
         }
       />
@@ -204,6 +210,7 @@ function LairsTab() {
 }
 
 export function SocialScreen() {
+  const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
   const [tab, setTab] = useState<Tab>("amis");
 
@@ -211,12 +218,12 @@ export function SocialScreen() {
     <div className="screen">
       <div className="screen-head">
         <div className="screen-head__titles">
-          <h1 className="screen-title">Communauté</h1>
+          <h1 className="screen-title">{t("social.title")}</h1>
         </div>
         <div className="head-actions">
           <button
             className="icon-button icon-button--primary"
-            aria-label="Ajouter un ami"
+            aria-label={t("social.addFriend")}
           >
             <UserPlusIcon size={20} />
           </button>
@@ -228,19 +235,19 @@ export function SocialScreen() {
           className={`segmented__item${tab === "amis" ? " segmented__item--active" : ""}`}
           onClick={() => setTab("amis")}
         >
-          Amis
+          {t("social.tabFriends")}
         </button>
         <button
           className={`segmented__item${tab === "groups" ? " segmented__item--active" : ""}`}
           onClick={() => setTab("groups")}
         >
-          Groupes
+          {t("social.tabGroups")}
         </button>
         <button
           className={`segmented__item${tab === "lairs" ? " segmented__item--active" : ""}`}
           onClick={() => setTab("lairs")}
         >
-          Boutiques
+          {t("social.tabLairs")}
         </button>
       </div>
 

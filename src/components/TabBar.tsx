@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import type { ReactElement, SVGProps } from "react";
+import { useTranslation } from "react-i18next";
 import {
   CalendarIcon,
   GridIcon,
@@ -10,15 +11,16 @@ import {
 
 type TabIcon = (p: SVGProps<SVGSVGElement> & { size?: number }) => ReactElement;
 
-const tabs: { to: string; label: string; Icon: TabIcon }[] = [
-  { to: "/", label: "Accueil", Icon: HomeIcon },
-  { to: "/games", label: "Jeux", Icon: LayersIcon },
-  { to: "/events", label: "Événements", Icon: CalendarIcon },
-  { to: "/collection", label: "Collection", Icon: GridIcon },
-  { to: "/social", label: "Social", Icon: UsersIcon },
+const tabs: { to: string; labelKey: string; Icon: TabIcon }[] = [
+  { to: "/", labelKey: "tabs.home", Icon: HomeIcon },
+  { to: "/games", labelKey: "tabs.games", Icon: LayersIcon },
+  { to: "/events", labelKey: "tabs.events", Icon: CalendarIcon },
+  { to: "/collection", labelKey: "tabs.collection", Icon: GridIcon },
+  { to: "/social", labelKey: "tabs.social", Icon: UsersIcon },
 ];
 
 export function TabBar() {
+  const { t } = useTranslation();
   return (
     <nav className="tab-bar">
       {tabs.map((tab) => (
@@ -35,7 +37,7 @@ export function TabBar() {
               <span className="tab-bar__icon-wrap">
                 <tab.Icon size={22} strokeWidth={isActive ? 2.4 : 1.9} />
               </span>
-              <span className="tab-bar__label">{tab.label}</span>
+              <span className="tab-bar__label">{t(tab.labelKey)}</span>
             </>
           )}
         </NavLink>

@@ -2350,3 +2350,26 @@ textarea:focus {
     color: #fff;
   }
 }
+
+/* Sélecteur de langue (Réglages). */
+.lang-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.lang-option {
+  padding: 11px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.lang-option--active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-fg);
+}
