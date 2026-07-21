@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { listGames } from "../api/games";
 import { listNews } from "../api/news";
 import type { News } from "../api/types";
+import { CachedImage } from "../components/CachedImage";
 import { HeartIcon, SearchIcon, SettingsIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
@@ -20,7 +21,12 @@ function FeaturedCard({ item }: { item: News }) {
   return (
     <Link to={`/news/${item.id}`} className="featured">
       {item.banner ? (
-        <img src={item.banner} alt="" className="featured__img" loading="lazy" />
+        <CachedImage
+          src={item.banner}
+          alt=""
+          className="featured__img"
+          loading="lazy"
+        />
       ) : (
         <div className="featured__img featured__img--placeholder shimmer" />
       )}
@@ -47,7 +53,7 @@ function NewsItem({ item }: { item: News }) {
   return (
     <Link to={`/news/${item.id}`} className="news-item">
       {item.banner ? (
-        <img
+        <CachedImage
           src={item.banner}
           alt=""
           className="news-item__thumb"

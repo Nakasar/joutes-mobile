@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { listGames } from "../api/games";
 import type { GameSummary } from "../api/types";
+import { CachedImage } from "../components/CachedImage";
 import { ChevronIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
@@ -22,7 +23,7 @@ function GameRow({
     <>
       <span className="game-row__bar" style={{ background: color }} />
       {game.icon ? (
-        <img
+        <CachedImage
           src={game.icon}
           alt=""
           className="avatar avatar--game"

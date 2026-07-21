@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getNews, toggleNewsLike } from "../api/news";
 import { BackHeader } from "../components/BackHeader";
+import { CachedImage } from "../components/CachedImage";
 import { GameMarkdown } from "../components/GameMarkdown";
 import { BackIcon, HeartIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
@@ -69,7 +70,7 @@ export function NewsDetailScreen() {
           <BackIcon size={20} />
         </button>
         {data.banner ? (
-          <img src={data.banner} alt="" loading="lazy" />
+          <CachedImage src={data.banner} alt="" loading="lazy" />
         ) : (
           <div className="shimmer" style={{ width: "100%", height: "100%" }} />
         )}

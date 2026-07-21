@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { getCollectionOverview } from "../api/collection";
+import { CachedImage } from "../components/CachedImage";
 import { LockIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
@@ -45,7 +46,7 @@ function CollectionContent() {
           <div key={game.gameId} className="collection-game">
             <div className="collection-game__head">
               {game.icon ? (
-                <img
+                <CachedImage
                   src={game.icon}
                   alt=""
                   className="avatar avatar--sm"
