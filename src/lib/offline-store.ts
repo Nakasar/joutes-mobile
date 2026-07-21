@@ -29,8 +29,19 @@ function openDb(): Promise<IDBDatabase> {
         db.createObjectStore(STORE_META);
       }
     };
+    // Une mise à niveau bloquée par une autre connexion ne doit pas rester
+    // en suspens indéfiniment.
+    request.onblocked = () => {
+      dbPromise = null;
+      reject(new Error("Base hors ligne bloquée par une autre fenêtre."));
+    };
     request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
+    request.onerror = () => {
+      // Ne pas mémoriser une promesse rejetée : sinon toute opération future
+      // échouerait sans possibilité de réessayer.
+      dbPromise = null;
+      reject(request.error);
+    };
   });
   return dbPromise;
 }
@@ -51,13 +62,38 @@ function tx<T>(
   );
 }
 
-/** Enregistre un export complet + ses métadonnées. */
+/** Écriture atomique sur les deux magasins (résolue à `oncomplete`). */
+function writeBoth(
+  run: (exportStore: IDBObjectStore, metaStore: IDBObjectStore) => void,
+): Promise<void> {
+  return openDb().then(
+    (db) =>
+      new Promise<void>((resolve, reject) => {
+        const transaction = db.transaction(
+          [STORE_EXPORT, STORE_META],
+          "readwrite",
+        );
+        transaction.oncomplete = () => resolve();
+        transaction.onerror = () => reject(transaction.error);
+        transaction.onabort = () => reject(transaction.error);
+        run(
+          transaction.objectStore(STORE_EXPORT),
+          transaction.objectStore(STORE_META),
+        );
+      }),
+  );
+}
+
+/** Enregistre un export complet + ses métadonnées (transaction atomique). */
 export async function saveExport(
   meta: OfflineMeta,
   data: GameExport,
 ): Promise<void> {
-  await tx(STORE_EXPORT, "readwrite", (s) => s.put(data, meta.slug));
-  await tx(STORE_META, "readwrite", (s) => s.put(meta, meta.slug));
+  await writeBoth((exportStore, metaStore) => {
+    exportStore.put(data, meta.slug);
+    metaStore.put(meta, meta.slug);
+  });
+  // Cache mémoire mis à jour seulement après confirmation de l'écriture.
   exportCache.set(meta.slug, data);
 }
 
@@ -84,10 +120,12 @@ export function listMeta(): Promise<OfflineMeta[]> {
   return tx<OfflineMeta[]>(STORE_META, "readonly", (s) => s.getAll());
 }
 
-/** Supprime les données hors ligne d'un jeu. */
+/** Supprime les données hors ligne d'un jeu (transaction atomique). */
 export async function deleteExport(slug: string): Promise<void> {
-  await tx(STORE_EXPORT, "readwrite", (s) => s.delete(slug));
-  await tx(STORE_META, "readwrite", (s) => s.delete(slug));
+  await writeBoth((exportStore, metaStore) => {
+    exportStore.delete(slug);
+    metaStore.delete(slug);
+  });
   exportCache.delete(slug);
 }
 

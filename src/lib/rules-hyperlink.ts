@@ -37,7 +37,12 @@ interface TitleTarget {
 }
 interface TitleData {
   map: Map<string, TitleTarget>;
-  regexSource: string;
+  /**
+   * RegExp partagée reconnaissant tous les titres, construite une seule fois
+   * par document et réutilisée pour chaque entrée (on réinitialise `lastIndex`
+   * à chaque usage). `null` si aucun titre.
+   */
+  regex: RegExp | null;
 }
 
 function buildTitleData(
@@ -57,8 +62,9 @@ function buildTitleData(
   const escaped = sortedTitles.map((t) =>
     t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
   );
-  const regexSource = escaped.length > 0 ? `(${escaped.join("|")})` : "";
-  return { map, regexSource };
+  const regex =
+    escaped.length > 0 ? new RegExp(`(${escaped.join("|")})`, "g") : null;
+  return { map, regex };
 }
 
 type Token =
@@ -70,8 +76,9 @@ function tokenizeWithLinks(
   titleData: TitleData,
   currentId: string,
 ): Token[] {
-  if (!titleData.regexSource) return [{ type: "text", text }];
-  const regex = new RegExp(titleData.regexSource, "g");
+  const regex = titleData.regex;
+  if (!regex) return [{ type: "text", text }];
+  regex.lastIndex = 0;
   const tokens: Token[] = [];
   let lastIndex = 0;
   let match: RegExpExecArray | null;
