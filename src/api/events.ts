@@ -1,6 +1,7 @@
 import { api } from "./client";
 import { endpoints } from "./endpoints";
 import type { EventsListResponse, JoutesEvent } from "./types";
+import { withCache } from "../lib/response-cache";
 
 export interface ListEventsParams {
   /** Mois 1-12. */
@@ -10,11 +11,13 @@ export interface ListEventsParams {
   lairId?: string;
 }
 
-export async function listEvents(
+export function listEvents(
   params: ListEventsParams = {},
 ): Promise<JoutesEvent[]> {
-  const response = await api.get<EventsListResponse>(endpoints.events.list, {
-    ...params,
+  return withCache(`events:list:${JSON.stringify(params)}`, async () => {
+    const response = await api.get<EventsListResponse>(endpoints.events.list, {
+      ...params,
+    });
+    return response.events;
   });
-  return response.events;
 }
