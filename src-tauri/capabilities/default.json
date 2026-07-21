@@ -10,7 +10,8 @@
       "identifier": "http:default",
       "allow": [
         { "url": "https://joutes.app/*" },
-        { "url": "https://*.joutes.app/*" }
+        { "url": "https://*.joutes.app/*" },
+        { "url": "https://*.public.blob.vercel-storage.com/*" }
       ]
     }
   ]

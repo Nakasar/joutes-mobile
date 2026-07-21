@@ -23,7 +23,7 @@ function formatDate(iso?: string): string {
 
 type State =
   | { status: "idle" }
-  | { status: "downloading"; pct: number }
+  | { status: "downloading" }
   | { status: "error"; message: string };
 
 function GameRow({
@@ -38,14 +38,9 @@ function GameRow({
   const [state, setState] = useState<State>({ status: "idle" });
 
   async function download() {
-    setState({ status: "downloading", pct: 0 });
+    setState({ status: "downloading" });
     try {
-      await downloadGameData(game.slug, game.name, ({ loaded, total }) => {
-        setState({
-          status: "downloading",
-          pct: total > 0 ? Math.min(100, Math.round((loaded / total) * 100)) : 0,
-        });
-      });
+      await downloadGameData(game.slug, game.name);
       setState({ status: "idle" });
       onChanged();
     } catch (err) {
@@ -69,7 +64,7 @@ function GameRow({
       <div className="offline-row__body">
         <p className="offline-row__name">{game.name}</p>
         {downloading ? (
-          <p className="offline-row__sub">Téléchargement… {state.pct}%</p>
+          <p className="offline-row__sub">Téléchargement…</p>
         ) : meta ? (
           <p className="offline-row__sub">
             {formatSize(meta.size)} · à jour le {formatDate(meta.generatedAt)}
@@ -82,8 +77,8 @@ function GameRow({
           <p className="offline-row__sub">Non téléchargé</p>
         )}
         {downloading && (
-          <div className="progress" style={{ marginTop: 6 }}>
-            <div className="progress__bar" style={{ width: `${state.pct}%` }} />
+          <div className="progress progress--indeterminate" style={{ marginTop: 6 }}>
+            <div className="progress__bar" />
           </div>
         )}
       </div>
@@ -105,7 +100,7 @@ function GameRow({
           disabled={downloading}
         >
           {downloading ? (
-            `${state.pct}%`
+            "En cours…"
           ) : meta ? (
             "Mettre à jour"
           ) : (
