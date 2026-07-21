@@ -14,7 +14,12 @@ export interface ListEventsParams {
 export function listEvents(
   params: ListEventsParams = {},
 ): Promise<JoutesEvent[]> {
-  return withCache(`events:list:${JSON.stringify(params)}`, async () => {
+  // Clé déterministe : tuple à ordre fixe plutôt que `JSON.stringify(params)`,
+  // dont l'ordre des propriétés dépend de l'appelant.
+  const key = [params.month, params.year, params.gameId, params.lairId].join(
+    "|",
+  );
+  return withCache(`events:list:${key}`, async () => {
     const response = await api.get<EventsListResponse>(endpoints.events.list, {
       ...params,
     });

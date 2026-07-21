@@ -11,7 +11,11 @@ export interface ListNewsParams {
 }
 
 export function listNews(params: ListNewsParams = {}): Promise<NewsListResponse> {
-  return withCache(`news:list:${JSON.stringify(params)}`, () =>
+  // Clé déterministe : tuple à ordre fixe plutôt que `JSON.stringify(params)`,
+  // dont l'ordre des propriétés dépend de l'appelant (sinon des entrées de
+  // cache dupliquées pour une même requête logique).
+  const key = [params.gameId, params.tag, params.page, params.limit].join("|");
+  return withCache(`news:list:${key}`, () =>
     api.get<NewsListResponse>(endpoints.news.list, { ...params }),
   );
 }

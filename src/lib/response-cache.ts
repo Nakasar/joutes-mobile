@@ -8,6 +8,8 @@
  * ne stocke que la dernière réponse de listes/détails légers.
  */
 
+import { ApiError } from "../api/client";
+
 const DB_NAME = "joutes-cache";
 const DB_VERSION = 1;
 const STORE = "responses";
@@ -44,6 +46,26 @@ export async function cacheGet<T>(key: string): Promise<T | null> {
     });
   } catch {
     return null;
+  }
+}
+
+/**
+ * Vide entièrement le cache de secours (best-effort). À appeler lorsque le
+ * contexte utilisateur change — déconnexion ou session expirée (401) — pour ne
+ * jamais resservir hors ligne les données privées d'un compte précédent.
+ */
+export async function cacheClear(): Promise<void> {
+  try {
+    const db = await openDb();
+    await new Promise<void>((resolve, reject) => {
+      const tx = db.transaction(STORE, "readwrite");
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+      tx.onabort = () => reject(tx.error);
+      tx.objectStore(STORE).clear();
+    });
+  } catch {
+    /* best-effort : un échec de purge ne doit rien casser */
   }
 }
 
@@ -86,8 +108,14 @@ export async function withCache<T>(
     void cacheSet(key, result);
     return result;
   } catch (error) {
-    const cached = await cacheGet<T>(key);
-    if (cached !== null) return cached;
+    // On ne se rabat sur le cache que pour les erreurs réseau (statut 0 dans ce
+    // client). Une erreur HTTP légitime (401 session expirée, 403, 404…) doit
+    // remonter telle quelle, sans resservir de données potentiellement privées
+    // ou obsolètes.
+    if (error instanceof ApiError && error.status === 0) {
+      const cached = await cacheGet<T>(key);
+      if (cached !== null) return cached;
+    }
     throw error;
   }
 }

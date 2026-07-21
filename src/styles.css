@@ -967,12 +967,12 @@ textarea:focus {
   transform: scale(0.985);
 }
 
-/* Jeu non téléchargé, hors ligne : grisé et non cliquable. */
+/* Jeu non téléchargé, hors ligne : grisé. Déjà rendu en <div> (pas un <Link>),
+   donc non cliquable sans neutraliser tous les événements de survol. */
 .game-row--offline {
   opacity: 0.45;
   filter: saturate(0.6);
   cursor: default;
-  pointer-events: none;
 }
 
 .game-row__bar {

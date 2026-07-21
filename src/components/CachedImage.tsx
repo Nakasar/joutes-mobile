@@ -12,7 +12,10 @@ type Props = Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> & {
  * icônes de jeux et les bannières d'actualités.
  */
 export function CachedImage({ src, ...imgProps }: Props) {
-  const [resolved, setResolved] = useState<string | undefined>(undefined);
+  // Initialisé avec l'URL réseau pour afficher l'image immédiatement au premier
+  // rendu ; la lecture async d'IndexedDB la remplace ensuite par l'object URL
+  // en cache si disponible (évite un flicker / layout shift).
+  const [resolved, setResolved] = useState<string | undefined>(src);
 
   useEffect(() => {
     if (!src) {
