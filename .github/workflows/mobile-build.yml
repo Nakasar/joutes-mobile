@@ -65,6 +65,14 @@ jobs:
       - name: Initialize Android project
         run: npm run tauri -- android init --ci
 
+      # `tauri ios/android init` scaffolde le projet natif avec l'icône Tauri
+      # par défaut et ne réapplique pas `src-tauri/icons/`. On (re)génère donc
+      # les icônes depuis le logo Joutes officiel après l'init : `tauri icon`
+      # met à jour l'app icon du projet `gen/` généré (mipmaps Android /
+      # AppIcon.appiconset iOS) en plus de `src-tauri/icons/`.
+      - name: Apply Joutes app icon
+        run: npm run tauri -- icon src-tauri/app-icon.png
+
       - name: Build APK and AAB (arm64)
         run: npm run tauri -- android build --target aarch64 --apk --aab
 
@@ -174,6 +182,13 @@ jobs:
         env:
           APPLE_DEVELOPMENT_TEAM: ${{ secrets.APPLE_DEVELOPMENT_TEAM }}
         run: npm run tauri -- ios init --ci
+
+      # `tauri ios init` scaffolde le projet Xcode avec l'AppIcon Tauri par
+      # défaut et ne réapplique pas `src-tauri/icons/ios/`. On régénère donc
+      # les icônes depuis le logo Joutes officiel après l'init : `tauri icon`
+      # met à jour l'AppIcon.appiconset du projet `gen/apple` généré.
+      - name: Apply Joutes app icon
+        run: npm run tauri -- icon src-tauri/app-icon.png
 
       - name: Build signed IPA
         if: env.HAS_ASC_API_KEY == 'true'
