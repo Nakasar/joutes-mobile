@@ -10,6 +10,7 @@ import {
 import { api } from "../api/client";
 import * as authApi from "../api/auth";
 import type { SessionUser } from "../api/types";
+import { cacheClear } from "../lib/response-cache";
 
 interface AuthContextValue {
   /** false tant que la vérification de session au démarrage n'est pas finie. */
@@ -46,9 +47,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     void refresh().finally(() => setReady(true));
   }, [refresh]);
 
-  // Si l'API répond 401, la session a expiré : on repasse en anonyme.
+  // Si l'API répond 401, la session a expiré : on repasse en anonyme et on
+  // purge le cache de secours pour ne pas resservir hors ligne les données
+  // privées d'une session périmée.
   useEffect(() => {
-    api.setUnauthorizedHandler(() => setUser(null));
+    api.setUnauthorizedHandler(() => {
+      setUser(null);
+      void cacheClear();
+    });
     return () => api.setUnauthorizedHandler(null);
   }, []);
 
@@ -71,6 +77,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Même si l'appel échoue (hors-ligne…), on repasse en anonyme côté app.
     }
     setUser(null);
+    // Purge le cache de secours : les données privées (collection, amis,
+    // groupes…) ne doivent pas rester disponibles après déconnexion.
+    void cacheClear();
   }, []);
 
   const value = useMemo(
