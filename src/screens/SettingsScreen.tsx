@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { config } from "../config";
 import { BackHeader } from "../components/BackHeader";
+import { OfflineSection } from "../components/OfflineSection";
 import { useAuth } from "../store/auth";
 
 export function SettingsScreen() {
@@ -37,6 +38,7 @@ export function SettingsScreen() {
           </>
         )}
       </section>
+      <OfflineSection />
       <section className="card">
         <h2 className="card__title">À propos</h2>
         <p>

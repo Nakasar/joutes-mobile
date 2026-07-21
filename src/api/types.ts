@@ -294,6 +294,47 @@ export interface DecksListResponse {
   totalPages: number;
 }
 
+// ---- Export hors ligne ----
+
+/** Réponse de GET /games/{slug}/exports : pointeur vers le document complet. */
+export interface GameExportInfo {
+  url: string;
+  /** Taille du document en octets. */
+  size: number;
+  generatedAt: string;
+}
+
+/** Entrée brute d'un document de règles dans l'export ({id, content}). */
+export interface RawRuleEntry {
+  id: string;
+  content: string;
+}
+
+/** Document d'export complet d'un jeu (téléchargé depuis `GameExportInfo.url`). */
+export interface GameExport {
+  game: { id?: string; slug?: string; name?: string };
+  generatedAt: string;
+  cards: Record<string, unknown>[];
+  erratas: Errata[];
+  policies?: Record<string, unknown>[];
+  rules: {
+    en?: { cr?: RawRuleEntry[]; tr?: RawRuleEntry[] };
+    fr?: { cr?: RawRuleEntry[]; tr?: RawRuleEntry[] };
+  };
+}
+
+/** Métadonnées locales d'un export téléchargé. */
+export interface OfflineMeta {
+  slug: string;
+  name: string;
+  /** Taille du document en octets. */
+  size: number;
+  /** Date de génération côté serveur. */
+  generatedAt: string;
+  /** Date de téléchargement local. */
+  downloadedAt: string;
+}
+
 // ---- Vérificateur de deck (Riftbound) ----
 
 export interface DeckListCard {
