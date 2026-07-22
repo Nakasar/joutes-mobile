@@ -21,7 +21,7 @@ const RULES: Partial<Record<keyof DeckList, SectionRule>> = {
   legends: { min: 1, max: 1 },
   champions: { min: 1, max: 1 },
   maindeck: { min: 39, max: 39 },
-  sideboard: { min: 0, max: 8 },
+  sideboard: { min: 0, max: 10 },
   runes: { min: 12, max: 12 },
 };
 
