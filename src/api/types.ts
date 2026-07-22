@@ -434,3 +434,127 @@ export interface CollectionCardInput {
   collectorNumber: string;
   image: string;
 }
+
+/** Copie possédée d'une carte du catalogue (`GET /collection/cards/{cardId}`). */
+export interface CollectionCardEntry {
+  id: string;
+  foil?: boolean;
+  language?: "FR" | "EN" | "ZH" | "IT" | "JA" | "KO";
+  condition?: "Damaged" | "Played" | "Good" | "Near Mint" | "Mint";
+  grade?: number;
+  obtainedAt?: string;
+  acquisitionPrice?: number;
+  acquisitionCurrency?: string;
+  borrowedBy?: string;
+  /** Présent si cette copie est déjà en vente. */
+  forSale?: {
+    itemId: string;
+    sellListId: string;
+    price?: number;
+    currency?: string;
+    note?: string;
+  };
+}
+
+export interface OwnedCopiesResponse {
+  quantity: number;
+  cards: CollectionCardEntry[];
+}
+
+// ---- Listes de souhaits / listes de vente ----
+
+/** Les deux types de propriétaire possibles pour une liste (perso ou groupe). */
+export type ListOwnerType = "user" | "playGroup";
+export type WishlistVisibility = "private" | "unlisted" | "public";
+
+export interface Wishlist {
+  id: string;
+  name: string;
+  description?: string;
+  ownerType: ListOwnerType;
+  ownerId: string;
+  visibility: WishlistVisibility;
+  itemsCount?: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface WishlistItem {
+  id: string;
+  wishlistId: string;
+  cardId: string;
+  gameId?: string;
+  gameName?: string;
+  gameSlug?: string;
+  name: string;
+  setCode?: string;
+  collectorNumber?: string;
+  image?: string;
+  type?: string;
+  quantity: number;
+  note?: string;
+  addedByUserId?: string;
+  createdAt?: string;
+  /** Uniquement sur l'endpoint de liste : quantité possédée par le viewer courant. */
+  ownedQuantity?: number;
+}
+
+/** Réponse de `GET /wishlists/mine` : listes perso + listes de chaque play-group. */
+export interface WishlistsMineResponse {
+  personal: Wishlist[];
+  groups: {
+    group: { id: string; name: string };
+    wishlists: Wishlist[];
+  }[];
+}
+
+export interface WishlistItemsResponse {
+  items: WishlistItem[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface SellList {
+  id: string;
+  ownerType: ListOwnerType;
+  ownerId: string;
+  description?: string;
+  itemsCount?: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface SellListItem {
+  id: string;
+  sellListId: string;
+  collectionEntryId: string;
+  cardId: string;
+  gameId?: string;
+  gameName?: string;
+  gameSlug?: string;
+  name: string;
+  setCode?: string;
+  collectorNumber?: string;
+  image?: string;
+  type?: string;
+  foil?: boolean;
+  language?: string;
+  condition?: string;
+  grade?: number;
+  price?: number;
+  currency?: string;
+  note?: string;
+  addedByUserId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface SellListItemsResponse {
+  items: SellListItem[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}

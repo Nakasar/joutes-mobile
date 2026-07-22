@@ -199,3 +199,22 @@ export function MinusIcon(p: IconProps) {
     </Icon>
   );
 }
+
+export function TagIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M20.6 12.3 12.3 20.6a2 2 0 0 1-2.8 0l-6.1-6.1a2 2 0 0 1 0-2.8L11.7 3.4A2 2 0 0 1 13.1 2.8l6 .1a2 2 0 0 1 2 2l.1 6a2 2 0 0 1-.6 1.4Z" />
+      <circle cx="15.5" cy="8.5" r="1.5" />
+    </Icon>
+  );
+}
+
+export function TrashIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M4 7h16" />
+      <path d="M9 7V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V7" />
+      <path d="M6 7l1 13.5A1.5 1.5 0 0 0 8.5 22h7a1.5 1.5 0 0 0 1.5-1.5L18 7" />
+    </Icon>
+  );
+}

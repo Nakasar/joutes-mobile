@@ -3,7 +3,12 @@ import { useTranslation } from "react-i18next";
 import { getPlayGroupCollectionOverview } from "../api/collection";
 import { getPlayGroup } from "../api/social";
 import { BackHeader } from "../components/BackHeader";
-import { LockIcon } from "../components/icons";
+import {
+  ChevronIcon,
+  HeartIcon,
+  LockIcon,
+  TagIcon,
+} from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
@@ -29,6 +34,45 @@ function PlayGroupDetailContent({ groupId }: { groupId: string }) {
 
       {group.data && (
         <>
+          <Link
+            to={`/social/groups/${groupId}/wishlists`}
+            className="list-row list-row--link"
+          >
+            <span
+              className="list-row__icon"
+              style={{ background: "var(--chip)" }}
+            >
+              <HeartIcon size={20} style={{ color: "var(--primary)" }} />
+            </span>
+            <div className="list-row__body">
+              <p className="list-row__title">
+                {t("social.groupDetail.wishlistsAction")}
+              </p>
+            </div>
+            <span className="chevron">
+              <ChevronIcon size={18} />
+            </span>
+          </Link>
+          <Link
+            to={`/social/groups/${groupId}/sell-list`}
+            className="list-row list-row--link"
+          >
+            <span
+              className="list-row__icon"
+              style={{ background: "var(--chip)" }}
+            >
+              <TagIcon size={20} style={{ color: "var(--primary)" }} />
+            </span>
+            <div className="list-row__body">
+              <p className="list-row__title">
+                {t("social.groupDetail.sellListAction")}
+              </p>
+            </div>
+            <span className="chevron">
+              <ChevronIcon size={18} />
+            </span>
+          </Link>
+
           <p className="section-label">
             {t("social.members", { count: group.data.members?.length ?? 0 })}
           </p>

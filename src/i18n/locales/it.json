@@ -8,7 +8,11 @@
     "signOut": "Esci",
     "search": "Cerca",
     "settings": "Impostazioni",
-    "loginRequiredTitle": "Accesso richiesto"
+    "loginRequiredTitle": "Accesso richiesto",
+    "error": "Si è verificato un errore.",
+    "save": "Salva",
+    "saving": "Salvataggio…",
+    "remove": "Rimuovi"
   },
   "tabs": {
     "home": "Home",
@@ -63,7 +67,9 @@
       "removeOne": "Rimuovi una copia",
       "empty": "Nessuna carta corrisponde a questi filtri.",
       "error": "Impossibile caricare la collezione."
-    }
+    },
+    "wishlistsAction": "Le mie liste dei desideri",
+    "sellListAction": "La mia lista di vendita"
   },
   "social": {
     "title": "Comunità",
@@ -92,7 +98,9 @@
         "member": "Membro"
       },
       "collectionTitle": "Collezione del gruppo",
-      "collectionEmpty": "Questo gruppo non ha ancora una collezione."
+      "collectionEmpty": "Questo gruppo non ha ancora una collezione.",
+      "wishlistsAction": "Liste dei desideri del gruppo",
+      "sellListAction": "Lista di vendita del gruppo"
     }
   },
   "settings": {
@@ -203,5 +211,52 @@
     "deprecated": "Obsoleto",
     "source": "Fonte",
     "sourceLabel": "Fonte: {{source}}"
+  },
+  "wishlists": {
+    "title": "Liste dei desideri",
+    "gateText": "Accedi per ritrovare le tue liste dei desideri.",
+    "createAction": "Nuova lista",
+    "createTitle": "Nuova lista dei desideri",
+    "createSubmit": "Crea",
+    "nameLabel": "Nome",
+    "noteLabel": "Nota (facoltativa)",
+    "visibilityLabel": "Visibilità",
+    "visibilityPrivate": "Privata",
+    "visibilityUnlisted": "Non elencata",
+    "visibilityPublic": "Pubblica",
+    "empty": "Nessuna lista dei desideri per ora.",
+    "sectionPersonal": "Le mie liste",
+    "sectionGroup": "Gruppo {{name}}",
+    "itemsCount_one": "{{count}} carta",
+    "itemsCount_other": "{{count}} carte",
+    "detailFallbackTitle": "Lista dei desideri",
+    "deleteAction": "Elimina la lista",
+    "itemsEmpty": "Questa lista non contiene ancora carte.",
+    "owned_one": "{{count}} posseduta",
+    "owned_other": "{{count}} possedute",
+    "decrease": "Diminuisci la quantità",
+    "increase": "Aumenta la quantità",
+    "addToAction": "Aggiungi ai desideri",
+    "addToTitle": "Aggiungi a una lista dei desideri",
+    "addToSubmit": "Aggiungi",
+    "addToSuccess": "Carta aggiunta alla lista."
+  },
+  "sellLists": {
+    "title": "Lista di vendita",
+    "gateText": "Accedi per ritrovare la tua lista di vendita.",
+    "emptyTitle": "Ancora nulla in vendita",
+    "emptyDescription": "Metti in vendita delle carte dalla tua collezione.",
+    "emptyCta": "Vedi la mia collezione",
+    "groupEmpty": "Questo gruppo non ha ancora messo nulla in vendita.",
+    "itemsEmpty": "Nessuna carta in vendita.",
+    "priceLabel": "Prezzo",
+    "noPricePlaceholder": "Senza prezzo",
+    "noPrice": "Prezzo non definito",
+    "noteLabel": "Nota (facoltativa)",
+    "unlistAction": "Rimuovi dalla vendita",
+    "listForSaleAction": "Metti in vendita",
+    "notOwned": "Non possiedi questa carta.",
+    "confirmListing": "Metti in vendita",
+    "invalidPrice": "Il prezzo indicato non è valido."
   }
 }

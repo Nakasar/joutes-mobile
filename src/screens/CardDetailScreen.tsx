@@ -1,21 +1,28 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getCard } from "../api/cards";
+import { AddToWishlistSheet } from "../components/AddToWishlistSheet";
 import { BackHeader } from "../components/BackHeader";
 import { ErrataCard } from "../components/ErrataCard";
 import { GameMarkdown } from "../components/GameMarkdown";
+import { HeartIcon, TagIcon } from "../components/icons";
+import { ListForSaleSheet } from "../components/ListForSaleSheet";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { annotateCardText } from "../lib/card-text-markdown";
+import { useAuth } from "../store/auth";
 
 export function CardDetailScreen() {
   const { t } = useTranslation();
   const { gameSlug = "", cardId = "" } = useParams();
+  const { isAuthenticated } = useAuth();
   const { data, loading, error, reload } = useApi(
     () => getCard(gameSlug, cardId),
     [gameSlug, cardId],
   );
+  const [addingToWishlist, setAddingToWishlist] = useState(false);
+  const [listingForSale, setListingForSale] = useState(false);
 
   const cardIdByName = useMemo(
     // `annotateErrataMarkdown` cherche par nom en minuscules : on normalise
@@ -73,6 +80,24 @@ export function CardDetailScreen() {
               <GameMarkdown markdown={cardTextMarkdown} gameSlug={gameSlug} />
             </div>
           )}
+          {isAuthenticated && (
+            <div className="action-row">
+              <button
+                className="btn btn--outline"
+                onClick={() => setAddingToWishlist(true)}
+              >
+                <HeartIcon size={16} />
+                {t("wishlists.addToAction")}
+              </button>
+              <button
+                className="btn btn--outline"
+                onClick={() => setListingForSale(true)}
+              >
+                <TagIcon size={16} />
+                {t("sellLists.listForSaleAction")}
+              </button>
+            </div>
+          )}
           <section>
             <h2 className="section-title">
               {t("card.errataSection")}
@@ -96,6 +121,20 @@ export function CardDetailScreen() {
             )}
           </section>
         </>
+      )}
+      {addingToWishlist && data && (
+        <AddToWishlistSheet
+          card={data}
+          gameSlug={gameSlug}
+          onClose={() => setAddingToWishlist(false)}
+        />
+      )}
+      {listingForSale && data && (
+        <ListForSaleSheet
+          card={data}
+          gameSlug={gameSlug}
+          onClose={() => setListingForSale(false)}
+        />
       )}
     </div>
   );
