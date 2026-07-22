@@ -256,6 +256,7 @@
     "unlistAction": "Rimuovi dalla vendita",
     "listForSaleAction": "Metti in vendita",
     "notOwned": "Non possiedi questa carta.",
-    "confirmListing": "Metti in vendita"
+    "confirmListing": "Metti in vendita",
+    "invalidPrice": "Il prezzo indicato non è valido."
   }
 }

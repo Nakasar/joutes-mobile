@@ -39,74 +39,86 @@ function WishlistItemRow({
 }) {
   const { t } = useTranslation();
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   function changeQuantity(delta: number) {
     const next = item.quantity + delta;
     if (next < 1 || next > 99 || busy) return;
     setBusy(true);
+    setError(null);
     updateWishlistItem(item.wishlistId, item.id, { quantity: next })
       .then(onChanged)
+      .catch((err: unknown) => {
+        setError(err instanceof Error ? err.message : t("common.error"));
+      })
       .finally(() => setBusy(false));
   }
 
   function remove() {
     if (busy) return;
     setBusy(true);
+    setError(null);
     removeWishlistItem(item.wishlistId, item.id)
       .then(onChanged)
+      .catch((err: unknown) => {
+        setError(err instanceof Error ? err.message : t("common.error"));
+      })
       .finally(() => setBusy(false));
   }
 
   return (
-    <div className="list-row">
-      {item.image ? (
-        <img src={item.image} alt="" className="list-row__thumb" />
-      ) : (
-        <span className="list-row__thumb" />
-      )}
-      <div className="list-row__body">
-        <p className="list-row__title">{item.name}</p>
-        <p className="list-row__sub">
-          {item.setCode} {item.collectorNumber}
-          {typeof item.ownedQuantity === "number" &&
-            ` · ${t("wishlists.owned", { count: item.ownedQuantity })}`}
-        </p>
-      </div>
-      <div className="list-row__actions">
-        {canEdit ? (
-          <>
-            <div className="stepper">
-              <button
-                className="stepper__btn"
-                onClick={() => changeQuantity(-1)}
-                disabled={busy || item.quantity <= 1}
-                aria-label={t("wishlists.decrease")}
-              >
-                −
-              </button>
-              <span className="stepper__value">{item.quantity}</span>
-              <button
-                className="stepper__btn"
-                onClick={() => changeQuantity(1)}
-                disabled={busy || item.quantity >= 99}
-                aria-label={t("wishlists.increase")}
-              >
-                +
-              </button>
-            </div>
-            <button
-              className="remove-btn"
-              onClick={remove}
-              disabled={busy}
-              aria-label={t("common.remove")}
-            >
-              <TrashIcon size={16} />
-            </button>
-          </>
+    <div>
+      <div className="list-row">
+        {item.image ? (
+          <img src={item.image} alt="" className="list-row__thumb" />
         ) : (
-          <span className="stepper__value">×{item.quantity}</span>
+          <span className="list-row__thumb" />
         )}
+        <div className="list-row__body">
+          <p className="list-row__title">{item.name}</p>
+          <p className="list-row__sub">
+            {item.setCode} {item.collectorNumber}
+            {typeof item.ownedQuantity === "number" &&
+              ` · ${t("wishlists.owned", { count: item.ownedQuantity })}`}
+          </p>
+        </div>
+        <div className="list-row__actions">
+          {canEdit ? (
+            <>
+              <div className="stepper">
+                <button
+                  className="stepper__btn"
+                  onClick={() => changeQuantity(-1)}
+                  disabled={busy || item.quantity <= 1}
+                  aria-label={t("wishlists.decrease")}
+                >
+                  −
+                </button>
+                <span className="stepper__value">{item.quantity}</span>
+                <button
+                  className="stepper__btn"
+                  onClick={() => changeQuantity(1)}
+                  disabled={busy || item.quantity >= 99}
+                  aria-label={t("wishlists.increase")}
+                >
+                  +
+                </button>
+              </div>
+              <button
+                className="remove-btn"
+                onClick={remove}
+                disabled={busy}
+                aria-label={t("common.remove")}
+              >
+                <TrashIcon size={16} />
+              </button>
+            </>
+          ) : (
+            <span className="stepper__value">×{item.quantity}</span>
+          )}
+        </div>
       </div>
+      {error && <p className="form-error">{error}</p>}
     </div>
   );
 }

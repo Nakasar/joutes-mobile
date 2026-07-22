@@ -256,6 +256,7 @@
     "unlistAction": "Retirer de la vente",
     "listForSaleAction": "Mettre en vente",
     "notOwned": "Vous ne possédez pas cette carte.",
-    "confirmListing": "Mettre en vente"
+    "confirmListing": "Mettre en vente",
+    "invalidPrice": "Le prix indiqué n'est pas valide."
   }
 }

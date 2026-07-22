@@ -30,7 +30,14 @@ function WishlistOption({
       className="list-row list-row--link"
       role="button"
       tabIndex={0}
+      aria-pressed={selected}
       onClick={onSelect}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onSelect();
+        }
+      }}
       style={selected ? { borderColor: "var(--primary)" } : undefined}
     >
       <span className="list-row__icon" style={{ background: "var(--chip)" }}>

@@ -32,14 +32,19 @@ function CopyRow({
   const [error, setError] = useState<string | null>(null);
 
   function submitListing() {
+    const trimmedPrice = price.trim();
+    const parsedPrice = trimmedPrice ? Number(trimmedPrice) : undefined;
+    if (parsedPrice !== undefined && !Number.isFinite(parsedPrice)) {
+      setError(t("sellLists.invalidPrice"));
+      return;
+    }
     setSaving(true);
     setError(null);
-    const trimmedPrice = price.trim();
     addMySellListItem({
       collectionEntryId: entry.id,
       gameSlug,
-      price: trimmedPrice ? Number(trimmedPrice) : undefined,
-      currency: trimmedPrice ? currency : undefined,
+      price: parsedPrice,
+      currency: parsedPrice !== undefined ? currency : undefined,
       note: note.trim() || undefined,
     })
       .then(onChanged)

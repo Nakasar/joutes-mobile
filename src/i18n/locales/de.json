@@ -256,6 +256,7 @@
     "unlistAction": "Aus dem Verkauf nehmen",
     "listForSaleAction": "Zum Verkauf anbieten",
     "notOwned": "Du besitzt diese Karte nicht.",
-    "confirmListing": "Zum Verkauf anbieten"
+    "confirmListing": "Zum Verkauf anbieten",
+    "invalidPrice": "Der eingegebene Preis ist ungültig."
   }
 }

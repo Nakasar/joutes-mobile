@@ -256,6 +256,7 @@
     "unlistAction": "Remove from sale",
     "listForSaleAction": "List for sale",
     "notOwned": "You don't own this card.",
-    "confirmListing": "List for sale"
+    "confirmListing": "List for sale",
+    "invalidPrice": "The price entered is not valid."
   }
 }

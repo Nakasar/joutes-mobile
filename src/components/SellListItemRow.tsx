@@ -31,12 +31,17 @@ function EditSellListItemSheet({
   const [error, setError] = useState<string | null>(null);
 
   function save() {
+    const trimmedPrice = price.trim();
+    const parsedPrice = trimmedPrice ? Number(trimmedPrice) : null;
+    if (parsedPrice !== null && !Number.isFinite(parsedPrice)) {
+      setError(t("sellLists.invalidPrice"));
+      return;
+    }
     setSaving(true);
     setError(null);
-    const trimmedPrice = price.trim();
     updateSellListItem(item.sellListId, item.id, {
-      price: trimmedPrice ? Number(trimmedPrice) : null,
-      currency: trimmedPrice ? currency : undefined,
+      price: parsedPrice,
+      currency: parsedPrice !== null ? currency : undefined,
       note: note.trim(),
     })
       .then(() => {
@@ -141,7 +146,26 @@ export function SellListItemRow({
 }) {
   const { t } = useTranslation();
   const [editing, setEditing] = useState(false);
+  const [removing, setRemoving] = useState(false);
+  const [removeError, setRemoveError] = useState<string | null>(null);
   const price = formatPrice(item);
+
+  function openEdit() {
+    if (canEdit) setEditing(true);
+  }
+
+  function quickRemove(e: { stopPropagation: () => void }) {
+    e.stopPropagation();
+    if (removing) return;
+    setRemoving(true);
+    setRemoveError(null);
+    removeSellListItem(item.sellListId, item.id)
+      .then(onChanged)
+      .catch((err: unknown) => {
+        setRemoveError(err instanceof Error ? err.message : t("common.error"));
+      })
+      .finally(() => setRemoving(false));
+  }
 
   return (
     <>
@@ -149,7 +173,17 @@ export function SellListItemRow({
         className={`list-row${canEdit ? " list-row--link" : ""}`}
         role={canEdit ? "button" : undefined}
         tabIndex={canEdit ? 0 : undefined}
-        onClick={canEdit ? () => setEditing(true) : undefined}
+        onClick={openEdit}
+        onKeyDown={
+          canEdit
+            ? (e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  openEdit();
+                }
+              }
+            : undefined
+        }
       >
         {item.image ? (
           <img src={item.image} alt="" className="list-row__thumb" />
@@ -176,10 +210,8 @@ export function SellListItemRow({
           {canEdit && (
             <button
               className="remove-btn"
-              onClick={(e) => {
-                e.stopPropagation();
-                removeSellListItem(item.sellListId, item.id).then(onChanged);
-              }}
+              onClick={quickRemove}
+              disabled={removing}
               aria-label={t("sellLists.unlistAction")}
             >
               <TrashIcon size={16} />
@@ -187,6 +219,7 @@ export function SellListItemRow({
           )}
         </div>
       </div>
+      {removeError && <p className="form-error">{removeError}</p>}
       {editing && (
         <EditSellListItemSheet
           item={item}
