@@ -4,6 +4,7 @@ import type {
   CollectionCardInput,
   CollectionOverview,
   GameCollectionResult,
+  OwnedCopiesResponse,
 } from "./types";
 import { withCache } from "../lib/response-cache";
 
@@ -80,4 +81,9 @@ export function removeCollectionCard(
     ? endpoints.playGroups.collection.card(playGroupId, cardId)
     : endpoints.collection.card(cardId);
   return api.delete<{ success: true }>(path);
+}
+
+/** Copies possédées d'une carte du catalogue (pour la mettre en vente). */
+export function getOwnedCopies(cardId: string): Promise<OwnedCopiesResponse> {
+  return api.get<OwnedCopiesResponse>(endpoints.collection.card(cardId));
 }

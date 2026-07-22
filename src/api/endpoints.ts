@@ -49,6 +49,10 @@ export const endpoints = {
       game: (playGroupId: string, gameSlug: string) =>
         `/play-groups/${playGroupId}/collection/games/${gameSlug}`,
     },
+    wishlists: (playGroupId: string) => `/play-groups/${playGroupId}/wishlists`,
+    sellList: (playGroupId: string) => `/play-groups/${playGroupId}/sell-list`,
+    sellListItems: (playGroupId: string) =>
+      `/play-groups/${playGroupId}/sell-list/items`,
   },
   decks: {
     list: "/decks",
@@ -59,5 +63,21 @@ export const endpoints = {
     cards: "/collection/cards",
     card: (cardId: string) => `/collection/cards/${cardId}`,
     game: (gameSlug: string) => `/collection/games/${gameSlug}`,
+  },
+  wishlists: {
+    mine: "/wishlists/mine",
+    list: "/wishlists",
+    detail: (wishlistId: string) => `/wishlists/${wishlistId}`,
+    items: (wishlistId: string) => `/wishlists/${wishlistId}/items`,
+    item: (wishlistId: string, itemId: string) =>
+      `/wishlists/${wishlistId}/items/${itemId}`,
+  },
+  sellLists: {
+    mine: "/sell-lists/mine",
+    mineItems: "/sell-lists/mine/items",
+    detail: (sellListId: string) => `/sell-lists/${sellListId}`,
+    items: (sellListId: string) => `/sell-lists/${sellListId}/items`,
+    item: (sellListId: string, itemId: string) =>
+      `/sell-lists/${sellListId}/items/${itemId}`,
   },
 } as const;

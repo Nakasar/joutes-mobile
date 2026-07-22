@@ -8,7 +8,11 @@
     "signOut": "Abmelden",
     "search": "Suchen",
     "settings": "Einstellungen",
-    "loginRequiredTitle": "Anmeldung erforderlich"
+    "loginRequiredTitle": "Anmeldung erforderlich",
+    "error": "Ein Fehler ist aufgetreten.",
+    "save": "Speichern",
+    "saving": "Wird gespeichert…",
+    "remove": "Entfernen"
   },
   "tabs": {
     "home": "Start",
@@ -63,7 +67,9 @@
       "removeOne": "Ein Exemplar entfernen",
       "empty": "Keine Karte entspricht diesen Filtern.",
       "error": "Die Sammlung konnte nicht geladen werden."
-    }
+    },
+    "wishlistsAction": "Meine Wunschlisten",
+    "sellListAction": "Meine Verkaufsliste"
   },
   "social": {
     "title": "Community",
@@ -92,7 +98,9 @@
         "member": "Mitglied"
       },
       "collectionTitle": "Sammlung der Gruppe",
-      "collectionEmpty": "Diese Gruppe hat noch keine Sammlung."
+      "collectionEmpty": "Diese Gruppe hat noch keine Sammlung.",
+      "wishlistsAction": "Wunschlisten der Gruppe",
+      "sellListAction": "Verkaufsliste der Gruppe"
     }
   },
   "settings": {
@@ -203,5 +211,51 @@
     "deprecated": "Veraltet",
     "source": "Quelle",
     "sourceLabel": "Quelle: {{source}}"
+  },
+  "wishlists": {
+    "title": "Wunschlisten",
+    "gateText": "Melde dich an, um deine Wunschlisten zu finden.",
+    "createAction": "Neue Liste",
+    "createTitle": "Neue Wunschliste",
+    "createSubmit": "Erstellen",
+    "nameLabel": "Name",
+    "noteLabel": "Notiz (optional)",
+    "visibilityLabel": "Sichtbarkeit",
+    "visibilityPrivate": "Privat",
+    "visibilityUnlisted": "Nicht gelistet",
+    "visibilityPublic": "Öffentlich",
+    "empty": "Noch keine Wunschlisten.",
+    "sectionPersonal": "Meine Listen",
+    "sectionGroup": "Gruppe {{name}}",
+    "itemsCount_one": "{{count}} Karte",
+    "itemsCount_other": "{{count}} Karten",
+    "detailFallbackTitle": "Wunschliste",
+    "deleteAction": "Liste löschen",
+    "itemsEmpty": "Diese Liste enthält noch keine Karten.",
+    "owned_one": "{{count}} im Besitz",
+    "owned_other": "{{count}} im Besitz",
+    "decrease": "Menge verringern",
+    "increase": "Menge erhöhen",
+    "addToAction": "Zur Wunschliste hinzufügen",
+    "addToTitle": "Zu einer Wunschliste hinzufügen",
+    "addToSubmit": "Hinzufügen",
+    "addToSuccess": "Karte zur Liste hinzugefügt."
+  },
+  "sellLists": {
+    "title": "Verkaufsliste",
+    "gateText": "Melde dich an, um deine Verkaufsliste zu finden.",
+    "emptyTitle": "Noch nichts im Verkauf",
+    "emptyDescription": "Biete Karten aus deiner Sammlung zum Verkauf an.",
+    "emptyCta": "Meine Sammlung ansehen",
+    "groupEmpty": "Diese Gruppe hat noch nichts zum Verkauf angeboten.",
+    "itemsEmpty": "Keine Karten im Verkauf.",
+    "priceLabel": "Preis",
+    "noPricePlaceholder": "Ohne Preis",
+    "noPrice": "Kein Preis festgelegt",
+    "noteLabel": "Notiz (optional)",
+    "unlistAction": "Aus dem Verkauf nehmen",
+    "listForSaleAction": "Zum Verkauf anbieten",
+    "notOwned": "Du besitzt diese Karte nicht.",
+    "confirmListing": "Zum Verkauf anbieten"
   }
 }

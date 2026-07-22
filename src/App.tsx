@@ -10,11 +10,16 @@ import { GameCardsScreen } from "./screens/GameCardsScreen";
 import { GamesScreen } from "./screens/GamesScreen";
 import { HomeScreen } from "./screens/HomeScreen";
 import { LoginScreen } from "./screens/LoginScreen";
+import { MySellListScreen } from "./screens/MySellListScreen";
 import { NewsDetailScreen } from "./screens/NewsDetailScreen";
 import { PlayGroupDetailScreen } from "./screens/PlayGroupDetailScreen";
+import { PlayGroupSellListScreen } from "./screens/PlayGroupSellListScreen";
+import { PlayGroupWishlistsScreen } from "./screens/PlayGroupWishlistsScreen";
 import { RulesScreen } from "./screens/RulesScreen";
 import { SettingsScreen } from "./screens/SettingsScreen";
 import { SocialScreen } from "./screens/SocialScreen";
+import { WishlistDetailScreen } from "./screens/WishlistDetailScreen";
+import { WishlistsScreen } from "./screens/WishlistsScreen";
 import { AuthProvider, useAuth } from "./store/auth";
 import "./styles.css";
 
@@ -65,6 +70,12 @@ function Shell() {
                   path="/collection/:gameSlug"
                   element={<CollectionGameScreen />}
                 />
+                <Route path="/wishlists" element={<WishlistsScreen />} />
+                <Route
+                  path="/wishlists/:wishlistId"
+                  element={<WishlistDetailScreen />}
+                />
+                <Route path="/sell-lists/mine" element={<MySellListScreen />} />
                 <Route path="/social" element={<SocialScreen />} />
                 <Route
                   path="/social/groups/:groupId"
@@ -73,6 +84,14 @@ function Shell() {
                 <Route
                   path="/social/groups/:groupId/collection/:gameSlug"
                   element={<CollectionGameScreen />}
+                />
+                <Route
+                  path="/social/groups/:groupId/wishlists"
+                  element={<PlayGroupWishlistsScreen />}
+                />
+                <Route
+                  path="/social/groups/:groupId/sell-list"
+                  element={<PlayGroupSellListScreen />}
                 />
                 <Route path="/settings" element={<SettingsScreen />} />
                 <Route path="*" element={<Navigate to="/" replace />} />

@@ -8,7 +8,11 @@
     "signOut": "Sign out",
     "search": "Search",
     "settings": "Settings",
-    "loginRequiredTitle": "Sign in required"
+    "loginRequiredTitle": "Sign in required",
+    "error": "Something went wrong.",
+    "save": "Save",
+    "saving": "Saving…",
+    "remove": "Remove"
   },
   "tabs": {
     "home": "Home",
@@ -63,7 +67,9 @@
       "removeOne": "Remove a copy",
       "empty": "No cards match these filters.",
       "error": "Couldn't load the collection."
-    }
+    },
+    "wishlistsAction": "My wishlists",
+    "sellListAction": "My sale list"
   },
   "social": {
     "title": "Community",
@@ -92,7 +98,9 @@
         "member": "Member"
       },
       "collectionTitle": "Group collection",
-      "collectionEmpty": "This group doesn't have a collection yet."
+      "collectionEmpty": "This group doesn't have a collection yet.",
+      "wishlistsAction": "Group wishlists",
+      "sellListAction": "Group sale list"
     }
   },
   "settings": {
@@ -203,5 +211,51 @@
     "deprecated": "Deprecated",
     "source": "Source",
     "sourceLabel": "Source: {{source}}"
+  },
+  "wishlists": {
+    "title": "Wishlists",
+    "gateText": "Sign in to find your wishlists.",
+    "createAction": "New list",
+    "createTitle": "New wishlist",
+    "createSubmit": "Create",
+    "nameLabel": "Name",
+    "noteLabel": "Note (optional)",
+    "visibilityLabel": "Visibility",
+    "visibilityPrivate": "Private",
+    "visibilityUnlisted": "Unlisted",
+    "visibilityPublic": "Public",
+    "empty": "No wishlists yet.",
+    "sectionPersonal": "My lists",
+    "sectionGroup": "{{name}} group",
+    "itemsCount_one": "{{count}} card",
+    "itemsCount_other": "{{count}} cards",
+    "detailFallbackTitle": "Wishlist",
+    "deleteAction": "Delete list",
+    "itemsEmpty": "This list has no cards yet.",
+    "owned_one": "{{count}} owned",
+    "owned_other": "{{count}} owned",
+    "decrease": "Decrease quantity",
+    "increase": "Increase quantity",
+    "addToAction": "Add to wishlist",
+    "addToTitle": "Add to a wishlist",
+    "addToSubmit": "Add",
+    "addToSuccess": "Card added to the list."
+  },
+  "sellLists": {
+    "title": "Sale list",
+    "gateText": "Sign in to find your sale list.",
+    "emptyTitle": "Nothing for sale yet",
+    "emptyDescription": "List cards for sale from your collection.",
+    "emptyCta": "View my collection",
+    "groupEmpty": "This group hasn't listed anything for sale yet.",
+    "itemsEmpty": "No cards for sale.",
+    "priceLabel": "Price",
+    "noPricePlaceholder": "No price",
+    "noPrice": "No price set",
+    "noteLabel": "Note (optional)",
+    "unlistAction": "Remove from sale",
+    "listForSaleAction": "List for sale",
+    "notOwned": "You don't own this card.",
+    "confirmListing": "List for sale"
   }
 }

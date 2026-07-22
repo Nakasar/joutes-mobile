@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getCollectionOverview } from "../api/collection";
 import { CachedImage } from "../components/CachedImage";
-import { LockIcon } from "../components/icons";
+import { ChevronIcon, HeartIcon, LockIcon, TagIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
@@ -18,6 +18,29 @@ function CollectionContent() {
 
   return (
     <>
+      <Link to="/wishlists" className="list-row list-row--link">
+        <span className="list-row__icon" style={{ background: "var(--chip)" }}>
+          <HeartIcon size={20} style={{ color: "var(--primary)" }} />
+        </span>
+        <div className="list-row__body">
+          <p className="list-row__title">{t("collection.wishlistsAction")}</p>
+        </div>
+        <span className="chevron">
+          <ChevronIcon size={18} />
+        </span>
+      </Link>
+      <Link to="/sell-lists/mine" className="list-row list-row--link">
+        <span className="list-row__icon" style={{ background: "var(--chip)" }}>
+          <TagIcon size={20} style={{ color: "var(--primary)" }} />
+        </span>
+        <div className="list-row__body">
+          <p className="list-row__title">{t("collection.sellListAction")}</p>
+        </div>
+        <span className="chevron">
+          <ChevronIcon size={18} />
+        </span>
+      </Link>
+
       <StatusView
         loading={loading}
         error={error}
