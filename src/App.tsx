@@ -2,6 +2,7 @@ import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { TabBar } from "./components/TabBar";
 import { CardDetailScreen } from "./screens/CardDetailScreen";
+import { CollectionGameScreen } from "./screens/CollectionGameScreen";
 import { CollectionScreen } from "./screens/CollectionScreen";
 import { DeckCheckerScreen } from "./screens/DeckCheckerScreen";
 import { EventsScreen } from "./screens/EventsScreen";
@@ -10,6 +11,7 @@ import { GamesScreen } from "./screens/GamesScreen";
 import { HomeScreen } from "./screens/HomeScreen";
 import { LoginScreen } from "./screens/LoginScreen";
 import { NewsDetailScreen } from "./screens/NewsDetailScreen";
+import { PlayGroupDetailScreen } from "./screens/PlayGroupDetailScreen";
 import { RulesScreen } from "./screens/RulesScreen";
 import { SettingsScreen } from "./screens/SettingsScreen";
 import { SocialScreen } from "./screens/SocialScreen";
@@ -59,7 +61,19 @@ function Shell() {
                 />
                 <Route path="/events" element={<EventsScreen />} />
                 <Route path="/collection" element={<CollectionScreen />} />
+                <Route
+                  path="/collection/:gameSlug"
+                  element={<CollectionGameScreen />}
+                />
                 <Route path="/social" element={<SocialScreen />} />
+                <Route
+                  path="/social/groups/:groupId"
+                  element={<PlayGroupDetailScreen />}
+                />
+                <Route
+                  path="/social/groups/:groupId/collection/:gameSlug"
+                  element={<CollectionGameScreen />}
+                />
                 <Route path="/settings" element={<SettingsScreen />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>

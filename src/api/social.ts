@@ -35,6 +35,15 @@ export function listPlayGroups(): Promise<PlayGroup[]> {
   );
 }
 
+/** Détail d'un groupe de jeu (membres inclus), pour les membres du groupe uniquement. */
+export function getPlayGroup(playGroupId: string): Promise<PlayGroup> {
+  return withCache(`social:group:${playGroupId}`, () =>
+    api
+      .get<{ group: PlayGroup }>(endpoints.playGroups.detail(playGroupId))
+      .then((r) => r.group),
+  );
+}
+
 /** Boutiques / lieux (lairs) — annuaire public. */
 export function listLairs(): Promise<LairsListResponse> {
   return withCache("social:lairs", () =>

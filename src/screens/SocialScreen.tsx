@@ -132,7 +132,7 @@ function GroupsTab() {
         const color = colorFor(group.id);
         const n = membersCount(group);
         return (
-          <div key={group.id} className="friend-row">
+          <Link key={group.id} to={`/social/groups/${group.id}`} className="friend-row">
             <span className="avatar avatar--sm" style={tintStyle(color)}>
               {initialOf(group.name)}
             </span>
@@ -148,7 +148,7 @@ function GroupsTab() {
             <span className="chevron">
               <ChevronIcon size={18} />
             </span>
-          </div>
+          </Link>
         );
       })}
     </>

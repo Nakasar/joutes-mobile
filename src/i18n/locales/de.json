@@ -50,7 +50,20 @@
     "overviewSub_other": "Karten in {{games}} {{gamesWord}}",
     "gameStats_one": "{{owned}}/{{total}} Karten · {{copies}} Exemplar",
     "gameStats_other": "{{owned}}/{{total}} Karten · {{copies}} Exemplare",
-    "gateText": "Melde dich an, um deine Sammlung, Wunschlisten und Verkaufslisten zu finden."
+    "gateText": "Melde dich an, um deine Sammlung, Wunschlisten und Verkaufslisten zu finden.",
+    "browse": {
+      "fallbackTitle": "Sammlung",
+      "searchPlaceholder": "Karte suchen…",
+      "filterAll": "Alle",
+      "filterOwned": "Besessen",
+      "filterUnowned": "Fehlend",
+      "stats": "{{owned}}/{{total}} einzigartige Karten",
+      "copies": "{{owned}}/{{total}} Editionen besessen",
+      "addOne": "Ein Exemplar hinzufügen",
+      "removeOne": "Ein Exemplar entfernen",
+      "empty": "Keine Karte entspricht diesen Filtern.",
+      "error": "Die Sammlung konnte nicht geladen werden."
+    }
   },
   "social": {
     "title": "Community",
@@ -70,7 +83,17 @@
     "members_other": "{{count}} Mitglieder",
     "groupGames_one": "{{count}} Spiel",
     "groupGames_other": "{{count}} Spiele",
-    "lairsEmpty": "Keine Läden."
+    "lairsEmpty": "Keine Läden.",
+    "groupDetail": {
+      "fallbackTitle": "Gruppe",
+      "role": {
+        "owner": "Eigentümer",
+        "admin": "Verantwortlicher",
+        "member": "Mitglied"
+      },
+      "collectionTitle": "Sammlung der Gruppe",
+      "collectionEmpty": "Diese Gruppe hat noch keine Sammlung."
+    }
   },
   "settings": {
     "title": "Einstellungen",
