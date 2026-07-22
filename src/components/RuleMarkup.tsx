@@ -38,11 +38,20 @@ function renderNodes(
         </KeywordBadge>
       );
     }
-    return (
-      <mark key={key} className="rule-match">
-        {renderNodes(node.children, key, onNavigate)}
-      </mark>
-    );
+    if (node.type === "match") {
+      return (
+        <mark key={key} className="rule-match">
+          {renderNodes(node.children, key, onNavigate)}
+        </mark>
+      );
+    }
+    if (node.type === "bold") {
+      return <strong key={key}>{renderNodes(node.children, key, onNavigate)}</strong>;
+    }
+    if (node.type === "italic") {
+      return <em key={key}>{renderNodes(node.children, key, onNavigate)}</em>;
+    }
+    return <code key={key}>{node.text}</code>;
   });
 }
 
