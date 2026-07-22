@@ -258,5 +258,17 @@
     "notOwned": "Du besitzt diese Karte nicht.",
     "confirmListing": "Zum Verkauf anbieten",
     "invalidPrice": "Der eingegebene Preis ist ungültig."
+  },
+  "profile": {
+    "fallbackTitle": "Profil",
+    "gamesTitle": "Verfolgte Spiele",
+    "gamesEmpty": "Noch keine Spiele verfolgt.",
+    "lairsTitle": "Verfolgte Läden",
+    "lairsEmpty": "Noch keine Läden verfolgt.",
+    "achievementsTitle": "Erfolge",
+    "privateNote": "Dieses Profil ist privat: verfolgte Spiele, Läden und Erfolge sind nicht sichtbar.",
+    "wishlistsTitle": "Wunschlisten",
+    "sellListTitle": "Verkaufsliste",
+    "viewMineAction": "Mein öffentliches Profil ansehen"
   }
 }

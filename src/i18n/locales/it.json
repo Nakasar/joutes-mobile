@@ -258,5 +258,17 @@
     "notOwned": "Non possiedi questa carta.",
     "confirmListing": "Metti in vendita",
     "invalidPrice": "Il prezzo indicato non è valido."
+  },
+  "profile": {
+    "fallbackTitle": "Profilo",
+    "gamesTitle": "Giochi seguiti",
+    "gamesEmpty": "Nessun gioco seguito per ora.",
+    "lairsTitle": "Negozi seguiti",
+    "lairsEmpty": "Nessun negozio seguito per ora.",
+    "achievementsTitle": "Successi",
+    "privateNote": "Questo profilo è privato: giochi, negozi seguiti e successi non sono visibili.",
+    "wishlistsTitle": "Liste dei desideri",
+    "sellListTitle": "Lista di vendita",
+    "viewMineAction": "Vedi il mio profilo pubblico"
   }
 }

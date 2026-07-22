@@ -2610,3 +2610,48 @@ textarea:focus {
   flex-wrap: wrap;
   margin-top: 3px;
 }
+
+/* ---- Profil utilisateur ---- */
+
+.avatar--lg {
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  font-size: 28px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.profile-header__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-header__name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-header__bio {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+}
+
+.profile-links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 10px;
+}

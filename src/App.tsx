@@ -18,6 +18,7 @@ import { PlayGroupWishlistsScreen } from "./screens/PlayGroupWishlistsScreen";
 import { RulesScreen } from "./screens/RulesScreen";
 import { SettingsScreen } from "./screens/SettingsScreen";
 import { SocialScreen } from "./screens/SocialScreen";
+import { UserProfileScreen } from "./screens/UserProfileScreen";
 import { WishlistDetailScreen } from "./screens/WishlistDetailScreen";
 import { WishlistsScreen } from "./screens/WishlistsScreen";
 import { AuthProvider, useAuth } from "./store/auth";
@@ -93,6 +94,7 @@ function Shell() {
                   path="/social/groups/:groupId/sell-list"
                   element={<PlayGroupSellListScreen />}
                 />
+                <Route path="/users/:userTag" element={<UserProfileScreen />} />
                 <Route path="/settings" element={<SettingsScreen />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
