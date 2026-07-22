@@ -50,7 +50,20 @@
     "overviewSub_other": "cards across {{games}} {{gamesWord}}",
     "gameStats_one": "{{owned}}/{{total}} cards · {{copies}} copy",
     "gameStats_other": "{{owned}}/{{total}} cards · {{copies}} copies",
-    "gateText": "Sign in to find your collection, wishlists and sale lists."
+    "gateText": "Sign in to find your collection, wishlists and sale lists.",
+    "browse": {
+      "fallbackTitle": "Collection",
+      "searchPlaceholder": "Search for a card…",
+      "filterAll": "All",
+      "filterOwned": "Owned",
+      "filterUnowned": "Missing",
+      "stats": "{{owned}}/{{total}} unique cards",
+      "copies": "{{owned}}/{{total}} printings owned",
+      "addOne": "Add a copy",
+      "removeOne": "Remove a copy",
+      "empty": "No cards match these filters.",
+      "error": "Couldn't load the collection."
+    }
   },
   "social": {
     "title": "Community",
@@ -70,7 +83,17 @@
     "members_other": "{{count}} members",
     "groupGames_one": "{{count}} game",
     "groupGames_other": "{{count}} games",
-    "lairsEmpty": "No stores."
+    "lairsEmpty": "No stores.",
+    "groupDetail": {
+      "fallbackTitle": "Group",
+      "role": {
+        "owner": "Owner",
+        "admin": "Admin",
+        "member": "Member"
+      },
+      "collectionTitle": "Group collection",
+      "collectionEmpty": "This group doesn't have a collection yet."
+    }
   },
   "settings": {
     "title": "Settings",

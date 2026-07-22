@@ -399,3 +399,38 @@ export interface CollectionOverview {
   gamesWithItems: number;
   games: (GameCollectionStats | null)[];
 }
+
+/** Une carte du catalogue d'un jeu, annotée avec la quantité possédée par le propriétaire consulté. */
+export interface CollectionItem {
+  id: string;
+  name: string;
+  setCode: string;
+  collectorNumber: string;
+  image: string;
+  type?: string;
+  quantity: number;
+  /** Nombre d'autres éditions de cette même carte (ex. alt arts) possédées à au moins un exemplaire. */
+  variantsOwned: number;
+}
+
+/** Réponse paginée de GET /collection/games/{slug} (ou son équivalent play-group). */
+export interface GameCollectionResult {
+  items: CollectionItem[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  setCodes: string[];
+  types: string[];
+  stats: GameCollectionStats | null;
+  game: { id: string; name: string; slug: string };
+}
+
+/** Payload d'ajout d'un exemplaire à une collection (POST /collection/cards). */
+export interface CollectionCardInput {
+  cardId: string;
+  name: string;
+  setCode: string;
+  collectorNumber: string;
+  image: string;
+}

@@ -40,6 +40,15 @@ export const endpoints = {
   },
   playGroups: {
     list: "/play-groups",
+    detail: (playGroupId: string) => `/play-groups/${playGroupId}`,
+    collection: {
+      overview: (playGroupId: string) => `/play-groups/${playGroupId}/collection`,
+      cards: (playGroupId: string) => `/play-groups/${playGroupId}/collection/cards`,
+      card: (playGroupId: string, cardId: string) =>
+        `/play-groups/${playGroupId}/collection/cards/${cardId}`,
+      game: (playGroupId: string, gameSlug: string) =>
+        `/play-groups/${playGroupId}/collection/games/${gameSlug}`,
+    },
   },
   decks: {
     list: "/decks",
@@ -48,6 +57,7 @@ export const endpoints = {
   collection: {
     overview: "/collection",
     cards: "/collection/cards",
+    card: (cardId: string) => `/collection/cards/${cardId}`,
     game: (gameSlug: string) => `/collection/games/${gameSlug}`,
   },
 } as const;

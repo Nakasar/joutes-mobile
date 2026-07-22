@@ -45,8 +45,8 @@ function CollectionContent() {
             ? Math.round((game.gameOwned / game.gameTotal) * 100)
             : 0;
         const color = colorFor(game.slug, game.color);
-        return (
-          <div key={game.gameId} className="collection-game">
+        const body = (
+          <>
             <div className="collection-game__head">
               {game.icon ? (
                 <CachedImage
@@ -81,6 +81,19 @@ function CollectionContent() {
                 style={{ width: `${percent}%`, background: color }}
               />
             </div>
+          </>
+        );
+        return game.slug ? (
+          <Link
+            key={game.gameId}
+            to={`/collection/${game.slug}`}
+            className="collection-game collection-game--link"
+          >
+            {body}
+          </Link>
+        ) : (
+          <div key={game.gameId} className="collection-game">
+            {body}
           </div>
         );
       })}

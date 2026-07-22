@@ -50,7 +50,20 @@
     "overviewSub_other": "cartes sur {{games}} {{gamesWord}}",
     "gameStats_one": "{{owned}}/{{total}} cartes · {{copies}} exemplaire",
     "gameStats_other": "{{owned}}/{{total}} cartes · {{copies}} exemplaires",
-    "gateText": "Connectez-vous pour retrouver votre collection, vos wishlists et vos listes de vente."
+    "gateText": "Connectez-vous pour retrouver votre collection, vos wishlists et vos listes de vente.",
+    "browse": {
+      "fallbackTitle": "Collection",
+      "searchPlaceholder": "Rechercher une carte…",
+      "filterAll": "Toutes",
+      "filterOwned": "Possédées",
+      "filterUnowned": "Manquantes",
+      "stats": "{{owned}}/{{total}} cartes uniques",
+      "copies": "{{owned}}/{{total}} éditions possédées",
+      "addOne": "Ajouter un exemplaire",
+      "removeOne": "Retirer un exemplaire",
+      "empty": "Aucune carte ne correspond à ces filtres.",
+      "error": "Impossible de charger la collection."
+    }
   },
   "social": {
     "title": "Communauté",
@@ -70,7 +83,17 @@
     "members_other": "{{count}} membres",
     "groupGames_one": "{{count}} jeu",
     "groupGames_other": "{{count}} jeux",
-    "lairsEmpty": "Aucune boutique."
+    "lairsEmpty": "Aucune boutique.",
+    "groupDetail": {
+      "fallbackTitle": "Groupe",
+      "role": {
+        "owner": "Propriétaire",
+        "admin": "Responsable",
+        "member": "Membre"
+      },
+      "collectionTitle": "Collection du groupe",
+      "collectionEmpty": "Ce groupe n'a pas encore de collection."
+    }
   },
   "settings": {
     "title": "Réglages",

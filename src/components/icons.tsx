@@ -183,3 +183,19 @@ export function LockIcon(p: IconProps) {
     </Icon>
   );
 }
+
+export function PlusIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M12 5v14M5 12h14" />
+    </Icon>
+  );
+}
+
+export function MinusIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M5 12h14" />
+    </Icon>
+  );
+}
