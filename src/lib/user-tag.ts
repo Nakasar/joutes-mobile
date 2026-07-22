@@ -12,6 +12,11 @@ export function userTag(user: PublicUser): string {
   return user.username || user.id;
 }
 
+/** Chemin `/users/:tag` prêt à l'emploi dans un `Link to=`, tag encodé. */
+export function userProfilePath(user: PublicUser): string {
+  return `/users/${encodeURIComponent(userTag(user))}`;
+}
+
 /** Étiquette lisible `Nom#1234` (ou le username seul si pas de discriminateur). */
 export function userLabel(user: PublicUser, fallback = ""): string {
   if (user.displayName && user.discriminator) {

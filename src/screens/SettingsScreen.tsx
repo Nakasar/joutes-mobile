@@ -8,7 +8,7 @@ import {
   SUPPORTED_LANGUAGES,
   type Language,
 } from "../i18n";
-import { userTag } from "../lib/user-tag";
+import { userProfilePath } from "../lib/user-tag";
 import { useAuth } from "../store/auth";
 
 function LanguageSection() {
@@ -55,7 +55,7 @@ export function SettingsScreen() {
             {user?.email && <p className="muted">{user.email}</p>}
             {user && (
               <Link
-                to={`/users/${userTag(user)}`}
+                to={userProfilePath(user)}
                 className="btn btn--outline btn--block"
                 style={{ marginTop: 12 }}
               >

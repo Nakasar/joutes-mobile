@@ -13,7 +13,7 @@ import { ChevronIcon, PinIcon, UserPlusIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
-import { userTag } from "../lib/user-tag";
+import { userProfilePath } from "../lib/user-tag";
 import { useAuth } from "../store/auth";
 
 type Tab = "amis" | "groups" | "lairs";
@@ -81,7 +81,7 @@ function FriendsTab() {
         return (
           <Link
             key={friend.id}
-            to={`/users/${userTag(friend)}`}
+            to={userProfilePath(friend)}
             className="friend-row"
           >
             <div className="friend-row__avatar">

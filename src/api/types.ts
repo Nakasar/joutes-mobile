@@ -253,9 +253,9 @@ export interface PublicUserAchievement {
  * peuplés que si `isPublicProfile` est vrai (tableaux vides sinon).
  */
 export interface PublicUserProfile extends PublicUser {
-  description?: string;
-  website?: string;
-  socialLinks?: string[];
+  description: string | null;
+  website: string | null;
+  socialLinks: string[];
   isPublicProfile: boolean;
   games: PublicUserGame[];
   lairs: PublicUserLair[];

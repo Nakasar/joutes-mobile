@@ -27,6 +27,15 @@ function hostnameOf(url: string): string {
   }
 }
 
+/** N'autorise que http(s) : évite qu'un lien `javascript:` ou un schéma inattendu se retrouve dans un `href`. */
+function isSafeUrl(url: string): boolean {
+  try {
+    return ["http:", "https:"].includes(new URL(url).protocol);
+  } catch {
+    return false;
+  }
+}
+
 function WishlistRow({ wishlist }: { wishlist: Wishlist }) {
   const { t } = useTranslation();
   return (
@@ -66,8 +75,8 @@ export function UserProfileScreen() {
   const label = user ? userLabel(user, t("profile.fallbackTitle")) : "";
   const color = user ? colorFor(user.id) : "#888";
   const links = user
-    ? [user.website, ...(user.socialLinks ?? [])].filter(
-        (l): l is string => !!l,
+    ? [user.website, ...user.socialLinks].filter(
+        (l): l is string => !!l && isSafeUrl(l),
       )
     : [];
 
