@@ -43,7 +43,8 @@ function CollectionGameContent({
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [busyCardId, setBusyCardId] = useState<string | null>(null);
+  const [busyCardIds, setBusyCardIds] = useState<Set<string>>(new Set());
+  const [retryTick, setRetryTick] = useState(0);
 
   useEffect(() => {
     const timer = setTimeout(() => setSearchQuery(searchInput.trim()), 300);
@@ -96,7 +97,7 @@ function CollectionGameContent({
       .finally(() => {
         if (id === requestId.current) setLoading(false);
       });
-  }, [gameSlug, groupId, searchQuery, setCode, type, ownership, page, t]);
+  }, [gameSlug, groupId, searchQuery, setCode, type, ownership, page, retryTick, t]);
 
   const applyQuantity = (cardId: string, quantity: number) => {
     setItems((previous) =>
@@ -115,8 +116,17 @@ function CollectionGameContent({
     }
   };
 
+  const setBusy = (cardId: string, busy: boolean) => {
+    setBusyCardIds((previous) => {
+      const next = new Set(previous);
+      if (busy) next.add(cardId);
+      else next.delete(cardId);
+      return next;
+    });
+  };
+
   const addOne = async (item: CollectionItem) => {
-    setBusyCardId(item.id);
+    setBusy(item.id, true);
     const previousQuantity = item.quantity;
     applyStatsDelta(item, 1);
     applyQuantity(item.id, previousQuantity + 1);
@@ -136,13 +146,13 @@ function CollectionGameContent({
       applyStatsDelta({ ...item, quantity: previousQuantity + 1 }, -1);
       setError(err instanceof Error ? err.message : t("collection.browse.error"));
     } finally {
-      setBusyCardId(null);
+      setBusy(item.id, false);
     }
   };
 
   const removeOne = async (item: CollectionItem) => {
     if (item.quantity <= 0) return;
-    setBusyCardId(item.id);
+    setBusy(item.id, true);
     const previousQuantity = item.quantity;
     applyStatsDelta(item, -1);
     applyQuantity(item.id, previousQuantity - 1);
@@ -153,7 +163,7 @@ function CollectionGameContent({
       applyStatsDelta({ ...item, quantity: previousQuantity - 1 }, 1);
       setError(err instanceof Error ? err.message : t("collection.browse.error"));
     } finally {
-      setBusyCardId(null);
+      setBusy(item.id, false);
     }
   };
 
@@ -243,7 +253,7 @@ function CollectionGameContent({
       <div className="card-grid">
         {items.map((item) => {
           const owned = item.quantity > 0;
-          const busy = busyCardId === item.id;
+          const busy = busyCardIds.has(item.id);
           return (
             <div key={item.id} className="card-tile">
               <Link
@@ -295,7 +305,7 @@ function CollectionGameContent({
       <StatusView
         loading={loading}
         error={error}
-        onRetry={() => setPage(1)}
+        onRetry={() => setRetryTick((t) => t + 1)}
         empty={
           !loading && !error && items.length === 0
             ? t("collection.browse.empty")
