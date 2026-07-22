@@ -13,6 +13,7 @@ import { ChevronIcon, PinIcon, UserPlusIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
+import { userProfilePath } from "../lib/user-tag";
 import { useAuth } from "../store/auth";
 
 type Tab = "amis" | "groups" | "lairs";
@@ -78,7 +79,11 @@ function FriendsTab() {
       {friends.data?.map((friend) => {
         const color = colorFor(friend.id);
         return (
-          <div key={friend.id} className="friend-row">
+          <Link
+            key={friend.id}
+            to={userProfilePath(friend)}
+            className="friend-row"
+          >
             <div className="friend-row__avatar">
               {friend.avatar ? (
                 <img
@@ -102,7 +107,7 @@ function FriendsTab() {
             <span className="chevron">
               <ChevronIcon size={18} />
             </span>
-          </div>
+          </Link>
         );
       })}
     </>

@@ -218,3 +218,16 @@ export function TrashIcon(p: IconProps) {
     </Icon>
   );
 }
+
+export function TrophyIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M8 4h8v5a4 4 0 0 1-8 0Z" />
+      <path d="M8 5H5a3 3 0 0 0 3 5" />
+      <path d="M16 5h3a3 3 0 0 1-3 5" />
+      <path d="M12 13v3" />
+      <path d="M9 20h6" />
+      <path d="M10 16h4l.5 4h-5z" />
+    </Icon>
+  );
+}

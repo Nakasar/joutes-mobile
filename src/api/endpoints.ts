@@ -80,4 +80,12 @@ export const endpoints = {
     item: (sellListId: string, itemId: string) =>
       `/sell-lists/${sellListId}/items/${itemId}`,
   },
+  users: {
+    detail: (userTagOrId: string) =>
+      `/users/${encodeURIComponent(userTagOrId)}`,
+    wishlists: (userTagOrId: string) =>
+      `/users/${encodeURIComponent(userTagOrId)}/wishlists`,
+    sellList: (userTagOrId: string) =>
+      `/users/${encodeURIComponent(userTagOrId)}/sell-list`,
+  },
 } as const;

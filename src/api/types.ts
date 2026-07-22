@@ -225,6 +225,43 @@ export interface PublicUser {
   avatar?: string;
 }
 
+export interface PublicUserGame {
+  id: string;
+  name: string;
+  slug?: string;
+  icon?: string;
+}
+
+export interface PublicUserLair {
+  id: string;
+  name: string;
+  address?: string;
+}
+
+export interface PublicUserAchievement {
+  id: string;
+  name: string;
+  description?: string;
+  icon?: string;
+  points?: number;
+  unlockedAt?: string;
+}
+
+/**
+ * Profil public d'un utilisateur (`GET /users/{tag}`). `description`/`website`/
+ * `socialLinks` sont toujours présents ; `games`/`lairs`/`achievements` ne sont
+ * peuplés que si `isPublicProfile` est vrai (tableaux vides sinon).
+ */
+export interface PublicUserProfile extends PublicUser {
+  description: string | null;
+  website: string | null;
+  socialLinks: string[];
+  isPublicProfile: boolean;
+  games: PublicUserGame[];
+  lairs: PublicUserLair[];
+  achievements: PublicUserAchievement[];
+}
+
 export interface FriendRequest {
   id: string;
   requester?: PublicUser;

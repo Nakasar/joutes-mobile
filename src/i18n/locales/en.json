@@ -258,5 +258,17 @@
     "notOwned": "You don't own this card.",
     "confirmListing": "List for sale",
     "invalidPrice": "The price entered is not valid."
+  },
+  "profile": {
+    "fallbackTitle": "Profile",
+    "gamesTitle": "Followed games",
+    "gamesEmpty": "No games followed yet.",
+    "lairsTitle": "Followed stores",
+    "lairsEmpty": "No stores followed yet.",
+    "achievementsTitle": "Achievements",
+    "privateNote": "This profile is private: followed games, stores and achievements aren't visible.",
+    "wishlistsTitle": "Wishlists",
+    "sellListTitle": "Sale list",
+    "viewMineAction": "View my public profile"
   }
 }

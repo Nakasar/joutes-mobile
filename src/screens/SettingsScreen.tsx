@@ -8,6 +8,7 @@ import {
   SUPPORTED_LANGUAGES,
   type Language,
 } from "../i18n";
+import { userProfilePath } from "../lib/user-tag";
 import { useAuth } from "../store/auth";
 
 function LanguageSection() {
@@ -52,6 +53,15 @@ export function SettingsScreen() {
               {user?.discriminator ? `#${user.discriminator}` : ""}
             </p>
             {user?.email && <p className="muted">{user.email}</p>}
+            {user && (
+              <Link
+                to={userProfilePath(user)}
+                className="btn btn--outline btn--block"
+                style={{ marginTop: 12 }}
+              >
+                {t("profile.viewMineAction")}
+              </Link>
+            )}
             <button
               className="btn btn--danger"
               style={{ marginTop: 12 }}
