@@ -9,7 +9,7 @@ export function formatDuration(totalSeconds: number): string {
   const s = abs % 60;
   const mm = String(m).padStart(2, "0");
   const ss = String(s).padStart(2, "0");
-  return h > 0 ? `${sign}${h}:${mm}:${ss}` : `${sign}${m}:${ss}`;
+  return h > 0 ? `${sign}${h}:${mm}:${ss}` : `${sign}${mm}:${ss}`;
 }
 
 /**

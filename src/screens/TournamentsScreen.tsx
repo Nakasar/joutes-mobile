@@ -35,15 +35,28 @@ export function tournamentStatusChipClass(status: TournamentStatus): string {
  * (`/tournaments/sync`) — un même appareil peut avoir les deux.
  */
 function loadTournaments(isAuthenticated: boolean): Promise<TournamentSummary[]> {
-  const playing = isAuthenticated ? listPlayingTournaments().catch(() => []) : Promise.resolve([]);
-  const synced = syncTournamentKeys(Object.values(getSyncKeys())).catch(() => []);
+  const playing = isAuthenticated ? listPlayingTournaments() : Promise.resolve([]);
+  const synced = syncTournamentKeys(Object.values(getSyncKeys()));
 
-  return Promise.all([playing, synced]).then(([playingEntries, syncedEntries]) => {
-    const byId = new Map<string, TournamentSummary>();
-    for (const entry of syncedEntries) {
-      byId.set(entry.tournament.id, entry.tournament);
+  return Promise.allSettled([playing, synced]).then(([playingResult, syncedResult]) => {
+    // `/tournaments/playing` fait autorité pour un compte connecté (401,
+    // panne réseau...) : on ne l'avale pas en liste vide, sous peine
+    // d'afficher un état "aucun tournoi" trompeur.
+    if (playingResult.status === "rejected") throw playingResult.reason;
+    // La synchronisation invité est secondaire (best-effort) tant que le
+    // compte a lui-même des résultats ; sinon son échec devient la seule
+    // explication de la liste vide et doit remonter.
+    if (syncedResult.status === "rejected" && playingResult.value.length === 0) {
+      throw syncedResult.reason;
     }
-    for (const entry of playingEntries) {
+
+    const byId = new Map<string, TournamentSummary>();
+    if (syncedResult.status === "fulfilled") {
+      for (const entry of syncedResult.value) {
+        byId.set(entry.tournament.id, entry.tournament);
+      }
+    }
+    for (const entry of playingResult.value) {
       byId.set(entry.tournament.id, entry.tournament);
     }
     return Array.from(byId.values());
