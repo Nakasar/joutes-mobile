@@ -8,15 +8,18 @@ import { isTauri } from "../api/http";
  */
 export async function scanQrCode(): Promise<string | null> {
   if (!isTauri()) return null;
-  const { scan, requestPermissions, Format } = await import(
-    "@tauri-apps/plugin-barcode-scanner"
-  );
-  const permission = await requestPermissions();
-  if (permission !== "granted") return null;
   try {
+    const { scan, requestPermissions, Format } = await import(
+      "@tauri-apps/plugin-barcode-scanner"
+    );
+    const permission = await requestPermissions();
+    if (permission !== "granted") return null;
     const result = await scan({ windowed: false, formats: [Format.QRCode] });
     return result.content;
-  } catch {
+  } catch (error) {
+    // Annulation utilisateur ou échec de scan : on log pour le diagnostic,
+    // l'appelant se contente d'un retour à la saisie manuelle du code.
+    console.error("QR scan failed", error);
     return null;
   }
 }
