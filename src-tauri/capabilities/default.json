@@ -6,6 +6,8 @@
   "permissions": [
     "core:default",
     "opener:default",
+    "barcode-scanner:allow-scan",
+    "barcode-scanner:allow-cancel",
     {
       "identifier": "http:default",
       "allow": [

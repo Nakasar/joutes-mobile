@@ -19,7 +19,7 @@
     "games": "Games",
     "events": "Events",
     "collection": "Collection",
-    "social": "Social"
+    "tournaments": "Tournaments"
   },
   "home": {
     "eyebrow": "Joutes",
@@ -111,7 +111,10 @@
     "language": "Language",
     "about": "About",
     "aboutText": "Mobile client for <link>joutes.app</link>, built with Tauri 2 and React.",
-    "apiLabel": "API: {{url}}"
+    "apiLabel": "API: {{url}}",
+    "socialTitle": "Community",
+    "socialText": "Find your friends, play groups and followed game stores.",
+    "socialAction": "View the Social section"
   },
   "offline": {
     "title": "Offline",
@@ -270,5 +273,51 @@
     "wishlistsTitle": "Wishlists",
     "sellListTitle": "Sale list",
     "viewMineAction": "View my public profile"
+  },
+  "tournaments": {
+    "title": "Tournaments",
+    "joinAction": "Join a tournament",
+    "filterCurrent": "Current",
+    "filterPast": "Past",
+    "empty": "You're not part of any tournament yet.",
+    "status": {
+      "draft": "Upcoming",
+      "in-progress": "In progress",
+      "completed": "Completed"
+    },
+    "joinTitle": "Join a tournament",
+    "joinCodeLabel": "Invitation code or link",
+    "joinCodePlaceholder": "tpsk_… or link from the organizer",
+    "joinSubmit": "Join",
+    "joinOr": "or",
+    "scanAction": "Scan a QR code",
+    "joinInvalidCode": "Invalid invitation code.",
+    "scanUnavailable": "Scan unavailable or cancelled.",
+    "detailFallbackTitle": "Tournament",
+    "notJoinedTitle": "Tournament not found",
+    "notJoinedText": "You haven't joined this tournament on this device yet.",
+    "myMatch": "My match",
+    "noMatchThisRound": "You have no match in this round.",
+    "notStartedYet": "The tournament hasn't started yet.",
+    "roundMatches": "Other matches this round",
+    "roundLabel": "Round {{number}}",
+    "standingsTitle": "Standings",
+    "standingsEmpty": "No standings available yet.",
+    "standingsPlayer": "Player",
+    "standingsPoints": "Pts",
+    "standingsRecord": "W-L-D",
+    "standingsDiff": "Diff.",
+    "bye": "Automatic win (bye)",
+    "matchStatus": {
+      "pending": "To play",
+      "in-progress": "Awaiting confirmation",
+      "completed": "Completed",
+      "disputed": "Disputed"
+    },
+    "gameLabel": "Game {{number}}",
+    "draw": "Draw",
+    "reportSubmit": "Submit result",
+    "confirmAction": "Confirm",
+    "disputeAction": "Dispute"
   }
 }

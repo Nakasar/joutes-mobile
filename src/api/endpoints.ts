@@ -88,4 +88,15 @@ export const endpoints = {
     sellList: (userTagOrId: string) =>
       `/users/${encodeURIComponent(userTagOrId)}/sell-list`,
   },
+  tournaments: {
+    sync: "/tournaments/sync",
+    detail: (tournamentId: string) => `/tournaments/${tournamentId}`,
+    standings: (tournamentId: string) => `/tournaments/${tournamentId}/standings`,
+    phase: (tournamentId: string, phaseId: string) =>
+      `/tournaments/${tournamentId}/phases/${phaseId}`,
+    round: (tournamentId: string, roundId: string) =>
+      `/tournaments/${tournamentId}/rounds/${roundId}`,
+    match: (tournamentId: string, matchId: string) =>
+      `/tournaments/${tournamentId}/matches/${matchId}`,
+  },
 } as const;

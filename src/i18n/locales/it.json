@@ -19,7 +19,7 @@
     "games": "Giochi",
     "events": "Eventi",
     "collection": "Collezione",
-    "social": "Social"
+    "tournaments": "Tornei"
   },
   "home": {
     "eyebrow": "Joutes",
@@ -111,7 +111,10 @@
     "language": "Lingua",
     "about": "Informazioni",
     "aboutText": "Client mobile di <link>joutes.app</link>, sviluppato con Tauri 2 e React.",
-    "apiLabel": "API: {{url}}"
+    "apiLabel": "API: {{url}}",
+    "socialTitle": "Community",
+    "socialText": "Trova i tuoi amici, i gruppi di gioco e i negozi seguiti.",
+    "socialAction": "Vai alla sezione Social"
   },
   "offline": {
     "title": "Offline",
@@ -270,5 +273,51 @@
     "wishlistsTitle": "Liste dei desideri",
     "sellListTitle": "Lista di vendita",
     "viewMineAction": "Vedi il mio profilo pubblico"
+  },
+  "tournaments": {
+    "title": "Tornei",
+    "joinAction": "Partecipa a un torneo",
+    "filterCurrent": "In corso",
+    "filterPast": "Passati",
+    "empty": "Non partecipi ancora a nessun torneo.",
+    "status": {
+      "draft": "In arrivo",
+      "in-progress": "In corso",
+      "completed": "Concluso"
+    },
+    "joinTitle": "Partecipa a un torneo",
+    "joinCodeLabel": "Codice o link d'invito",
+    "joinCodePlaceholder": "tpsk_… o link ricevuto dall'organizzatore",
+    "joinSubmit": "Partecipa",
+    "joinOr": "oppure",
+    "scanAction": "Scansiona un codice QR",
+    "joinInvalidCode": "Codice d'invito non valido.",
+    "scanUnavailable": "Scansione non disponibile o annullata.",
+    "detailFallbackTitle": "Torneo",
+    "notJoinedTitle": "Torneo non trovato",
+    "notJoinedText": "Non hai ancora partecipato a questo torneo su questo dispositivo.",
+    "myMatch": "Il mio match",
+    "noMatchThisRound": "Non hai un match in questo turno.",
+    "notStartedYet": "Il torneo non è ancora iniziato.",
+    "roundMatches": "Altri match del turno",
+    "roundLabel": "Turno {{number}}",
+    "standingsTitle": "Classifica",
+    "standingsEmpty": "Nessuna classifica disponibile per ora.",
+    "standingsPlayer": "Giocatore",
+    "standingsPoints": "Pt",
+    "standingsRecord": "V-P-N",
+    "standingsDiff": "Diff.",
+    "bye": "Vittoria automatica (turno di riposo)",
+    "matchStatus": {
+      "pending": "Da giocare",
+      "in-progress": "In attesa di conferma",
+      "completed": "Concluso",
+      "disputed": "Contestato"
+    },
+    "gameLabel": "Partita {{number}}",
+    "draw": "Pareggio",
+    "reportSubmit": "Invia risultato",
+    "confirmAction": "Conferma",
+    "disputeAction": "Contesta"
   }
 }

@@ -595,3 +595,112 @@ export interface SellListItemsResponse {
   limit: number;
   totalPages: number;
 }
+
+// ---- Tournois ----
+
+export type TournamentStatus = "draft" | "in-progress" | "completed";
+export type TournamentPhaseType = "freeform" | "swiss" | "elimination" | "bracket";
+export type TournamentPhaseStatus = "not-started" | "in-progress" | "completed";
+export type TournamentPlayerStatus = "active" | "dropped";
+export type TournamentMatchStatus = "pending" | "in-progress" | "completed" | "disputed";
+export type TournamentResultMode = "points" | "selection";
+
+export interface Tournament {
+  id: string;
+  name: string;
+  eventId?: string;
+  gameId?: string;
+  status: TournamentStatus;
+  currentPhaseId?: string;
+  settings: {
+    allowSelfReporting: boolean;
+    requireConfirmation: boolean;
+  };
+  createdAt: string;
+}
+
+export interface TournamentPlayer {
+  id: string;
+  tournamentId: string;
+  userId?: string;
+  displayName: string;
+  seed?: number;
+  status: TournamentPlayerStatus;
+}
+
+export interface TournamentPhase {
+  id: string;
+  tournamentId: string;
+  name: string;
+  type: TournamentPhaseType;
+  bestOf: number;
+  resultMode: TournamentResultMode;
+  order: number;
+  status: TournamentPhaseStatus;
+}
+
+export interface TournamentDetail extends Tournament {
+  phases: TournamentPhase[];
+  players: TournamentPlayer[];
+}
+
+export interface TournamentRound {
+  id: string;
+  tournamentId: string;
+  phaseId: string;
+  number: number;
+  status: "in-progress" | "completed";
+}
+
+export interface TournamentPhaseDetail extends TournamentPhase {
+  rounds: TournamentRound[];
+}
+
+export interface TournamentMatchPlayer {
+  playerId: string;
+  score: number;
+}
+
+export interface TournamentGameResult {
+  winnerId?: string | null;
+  points?: Record<string, number>;
+}
+
+export interface TournamentMatch {
+  id: string;
+  tournamentId: string;
+  phaseId: string;
+  roundId: string;
+  players: TournamentMatchPlayer[];
+  games: TournamentGameResult[];
+  winnerIds: string[];
+  status: TournamentMatchStatus;
+  reportedBy?: string;
+  confirmedBy?: string;
+}
+
+export interface TournamentRoundDetail extends TournamentRound {
+  matches: TournamentMatch[];
+}
+
+export interface TournamentStanding {
+  playerId: string;
+  displayName: string;
+  userId?: string;
+  playerStatus: TournamentPlayerStatus;
+  wins: number;
+  losses: number;
+  draws: number;
+  matchPoints: number;
+  gamesWon: number;
+  gamesLost: number;
+  gamesDiff: number;
+  opponentMatchWinPercentage?: number;
+}
+
+/** Une entrée retournée par `POST /tournaments/sync` pour une clé de joueur connue. */
+export interface TournamentSyncEntry {
+  key: string;
+  tournament: { id: string; name: string; status: TournamentStatus; createdAt: string };
+  player: { id: string; displayName: string; status: TournamentPlayerStatus };
+}

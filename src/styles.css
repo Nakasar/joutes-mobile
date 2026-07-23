@@ -2655,3 +2655,155 @@ textarea:focus {
   gap: 4px;
   margin-top: 10px;
 }
+
+/* ---- Tournois ---- */
+
+.status-badge {
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.match-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.match-card__players {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.match-card__player {
+  flex: 1;
+  min-width: 0;
+}
+
+.match-card__player--me .match-card__name {
+  color: var(--primary);
+}
+
+.match-card__name {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.match-card__score {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 2px 0 0;
+}
+
+.match-card__status {
+  margin-top: 10px;
+}
+
+.game-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.game-picker__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.game-picker__label {
+  width: 56px;
+  flex-shrink: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.game-picker__options {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+}
+
+.game-picker__option {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 4px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.game-picker__option--selected {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-fg);
+}
+
+.join-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.join-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin: 2px 0;
+}
+.join-divider::before,
+.join-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.standings-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+}
+
+.standings-table th,
+.standings-table td {
+  padding: 8px 6px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.standings-table th {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.standings-table th:not(:first-child),
+.standings-table td:not(:first-child) {
+  text-align: center;
+}
+
+.standings-table__row--me {
+  background: var(--chip);
+}

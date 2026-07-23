@@ -6,7 +6,7 @@ import {
   GridIcon,
   HomeIcon,
   LayersIcon,
-  UsersIcon,
+  SwordsIcon,
 } from "./icons";
 
 type TabIcon = (p: SVGProps<SVGSVGElement> & { size?: number }) => ReactElement;
@@ -14,9 +14,9 @@ type TabIcon = (p: SVGProps<SVGSVGElement> & { size?: number }) => ReactElement;
 const tabs: { to: string; labelKey: string; Icon: TabIcon }[] = [
   { to: "/", labelKey: "tabs.home", Icon: HomeIcon },
   { to: "/games", labelKey: "tabs.games", Icon: LayersIcon },
+  { to: "/tournaments", labelKey: "tabs.tournaments", Icon: SwordsIcon },
   { to: "/events", labelKey: "tabs.events", Icon: CalendarIcon },
   { to: "/collection", labelKey: "tabs.collection", Icon: GridIcon },
-  { to: "/social", labelKey: "tabs.social", Icon: UsersIcon },
 ];
 
 export function TabBar() {
