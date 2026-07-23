@@ -231,3 +231,30 @@ export function TrophyIcon(p: IconProps) {
     </Icon>
   );
 }
+
+export function SwordsIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M7 17 19 5" />
+      <path d="M5.5 15.5 8.5 18.5" />
+      <path d="M7 17 5 19" />
+      <circle cx="5" cy="19" r="1" />
+      <path d="M17 17 5 5" />
+      <path d="M18.5 15.5 15.5 18.5" />
+      <path d="M17 17 19 19" />
+      <circle cx="19" cy="19" r="1" />
+    </Icon>
+  );
+}
+
+export function ScanIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M4 9V6a2 2 0 0 1 2-2h3" />
+      <path d="M20 9V6a2 2 0 0 0-2-2h-3" />
+      <path d="M4 15v3a2 2 0 0 0 2 2h3" />
+      <path d="M20 15v3a2 2 0 0 1-2 2h-3" />
+      <rect x="9" y="9" width="6" height="6" rx="1" />
+    </Icon>
+  );
+}

@@ -19,7 +19,7 @@
     "games": "Spiele",
     "events": "Events",
     "collection": "Sammlung",
-    "social": "Social"
+    "tournaments": "Turniere"
   },
   "home": {
     "eyebrow": "Joutes",
@@ -111,7 +111,10 @@
     "language": "Sprache",
     "about": "Über",
     "aboutText": "Mobiler Client für <link>joutes.app</link>, entwickelt mit Tauri 2 und React.",
-    "apiLabel": "API: {{url}}"
+    "apiLabel": "API: {{url}}",
+    "socialTitle": "Community",
+    "socialText": "Finde deine Freunde, Spielgruppen und verfolgten Läden.",
+    "socialAction": "Zum Bereich Social"
   },
   "offline": {
     "title": "Offline",
@@ -270,5 +273,54 @@
     "wishlistsTitle": "Wunschlisten",
     "sellListTitle": "Verkaufsliste",
     "viewMineAction": "Mein öffentliches Profil ansehen"
+  },
+  "tournaments": {
+    "title": "Turniere",
+    "joinAction": "Turnier beitreten",
+    "filterCurrent": "Aktuell",
+    "filterPast": "Vergangen",
+    "empty": "Du nimmst noch an keinem Turnier teil.",
+    "status": {
+      "draft": "Bevorstehend",
+      "in-progress": "Laufend",
+      "completed": "Abgeschlossen"
+    },
+    "joinTitle": "Turnier beitreten",
+    "joinCodeLabel": "Turniercode oder Link",
+    "joinCodePlaceholder": "Z. B. 7F3K9QXZP oder Link vom Organisator",
+    "joinNameLabel": "Dein Name",
+    "joinNamePlaceholder": "Wie sollen wir dich nennen?",
+    "joinNameRequired": "Gib einen Namen ein, um ohne Konto beizutreten.",
+    "joinSubmit": "Beitreten",
+    "joinOr": "oder",
+    "scanAction": "QR-Code scannen",
+    "joinInvalidCode": "Ungültiger Turniercode.",
+    "scanUnavailable": "Scan nicht verfügbar oder abgebrochen.",
+    "detailFallbackTitle": "Turnier",
+    "myMatch": "Mein Match",
+    "noMatchThisRound": "Du hast in dieser Runde kein Match.",
+    "notStartedYet": "Das Turnier hat noch nicht begonnen.",
+    "roundMatches": "Weitere Matches dieser Runde",
+    "roundLabel": "Runde {{number}}",
+    "standingsTitle": "Tabelle",
+    "standingsEmpty": "Noch keine Tabelle verfügbar.",
+    "standingsPlayer": "Spieler",
+    "standingsPoints": "Pkt",
+    "standingsRecord": "S-N-U",
+    "standingsDiff": "Diff.",
+    "bye": "Automatischer Sieg (Freilos)",
+    "matchStatus": {
+      "pending": "Ausstehend",
+      "in-progress": "Wartet auf Bestätigung",
+      "completed": "Abgeschlossen",
+      "disputed": "Angefochten"
+    },
+    "gameLabel": "Spiel {{number}}",
+    "draw": "Unentschieden",
+    "reportSubmit": "Ergebnis senden",
+    "confirmAction": "Bestätigen",
+    "disputeAction": "Anfechten",
+    "timerPaused": "pausiert",
+    "leaveAction": "Turnier verlassen"
   }
 }

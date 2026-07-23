@@ -81,6 +81,13 @@ export function SettingsScreen() {
           </>
         )}
       </section>
+      <section className="card">
+        <h2 className="card__title">{t("settings.socialTitle")}</h2>
+        <p className="muted" style={{ marginBottom: 12 }}>{t("settings.socialText")}</p>
+        <Link to="/social" className="btn btn--outline btn--block">
+          {t("settings.socialAction")}
+        </Link>
+      </section>
       <LanguageSection />
       <OfflineSection />
       <section className="card">
