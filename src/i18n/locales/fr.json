@@ -19,7 +19,7 @@
     "games": "Jeux",
     "events": "Événements",
     "collection": "Collection",
-    "social": "Social"
+    "tournaments": "Tournois"
   },
   "home": {
     "eyebrow": "Joutes",
@@ -111,7 +111,10 @@
     "language": "Langue",
     "about": "À propos",
     "aboutText": "Client mobile de <link>joutes.app</link>, construit avec Tauri 2 et React.",
-    "apiLabel": "API : {{url}}"
+    "apiLabel": "API : {{url}}",
+    "socialTitle": "Communauté",
+    "socialText": "Retrouvez vos amis, vos groupes de jeu et les repaires suivis.",
+    "socialAction": "Voir la section Social"
   },
   "offline": {
     "title": "Hors ligne",
@@ -270,5 +273,54 @@
     "wishlistsTitle": "Listes de souhaits",
     "sellListTitle": "Liste de vente",
     "viewMineAction": "Voir mon profil public"
+  },
+  "tournaments": {
+    "title": "Tournois",
+    "joinAction": "Rejoindre un tournoi",
+    "filterCurrent": "En cours",
+    "filterPast": "Terminés",
+    "empty": "Vous ne participez à aucun tournoi pour l'instant.",
+    "status": {
+      "draft": "À venir",
+      "in-progress": "En cours",
+      "completed": "Terminé"
+    },
+    "joinTitle": "Rejoindre un tournoi",
+    "joinCodeLabel": "Code ou lien du tournoi",
+    "joinCodePlaceholder": "Ex. 7F3K9QXZP ou lien reçu de l'organisateur",
+    "joinNameLabel": "Votre nom",
+    "joinNamePlaceholder": "Comment vous appeler ?",
+    "joinNameRequired": "Indiquez un nom pour rejoindre sans compte.",
+    "joinSubmit": "Rejoindre",
+    "joinOr": "ou",
+    "scanAction": "Scanner un QR code",
+    "joinInvalidCode": "Code de tournoi invalide.",
+    "scanUnavailable": "Scan indisponible ou annulé.",
+    "detailFallbackTitle": "Tournoi",
+    "myMatch": "Mon match",
+    "noMatchThisRound": "Vous n'avez pas de match dans cette ronde.",
+    "notStartedYet": "Le tournoi n'a pas encore commencé.",
+    "roundMatches": "Autres matchs de la ronde",
+    "roundLabel": "Ronde {{number}}",
+    "standingsTitle": "Classement",
+    "standingsEmpty": "Aucun classement disponible pour l'instant.",
+    "standingsPlayer": "Joueur",
+    "standingsPoints": "Pts",
+    "standingsRecord": "V-D-N",
+    "standingsDiff": "Diff.",
+    "bye": "Victoire automatique (exempt)",
+    "matchStatus": {
+      "pending": "À jouer",
+      "in-progress": "En attente de confirmation",
+      "completed": "Terminé",
+      "disputed": "Contesté"
+    },
+    "gameLabel": "Partie {{number}}",
+    "draw": "Nul",
+    "reportSubmit": "Envoyer le résultat",
+    "confirmAction": "Confirmer",
+    "disputeAction": "Contester",
+    "timerPaused": "en pause",
+    "leaveAction": "Quitter le tournoi"
   }
 }

@@ -88,4 +88,24 @@ export const endpoints = {
     sellList: (userTagOrId: string) =>
       `/users/${encodeURIComponent(userTagOrId)}/sell-list`,
   },
+  tournaments: {
+    /** Rejoindre via le code public d'un tournoi (`Tournament.joinCode`). */
+    join: "/tournaments/join",
+    /** Tournois où l'utilisateur connecté est inscrit (compte, sans clé). */
+    playing: "/tournaments/playing",
+    /** Résout des clés de synchronisation d'invités (`tpsk_...`) en tournois. */
+    sync: "/tournaments/sync",
+    detail: (tournamentId: string) => `/tournaments/${tournamentId}`,
+    /** État public diffusé aux joueurs : annonces + minuteur (sans auth). */
+    live: (tournamentId: string) => `/tournaments/${tournamentId}/live`,
+    standings: (tournamentId: string) => `/tournaments/${tournamentId}/standings`,
+    player: (tournamentId: string, playerId: string) =>
+      `/tournaments/${tournamentId}/players/${playerId}`,
+    phase: (tournamentId: string, phaseId: string) =>
+      `/tournaments/${tournamentId}/phases/${phaseId}`,
+    round: (tournamentId: string, roundId: string) =>
+      `/tournaments/${tournamentId}/rounds/${roundId}`,
+    match: (tournamentId: string, matchId: string) =>
+      `/tournaments/${tournamentId}/matches/${matchId}`,
+  },
 } as const;

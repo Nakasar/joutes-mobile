@@ -18,6 +18,7 @@ type QueryParams = Record<string, string | number | boolean | undefined>;
 interface RequestOptions {
   query?: QueryParams;
   body?: unknown;
+  headers?: Record<string, string>;
 }
 
 /**
@@ -65,6 +66,12 @@ class ApiClient {
     // navigateur s'applique.
     if (isTauri()) {
       headers["Origin"] = config.trustedOrigin;
+    }
+    // Auth alternative au cookie de session : clé de synchronisation d'un
+    // joueur de tournoi invité (`tpsk_...`), transmise explicitement par
+    // l'appelant.
+    if (options.headers) {
+      Object.assign(headers, options.headers);
     }
 
     const fetch = await getFetch();
@@ -117,20 +124,25 @@ class ApiClient {
     return data as T;
   }
 
-  get<T>(path: string, query?: QueryParams): Promise<T> {
-    return this.request<T>("GET", path, { query });
+  get<T>(path: string, query?: QueryParams, headers?: Record<string, string>): Promise<T> {
+    return this.request<T>("GET", path, { query, headers });
   }
 
-  post<T>(path: string, body?: unknown, query?: QueryParams): Promise<T> {
-    return this.request<T>("POST", path, { body, query });
+  post<T>(
+    path: string,
+    body?: unknown,
+    query?: QueryParams,
+    headers?: Record<string, string>,
+  ): Promise<T> {
+    return this.request<T>("POST", path, { body, query, headers });
   }
 
   put<T>(path: string, body?: unknown): Promise<T> {
     return this.request<T>("PUT", path, { body });
   }
 
-  patch<T>(path: string, body?: unknown): Promise<T> {
-    return this.request<T>("PATCH", path, { body });
+  patch<T>(path: string, body?: unknown, headers?: Record<string, string>): Promise<T> {
+    return this.request<T>("PATCH", path, { body, headers });
   }
 
   delete<T>(path: string, query?: QueryParams): Promise<T> {

@@ -595,3 +595,163 @@ export interface SellListItemsResponse {
   limit: number;
   totalPages: number;
 }
+
+// ---- Tournois ----
+
+export type TournamentStatus = "draft" | "in-progress" | "completed";
+export type TournamentPhaseType = "freeform" | "swiss" | "elimination" | "bracket";
+export type TournamentPhaseStatus = "not-started" | "in-progress" | "completed";
+export type TournamentPlayerStatus = "registered" | "pre-registered" | "dropped";
+export type TournamentMatchStatus = "pending" | "in-progress" | "completed" | "disputed";
+export type TournamentResultMode = "points" | "selection";
+export type TournamentAnnouncementLevel = "info" | "urgent";
+
+export interface TournamentTimer {
+  durationSeconds: number;
+  /** Présent uniquement pendant que le minuteur tourne. */
+  endsAt?: string;
+  running: boolean;
+  /** Temps restant figé, présent uniquement en pause (permet la reprise). */
+  remainingSeconds?: number;
+}
+
+export interface Tournament {
+  id: string;
+  name: string;
+  eventId?: string;
+  gameId?: string;
+  status: TournamentStatus;
+  currentPhaseId?: string;
+  /** Code public à 9 caractères (A-Z0-9) : rejoindre via `/t/{joinCode}/join`. */
+  joinCode?: string;
+  timer?: TournamentTimer | null;
+  settings: {
+    allowSelfReporting: boolean;
+    requireConfirmation: boolean;
+    preRegistration: boolean;
+  };
+  createdAt: string;
+}
+
+export interface TournamentPlayer {
+  id: string;
+  tournamentId: string;
+  userId?: string;
+  displayName: string;
+  discriminator?: string;
+  seed?: number;
+  status: TournamentPlayerStatus;
+  /**
+   * Clé de synchronisation d'un joueur invité (`tpsk_...`). Absente pour un
+   * joueur lié à un compte, ou lorsque le viewer n'est ni ce joueur invité ni
+   * un organisateur.
+   */
+  syncKey?: string;
+}
+
+export interface TournamentPhase {
+  id: string;
+  tournamentId: string;
+  name: string;
+  type: TournamentPhaseType;
+  bestOf: number;
+  resultMode: TournamentResultMode;
+  order: number;
+  status: TournamentPhaseStatus;
+}
+
+export interface TournamentDetail extends Tournament {
+  phases: TournamentPhase[];
+  players: TournamentPlayer[];
+}
+
+export interface TournamentRound {
+  id: string;
+  tournamentId: string;
+  phaseId: string;
+  number: number;
+  status: "in-progress" | "completed";
+}
+
+export interface TournamentPhaseDetail extends TournamentPhase {
+  rounds: TournamentRound[];
+}
+
+export interface TournamentMatchPlayer {
+  playerId: string;
+  score: number;
+}
+
+export interface TournamentGameResult {
+  winnerId?: string | null;
+  points?: Record<string, number>;
+}
+
+export interface TournamentMatch {
+  id: string;
+  tournamentId: string;
+  phaseId: string;
+  roundId: string;
+  players: TournamentMatchPlayer[];
+  games: TournamentGameResult[];
+  winnerIds: string[];
+  status: TournamentMatchStatus;
+  reportedBy?: string;
+  confirmedBy?: string;
+}
+
+export interface TournamentRoundDetail extends TournamentRound {
+  matches: TournamentMatch[];
+}
+
+export interface TournamentStanding {
+  playerId: string;
+  displayName: string;
+  discriminator?: string;
+  userId?: string;
+  playerStatus: TournamentPlayerStatus;
+  wins: number;
+  losses: number;
+  draws: number;
+  matchPoints: number;
+  gamesWon: number;
+  gamesLost: number;
+  gamesDiff: number;
+  opponentMatchWinPercentage?: number;
+}
+
+/** Réponse de `POST /tournaments/join`. */
+export interface TournamentJoinResult {
+  tournamentId: string;
+  alreadyJoined: boolean;
+  player: TournamentPlayer;
+}
+
+/** Une entrée de `GET /tournaments/playing` (compte connecté, sans clé). */
+export interface TournamentPlayingEntry {
+  tournament: Tournament;
+  player: TournamentPlayer;
+}
+
+/** Une entrée de `POST /tournaments/sync`, pour une clé de joueur invité. */
+export interface TournamentSyncEntry {
+  key: string;
+  tournament: { id: string; name: string; status: TournamentStatus; createdAt: string };
+  player: { id: string; displayName: string; status: TournamentPlayerStatus };
+}
+
+/** Annonce publique diffusée aux joueurs via `GET /tournaments/{id}/live`. */
+export interface TournamentAnnouncementPublic {
+  id: string;
+  message: string;
+  level: TournamentAnnouncementLevel;
+  createdAt: string;
+}
+
+/** État public d'un tournoi, interrogé en polling (sans auth). */
+export interface TournamentLiveState {
+  name: string;
+  announcements: TournamentAnnouncementPublic[];
+  timer: TournamentTimer | null;
+  serverNow: string;
+}
