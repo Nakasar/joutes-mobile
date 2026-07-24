@@ -7,6 +7,7 @@ import { ExternalLinkIcon, PinIcon, StarIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { currentLocale } from "../i18n";
+import { isSafeUrl } from "../lib/safe-url";
 import { useAuth } from "../store/auth";
 
 const statusLabelKeys: Record<string, string> = {
@@ -104,7 +105,7 @@ export function EventDetailScreen() {
 
           {data.description && <p className="list-meta">{data.description}</p>}
 
-          {data.url && (
+          {data.url && isSafeUrl(data.url) && (
             <a
               href={data.url}
               target="_blank"

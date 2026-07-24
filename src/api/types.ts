@@ -215,12 +215,13 @@ export interface JoutesEvent {
   runningState?: "not-started" | "ongoing" | "completed";
   allowJoin?: boolean;
   preRegistration?: boolean;
-  /** IDs des utilisateurs inscrits. Absent des réponses de liste, présent sur le détail. */
+  /** IDs des utilisateurs inscrits. Présent en liste comme au détail. */
   participants?: string[];
+  /** Présent au détail et sur la liste des événements d'un compte connecté ; absent de la recherche géospatiale par lair. */
   participantRegistrations?: Record<string, EventRegistrationStatus>;
   registeredParticipantsCount?: number;
   maxParticipants?: number;
-  /** IDs des utilisateurs ayant mis l'évènement en favori. */
+  /** IDs des utilisateurs ayant mis l'évènement en favori. Présent en liste comme au détail. */
   favoritedBy?: string[];
   lair?: { id?: string; name?: string; address?: string; [key: string]: unknown };
   [key: string]: unknown;

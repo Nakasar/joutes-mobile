@@ -17,6 +17,7 @@ import { SellListItemRow } from "../components/SellListItemRow";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
+import { isSafeUrl } from "../lib/safe-url";
 import { userLabel } from "../lib/user-tag";
 
 function hostnameOf(url: string): string {
@@ -24,15 +25,6 @@ function hostnameOf(url: string): string {
     return new URL(url).hostname;
   } catch {
     return url;
-  }
-}
-
-/** N'autorise que http(s) : évite qu'un lien `javascript:` ou un schéma inattendu se retrouve dans un `href`. */
-function isSafeUrl(url: string): boolean {
-  try {
-    return ["http:", "https:"].includes(new URL(url).protocol);
-  } catch {
-    return false;
   }
 }
 
