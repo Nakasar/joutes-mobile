@@ -51,12 +51,19 @@
   },
   "events": {
     "title": "Events",
-    "prevMonth": "Previous month",
-    "nextMonth": "Next month",
     "empty": "No events this month.",
     "statusSoldOut": "Sold out",
     "statusCancelled": "Cancelled",
-    "statusOpen": "Open"
+    "statusOpen": "Open",
+    "loadPast": "Load past events",
+    "pastTitle": "Past events",
+    "emptyPast": "No past events.",
+    "registered": "Registered",
+    "preRegistered": "Pre-registered",
+    "favorite": "Add to favorites",
+    "unfavorite": "Remove from favorites",
+    "detailFallbackTitle": "Event",
+    "externalLink": "View event page"
   },
   "collection": {
     "title": "Collection",

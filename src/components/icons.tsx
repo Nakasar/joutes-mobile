@@ -258,3 +258,11 @@ export function ScanIcon(p: IconProps) {
     </Icon>
   );
 }
+
+export function StarIcon({ filled, ...p }: IconProps & { filled?: boolean }) {
+  return (
+    <Icon {...p} fill={filled ? "currentColor" : "none"}>
+      <path d="m12 3 2.6 5.9 6.4.6-4.8 4.3 1.4 6.3L12 16.9l-5.6 3.2 1.4-6.3-4.8-4.3 6.4-.6Z" />
+    </Icon>
+  );
+}
