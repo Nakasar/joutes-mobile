@@ -22,6 +22,9 @@ export const endpoints = {
     rules: (idOrSlug: string) => `/games/${idOrSlug}/rules`,
     deckChecker: (idOrSlug: string) => `/games/${idOrSlug}/deck-checker`,
     exports: (idOrSlug: string) => `/games/${idOrSlug}/exports`,
+    policies: (idOrSlug: string) => `/games/${idOrSlug}/policies`,
+    policy: (idOrSlug: string, policyId: string) =>
+      `/games/${idOrSlug}/policies/${policyId}`,
   },
   news: {
     list: "/news",

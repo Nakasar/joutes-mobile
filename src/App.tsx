@@ -8,6 +8,7 @@ import { DeckCheckerScreen } from "./screens/DeckCheckerScreen";
 import { EventDetailScreen } from "./screens/EventDetailScreen";
 import { EventsScreen } from "./screens/EventsScreen";
 import { GameCardsScreen } from "./screens/GameCardsScreen";
+import { GameScreen } from "./screens/GameScreen";
 import { GamesScreen } from "./screens/GamesScreen";
 import { HomeScreen } from "./screens/HomeScreen";
 import { LoginScreen } from "./screens/LoginScreen";
@@ -16,6 +17,8 @@ import { NewsDetailScreen } from "./screens/NewsDetailScreen";
 import { PlayGroupDetailScreen } from "./screens/PlayGroupDetailScreen";
 import { PlayGroupSellListScreen } from "./screens/PlayGroupSellListScreen";
 import { PlayGroupWishlistsScreen } from "./screens/PlayGroupWishlistsScreen";
+import { PoliciesListScreen } from "./screens/PoliciesListScreen";
+import { PolicyDetailScreen } from "./screens/PolicyDetailScreen";
 import { RulesScreen } from "./screens/RulesScreen";
 import { SettingsScreen } from "./screens/SettingsScreen";
 import { SocialScreen } from "./screens/SocialScreen";
@@ -52,6 +55,7 @@ function Shell() {
                 <Route path="/" element={<HomeScreen />} />
                 <Route path="/news/:newsId" element={<NewsDetailScreen />} />
                 <Route path="/games" element={<GamesScreen />} />
+                <Route path="/games/:gameSlug" element={<GameScreen />} />
                 <Route
                   path="/games/:gameSlug/cards"
                   element={<GameCardsScreen />}
@@ -67,6 +71,14 @@ function Shell() {
                 <Route
                   path="/games/:gameSlug/deck-checker"
                   element={<DeckCheckerScreen />}
+                />
+                <Route
+                  path="/games/:gameSlug/policies"
+                  element={<PoliciesListScreen />}
+                />
+                <Route
+                  path="/games/:gameSlug/policies/:policyId"
+                  element={<PolicyDetailScreen />}
                 />
                 <Route path="/events" element={<EventsScreen />} />
                 <Route path="/events/:eventId" element={<EventDetailScreen />} />

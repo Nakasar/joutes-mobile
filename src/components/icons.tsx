@@ -266,3 +266,14 @@ export function StarIcon({ filled, ...p }: IconProps & { filled?: boolean }) {
     </Icon>
   );
 }
+
+export function ScrollIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M7 3h11a2 2 0 0 1 2 2v13.5a2.5 2.5 0 0 1-2.5 2.5H8" />
+      <path d="M7 3a2.5 2.5 0 0 0-2.5 2.5v13A2.5 2.5 0 0 0 7 21" />
+      <path d="M7 3v18" />
+      <path d="M10 8h7M10 12h7" />
+    </Icon>
+  );
+}
