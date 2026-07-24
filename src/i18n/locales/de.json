@@ -27,14 +27,27 @@
     "filterAll": "Alle",
     "empty": "Noch keine Neuigkeiten.",
     "featuredBadge": "EMPFOHLEN",
-    "detailTitle": "Neuigkeit"
+    "detailTitle": "Neuigkeit",
+    "socialAction": "Social"
   },
   "games": {
     "title": "Spiele",
     "subtitle": "Kataloge, Karten und Regeln",
     "empty": "Keine Spiele.",
     "unavailableOffline": "Offline nicht verfügbar",
-    "offlineHint": "Lade dieses Spiel herunter (Einstellungen › Offline), um ohne Verbindung darauf zuzugreifen"
+    "offlineHint": "Lade dieses Spiel herunter (Einstellungen › Offline), um ohne Verbindung darauf zuzugreifen",
+    "scopeMine": "Meine Spiele",
+    "scopeAll": "Alle Spiele",
+    "searchPlaceholder": "Spiel suchen",
+    "typeAll": "Alle",
+    "emptyMine": "Du folgst noch keinem Spiel.",
+    "type": {
+      "TCG": "TCG",
+      "BoardGame": "Brettspiel",
+      "VideoGame": "Videospiel",
+      "Miniatures": "Miniaturen",
+      "Other": "Sonstiges"
+    }
   },
   "events": {
     "title": "Events",

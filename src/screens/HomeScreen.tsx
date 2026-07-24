@@ -5,7 +5,7 @@ import { listGames } from "../api/games";
 import { listNews } from "../api/news";
 import type { News } from "../api/types";
 import { CachedImage } from "../components/CachedImage";
-import { HeartIcon, SearchIcon, SettingsIcon } from "../components/icons";
+import { HeartIcon, SearchIcon, SettingsIcon, UsersIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { currentLocale } from "../i18n";
@@ -110,6 +110,13 @@ export function HomeScreen() {
         <div className="head-actions">
           <button className="icon-button" aria-label={t("common.search")}>
             <SearchIcon size={20} />
+          </button>
+          <button
+            className="icon-button"
+            aria-label={t("home.socialAction")}
+            onClick={() => navigate("/social")}
+          >
+            <UsersIcon size={20} />
           </button>
           <button
             className="icon-button"

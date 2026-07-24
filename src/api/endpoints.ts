@@ -81,6 +81,7 @@ export const endpoints = {
       `/sell-lists/${sellListId}/items/${itemId}`,
   },
   users: {
+    myGames: "/users/me/games",
     detail: (userTagOrId: string) =>
       `/users/${encodeURIComponent(userTagOrId)}`,
     wishlists: (userTagOrId: string) =>

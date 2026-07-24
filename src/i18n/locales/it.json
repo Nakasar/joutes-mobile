@@ -27,14 +27,27 @@
     "filterAll": "Tutte",
     "empty": "Nessuna novità.",
     "featuredBadge": "IN EVIDENZA",
-    "detailTitle": "Novità"
+    "detailTitle": "Novità",
+    "socialAction": "Social"
   },
   "games": {
     "title": "Giochi",
     "subtitle": "Cataloghi, carte e regole",
     "empty": "Nessun gioco.",
     "unavailableOffline": "Non disponibile offline",
-    "offlineHint": "Scarica questo gioco (Impostazioni › Offline) per accedervi senza connessione"
+    "offlineHint": "Scarica questo gioco (Impostazioni › Offline) per accedervi senza connessione",
+    "scopeMine": "I miei giochi",
+    "scopeAll": "Tutti i giochi",
+    "searchPlaceholder": "Cerca un gioco",
+    "typeAll": "Tutti",
+    "emptyMine": "Non segui ancora nessun gioco.",
+    "type": {
+      "TCG": "TCG",
+      "BoardGame": "Gioco da tavolo",
+      "VideoGame": "Videogioco",
+      "Miniatures": "Miniature",
+      "Other": "Altro"
+    }
   },
   "events": {
     "title": "Eventi",

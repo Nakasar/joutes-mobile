@@ -27,14 +27,27 @@
     "filterAll": "All",
     "empty": "No news yet.",
     "featuredBadge": "FEATURED",
-    "detailTitle": "News article"
+    "detailTitle": "News article",
+    "socialAction": "Social"
   },
   "games": {
     "title": "Games",
     "subtitle": "Catalogs, cards and rules",
     "empty": "No games.",
     "unavailableOffline": "Unavailable offline",
-    "offlineHint": "Download this game (Settings › Offline) to access it without a connection"
+    "offlineHint": "Download this game (Settings › Offline) to access it without a connection",
+    "scopeMine": "My games",
+    "scopeAll": "All games",
+    "searchPlaceholder": "Search a game",
+    "typeAll": "All",
+    "emptyMine": "You're not following any game yet.",
+    "type": {
+      "TCG": "TCG",
+      "BoardGame": "Board game",
+      "VideoGame": "Video game",
+      "Miniatures": "Miniatures",
+      "Other": "Other"
+    }
   },
   "events": {
     "title": "Events",
