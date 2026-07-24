@@ -4,6 +4,7 @@ import type {
   CardsSearchResponse,
   Errata,
   GameExport,
+  Policy,
   RuleDocument,
   RuleEntry,
   RuleLang,
@@ -193,4 +194,37 @@ export function offlineGetCard(
     erratas,
     cardIdByName,
   };
+}
+
+// ---- Politiques ----
+
+export interface OfflineSearchPoliciesParams {
+  searchQuery?: string;
+  page?: number;
+  limit?: number;
+}
+
+export function offlineSearchPolicies(
+  exp: GameExport,
+  params: OfflineSearchPoliciesParams,
+): Policy[] {
+  const all = exp.policies ?? [];
+  const q = params.searchQuery?.trim().toLowerCase();
+  const filtered = q
+    ? all.filter(
+        (p) =>
+          p.title.toLowerCase().includes(q) ||
+          p.content.toLowerCase().includes(q),
+      )
+    : all;
+  const sorted = [...filtered].sort((a, b) => a.title.localeCompare(b.title));
+
+  const limit = params.limit ?? 10;
+  const page = params.page ?? 1;
+  const start = (page - 1) * limit;
+  return sorted.slice(start, start + limit);
+}
+
+export function offlineGetPolicy(exp: GameExport, policyId: string): Policy | null {
+  return (exp.policies ?? []).find((p) => p.id === policyId) ?? null;
 }

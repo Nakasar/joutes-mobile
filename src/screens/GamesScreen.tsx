@@ -70,7 +70,7 @@ function GameRow({
   }
 
   return (
-    <Link to={`/games/${game.slug}/cards`} className="game-row">
+    <Link to={`/games/${game.slug}`} className="game-row">
       {inner}
     </Link>
   );

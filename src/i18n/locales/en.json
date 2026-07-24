@@ -49,6 +49,15 @@
       "Other": "Other"
     }
   },
+  "gameHub": {
+    "fallbackTitle": "Game",
+    "cards": "Cards",
+    "rules": "Rules",
+    "deckChecker": "Deck checker",
+    "collection": "Collection",
+    "policies": "Policies",
+    "empty": "No features available for this game."
+  },
   "events": {
     "title": "Events",
     "empty": "No events this month.",
@@ -234,6 +243,14 @@
     "deprecated": "Deprecated",
     "source": "Source",
     "sourceLabel": "Source: {{source}}"
+  },
+  "policies": {
+    "title": "Policies",
+    "searchPlaceholder": "Search for a policy…",
+    "empty": "No policy matches the search.",
+    "loadMore": "Load more",
+    "detailFallbackTitle": "Policy",
+    "error": "Something went wrong."
   },
   "wishlists": {
     "title": "Wishlists",

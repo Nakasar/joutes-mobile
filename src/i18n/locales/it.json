@@ -49,6 +49,15 @@
       "Other": "Altro"
     }
   },
+  "gameHub": {
+    "fallbackTitle": "Gioco",
+    "cards": "Carte",
+    "rules": "Regole",
+    "deckChecker": "Verifica deck",
+    "collection": "Collezione",
+    "policies": "Politiche",
+    "empty": "Nessuna funzionalità disponibile per questo gioco."
+  },
   "events": {
     "title": "Eventi",
     "empty": "Nessun evento questo mese.",
@@ -234,6 +243,14 @@
     "deprecated": "Obsoleto",
     "source": "Fonte",
     "sourceLabel": "Fonte: {{source}}"
+  },
+  "policies": {
+    "title": "Politiche",
+    "searchPlaceholder": "Cerca una politica…",
+    "empty": "Nessuna politica corrisponde alla ricerca.",
+    "loadMore": "Carica altre",
+    "detailFallbackTitle": "Politica",
+    "error": "Si è verificato un errore."
   },
   "wishlists": {
     "title": "Liste dei desideri",

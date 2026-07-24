@@ -64,6 +64,15 @@ export interface Game extends GameSummary {
   };
   formats?: { name: string }[];
   stats?: { communityRating?: number; popularityScore?: number };
+  /** Fonctionnalités activées pour ce jeu côté backend (toutes optionnelles/absentes = désactivées). */
+  features?: {
+    cards?: boolean;
+    collection?: boolean;
+    rules?: boolean;
+    policies?: boolean;
+    tournaments?: boolean;
+    deckChecker?: boolean;
+  };
   [key: string]: unknown;
 }
 
@@ -117,6 +126,29 @@ export interface Errata {
   contentUpdatedAt?: string;
   deprecatedAt?: string;
   votes?: { positive?: number; negative?: number; userVote?: string };
+}
+
+export type PolicyVoteType = "positive" | "negative";
+
+/**
+ * Politique / clarification d'organisation de tournoi propre à un jeu
+ * (`GET /games/{idOrSlug}/policies`). Structure proche d'`Errata`, mais
+ * titrée et non liée à des cartes.
+ */
+export interface Policy {
+  id: string;
+  title: string;
+  /** Texte original (markdown). */
+  content: string;
+  originalLang?: string;
+  translations?: { lang: string; title: string; content: string; updatedAt?: string }[];
+  gameId: string;
+  game?: { id?: string; name?: string; slug?: string };
+  source?: string;
+  contentUpdatedAt?: string;
+  createdAt?: string;
+  deprecatedAt?: string;
+  votes?: { positive?: number; negative?: number; userVote?: PolicyVoteType };
 }
 
 export interface CardDetail extends Card {
@@ -369,7 +401,7 @@ export interface GameExport {
   generatedAt: string;
   cards: Record<string, unknown>[];
   erratas: Errata[];
-  policies?: Record<string, unknown>[];
+  policies?: Policy[];
   rules: {
     en?: { cr?: RawRuleEntry[]; tr?: RawRuleEntry[] };
     fr?: { cr?: RawRuleEntry[]; tr?: RawRuleEntry[] };
