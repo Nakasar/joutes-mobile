@@ -5,6 +5,7 @@ import { CardDetailScreen } from "./screens/CardDetailScreen";
 import { CollectionGameScreen } from "./screens/CollectionGameScreen";
 import { CollectionScreen } from "./screens/CollectionScreen";
 import { DeckCheckerScreen } from "./screens/DeckCheckerScreen";
+import { EventDetailScreen } from "./screens/EventDetailScreen";
 import { EventsScreen } from "./screens/EventsScreen";
 import { GameCardsScreen } from "./screens/GameCardsScreen";
 import { GamesScreen } from "./screens/GamesScreen";
@@ -68,6 +69,7 @@ function Shell() {
                   element={<DeckCheckerScreen />}
                 />
                 <Route path="/events" element={<EventsScreen />} />
+                <Route path="/events/:eventId" element={<EventDetailScreen />} />
                 <Route path="/collection" element={<CollectionScreen />} />
                 <Route
                   path="/collection/:gameSlug"

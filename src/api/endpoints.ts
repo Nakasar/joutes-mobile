@@ -30,6 +30,8 @@ export const endpoints = {
   },
   events: {
     list: "/events",
+    detail: (eventId: string) => `/events/${eventId}`,
+    favorite: (eventId: string) => `/events/${eventId}/favorite`,
   },
   lairs: {
     list: "/lairs",

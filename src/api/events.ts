@@ -9,6 +9,9 @@ export interface ListEventsParams {
   year?: number;
   gameId?: string;
   lairId?: string;
+  /** Borne de date ISO, indépendante du calendrier mois/année. */
+  afterDate?: string;
+  beforeDate?: string;
 }
 
 export function listEvents(
@@ -16,13 +19,29 @@ export function listEvents(
 ): Promise<JoutesEvent[]> {
   // Clé déterministe : tuple à ordre fixe plutôt que `JSON.stringify(params)`,
   // dont l'ordre des propriétés dépend de l'appelant.
-  const key = [params.month, params.year, params.gameId, params.lairId].join(
-    "|",
-  );
+  const key = [
+    params.month,
+    params.year,
+    params.gameId,
+    params.lairId,
+    params.afterDate,
+    params.beforeDate,
+  ].join("|");
   return withCache(`events:list:${key}`, async () => {
     const response = await api.get<EventsListResponse>(endpoints.events.list, {
       ...params,
     });
     return response.events;
   });
+}
+
+export function getEvent(eventId: string): Promise<JoutesEvent> {
+  return withCache(`events:detail:${eventId}`, () =>
+    api.get<JoutesEvent>(endpoints.events.detail(eventId)),
+  );
+}
+
+/** Bascule le favori de l'utilisateur connecté sur cet évènement. */
+export function toggleEventFavorite(eventId: string): Promise<{ favorited: boolean }> {
+  return api.post<{ favorited: boolean }>(endpoints.events.favorite(eventId), {});
 }

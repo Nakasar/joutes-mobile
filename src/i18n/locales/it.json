@@ -51,12 +51,19 @@
   },
   "events": {
     "title": "Eventi",
-    "prevMonth": "Mese precedente",
-    "nextMonth": "Mese successivo",
     "empty": "Nessun evento questo mese.",
     "statusSoldOut": "Esaurito",
     "statusCancelled": "Annullato",
-    "statusOpen": "Aperto"
+    "statusOpen": "Aperto",
+    "loadPast": "Carica gli eventi passati",
+    "pastTitle": "Eventi passati",
+    "emptyPast": "Nessun evento passato.",
+    "registered": "Iscritto",
+    "preRegistered": "Pre-iscritto",
+    "favorite": "Aggiungi ai preferiti",
+    "unfavorite": "Rimuovi dai preferiti",
+    "detailFallbackTitle": "Evento",
+    "externalLink": "Vedi la pagina dell'evento"
   },
   "collection": {
     "title": "Collezione",

@@ -51,12 +51,19 @@
   },
   "events": {
     "title": "Events",
-    "prevMonth": "Vorheriger Monat",
-    "nextMonth": "Nächster Monat",
     "empty": "Keine Events in diesem Monat.",
     "statusSoldOut": "Ausverkauft",
     "statusCancelled": "Abgesagt",
-    "statusOpen": "Offen"
+    "statusOpen": "Offen",
+    "loadPast": "Vergangene Veranstaltungen laden",
+    "pastTitle": "Vergangene Veranstaltungen",
+    "emptyPast": "Keine vergangenen Veranstaltungen.",
+    "registered": "Angemeldet",
+    "preRegistered": "Voranmeldung",
+    "favorite": "Zu Favoriten hinzufügen",
+    "unfavorite": "Aus Favoriten entfernen",
+    "detailFallbackTitle": "Veranstaltung",
+    "externalLink": "Veranstaltungsseite ansehen"
   },
   "collection": {
     "title": "Sammlung",

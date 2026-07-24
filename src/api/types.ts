@@ -194,6 +194,11 @@ export interface NewsListResponse {
 // ---- Événements ----
 
 export type EventStatus = "available" | "sold-out" | "cancelled";
+export type EventRegistrationStatus =
+  | "NOT_REGISTERED"
+  | "PRE_REGISTERED"
+  | "REGISTERED"
+  | "EXCLUDED";
 
 export interface JoutesEvent {
   id: string;
@@ -210,9 +215,14 @@ export interface JoutesEvent {
   runningState?: "not-started" | "ongoing" | "completed";
   allowJoin?: boolean;
   preRegistration?: boolean;
+  /** IDs des utilisateurs inscrits. Absent des réponses de liste, présent sur le détail. */
+  participants?: string[];
+  participantRegistrations?: Record<string, EventRegistrationStatus>;
   registeredParticipantsCount?: number;
   maxParticipants?: number;
-  lair?: { id?: string; name?: string; [key: string]: unknown };
+  /** IDs des utilisateurs ayant mis l'évènement en favori. */
+  favoritedBy?: string[];
+  lair?: { id?: string; name?: string; address?: string; [key: string]: unknown };
   [key: string]: unknown;
 }
 
