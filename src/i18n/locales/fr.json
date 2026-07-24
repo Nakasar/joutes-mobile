@@ -27,14 +27,27 @@
     "filterAll": "Tous",
     "empty": "Aucune actualité.",
     "featuredBadge": "À LA UNE",
-    "detailTitle": "Actualité"
+    "detailTitle": "Actualité",
+    "socialAction": "Social"
   },
   "games": {
     "title": "Jeux",
     "subtitle": "Catalogues, cartes et règles",
     "empty": "Aucun jeu.",
     "unavailableOffline": "Indisponible hors ligne",
-    "offlineHint": "Téléchargez ce jeu (Réglages › Hors ligne) pour y accéder sans connexion"
+    "offlineHint": "Téléchargez ce jeu (Réglages › Hors ligne) pour y accéder sans connexion",
+    "scopeMine": "Mes jeux",
+    "scopeAll": "Tous les jeux",
+    "searchPlaceholder": "Rechercher un jeu",
+    "typeAll": "Tous",
+    "emptyMine": "Vous ne suivez aucun jeu pour l'instant.",
+    "type": {
+      "TCG": "TCG",
+      "BoardGame": "Jeu de plateau",
+      "VideoGame": "Jeu vidéo",
+      "Miniatures": "Figurines",
+      "Other": "Autre"
+    }
   },
   "events": {
     "title": "Événements",

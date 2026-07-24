@@ -29,6 +29,9 @@ export interface Session {
 
 // ---- Jeux ----
 
+/** Clé de type de jeu (`lib/constants/game-types.ts` côté joutes-app). */
+export type GameTypeKey = "TCG" | "BoardGame" | "VideoGame" | "Miniatures" | "Other";
+
 export interface GameSummary {
   /** L'API renvoie `_id` sur GET /games. */
   _id: string;
@@ -37,7 +40,9 @@ export interface GameSummary {
   description?: string;
   icon?: string;
   banner?: string;
-  type?: string;
+  // `& {}` empêche TS de réduire l'union à `string` : les clés connues
+  // gardent l'auto-complétion, tout en acceptant une valeur backend inconnue.
+  type?: GameTypeKey | (string & {});
 }
 
 export interface Game extends GameSummary {

@@ -33,3 +33,10 @@ export function getUserSellList(
       .then((r) => r.sellList),
   );
 }
+
+/** Jeux suivis par l'utilisateur connecté (session requise). */
+export function getMyFollowedGameIds(): Promise<string[]> {
+  return api
+    .get<{ gameIds: string[] }>(endpoints.users.myGames)
+    .then((r) => r.gameIds ?? []);
+}
