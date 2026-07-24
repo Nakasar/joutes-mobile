@@ -40,7 +40,9 @@ export interface GameSummary {
   description?: string;
   icon?: string;
   banner?: string;
-  type?: GameTypeKey | string;
+  // `& {}` empêche TS de réduire l'union à `string` : les clés connues
+  // gardent l'auto-complétion, tout en acceptant une valeur backend inconnue.
+  type?: GameTypeKey | (string & {});
 }
 
 export interface Game extends GameSummary {
