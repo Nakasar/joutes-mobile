@@ -229,7 +229,10 @@ export function TradeDetailScreen() {
     [userId],
   );
 
-  // Chargement initial.
+  // Chargement initial. Dépend aussi de `applyServerTrade` (donc de `userId`) :
+  // si la session finit de se résoudre pendant que la requête est en vol, on
+  // veut relire la réponse avec le bon `userId`, sous peine d'assigner la
+  // mauvaise face à « mon offre ».
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
@@ -248,8 +251,15 @@ export function TradeDetailScreen() {
     return () => {
       cancelled = true;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tradeId]);
+  }, [tradeId, applyServerTrade, t]);
+
+  // Les envois différés en attente ne doivent pas survivre au démontage de
+  // l'écran (navigation rapide après une modification d'offre).
+  useEffect(() => {
+    return () => {
+      for (const target of TARGETS) clearTimeout(timersRef.current[target]);
+    };
+  }, []);
 
   const flush = useCallback(
     async (target: OfferTarget) => {
@@ -401,6 +411,16 @@ export function TradeDetailScreen() {
     }
   }
 
+  // Un partenaire qui rejoint (surtout via un QR scanné immédiatement) doit
+  // trouver l'échange à jour : on s'assure qu'aucune offre n'est encore en
+  // attente d'enregistrement avant d'afficher le code/QR d'invitation.
+  async function openInvite() {
+    setBusy(true);
+    await flushPending();
+    setBusy(false);
+    setInviteOpen(true);
+  }
+
   async function validate() {
     setBusy(true);
     setActionError(null);
@@ -521,7 +541,7 @@ export function TradeDetailScreen() {
               className="btn btn--outline btn--block"
               style={{ marginBottom: 10 }}
               disabled={busy}
-              onClick={() => setInviteOpen(true)}
+              onClick={openInvite}
             >
               <UserPlusIcon size={16} />
               {t("trades.invite.button")}

@@ -36,6 +36,7 @@ export function TradeCardPickerSheet({
   const [result, setResult] = useState<TradeCardSearchResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [reloadTick, setReloadTick] = useState(0);
 
   useEffect(() => {
     const timer = setTimeout(() => setQuery(searchInput.trim()), 300);
@@ -63,7 +64,7 @@ export function TradeCardPickerSheet({
       .finally(() => {
         if (id === requestId.current) setLoading(false);
       });
-  }, [scope, query, page, t]);
+  }, [scope, query, page, reloadTick, t]);
 
   const items = result?.items ?? [];
   const totalPages = result?.totalPages ?? 1;
@@ -122,7 +123,7 @@ export function TradeCardPickerSheet({
               <StatusView
                 loading={loading}
                 error={error}
-                onRetry={() => setPage(1)}
+                onRetry={() => setReloadTick((tick) => tick + 1)}
                 empty={!loading && !error && items.length === 0 ? t("trades.panel.noResults") : undefined}
               />
               {items.map((card) => {
