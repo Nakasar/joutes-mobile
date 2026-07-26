@@ -277,3 +277,14 @@ export function ScrollIcon(p: IconProps) {
     </Icon>
   );
 }
+
+export function ArrowLeftRightIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="m8 3-4 4 4 4" />
+      <path d="M4 7h16" />
+      <path d="m16 21 4-4-4-4" />
+      <path d="M20 17H4" />
+    </Icon>
+  );
+}

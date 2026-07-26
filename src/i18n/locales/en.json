@@ -98,7 +98,8 @@
       "error": "Couldn't load the collection."
     },
     "wishlistsAction": "My wishlists",
-    "sellListAction": "My sale list"
+    "sellListAction": "My sale list",
+    "tradeAction": "Trade cards"
   },
   "social": {
     "title": "Community",
@@ -298,6 +299,110 @@
     "notOwned": "You don't own this card.",
     "confirmListing": "List for sale",
     "invalidPrice": "The price entered is not valid."
+  },
+  "trades": {
+    "title": "Trades",
+    "subtitle": "Trade cards with other players",
+    "gateText": "Sign in to trade cards with other players.",
+    "createAction": "Create a trade",
+    "joinAction": "Join with a code",
+    "openTitle": "Open",
+    "historyTitle": "History",
+    "noOpen": "No open trades.",
+    "noHistory": "No trade history.",
+    "noPartner": "No partner",
+    "summary": "{{offered}} given · {{received}} received",
+    "detailTitle": "Trade",
+    "withPartner": "With {{name}}",
+    "tradeAction": "Record the trade",
+    "status": {
+      "open": "Open",
+      "validated": "Validated",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "completedBanner": "Trade completed: the cards have been exchanged.",
+      "cancelledBanner": "This trade was cancelled."
+    },
+    "offer": {
+      "title": "My offer",
+      "subtitle": "Cards you're giving, from your collection"
+    },
+    "request": {
+      "title": "What I'm receiving",
+      "titleWithPartner": "{{name}}'s offer",
+      "subtitle": "Cards you're receiving, from the catalog",
+      "subtitlePartner": "Composed by your partner"
+    },
+    "panel": {
+      "add": "Add a card",
+      "addTitle": "Add a card",
+      "emptyOffer": "No cards offered yet.",
+      "emptyRequest": "Describe what you're receiving in exchange.",
+      "emptyPartner": "Your partner hasn't composed their offer yet.",
+      "scopeCollection": "My collection",
+      "scopeCatalog": "Whole catalog",
+      "searchPlaceholder": "Search for a card…",
+      "typeToSearch": "Type at least 2 characters to search the catalog.",
+      "noResults": "No card matches the search.",
+      "owned_one": "{{count}} owned",
+      "owned_other": "{{count}} owned",
+      "notOwned": "You don't own this card",
+      "notInCatalog": "Card not in the catalog",
+      "allCopiesSelected": "All your copies are already offered",
+      "previous": "Previous",
+      "next": "Next",
+      "pageOf": "Page {{page}} / {{totalPages}}",
+      "increase": "Increase quantity",
+      "decrease": "Decrease quantity"
+    },
+    "validation": {
+      "mine": "Validated",
+      "partner": "Validated",
+      "validate": "Validate the trade",
+      "revoke": "Revoke my validation"
+    },
+    "partner": {
+      "remove": "Remove partner",
+      "leave": "Leave the trade"
+    },
+    "cancel": {
+      "button": "Cancel the trade"
+    },
+    "invite": {
+      "button": "Invite a partner",
+      "title": "Invite a partner",
+      "description": "Have this QR code scanned, or share the code with your partner.",
+      "qrAlt": "Trade invite QR code",
+      "copyLink": "Copy link",
+      "copied": "Link copied!",
+      "codeHint": "Your partner can also type this code from the Trades screen.",
+      "directTitle": "Or invite directly",
+      "identifierPlaceholder": "Tag#1234, username or e-mail",
+      "identifierHint": "The partner must already have a Joutes account.",
+      "submit": "Send invite"
+    },
+    "joinTitle": "Join a trade",
+    "joinCodeLabel": "Invite code",
+    "joinCodePlaceholder": "Paste the code or link",
+    "joinSubmit": "Join",
+    "joinOr": "or",
+    "joinInvalidCode": "Invalid code.",
+    "scanAction": "Scan a QR code",
+    "scanUnavailable": "Scan unavailable or cancelled.",
+    "errors": {
+      "notFound": "This trade could not be found.",
+      "forbidden": "You're not allowed to do that.",
+      "closed": "This trade is no longer open.",
+      "changed": "The trade changed in the meantime, try again.",
+      "empty": "Add at least one card before validating.",
+      "taken": "This trade already has a partner.",
+      "alreadyParticipant": "You're already part of this trade.",
+      "self": "You can't trade with yourself.",
+      "insufficientCopies": "Some cards are no longer available in sufficient quantity",
+      "unknownCards": "Some cards couldn't be found in the catalog.",
+      "userNotFound": "No user matches that identifier.",
+      "failed": "Something went wrong."
+    }
   },
   "profile": {
     "fallbackTitle": "Profile",

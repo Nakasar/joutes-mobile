@@ -98,7 +98,8 @@
       "error": "Impossibile caricare la collezione."
     },
     "wishlistsAction": "Le mie liste dei desideri",
-    "sellListAction": "La mia lista di vendita"
+    "sellListAction": "La mia lista di vendita",
+    "tradeAction": "Scambia carte"
   },
   "social": {
     "title": "Comunità",
@@ -298,6 +299,110 @@
     "notOwned": "Non possiedi questa carta.",
     "confirmListing": "Metti in vendita",
     "invalidPrice": "Il prezzo indicato non è valido."
+  },
+  "trades": {
+    "title": "Scambi",
+    "subtitle": "Scambia carte con altri giocatori",
+    "gateText": "Accedi per scambiare carte con altri giocatori.",
+    "createAction": "Crea uno scambio",
+    "joinAction": "Partecipa con un codice",
+    "openTitle": "In corso",
+    "historyTitle": "Cronologia",
+    "noOpen": "Nessuno scambio in corso.",
+    "noHistory": "Nessuno scambio nella cronologia.",
+    "noPartner": "Nessun partner",
+    "summary": "{{offered}} cedute · {{received}} ricevute",
+    "detailTitle": "Scambio",
+    "withPartner": "Con {{name}}",
+    "tradeAction": "Registra lo scambio",
+    "status": {
+      "open": "In corso",
+      "validated": "Convalidato",
+      "completed": "Completato",
+      "cancelled": "Annullato",
+      "completedBanner": "Scambio completato: le carte sono state scambiate.",
+      "cancelledBanner": "Questo scambio è stato annullato."
+    },
+    "offer": {
+      "title": "La mia offerta",
+      "subtitle": "Carte che cedi, dalla tua collezione"
+    },
+    "request": {
+      "title": "Cosa ricevo",
+      "titleWithPartner": "Offerta di {{name}}",
+      "subtitle": "Carte che ricevi, dal catalogo",
+      "subtitlePartner": "Composta dal tuo partner"
+    },
+    "panel": {
+      "add": "Aggiungi una carta",
+      "addTitle": "Aggiungi una carta",
+      "emptyOffer": "Nessuna carta proposta per ora.",
+      "emptyRequest": "Descrivi cosa ricevi in cambio.",
+      "emptyPartner": "Il tuo partner non ha ancora composto la sua offerta.",
+      "scopeCollection": "La mia collezione",
+      "scopeCatalog": "Tutto il catalogo",
+      "searchPlaceholder": "Cerca una carta…",
+      "typeToSearch": "Digita almeno 2 caratteri per cercare nel catalogo.",
+      "noResults": "Nessuna carta corrisponde alla ricerca.",
+      "owned_one": "{{count}} posseduta",
+      "owned_other": "{{count}} possedute",
+      "notOwned": "Non possiedi questa carta",
+      "notInCatalog": "Carta assente dal catalogo",
+      "allCopiesSelected": "Tutte le tue copie sono già proposte",
+      "previous": "Precedente",
+      "next": "Successivo",
+      "pageOf": "Pagina {{page}} / {{totalPages}}",
+      "increase": "Aumenta quantità",
+      "decrease": "Diminuisci quantità"
+    },
+    "validation": {
+      "mine": "Convalidato",
+      "partner": "Convalidato",
+      "validate": "Convalida lo scambio",
+      "revoke": "Revoca la mia convalida"
+    },
+    "partner": {
+      "remove": "Rimuovi partner",
+      "leave": "Esci dallo scambio"
+    },
+    "cancel": {
+      "button": "Annulla lo scambio"
+    },
+    "invite": {
+      "button": "Invita un partner",
+      "title": "Invita un partner",
+      "description": "Fai scansionare questo QR code o condividi il codice con il tuo partner.",
+      "qrAlt": "QR code di invito allo scambio",
+      "copyLink": "Copia link",
+      "copied": "Link copiato!",
+      "codeHint": "Il tuo partner può anche digitare questo codice dalla schermata degli scambi.",
+      "directTitle": "Oppure invita direttamente",
+      "identifierPlaceholder": "Tag#1234, nome utente o e-mail",
+      "identifierHint": "Il partner deve già avere un account Joutes.",
+      "submit": "Invia invito"
+    },
+    "joinTitle": "Partecipa a uno scambio",
+    "joinCodeLabel": "Codice di invito",
+    "joinCodePlaceholder": "Incolla il codice o il link",
+    "joinSubmit": "Partecipa",
+    "joinOr": "oppure",
+    "joinInvalidCode": "Codice non valido.",
+    "scanAction": "Scansiona un QR code",
+    "scanUnavailable": "Scansione non disponibile o annullata.",
+    "errors": {
+      "notFound": "Scambio non trovato.",
+      "forbidden": "Non sei autorizzato a farlo.",
+      "closed": "Questo scambio non è più aperto.",
+      "changed": "Lo scambio è cambiato nel frattempo, riprova.",
+      "empty": "Aggiungi almeno una carta prima di convalidare.",
+      "taken": "Questo scambio ha già un partner.",
+      "alreadyParticipant": "Partecipi già a questo scambio.",
+      "self": "Non puoi scambiare con te stesso.",
+      "insufficientCopies": "Alcune carte non sono più disponibili in quantità sufficiente",
+      "unknownCards": "Alcune carte non sono state trovate nel catalogo.",
+      "userNotFound": "Nessun utente corrisponde a questo identificativo.",
+      "failed": "Si è verificato un errore."
+    }
   },
   "profile": {
     "fallbackTitle": "Profilo",
