@@ -85,6 +85,16 @@ export const endpoints = {
     item: (sellListId: string, itemId: string) =>
       `/sell-lists/${sellListId}/items/${itemId}`,
   },
+  trades: {
+    list: "/trades",
+    create: "/trades",
+    join: "/trades/join",
+    cards: "/trades/cards",
+    detail: (tradeId: string) => `/trades/${tradeId}`,
+    offer: (tradeId: string) => `/trades/${tradeId}/offer`,
+    partner: (tradeId: string) => `/trades/${tradeId}/partner`,
+    validate: (tradeId: string) => `/trades/${tradeId}/validate`,
+  },
   users: {
     myGames: "/users/me/games",
     detail: (userTagOrId: string) =>

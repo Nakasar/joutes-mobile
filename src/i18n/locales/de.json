@@ -98,7 +98,8 @@
       "error": "Die Sammlung konnte nicht geladen werden."
     },
     "wishlistsAction": "Meine Wunschlisten",
-    "sellListAction": "Meine Verkaufsliste"
+    "sellListAction": "Meine Verkaufsliste",
+    "tradeAction": "Karten tauschen"
   },
   "social": {
     "title": "Community",
@@ -298,6 +299,110 @@
     "notOwned": "Du besitzt diese Karte nicht.",
     "confirmListing": "Zum Verkauf anbieten",
     "invalidPrice": "Der eingegebene Preis ist ungültig."
+  },
+  "trades": {
+    "title": "Tauschgeschäfte",
+    "subtitle": "Tausche Karten mit anderen Spielern",
+    "gateText": "Melde dich an, um Karten mit anderen Spielern zu tauschen.",
+    "createAction": "Tausch erstellen",
+    "joinAction": "Mit Code beitreten",
+    "openTitle": "Laufend",
+    "historyTitle": "Verlauf",
+    "noOpen": "Keine laufenden Tauschgeschäfte.",
+    "noHistory": "Kein Tauschverlauf.",
+    "noPartner": "Kein Partner",
+    "summary": "{{offered}} abgegeben · {{received}} erhalten",
+    "detailTitle": "Tausch",
+    "withPartner": "Mit {{name}}",
+    "tradeAction": "Tausch festhalten",
+    "status": {
+      "open": "Laufend",
+      "validated": "Bestätigt",
+      "completed": "Abgeschlossen",
+      "cancelled": "Storniert",
+      "completedBanner": "Tausch abgeschlossen: Die Karten wurden getauscht.",
+      "cancelledBanner": "Dieser Tausch wurde storniert."
+    },
+    "offer": {
+      "title": "Mein Angebot",
+      "subtitle": "Karten, die du abgibst, aus deiner Sammlung"
+    },
+    "request": {
+      "title": "Was ich erhalte",
+      "titleWithPartner": "Angebot von {{name}}",
+      "subtitle": "Karten, die du erhältst, aus dem Katalog",
+      "subtitlePartner": "Von deinem Partner zusammengestellt"
+    },
+    "panel": {
+      "add": "Karte hinzufügen",
+      "addTitle": "Karte hinzufügen",
+      "emptyOffer": "Noch keine Karten angeboten.",
+      "emptyRequest": "Beschreibe, was du im Tausch erhältst.",
+      "emptyPartner": "Dein Partner hat sein Angebot noch nicht zusammengestellt.",
+      "scopeCollection": "Meine Sammlung",
+      "scopeCatalog": "Ganzer Katalog",
+      "searchPlaceholder": "Nach einer Karte suchen…",
+      "typeToSearch": "Mindestens 2 Zeichen eingeben, um den Katalog zu durchsuchen.",
+      "noResults": "Keine Karte entspricht der Suche.",
+      "owned_one": "{{count}} besessen",
+      "owned_other": "{{count}} besessen",
+      "notOwned": "Du besitzt diese Karte nicht",
+      "notInCatalog": "Karte nicht im Katalog",
+      "allCopiesSelected": "Alle deine Exemplare sind bereits angeboten",
+      "previous": "Zurück",
+      "next": "Weiter",
+      "pageOf": "Seite {{page}} / {{totalPages}}",
+      "increase": "Menge erhöhen",
+      "decrease": "Menge verringern"
+    },
+    "validation": {
+      "mine": "Bestätigt",
+      "partner": "Bestätigt",
+      "validate": "Tausch bestätigen",
+      "revoke": "Meine Bestätigung zurückziehen"
+    },
+    "partner": {
+      "remove": "Partner entfernen",
+      "leave": "Tausch verlassen"
+    },
+    "cancel": {
+      "button": "Tausch abbrechen"
+    },
+    "invite": {
+      "button": "Partner einladen",
+      "title": "Partner einladen",
+      "description": "Lass diesen QR-Code scannen oder teile den Code mit deinem Partner.",
+      "qrAlt": "QR-Code zur Tauscheinladung",
+      "copyLink": "Link kopieren",
+      "copied": "Link kopiert!",
+      "codeHint": "Dein Partner kann diesen Code auch im Tausch-Bildschirm eingeben.",
+      "directTitle": "Oder direkt einladen",
+      "identifierPlaceholder": "Tag#1234, Benutzername oder E-Mail",
+      "identifierHint": "Der Partner muss bereits ein Joutes-Konto haben.",
+      "submit": "Einladung senden"
+    },
+    "joinTitle": "Tausch beitreten",
+    "joinCodeLabel": "Einladungscode",
+    "joinCodePlaceholder": "Code oder Link einfügen",
+    "joinSubmit": "Beitreten",
+    "joinOr": "oder",
+    "joinInvalidCode": "Ungültiger Code.",
+    "scanAction": "QR-Code scannen",
+    "scanUnavailable": "Scan nicht verfügbar oder abgebrochen.",
+    "errors": {
+      "notFound": "Dieser Tausch wurde nicht gefunden.",
+      "forbidden": "Das ist dir nicht erlaubt.",
+      "closed": "Dieser Tausch ist nicht mehr offen.",
+      "changed": "Der Tausch hat sich zwischenzeitlich geändert, versuche es erneut.",
+      "empty": "Füge mindestens eine Karte hinzu, bevor du bestätigst.",
+      "taken": "Dieser Tausch hat bereits einen Partner.",
+      "alreadyParticipant": "Du nimmst bereits an diesem Tausch teil.",
+      "self": "Du kannst nicht mit dir selbst tauschen.",
+      "insufficientCopies": "Einige Karten sind nicht mehr in ausreichender Menge verfügbar",
+      "unknownCards": "Einige Karten wurden im Katalog nicht gefunden.",
+      "userNotFound": "Kein Benutzer entspricht dieser Kennung.",
+      "failed": "Ein Fehler ist aufgetreten."
+    }
   },
   "profile": {
     "fallbackTitle": "Profil",

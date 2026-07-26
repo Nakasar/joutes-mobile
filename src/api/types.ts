@@ -644,6 +644,111 @@ export interface SellListItemsResponse {
   totalPages: number;
 }
 
+// ---- Échanges ----
+
+/** Impression proposable à l'échange (collection ou catalogue, tous jeux confondus). */
+export interface TradeCard {
+  /** Clé stable d'une impression : `name|setCode|collectorNumber`. */
+  key: string;
+  /** Id catalogue (`cards.id`). Absent pour de rares entrées de collection historiques. */
+  cardId?: string;
+  name: string;
+  setCode: string;
+  collectorNumber: string;
+  image: string;
+  type?: string;
+  gameId?: string;
+  gameName?: string;
+  gameSlug?: string;
+  /** Nombre d'exemplaires de cette impression possédés par l'utilisateur. */
+  owned: number;
+}
+
+export type TradeCardScope = "collection" | "catalog";
+
+export interface TradeCardSearchResult {
+  items: TradeCard[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  /** Vrai quand la recherche catalogue a été ignorée faute d'un terme assez long. */
+  needsQuery: boolean;
+}
+
+export interface TradeGame {
+  id: string;
+  name: string;
+  slug?: string;
+}
+
+/** Carte figée dans une offre : le snapshot est résolu côté serveur, jamais fourni par le client. */
+export interface TradeCardSnapshot {
+  cardId?: string;
+  name: string;
+  setCode: string;
+  collectorNumber: string;
+  image: string;
+  gameId?: string;
+  gameName?: string;
+  quantity: number;
+}
+
+export type TradeSideId = "a" | "b";
+
+export interface TradeSide {
+  id: TradeSideId;
+  /** `null` tant que la face n'est pas occupée par un compte (échange libre). */
+  user: PublicUser | null;
+  cards: TradeCardSnapshot[];
+  validatedAt: string | null;
+}
+
+export type TradeStatus = "open" | "completed" | "cancelled";
+
+export interface Trade {
+  id: string;
+  code: string;
+  status: TradeStatus;
+  revision: number;
+  sides: TradeSide[];
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+  completedAt: string | null;
+  cancelledAt: string | null;
+}
+
+export interface TradeOwnedCardInput {
+  name: string;
+  setCode: string;
+  collectorNumber: string;
+  quantity: number;
+}
+
+export interface TradeCatalogCardInput {
+  cardId: string;
+  quantity: number;
+}
+
+export type TradeOfferUpdateInput =
+  | { target: "mine"; cards: TradeOwnedCardInput[] }
+  | { target: "counterparty"; cards: TradeCatalogCardInput[] };
+
+/** Code d'erreur renvoyé par les opérations d'échange (voir `ApiError.body.error`). */
+export type TradeError =
+  | "not-found"
+  | "forbidden"
+  | "closed"
+  | "conflict"
+  | "empty"
+  | "side-taken"
+  | "already-participant"
+  | "self-trade"
+  | "insufficient-copies"
+  | "unknown-cards"
+  | "user-not-found";
+
 // ---- Tournois ----
 
 export type TournamentStatus = "draft" | "in-progress" | "completed";

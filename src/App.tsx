@@ -24,6 +24,8 @@ import { SettingsScreen } from "./screens/SettingsScreen";
 import { SocialScreen } from "./screens/SocialScreen";
 import { TournamentDetailScreen } from "./screens/TournamentDetailScreen";
 import { TournamentsScreen } from "./screens/TournamentsScreen";
+import { TradeDetailScreen } from "./screens/TradeDetailScreen";
+import { TradesScreen } from "./screens/TradesScreen";
 import { UserProfileScreen } from "./screens/UserProfileScreen";
 import { WishlistDetailScreen } from "./screens/WishlistDetailScreen";
 import { WishlistsScreen } from "./screens/WishlistsScreen";
@@ -93,6 +95,8 @@ function Shell() {
                   element={<WishlistDetailScreen />}
                 />
                 <Route path="/sell-lists/mine" element={<MySellListScreen />} />
+                <Route path="/trades" element={<TradesScreen />} />
+                <Route path="/trades/:tradeId" element={<TradeDetailScreen />} />
                 <Route path="/tournaments" element={<TournamentsScreen />} />
                 <Route
                   path="/tournaments/:tournamentId"
