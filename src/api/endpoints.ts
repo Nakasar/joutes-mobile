@@ -115,6 +115,8 @@ export const endpoints = {
     /** État public diffusé aux joueurs : annonces + minuteur (sans auth). */
     live: (tournamentId: string) => `/tournaments/${tournamentId}/live`,
     standings: (tournamentId: string) => `/tournaments/${tournamentId}/standings`,
+    /** Phases, rondes, matchs et classements figés — tout l'historique en une requête. */
+    history: (tournamentId: string) => `/tournaments/${tournamentId}/history`,
     player: (tournamentId: string, playerId: string) =>
       `/tournaments/${tournamentId}/players/${playerId}`,
     phase: (tournamentId: string, phaseId: string) =>

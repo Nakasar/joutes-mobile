@@ -278,6 +278,16 @@ export function ScrollIcon(p: IconProps) {
   );
 }
 
+export function MegaphoneIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M4 10v4a1 1 0 0 0 1 1h3l8 4V5L8 9H5a1 1 0 0 0-1 1Z" />
+      <path d="M8 15v5h3v-4" />
+      <path d="M19 10a3 3 0 0 1 0 4" />
+    </Icon>
+  );
+}
+
 export function ArrowLeftRightIcon(p: IconProps) {
   return (
     <Icon {...p}>

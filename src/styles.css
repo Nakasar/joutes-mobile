@@ -443,9 +443,10 @@ textarea:focus {
   color: #fff;
 }
 
+/* Attente (résultat à confirmer) : à distinguer d'un litige, qui est rouge. */
 .chip--warning {
-  background: color-mix(in srgb, var(--danger) 14%, transparent);
-  color: var(--danger);
+  background: color-mix(in srgb, var(--gold) 18%, transparent);
+  color: var(--gold);
 }
 
 /* Rangée de puces défilable horizontalement */
@@ -2876,4 +2877,550 @@ textarea:focus {
 
 .standings-table__row--me {
   background: var(--chip);
+}
+
+/* ---- Portail joueur (tournoi) ---- */
+
+/*
+ * En-tête sombre du portail : le joueur y lit la ronde, le minuteur et
+ * l'annonce sans avoir à chercher. Volontairement sombre dans les deux thèmes :
+ * c'est le repère fixe de l'écran, il ne doit pas se confondre avec les cartes.
+ */
+.portal-header {
+  background: #0c1a22;
+  color: #f2fafd;
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+
+.portal-header__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.portal-header__titles {
+  min-width: 0;
+}
+
+.portal-header__name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.portal-header__meta {
+  margin: 2px 0 0;
+  font-size: 0.78rem;
+  color: rgba(242, 250, 253, 0.62);
+}
+
+.portal-header__timer {
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.portal-header__clock {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 1.35rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.portal-header__clock--low {
+  color: #f6c66a;
+}
+
+.portal-header__clock--expired {
+  color: #ff7a76;
+}
+
+.portal-header__timer-label {
+  margin: 0;
+  font-size: 0.68rem;
+  color: rgba(242, 250, 253, 0.62);
+}
+
+.portal-header__me {
+  margin: 12px 0 0;
+  font-size: 0.78rem;
+  color: rgba(242, 250, 253, 0.62);
+}
+
+.portal-header__me strong {
+  color: #f2fafd;
+}
+
+.portal-announce {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 13px;
+  padding: 11px 13px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.07);
+  color: #cfe9f4;
+}
+
+.portal-announce--urgent {
+  border-color: rgba(255, 122, 118, 0.45);
+  background: rgba(255, 122, 118, 0.16);
+  color: #ffc9c7;
+}
+
+.portal-announce__text {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+/* Carte de table : le numéro doit se lire à trois mètres du panneau. */
+.table-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 16px;
+  margin-bottom: 14px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.table-card__eyebrow {
+  margin: 0;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.table-card__number {
+  margin: 4px 0 8px;
+  font-family: var(--font-mono);
+  font-size: 5rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.table-card__against {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.table-card__opponent {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 2px 0 0;
+}
+
+.table-card__discriminator {
+  margin-left: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.table-card__record {
+  margin: 4px 0 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.table-card .chip {
+  margin-top: 12px;
+}
+
+.table-card__extension {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* Bandeau d'état d'un match (rapporté, à confirmer, litige). */
+.portal-notice {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  padding: 14px;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.portal-notice__title {
+  margin: 0;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.portal-notice__text {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.portal-notice .btn {
+  margin-top: 10px;
+}
+
+.portal-notice--pending {
+  border-color: color-mix(in srgb, var(--primary) 40%, transparent);
+  background: var(--chip);
+}
+
+.portal-notice--done {
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.portal-notice--done .portal-notice__title {
+  color: var(--accent);
+}
+
+.portal-notice--danger {
+  border-color: color-mix(in srgb, var(--danger) 45%, transparent);
+  background: color-mix(in srgb, var(--danger) 10%, transparent);
+}
+
+.portal-notice--danger .portal-notice__title {
+  color: var(--danger);
+}
+
+/* Petites lignes clé / valeur (ma place, mon score, informations pratiques). */
+.portal-facts {
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.portal-facts--flat {
+  border: none;
+  background: none;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.portal-facts__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 5px 0;
+  font-size: 0.85rem;
+}
+
+.portal-facts__row dt {
+  color: var(--muted);
+}
+
+.portal-facts__row dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+}
+
+/* Déroulé de la journée. */
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.timeline__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+}
+
+.timeline__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+.timeline__dot--done {
+  background: var(--accent);
+}
+
+.timeline__dot--live {
+  background: var(--primary);
+}
+
+.timeline__label {
+  font-weight: 600;
+}
+
+/* Liste « mes matchs » / « joueurs ». */
+.result-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.result-list__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-2);
+  font-size: 0.85rem;
+}
+
+.result-list__item:last-child {
+  border-bottom: none;
+}
+
+.result-list__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.result-list__outcome {
+  flex-shrink: 0;
+  font-weight: 600;
+}
+
+.result-list__outcome--win {
+  color: var(--accent);
+}
+
+.result-list__outcome--loss {
+  color: var(--danger);
+}
+
+.result-list__outcome--draw {
+  color: var(--muted);
+}
+
+/* Ma ligne de classement, sortie du tableau pour être trouvée sans chercher. */
+.standings-me {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #0c1a22;
+  color: #f2fafd;
+  border-radius: var(--radius-sm);
+  padding: 13px 15px;
+  margin-bottom: 14px;
+}
+
+.standings-me__label {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.standings-me__name {
+  margin: 2px 0 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.standings-me__score {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.standings-me__rank {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.standings-me__record {
+  margin: 0;
+  font-size: 0.75rem;
+  color: rgba(242, 250, 253, 0.62);
+}
+
+/* Feuille de saisie du résultat. */
+.report-sheet__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.report-sheet__sub {
+  margin: 4px 0 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.report-sheet__options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.report-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 15px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.98rem;
+  transition: transform 0.12s;
+}
+
+.report-option:active {
+  transform: scale(0.985);
+}
+
+.report-option:disabled {
+  opacity: 0.6;
+}
+
+.report-option__label {
+  font-weight: 600;
+  text-align: left;
+}
+
+.report-option__score {
+  font-family: var(--font-mono);
+  color: var(--muted);
+}
+
+/* Bouton d'action principal du portail (rapporter son résultat). */
+.btn--lg {
+  padding: 1.1em 1.2em;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+/* Carte du tournoi en cours, dans la liste. */
+.live-card {
+  display: block;
+  background: #0c1a22;
+  color: #f2fafd;
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+  transition: transform 0.12s;
+}
+
+.live-card:active {
+  transform: scale(0.985);
+}
+
+.live-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.live-card__titles {
+  min-width: 0;
+}
+
+.live-card__eyebrow {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.live-card__name {
+  margin: 3px 0 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.live-card__meta {
+  margin: 2px 0 0;
+  font-size: 0.78rem;
+  color: rgba(242, 250, 253, 0.62);
+}
+
+.live-card__timer {
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.live-card__clock {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.live-card__clock--expired {
+  color: #ff7a76;
+}
+
+.live-card__timer-label {
+  margin: 0;
+  font-size: 0.68rem;
+  color: rgba(242, 250, 253, 0.62);
+}
+
+.live-card__announce {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.07);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: #cfe9f4;
+}
+
+.live-card__cta {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent);
 }
