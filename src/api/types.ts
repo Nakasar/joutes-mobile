@@ -782,7 +782,14 @@ export interface Tournament {
     allowSelfReporting: boolean;
     requireConfirmation: boolean;
     preRegistration: boolean;
+    /** Numéro de la première table de la salle (les suivantes s'enchaînent). */
+    firstTableNumber?: number;
   };
+  /** Informations pratiques, pré-remplies depuis l'événement lié puis autonomes. */
+  location?: string;
+  startsAt?: string;
+  /** Nombre de places. Absent = pas de limite affichée. */
+  capacity?: number;
   createdAt: string;
 }
 
@@ -793,13 +800,32 @@ export interface TournamentPlayer {
   displayName: string;
   discriminator?: string;
   seed?: number;
+  /** Table fixe conservée pendant tout le tournoi, quand l'organisation en assigne une. */
+  fixedTableNumber?: number;
   status: TournamentPlayerStatus;
+  /**
+   * Pointage à l'arrivée : instant auquel l'organisation a constaté la
+   * présence physique du joueur. Indépendant de `status`, qui porte
+   * l'inscription. Absent = pas encore pointé.
+   */
+  checkedInAt?: string;
+  /** Liste de deck déclarée, saisie et vérifiée par l'organisation. */
+  decklist?: TournamentDecklist;
   /**
    * Clé de synchronisation d'un joueur invité (`tpsk_...`). Absente pour un
    * joueur lié à un compte, ou lorsque le viewer n'est ni ce joueur invité ni
    * un organisateur.
    */
   syncKey?: string;
+}
+
+/** Liste de deck d'un joueur : texte libre, plus l'état de vérification arbitrale. */
+export interface TournamentDecklist {
+  content: string;
+  checked: boolean;
+  checkedBy?: string;
+  checkedAt?: string;
+  updatedAt: string;
 }
 
 export interface TournamentPhase {
@@ -809,6 +835,10 @@ export interface TournamentPhase {
   type: TournamentPhaseType;
   bestOf: number;
   resultMode: TournamentResultMode;
+  /** Nombre de rondes prévues, quand l'organisation l'a annoncé. */
+  plannedRounds?: number;
+  /** Nombre de joueurs qualifiés à l'entrée de la phase (top cut). Absent = tous. */
+  topCut?: number;
   order: number;
   status: TournamentPhaseStatus;
 }
@@ -822,9 +852,21 @@ export interface TournamentRound {
   id: string;
   tournamentId: string;
   phaseId: string;
+  /** Les numéros repartent à 1 à chaque phase : ils n'ordonnent pas le tournoi entier. */
   number: number;
   status: "in-progress" | "completed";
+  /**
+   * Classement de la phase figé à l'issue de la ronde. Absent tant que
+   * l'organisation ne l'a pas validé — un classement figé et un classement en
+   * direct ne se lisent pas pareil.
+   */
+  standings?: TournamentRoundStanding[];
+  standingsValidatedAt?: string;
+  completedAt?: string;
 }
+
+/** Une ligne du classement figé d'une ronde (même forme que le classement courant). */
+export type TournamentRoundStanding = TournamentStanding;
 
 export interface TournamentPhaseDetail extends TournamentPhase {
   rounds: TournamentRound[];
@@ -848,6 +890,15 @@ export interface TournamentMatch {
   players: TournamentMatchPlayer[];
   games: TournamentGameResult[];
   winnerIds: string[];
+  /** Position dans l'arbre d'élimination (phases `bracket`). */
+  bracketPosition?: string;
+  /** Table où se joue le match. Absent pour un BYE. */
+  tableNumber?: number;
+  /**
+   * Prolongation accordée par l'arbitrage à cette table, en secondes, qui
+   * s'ajoute au minuteur de la ronde pour ce match seul. 0 ou absent = aucune.
+   */
+  extensionSeconds?: number;
   status: TournamentMatchStatus;
   reportedBy?: string;
   confirmedBy?: string;
@@ -855,6 +906,28 @@ export interface TournamentMatch {
 
 export interface TournamentRoundDetail extends TournamentRound {
   matches: TournamentMatch[];
+}
+
+/** Une ronde et ses matchs dans `GET /tournaments/{id}/history`. */
+export interface TournamentHistoryRound {
+  round: TournamentRound;
+  matches: TournamentMatch[];
+}
+
+/** Une phase et ses rondes dans `GET /tournaments/{id}/history`. */
+export interface TournamentHistoryPhase {
+  phase: TournamentPhase;
+  rounds: TournamentHistoryRound[];
+}
+
+/**
+ * Historique complet du tournoi : phases ordonnées, rondes, matchs et
+ * classement figé de chaque ronde. Une seule requête là où il en fallait une
+ * par ronde.
+ */
+export interface TournamentHistory {
+  phases: TournamentHistoryPhase[];
+  players: TournamentPlayer[];
 }
 
 export interface TournamentStanding {
@@ -904,6 +977,10 @@ export interface TournamentAnnouncementPublic {
 /** État public d'un tournoi, interrogé en polling (sans auth). */
 export interface TournamentLiveState {
   name: string;
+  /** Panneau demandé par l'organisation pour l'écran de salle. */
+  display?: "timer" | "announcements" | "standings" | "matches";
+  /** Numéro de la ronde en cours, quand le panneau demandé le fait calculer. */
+  roundNumber?: number | null;
   announcements: TournamentAnnouncementPublic[];
   timer: TournamentTimer | null;
   serverNow: string;

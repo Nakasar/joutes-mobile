@@ -9,6 +9,7 @@ Application mobile (et desktop) pour [Joutes](https://joutes.app) — plateforme
 - **Galerie de cartes** : exploration du catalogue de cartes d'un jeu — recherche plein texte (Meilisearch), filtres par set et par type, pagination
 - **Détail d'une carte** : image, coût/type/set, et ses **erratas, clarifications et rulings** (markdown rendu, traduction française affichée quand elle existe, votes, obsolescence)
 - **Événements** : calendrier mensuel des tournois/événements avec navigation par mois
+- **Tournois — portail joueur** : rejoindre par code ou QR (avec ou sans compte), en-tête permanent (ronde, minuteur, annonce de l'organisation), numéro de table, prolongation accordée par l'arbitrage, saisie du résultat en deux touches (raccourcis dérivés du best-of, saisie détaillée en repli), confirmation ou contestation, classement en direct ou figé ronde par ronde (OMW%), déroulé de la journée, parcours personnel et informations pratiques
 - **Collection** : vue d'ensemble de la collection par jeu avec taux de complétion (connexion requise)
 - **Connexion** : par code OTP e-mail (Better Auth), session persistante
 

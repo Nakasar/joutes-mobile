@@ -1,32 +1,47 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   confirmMatchResult,
   disputeMatchResult,
   dropSelf,
-  getPhase,
-  getRound,
+  getHistory,
   getStandings,
   getTournament,
   reportMatchResult,
   syncTournamentKeys,
 } from "../api/tournaments";
 import type {
+  TournamentDetail,
   TournamentGameResult,
+  TournamentHistory,
   TournamentMatch,
   TournamentMatchStatus,
-  TournamentResultMode,
+  TournamentPhase,
+  TournamentPlayer,
+  TournamentRound,
   TournamentStanding,
 } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
+import { MegaphoneIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
+import { TournamentReportSheet } from "../components/TournamentReportSheet";
 import { useApi } from "../hooks/useApi";
 import { useTournamentLive } from "../hooks/useTournamentLive";
-import { formatDuration, timerIsPaused, timerRemainingSeconds } from "../lib/tournament-timer";
+import { currentLocale } from "../i18n";
+import { playerTag } from "../lib/tournament-player";
 import { getSyncKey, removeSyncKey } from "../lib/tournament-sync-storage";
+import { formatDuration, timerIsPaused, timerRemainingSeconds } from "../lib/tournament-timer";
 import { useAuth } from "../store/auth";
-import { tournamentStatusChipClass } from "./TournamentsScreen";
+
+type Tab = "match" | "standings" | "info";
+
+/** Une ronde replacée dans sa phase, l'historique étant lu à plat un peu partout. */
+interface FlatRound {
+  phase: TournamentPhase;
+  round: TournamentRound;
+  matches: TournamentMatch[];
+}
 
 function matchStatusChipClass(status: TournamentMatchStatus): string {
   switch (status) {
@@ -41,186 +56,242 @@ function matchStatusChipClass(status: TournamentMatchStatus): string {
   }
 }
 
-function LiveBanner({ tournamentId }: { tournamentId: string }) {
+function formatDateTime(iso: string): string {
+  return new Date(iso).toLocaleDateString(currentLocale(), {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+/** Re-rendu périodique, pour que le décompte du minuteur avance à l'écran. */
+function useTick(intervalMs: number): void {
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setTick((n) => n + 1), intervalMs);
+    return () => clearInterval(id);
+  }, [intervalMs]);
+}
+
+/**
+ * En-tête sombre du portail : le tournoi, la ronde, le minuteur et la dernière
+ * annonce. L'annonce vit ici parce que c'est la seule information qu'un joueur
+ * ne doit jamais rater, quel que soit l'onglet ouvert.
+ */
+function PortalHeader({
+  tournamentId,
+  name,
+  roundLabel,
+  meLabel,
+}: {
+  tournamentId: string;
+  name: string;
+  roundLabel: string | null;
+  meLabel: string | null;
+}) {
   const { t } = useTranslation();
   const { state, serverOffsetMs } = useTournamentLive(tournamentId);
-  const remaining = timerRemainingSeconds(state?.timer, serverOffsetMs);
+  useTick(1000);
 
-  if (!state || (state.announcements.length === 0 && remaining === null)) return null;
+  const remaining = timerRemainingSeconds(state?.timer, serverOffsetMs);
+  const paused = timerIsPaused(state?.timer);
+  const expired = remaining !== null && remaining < 0;
+  const low = remaining !== null && remaining >= 0 && remaining < 300;
+  const announcement = state?.announcements[0];
 
   return (
-    <div className="live-banner">
-      {state.announcements.map((a) => (
-        <p key={a.id} className={`live-banner__announcement${a.level === "urgent" ? " live-banner__announcement--urgent" : ""}`}>
-          {a.message}
-        </p>
-      ))}
-      {remaining !== null && (
-        <p className={`live-banner__timer${remaining < 0 ? " live-banner__timer--expired" : ""}`}>
-          {formatDuration(remaining)}
-          {timerIsPaused(state.timer) && ` (${t("tournaments.timerPaused")})`}
+    <div className="portal-header">
+      <div className="portal-header__top">
+        <div className="portal-header__titles">
+          <p className="portal-header__name">{name}</p>
+          {roundLabel && <p className="portal-header__meta">{roundLabel}</p>}
+        </div>
+        {remaining !== null && (
+          <div className="portal-header__timer">
+            <p
+              className={`portal-header__clock${expired ? " portal-header__clock--expired" : low ? " portal-header__clock--low" : ""}`}
+            >
+              {formatDuration(remaining)}
+            </p>
+            <p className="portal-header__timer-label">
+              {paused ? t("tournaments.timerPaused") : t("tournaments.timerRemaining")}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {announcement && (
+        <div
+          className={`portal-announce${announcement.level === "urgent" ? " portal-announce--urgent" : ""}`}
+        >
+          <MegaphoneIcon size={18} />
+          <p className="portal-announce__text">{announcement.message}</p>
+        </div>
+      )}
+
+      {meLabel && (
+        <p className="portal-header__me">
+          {t("tournaments.participatingAs")} <strong>{meLabel}</strong>
         </p>
       )}
     </div>
   );
 }
 
-function ReportMatchForm({
-  tournamentId,
+/** Carte de table : ce que le joueur cherche à trois mètres du panneau. */
+function MyMatchCard({
   match,
-  bestOf,
-  resultMode,
-  syncKey,
+  myPlayerId,
+  opponent,
+  opponentStanding,
   playerName,
-  onReported,
 }: {
-  tournamentId: string;
   match: TournamentMatch;
-  bestOf: number;
-  resultMode: TournamentResultMode;
-  syncKey: string | undefined;
+  myPlayerId: string | undefined;
+  opponent: TournamentPlayer | undefined;
+  opponentStanding: TournamentStanding | undefined;
   playerName: (playerId: string) => string;
-  onReported: () => void;
 }) {
   const { t } = useTranslation();
-  const [games, setGames] = useState<Array<TournamentGameResult | undefined>>(() =>
-    Array.from({ length: Math.max(1, bestOf) }, () => undefined),
-  );
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  function setWinner(gameIndex: number, winnerId: string | null) {
-    setGames((prev) => {
-      const next = [...prev];
-      next[gameIndex] = { winnerId };
-      return next;
-    });
-  }
-
-  function setPoints(gameIndex: number, playerId: string, value: string) {
-    setGames((prev) => {
-      const next = [...prev];
-      const current = { ...(next[gameIndex]?.points ?? {}) };
-      if (value.trim() === "") {
-        delete current[playerId];
-      } else {
-        const n = Number(value);
-        if (Number.isFinite(n)) current[playerId] = n;
-      }
-      next[gameIndex] = Object.keys(current).length > 0 ? { points: current } : undefined;
-      return next;
-    });
-  }
-
-  const decided = games.filter((g): g is TournamentGameResult => g !== undefined);
-
-  function submit() {
-    if (decided.length === 0 || saving) return;
-    setSaving(true);
-    setError(null);
-    reportMatchResult(tournamentId, match.id, decided, syncKey)
-      .then(() => {
-        setSaving(false);
-        onReported();
-      })
-      .catch((err: unknown) => {
-        setSaving(false);
-        setError(err instanceof Error ? err.message : t("common.error"));
-      });
-  }
+  const isBye = match.players.length <= 1;
+  const extensionMinutes = Math.round((match.extensionSeconds ?? 0) / 60);
+  const opponentEntry = match.players.find((p) => p.playerId !== myPlayerId);
 
   return (
-    <div className="game-picker">
-      {games.map((game, i) => (
-        <div key={i} className="game-picker__row">
-          <span className="game-picker__label">{t("tournaments.gameLabel", { number: i + 1 })}</span>
-          <div className="game-picker__options">
-            {resultMode === "selection" ? (
-              <>
-                {match.players.map((p) => (
-                  <button
-                    key={p.playerId}
-                    type="button"
-                    className={`game-picker__option${game?.winnerId === p.playerId ? " game-picker__option--selected" : ""}`}
-                    onClick={() => setWinner(i, p.playerId)}
-                  >
-                    {playerName(p.playerId)}
-                  </button>
-                ))}
-                <button
-                  type="button"
-                  className={`game-picker__option${game !== undefined && game.winnerId === null ? " game-picker__option--selected" : ""}`}
-                  onClick={() => setWinner(i, null)}
-                >
-                  {t("tournaments.draw")}
-                </button>
-              </>
-            ) : (
-              match.players.map((p) => (
-                <input
-                  key={p.playerId}
-                  type="number"
-                  inputMode="numeric"
-                  className="game-picker__option"
-                  placeholder={playerName(p.playerId)}
-                  value={game?.points?.[p.playerId] ?? ""}
-                  onChange={(e) => setPoints(i, p.playerId, e.currentTarget.value)}
-                />
-              ))
+    <div className="table-card">
+      <p className="table-card__eyebrow">{t("tournaments.yourTable")}</p>
+      <p className="table-card__number">{match.tableNumber ?? "—"}</p>
+
+      {isBye ? (
+        <p className="muted">{t("tournaments.byeAutoWin")}</p>
+      ) : (
+        <>
+          <p className="table-card__against">{t("tournaments.against")}</p>
+          <p className="table-card__opponent">
+            {opponent?.displayName ??
+              (opponentEntry ? playerName(opponentEntry.playerId) : t("tournaments.unknownPlayer"))}
+            {opponent?.discriminator && (
+              <span className="table-card__discriminator">#{opponent.discriminator}</span>
             )}
-          </div>
-        </div>
-      ))}
-      {error && <p className="form-error">{error}</p>}
-      <button
-        className="btn btn--grad btn--block"
-        onClick={submit}
-        disabled={saving || decided.length === 0}
-      >
-        {saving ? t("common.saving") : t("tournaments.reportSubmit")}
-      </button>
+          </p>
+          {opponentStanding && (
+            <p className="table-card__record">
+              {t("tournaments.recordLabel", {
+                wins: opponentStanding.wins,
+                losses: opponentStanding.losses,
+                draws: opponentStanding.draws,
+              })}
+            </p>
+          )}
+        </>
+      )}
+
+      <span className={`chip status-badge ${matchStatusChipClass(match.status)}`}>
+        {t(`tournaments.matchStatus.${match.status}`)}
+      </span>
+
+      {extensionMinutes > 0 && (
+        <p className="table-card__extension">
+          {t("tournaments.extensionGranted", { minutes: extensionMinutes })}
+        </p>
+      )}
     </div>
   );
 }
 
-function MyMatchCard({
+/** Onglet « Mon match » : où je joue, contre qui, et le geste du moment. */
+function MatchTab({
   tournamentId,
-  match,
+  detail,
   myPlayerId,
-  playerName,
+  myMatch,
+  otherMatches,
   bestOf,
   resultMode,
-  allowSelfReporting,
+  standings,
+  playerName,
+  playerById,
   syncKey,
+  roundExists,
   onChanged,
 }: {
   tournamentId: string;
-  match: TournamentMatch;
+  detail: TournamentDetail;
   myPlayerId: string | undefined;
-  playerName: (playerId: string) => string;
+  myMatch: TournamentMatch | undefined;
+  otherMatches: TournamentMatch[];
   bestOf: number;
-  resultMode: TournamentResultMode;
-  allowSelfReporting: boolean;
+  resultMode: TournamentPhase["resultMode"];
+  standings: TournamentStanding[];
+  playerName: (playerId: string) => string;
+  playerById: Map<string, TournamentPlayer>;
   syncKey: string | undefined;
+  roundExists: boolean;
   onChanged: () => void;
 }) {
   const { t } = useTranslation();
+  const [sheetOpen, setSheetOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const isBye = match.players.length <= 1;
-  const iAmInMatch = match.players.some((p) => p.playerId === myPlayerId);
-  const canReport =
-    !isBye && match.status === "pending" && allowSelfReporting && iAmInMatch;
-  const awaitingConfirmation = match.status === "in-progress" && iAmInMatch;
-  const iReported = match.reportedBy === myPlayerId;
+  const myStatus = myPlayerId ? playerById.get(myPlayerId)?.status : undefined;
+  const opponentEntry = myMatch?.players.find((p) => p.playerId !== myPlayerId);
+  const opponent = opponentEntry ? playerById.get(opponentEntry.playerId) : undefined;
+  const opponentName = opponentEntry
+    ? playerName(opponentEntry.playerId)
+    : t("tournaments.byeShort");
+  const opponentStanding = opponentEntry
+    ? standings.find((s) => s.playerId === opponentEntry.playerId)
+    : undefined;
+
+  const myRankIndex = standings.findIndex((s) => s.playerId === myPlayerId);
+  const myStanding = myRankIndex >= 0 ? standings[myRankIndex] : undefined;
+
+  const isBye = (myMatch?.players.length ?? 0) <= 1;
+  const iAmInMatch = !!myMatch?.players.some((p) => p.playerId === myPlayerId);
+  const iReported = myMatch?.reportedBy === myPlayerId;
+  const canSelfReport =
+    !!myMatch &&
+    !isBye &&
+    iAmInMatch &&
+    detail.settings.allowSelfReporting &&
+    myStatus !== "dropped";
+  // Un résultat acté (terminé ou contesté) ne se corrige que par l'organisation :
+  // l'API refuse un nouveau rapport du joueur dans ces états.
+  const canReport = canSelfReport && (myMatch.status === "pending" || myMatch.status === "in-progress");
+  const awaitingConfirmation = myMatch?.status === "in-progress" && iAmInMatch;
+
+  const myScore = myMatch?.players.find((p) => p.playerId === myPlayerId)?.score ?? 0;
+  const theirScore = opponentEntry?.score ?? 0;
+
+  function submitReport(games: TournamentGameResult[]) {
+    if (!myMatch || busy) return;
+    if (games.length === 0) {
+      setError(t("tournaments.reportGamesRequired"));
+      return;
+    }
+    setBusy(true);
+    setError(null);
+    reportMatchResult(tournamentId, myMatch.id, games, syncKey)
+      .then(() => {
+        setBusy(false);
+        setSheetOpen(false);
+        onChanged();
+      })
+      .catch((err: unknown) => {
+        setBusy(false);
+        setError(err instanceof Error ? err.message : t("common.error"));
+      });
+  }
 
   function act(action: "confirm" | "dispute") {
-    if (busy) return;
+    if (!myMatch || busy) return;
     setBusy(true);
     setError(null);
     const fn = action === "confirm" ? confirmMatchResult : disputeMatchResult;
-    fn(tournamentId, match.id, syncKey)
+    fn(tournamentId, myMatch.id, syncKey)
       .then(() => {
         setBusy(false);
         onChanged();
@@ -231,94 +302,457 @@ function MyMatchCard({
       });
   }
 
+  if (!myMatch) {
+    return (
+      <p className="status muted">
+        {roundExists ? t("tournaments.noMatchThisRound") : t("tournaments.notStartedYet")}
+      </p>
+    );
+  }
+
   return (
-    <div className="match-card">
-      <div className="match-card__players">
-        {match.players.map((p) => (
-          <div
-            key={p.playerId}
-            className={`match-card__player${p.playerId === myPlayerId ? " match-card__player--me" : ""}`}
-          >
-            <p className="match-card__name">{playerName(p.playerId)}</p>
-            <p className="match-card__score">{p.score}</p>
-          </div>
-        ))}
-        {isBye && <p className="muted">{t("tournaments.bye")}</p>}
-      </div>
+    <>
+      <MyMatchCard
+        match={myMatch}
+        myPlayerId={myPlayerId}
+        opponent={opponent}
+        opponentStanding={opponentStanding}
+        playerName={playerName}
+      />
 
-      <div className="match-card__status">
-        <span className={`chip status-badge ${matchStatusChipClass(match.status)}`}>
-          {t(`tournaments.matchStatus.${match.status}`)}
-        </span>
-      </div>
-
-      {canReport && (
-        <ReportMatchForm
-          tournamentId={tournamentId}
-          match={match}
-          bestOf={bestOf}
-          resultMode={resultMode}
-          syncKey={syncKey}
-          playerName={playerName}
-          onReported={onChanged}
-        />
+      {canReport && myMatch.status === "pending" && (
+        <button className="btn btn--grad btn--block btn--lg" onClick={() => setSheetOpen(true)}>
+          {t("tournaments.reportAction")}
+        </button>
       )}
 
-      {awaitingConfirmation && !canReport && (
-        <div className="action-row">
-          {!iReported && (
+      {awaitingConfirmation && iReported && (
+        <div className="portal-notice portal-notice--pending">
+          <p className="portal-notice__title">
+            {t("tournaments.resultSent", { mine: myScore, theirs: theirScore })}
+          </p>
+          <p className="portal-notice__text">
+            {t("tournaments.awaitingConfirmationFrom", { name: opponentName })}
+          </p>
+          {canReport && (
+            <button className="btn btn--outline" onClick={() => setSheetOpen(true)} disabled={busy}>
+              {t("tournaments.correctAction")}
+            </button>
+          )}
+        </div>
+      )}
+
+      {awaitingConfirmation && !iReported && (
+        <div className="portal-notice portal-notice--pending">
+          <p className="portal-notice__title">
+            {t("tournaments.resultReported", { mine: myScore, theirs: theirScore })}
+          </p>
+          <p className="portal-notice__text">{t("tournaments.confirmPrompt")}</p>
+          <div className="action-row">
             <button className="btn btn--grad" disabled={busy} onClick={() => act("confirm")}>
               {t("tournaments.confirmAction")}
             </button>
-          )}
-          <button className="btn btn--outline" disabled={busy} onClick={() => act("dispute")}>
-            {t("tournaments.disputeAction")}
-          </button>
+            <button className="btn btn--outline" disabled={busy} onClick={() => act("dispute")}>
+              {t("tournaments.disputeAction")}
+            </button>
+          </div>
         </div>
       )}
+
+      {myMatch.status === "completed" && !isBye && (
+        <div className="portal-notice portal-notice--done">
+          <p className="portal-notice__title">
+            {t("tournaments.resultRecorded", { mine: myScore, theirs: theirScore })}
+          </p>
+          <p className="portal-notice__text">{t("tournaments.resultLockedHint")}</p>
+        </div>
+      )}
+
+      {myMatch.status === "disputed" && (
+        <div className="portal-notice portal-notice--danger">
+          <p className="portal-notice__title">{t("tournaments.disputedTitle")}</p>
+          <p className="portal-notice__text">{t("tournaments.disputedHint")}</p>
+        </div>
+      )}
+
       {error && <p className="form-error">{error}</p>}
-    </div>
+
+      <dl className="portal-facts">
+        <div className="portal-facts__row">
+          <dt>{t("tournaments.myRank")}</dt>
+          <dd>
+            {myStanding
+              ? t("tournaments.rankOf", { rank: myRankIndex + 1, total: standings.length })
+              : "—"}
+          </dd>
+        </div>
+        <div className="portal-facts__row">
+          <dt>{t("tournaments.myScore")}</dt>
+          <dd>
+            {myStanding
+              ? t("tournaments.recordLabel", {
+                  wins: myStanding.wins,
+                  losses: myStanding.losses,
+                  draws: myStanding.draws,
+                })
+              : "—"}
+          </dd>
+        </div>
+        <div className="portal-facts__row">
+          <dt>{t("tournaments.myRegistration")}</dt>
+          <dd>
+            {myStatus === "dropped"
+              ? t("tournaments.statusDropped")
+              : myStatus === "pre-registered"
+                ? t("tournaments.statusPreRegistered")
+                : t("tournaments.statusRegistered")}
+          </dd>
+        </div>
+      </dl>
+
+      {otherMatches.length > 0 && (
+        <>
+          <p className="section-label">{t("tournaments.roundMatches")}</p>
+          {otherMatches.map((m) => (
+            <div key={m.id} className="match-card">
+              <div className="match-card__players">
+                {m.players.map((p) => (
+                  <div key={p.playerId} className="match-card__player">
+                    <p className="match-card__name">{playerName(p.playerId)}</p>
+                    <p className="match-card__score">{p.score}</p>
+                  </div>
+                ))}
+                {m.players.length <= 1 && <p className="muted">{t("tournaments.bye")}</p>}
+              </div>
+              <div className="match-card__status">
+                {m.tableNumber !== undefined && (
+                  <span className="chip">{t("tournaments.tableShort", { number: m.tableNumber })}</span>
+                )}{" "}
+                <span className={`chip status-badge ${matchStatusChipClass(m.status)}`}>
+                  {t(`tournaments.matchStatus.${m.status}`)}
+                </span>
+              </div>
+            </div>
+          ))}
+        </>
+      )}
+
+      {sheetOpen && myPlayerId && (
+        <TournamentReportSheet
+          match={myMatch}
+          myPlayerId={myPlayerId}
+          bestOf={bestOf}
+          resultMode={resultMode}
+          playerName={playerName}
+          opponentName={opponentName}
+          busy={busy}
+          error={error}
+          onSubmit={submitReport}
+          onClose={() => setSheetOpen(false)}
+        />
+      )}
+    </>
   );
 }
 
-function StandingsTable({
-  standings,
+/**
+ * Onglet « Classement » : le classement en direct, ou celui figé à l'issue
+ * d'une ronde. Un classement validé et un classement qui bouge encore ne se
+ * lisent pas pareil — le bandeau le rappelle.
+ */
+function StandingsTab({
+  liveStandings,
+  flatRounds,
   myPlayerId,
 }: {
-  standings: TournamentStanding[];
+  liveStandings: TournamentStanding[];
+  flatRounds: FlatRound[];
   myPlayerId: string | undefined;
 }) {
   const { t } = useTranslation();
+  const [selectedRoundId, setSelectedRoundId] = useState<string | null>(null);
+
+  const validatedRounds = flatRounds.filter((entry) => entry.round.standings?.length);
+  const selected = validatedRounds.find((entry) => entry.round.id === selectedRoundId) ?? null;
+  const standings = selected?.round.standings ?? liveStandings;
+
+  const myRankIndex = standings.findIndex((s) => s.playerId === myPlayerId);
+  const myStanding = myRankIndex >= 0 ? standings[myRankIndex] : undefined;
+
   return (
-    <div style={{ overflowX: "auto" }}>
-      <table className="standings-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>{t("tournaments.standingsPlayer")}</th>
-            <th>{t("tournaments.standingsPoints")}</th>
-            <th>{t("tournaments.standingsRecord")}</th>
-            <th>{t("tournaments.standingsDiff")}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {standings.map((s, i) => (
-            <tr
-              key={s.playerId}
-              className={s.playerId === myPlayerId ? "standings-table__row--me" : undefined}
+    <>
+      {validatedRounds.length > 0 && (
+        <div className="chip-row">
+          <button
+            className={`chip-filter${selected === null ? " chip-filter--active" : ""}`}
+            onClick={() => setSelectedRoundId(null)}
+          >
+            {t("tournaments.standingsLive")}
+          </button>
+          {validatedRounds.map(({ phase, round }) => (
+            <button
+              key={round.id}
+              className={`chip-filter${selected?.round.id === round.id ? " chip-filter--active" : ""}`}
+              onClick={() => setSelectedRoundId(round.id)}
             >
-              <td>{i + 1}</td>
-              <td>{s.displayName}</td>
-              <td>{s.matchPoints}</td>
-              <td>
-                {s.wins}-{s.losses}-{s.draws}
-              </td>
-              <td>{s.gamesDiff > 0 ? `+${s.gamesDiff}` : s.gamesDiff}</td>
-            </tr>
+              {phase.name} · {t("tournaments.roundShort", { number: round.number })}
+            </button>
           ))}
-        </tbody>
-      </table>
-    </div>
+        </div>
+      )}
+
+      <p className="list-meta">
+        {selected ? (
+          <>
+            <span className="chip status-badge">{t("tournaments.standingsFrozen")}</span>
+            {selected.round.standingsValidatedAt &&
+              ` · ${t("tournaments.standingsValidatedAt", {
+                date: formatDateTime(selected.round.standingsValidatedAt),
+              })}`}
+          </>
+        ) : (
+          <>
+            <span className="chip status-badge chip--accent">{t("tournaments.standingsLive")}</span>
+            {` · ${t("tournaments.standingsLiveHint")}`}
+          </>
+        )}
+      </p>
+
+      {myStanding && (
+        <div className="standings-me">
+          <div>
+            <p className="standings-me__label">{t("tournaments.you")}</p>
+            <p className="standings-me__name">
+              {playerTag(myStanding.displayName, myStanding.discriminator)}
+            </p>
+          </div>
+          <div className="standings-me__score">
+            <p className="standings-me__rank">{myRankIndex + 1}</p>
+            <p className="standings-me__record">
+              {t("tournaments.recordLabel", {
+                wins: myStanding.wins,
+                losses: myStanding.losses,
+                draws: myStanding.draws,
+              })}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {standings.length === 0 ? (
+        <p className="status muted">{t("tournaments.standingsEmpty")}</p>
+      ) : (
+        <div style={{ overflowX: "auto" }}>
+          <table className="standings-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>{t("tournaments.standingsPlayer")}</th>
+                <th>{t("tournaments.standingsPoints")}</th>
+                <th>{t("tournaments.standingsRecord")}</th>
+                <th>{t("tournaments.standingsOmw")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {standings.map((s, i) => (
+                <tr
+                  key={s.playerId}
+                  className={s.playerId === myPlayerId ? "standings-table__row--me" : undefined}
+                >
+                  <td>{i + 1}</td>
+                  <td>
+                    {playerTag(s.displayName, s.discriminator)}
+                    {s.playerStatus === "dropped" && ` ${t("tournaments.droppedSuffix")}`}
+                  </td>
+                  <td>{s.matchPoints}</td>
+                  <td>
+                    {s.wins}-{s.losses}-{s.draws}
+                  </td>
+                  <td>{((s.opponentMatchWinPercentage ?? 0) * 100).toFixed(1)}%</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </>
+  );
+}
+
+/** Onglet « Tournoi » : ce qu'on se demande entre deux matchs. */
+function InfoTab({
+  detail,
+  flatRounds,
+  myPlayerId,
+  playerName,
+  dropping,
+  dropError,
+  onLeave,
+}: {
+  detail: TournamentDetail;
+  flatRounds: FlatRound[];
+  myPlayerId: string | undefined;
+  playerName: (playerId: string) => string;
+  dropping: boolean;
+  dropError: string | null;
+  onLeave: () => void;
+}) {
+  const { t } = useTranslation();
+
+  const me = myPlayerId ? detail.players.find((p) => p.id === myPlayerId) : undefined;
+  const activePlayers = detail.players.filter((p) => p.status !== "dropped");
+  const completedRounds = flatRounds.filter((entry) => entry.round.status === "completed");
+  const currentRound = flatRounds.find((entry) => entry.round.status === "in-progress");
+
+  // Parcours personnel : une ligne par ronde jouée, tirée de l'historique déjà chargé.
+  const myMatches = flatRounds.flatMap(({ round, matches }) => {
+    const match = matches.find((m) => m.players.some((p) => p.playerId === myPlayerId));
+    if (!match || match.status !== "completed" || !myPlayerId) return [];
+    const mine = match.players.find((p) => p.playerId === myPlayerId);
+    const theirs = match.players.find((p) => p.playerId !== myPlayerId);
+    const won = match.winnerIds.includes(myPlayerId);
+    const drew = match.winnerIds.length === 0;
+    return [
+      {
+        id: match.id,
+        roundNumber: round.number,
+        opponent: theirs ? playerName(theirs.playerId) : t("tournaments.byeShort"),
+        score: `${mine?.score ?? 0}–${theirs?.score ?? 0}`,
+        outcome: won ? "win" : drew ? "draw" : "loss",
+      },
+    ];
+  });
+
+  const hasPracticalInfo = detail.location || detail.startsAt || detail.capacity;
+
+  return (
+    <>
+      {hasPracticalInfo && (
+        <div className="card">
+          <h2 className="card__title">{t("tournaments.practicalTitle")}</h2>
+          <dl className="portal-facts portal-facts--flat">
+            {detail.startsAt && (
+              <div className="portal-facts__row">
+                <dt>{t("tournaments.startsAt")}</dt>
+                <dd>{formatDateTime(detail.startsAt)}</dd>
+              </div>
+            )}
+            {detail.location && (
+              <div className="portal-facts__row">
+                <dt>{t("tournaments.location")}</dt>
+                <dd>{detail.location}</dd>
+              </div>
+            )}
+            <div className="portal-facts__row">
+              <dt>{t("tournaments.playersCount")}</dt>
+              <dd>
+                {detail.capacity
+                  ? t("tournaments.playersOfCapacity", {
+                      players: activePlayers.length,
+                      capacity: detail.capacity,
+                    })
+                  : activePlayers.length}
+              </dd>
+            </div>
+          </dl>
+        </div>
+      )}
+
+      <div className="card">
+        <h2 className="card__title">{t("tournaments.progressTitle")}</h2>
+        {flatRounds.length === 0 ? (
+          <p className="muted">{t("tournaments.noRoundsYet")}</p>
+        ) : (
+          <ul className="timeline">
+            {completedRounds.length > 0 && (
+              <li className="timeline__item">
+                <span className="timeline__dot timeline__dot--done" />
+                <span className="muted">
+                  {t("tournaments.roundsCompleted", { count: completedRounds.length })}
+                </span>
+              </li>
+            )}
+            {currentRound && (
+              <li className="timeline__item">
+                <span className="timeline__dot timeline__dot--live" />
+                <span className="timeline__label">
+                  {t("tournaments.roundInProgress", { number: currentRound.round.number })} ·{" "}
+                  {currentRound.phase.name}
+                </span>
+              </li>
+            )}
+            {detail.phases
+              .filter((phase) => phase.status === "not-started")
+              .map((phase) => (
+                <li key={phase.id} className="timeline__item">
+                  <span className="timeline__dot" />
+                  <span className="muted">
+                    {phase.name}
+                    {phase.plannedRounds
+                      ? ` · ${t("tournaments.plannedRounds", { count: phase.plannedRounds })}`
+                      : ""}
+                    {phase.topCut ? ` · ${t("tournaments.topCut", { players: phase.topCut })}` : ""}
+                  </span>
+                </li>
+              ))}
+          </ul>
+        )}
+      </div>
+
+      {myMatches.length > 0 && (
+        <div className="card">
+          <h2 className="card__title">{t("tournaments.myMatchesTitle")}</h2>
+          <ul className="result-list">
+            {myMatches.map((entry) => (
+              <li key={entry.id} className="result-list__item">
+                <span className="result-list__label">
+                  {t("tournaments.roundShort", { number: entry.roundNumber })} · {entry.opponent}
+                </span>
+                <span className={`result-list__outcome result-list__outcome--${entry.outcome}`}>
+                  {t(`tournaments.outcome.${entry.outcome}`)} {entry.score}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <div className="card">
+        <h2 className="card__title">
+          {t("tournaments.playersTitle")} ({detail.players.length})
+        </h2>
+        {detail.players.length === 0 ? (
+          <p className="muted">{t("tournaments.noPlayers")}</p>
+        ) : (
+          <ul className="result-list">
+            {detail.players.map((player) => (
+              <li key={player.id} className="result-list__item">
+                <span className="result-list__label">
+                  {playerTag(player.displayName, player.discriminator)}
+                  {player.id === myPlayerId && ` ${t("tournaments.meSuffix")}`}
+                </span>
+                {player.status === "dropped" ? (
+                  <span className="chip chip--danger">{t("tournaments.droppedBadge")}</span>
+                ) : player.checkedInAt ? (
+                  <span className="chip chip--accent">{t("tournaments.checkedInBadge")}</span>
+                ) : player.status === "pre-registered" ? (
+                  <span className="chip">{t("tournaments.preRegisteredBadge")}</span>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {me && me.status !== "dropped" && (
+        <>
+          <button className="btn btn--danger btn--block" disabled={dropping} onClick={onLeave}>
+            {dropping ? t("common.saving") : t("tournaments.leaveAction")}
+          </button>
+          {dropError && <p className="form-error">{dropError}</p>}
+        </>
+      )}
+    </>
   );
 }
 
@@ -329,41 +763,62 @@ export function TournamentDetailScreen() {
   const { user } = useAuth();
   const syncKey = getSyncKey(tournamentId);
 
-  const detail = useApi(() => getTournament(tournamentId, syncKey), [tournamentId, syncKey]);
+  const [tab, setTab] = useState<Tab>("match");
+  const [dropping, setDropping] = useState(false);
+  const [dropError, setDropError] = useState<string | null>(null);
 
+  const detail = useApi(() => getTournament(tournamentId, syncKey), [tournamentId, syncKey]);
+  const history = useApi<TournamentHistory | null>(
+    () => getHistory(tournamentId, syncKey),
+    [tournamentId, syncKey],
+  );
+  const standings = useApi(() => getStandings(tournamentId, syncKey), [tournamentId, syncKey]);
   const sync = useApi(
     () => (syncKey ? syncTournamentKeys([syncKey]) : Promise.resolve([])),
     [tournamentId, syncKey],
   );
+
   const myPlayerId = syncKey
     ? sync.data?.[0]?.player.id
     : detail.data?.players.find((p) => p.userId === user?.id)?.id;
-  const myPlayer = detail.data?.players.find((p) => p.id === myPlayerId);
 
-  const activePhaseId =
-    detail.data?.currentPhaseId ??
-    detail.data?.phases.find((p) => p.status === "in-progress")?.id ??
-    detail.data?.phases[detail.data.phases.length - 1]?.id;
-  const activePhase = detail.data?.phases.find((p) => p.id === activePhaseId);
-
-  const phase = useApi(
-    () => (activePhaseId ? getPhase(tournamentId, activePhaseId, syncKey) : Promise.resolve(null)),
-    [tournamentId, activePhaseId, syncKey],
+  const playerById = useMemo(
+    () => new Map((detail.data?.players ?? []).map((p) => [p.id, p])),
+    [detail.data],
   );
-  const lastRound = phase.data?.rounds[phase.data.rounds.length - 1];
+  const playerName = useMemo(() => {
+    return (playerId: string): string => {
+      const player = playerById.get(playerId);
+      return player
+        ? playerTag(player.displayName, player.discriminator)
+        : t("tournaments.unknownPlayer");
+    };
+  }, [playerById, t]);
 
-  const round = useApi(
-    () => (lastRound ? getRound(tournamentId, lastRound.id, syncKey) : Promise.resolve(null)),
-    [tournamentId, lastRound?.id, syncKey],
+  // Historique à plat, dans l'ordre des phases puis des rondes.
+  const flatRounds = useMemo<FlatRound[]>(
+    () =>
+      (history.data?.phases ?? []).flatMap(({ phase, rounds }) =>
+        rounds.map(({ round, matches }) => ({ phase, round, matches })),
+      ),
+    [history.data],
   );
 
-  const standings = useApi(
-    () => getStandings(tournamentId, syncKey),
-    [tournamentId, syncKey],
-  );
+  const activePhase =
+    detail.data?.phases.find((p) => p.id === detail.data?.currentPhaseId) ??
+    detail.data?.phases.find((p) => p.status === "in-progress") ??
+    detail.data?.phases[detail.data.phases.length - 1];
 
-  const [dropping, setDropping] = useState(false);
-  const [dropError, setDropError] = useState<string | null>(null);
+  // Ronde en cours : la dernière ronde de la phase active.
+  const phaseRounds = flatRounds.filter((entry) => entry.phase.id === activePhase?.id);
+  const currentRound = phaseRounds[phaseRounds.length - 1];
+
+  const myMatch = currentRound?.matches.find((m) =>
+    m.players.some((p) => p.playerId === myPlayerId),
+  );
+  const otherMatches = currentRound?.matches.filter((m) => m.id !== myMatch?.id) ?? [];
+
+  const me = myPlayerId ? playerById.get(myPlayerId) : undefined;
 
   function leaveTournament() {
     if (!myPlayerId || dropping) return;
@@ -381,20 +836,25 @@ export function TournamentDetailScreen() {
       });
   }
 
-  function playerName(playerId: string): string {
-    return detail.data?.players.find((p) => p.id === playerId)?.displayName ?? "?";
+  function reloadMatchData() {
+    history.reload();
+    standings.reload();
+    detail.reload();
   }
-
-  const myMatch = round.data?.matches.find((m) => m.players.some((p) => p.playerId === myPlayerId));
-  const otherMatches = round.data?.matches.filter((m) => m.id !== myMatch?.id) ?? [];
 
   const topLoading = detail.loading || (syncKey ? sync.loading : false);
   const topError = detail.error ?? (syncKey ? sync.error : null);
 
+  const roundLabel = currentRound
+    ? `${t("tournaments.roundLabel", { number: currentRound.round.number })} · ${currentRound.phase.name}`
+    : detail.data
+      ? t(`tournaments.status.${detail.data.status}`)
+      : null;
+
   return (
     <div className="screen">
       <BackHeader title={detail.data?.name ?? t("tournaments.detailFallbackTitle")} />
-      <LiveBanner tournamentId={tournamentId} />
+
       <StatusView
         loading={topLoading}
         error={topError}
@@ -406,97 +866,80 @@ export function TournamentDetailScreen() {
 
       {detail.data && (
         <>
-          <p className="list-meta">
-            <span className={`chip status-badge ${tournamentStatusChipClass(detail.data.status)}`}>
-              {t(`tournaments.status.${detail.data.status}`)}
-            </span>
-            {activePhase && ` · ${activePhase.name}`}
-            {round.data && ` · ${t("tournaments.roundLabel", { number: round.data.number })}`}
-          </p>
+          <PortalHeader
+            tournamentId={tournamentId}
+            name={detail.data.name}
+            roundLabel={roundLabel}
+            meLabel={me ? playerTag(me.displayName, me.discriminator) : null}
+          />
 
-          <p className="section-label">{t("tournaments.myMatch")}</p>
-          {phase.loading || round.loading ? (
-            <p className="status muted">{t("common.loading")}</p>
-          ) : phase.error || round.error ? (
-            <div className="status">
-              <p className="form-error">{phase.error ?? round.error}</p>
-              <button
-                className="btn btn--grad"
-                style={{ marginTop: 12 }}
-                onClick={() => {
-                  phase.reload();
-                  round.reload();
-                }}
-              >
-                {t("common.retry")}
-              </button>
-            </div>
-          ) : myMatch ? (
-            <MyMatchCard
-              tournamentId={tournamentId}
-              match={myMatch}
+          <div className="segmented" style={{ marginBottom: 16 }}>
+            <button
+              className={`segmented__item${tab === "match" ? " segmented__item--active" : ""}`}
+              onClick={() => setTab("match")}
+            >
+              {t("tournaments.tabMatch")}
+            </button>
+            <button
+              className={`segmented__item${tab === "standings" ? " segmented__item--active" : ""}`}
+              onClick={() => setTab("standings")}
+            >
+              {t("tournaments.tabStandings")}
+            </button>
+            <button
+              className={`segmented__item${tab === "info" ? " segmented__item--active" : ""}`}
+              onClick={() => setTab("info")}
+            >
+              {t("tournaments.tabInfo")}
+            </button>
+          </div>
+
+          {tab === "match" &&
+            (history.loading ? (
+              <p className="status muted">{t("common.loading")}</p>
+            ) : history.error ? (
+              <StatusView error={history.error} onRetry={history.reload} />
+            ) : (
+              <MatchTab
+                tournamentId={tournamentId}
+                detail={detail.data}
+                myPlayerId={myPlayerId}
+                myMatch={myMatch}
+                otherMatches={otherMatches}
+                bestOf={activePhase?.bestOf ?? 1}
+                resultMode={activePhase?.resultMode ?? "selection"}
+                standings={standings.data ?? []}
+                playerName={playerName}
+                playerById={playerById}
+                syncKey={syncKey}
+                roundExists={!!currentRound}
+                onChanged={reloadMatchData}
+              />
+            ))}
+
+          {tab === "standings" &&
+            (standings.loading ? (
+              <p className="status muted">{t("common.loading")}</p>
+            ) : standings.error ? (
+              <StatusView error={standings.error} onRetry={standings.reload} />
+            ) : (
+              <StandingsTab
+                liveStandings={standings.data ?? []}
+                flatRounds={flatRounds}
+                myPlayerId={myPlayerId}
+              />
+            ))}
+
+          {tab === "info" && (
+            <InfoTab
+              detail={detail.data}
+              flatRounds={flatRounds}
               myPlayerId={myPlayerId}
               playerName={playerName}
-              bestOf={activePhase?.bestOf ?? 1}
-              resultMode={activePhase?.resultMode ?? "selection"}
-              allowSelfReporting={detail.data.settings.allowSelfReporting}
-              syncKey={syncKey}
-              onChanged={() => {
-                round.reload();
-                standings.reload();
-              }}
+              dropping={dropping}
+              dropError={dropError}
+              onLeave={leaveTournament}
             />
-          ) : (
-            <p className="status muted">
-              {round.data ? t("tournaments.noMatchThisRound") : t("tournaments.notStartedYet")}
-            </p>
-          )}
-
-          {otherMatches.length > 0 && (
-            <>
-              <p className="section-label">{t("tournaments.roundMatches")}</p>
-              {otherMatches.map((m) => (
-                <div key={m.id} className="match-card">
-                  <div className="match-card__players">
-                    {m.players.map((p) => (
-                      <div key={p.playerId} className="match-card__player">
-                        <p className="match-card__name">{playerName(p.playerId)}</p>
-                        <p className="match-card__score">{p.score}</p>
-                      </div>
-                    ))}
-                    {m.players.length <= 1 && <p className="muted">{t("tournaments.bye")}</p>}
-                  </div>
-                  <span className={`chip status-badge ${matchStatusChipClass(m.status)}`}>
-                    {t(`tournaments.matchStatus.${m.status}`)}
-                  </span>
-                </div>
-              ))}
-            </>
-          )}
-
-          <p className="section-label">{t("tournaments.standingsTitle")}</p>
-          <StatusView
-            loading={standings.loading}
-            error={standings.error}
-            onRetry={standings.reload}
-            empty={standings.data && standings.data.length === 0 ? t("tournaments.standingsEmpty") : undefined}
-          />
-          {standings.data && standings.data.length > 0 && (
-            <StandingsTable standings={standings.data} myPlayerId={myPlayerId} />
-          )}
-
-          {myPlayer && myPlayer.status !== "dropped" && (
-            <>
-              <button
-                className="btn btn--danger"
-                style={{ marginTop: 16 }}
-                disabled={dropping}
-                onClick={leaveTournament}
-              >
-                {dropping ? t("common.saving") : t("tournaments.leaveAction")}
-              </button>
-              {dropError && <p className="form-error">{dropError}</p>}
-            </>
           )}
         </>
       )}

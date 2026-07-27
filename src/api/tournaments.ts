@@ -3,6 +3,7 @@ import { endpoints } from "./endpoints";
 import type {
   TournamentDetail,
   TournamentGameResult,
+  TournamentHistory,
   TournamentJoinResult,
   TournamentLiveState,
   TournamentMatch,
@@ -61,6 +62,19 @@ export function getStandings(
 ): Promise<TournamentStanding[]> {
   return api.get<TournamentStanding[]>(
     endpoints.tournaments.standings(tournamentId),
+    undefined,
+    authHeaders(syncKey),
+  );
+}
+
+/**
+ * Historique du tournoi : phases, rondes, matchs et classement figé de chaque
+ * ronde. Une seule requête pour le classement par ronde, le parcours du joueur
+ * et l'avancement de la journée.
+ */
+export function getHistory(tournamentId: string, syncKey?: string): Promise<TournamentHistory> {
+  return api.get<TournamentHistory>(
+    endpoints.tournaments.history(tournamentId),
     undefined,
     authHeaders(syncKey),
   );
