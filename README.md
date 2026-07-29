@@ -10,6 +10,7 @@ Application mobile (et desktop) pour [Joutes](https://joutes.app) — plateforme
 - **Détail d'une carte** : image, coût/type/set, et ses **erratas, clarifications et rulings** (markdown rendu, traduction française affichée quand elle existe, votes, obsolescence)
 - **Événements** : calendrier mensuel des tournois/événements avec navigation par mois
 - **Tournois — portail joueur** : rejoindre par code ou QR (avec ou sans compte), en-tête permanent (ronde, minuteur, annonce de l'organisation), numéro de table, prolongation accordée par l'arbitrage, saisie du résultat en deux touches (raccourcis dérivés du best-of, saisie détaillée en repli), confirmation ou contestation, classement en direct ou figé ronde par ronde (OMW%), déroulé de la journée, parcours personnel et informations pratiques
+- **Tournois — ligues et jeux de figurines** : sur une phase au rythme asynchrone, l'échéance de l'intervalle remplace le minuteur et la date de jeu remplace le numéro de table ; scénario de la ronde affiché avec ses consignes de composition ; statistiques secondaires du jeu (cartes de lutte, blessures, points de victoire…) saisies partie par partie et reprises en colonnes de départage au classement
 - **Tournois — formulaire d'inscription** : réponses au formulaire demandé par l'organisation (texte, nombre, choix, carte du jeu recherchée dans le catalogue, liste de deck analysée par le serveur), avec date limite, réponses tardives signalées et consultation en lecture seule une fois la saisie close
 - **Collection** : vue d'ensemble de la collection par jeu avec taux de complétion (connexion requise)
 - **Connexion** : par code OTP e-mail (Better Auth), session persistante
@@ -31,6 +32,9 @@ src/
     useApi.ts     Hook de chargement de données (loading / error / reload)
   screens/        Écrans (Accueil, Jeux, Événements, Collection, Réglages, Login)
   components/     Composants partagés (TabBar, StatusView)
+  lib/            Logique pure et stockage local (dont `tournament-presets.ts`,
+                  copie de la table de presets de joutes-app : toute
+                  modification doit être reportée dans les deux dépôts)
   config.ts       Configuration (URL de l'API…)
 src-tauri/        Projet Rust Tauri (plugins http + cookies, opener)
 ```

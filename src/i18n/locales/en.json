@@ -418,6 +418,22 @@
     "viewMineAction": "View my public profile"
   },
   "tournaments": {
+                   "deadlineLabel": "deadline",
+                   "playBefore": "Play before",
+                   "scenario": "Scenario",
+                   "matchStatAria": "{{stat}} for {{name}} in game {{number}}",
+                   "matchStats": {
+                     "struggles": "Struggle cards claimed",
+                     "strugglesShort": "Struggle",
+                     "wounds": "Wounds inflicted",
+                     "woundsShort": "Wounds",
+                     "victoryPoints": "Victory points",
+                     "victoryPointsShort": "VP",
+                     "touchdowns": "Touchdowns",
+                     "touchdownsShort": "TD",
+                     "casualties": "Casualties inflicted",
+                     "casualtiesShort": "Cas."
+                   },
     "title": "Tournaments",
     "subtitle": "The ones you play in. Scan an organizer's QR code to join one.",
     "joinAction": "Join a tournament",

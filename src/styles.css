@@ -2819,6 +2819,42 @@ textarea:focus {
   text-align: center;
 }
 
+/* Statistiques secondaires d'une partie : elles complètent l'issue, elles ne
+   la remplacent pas — d'où leur place sous les options, en retrait. */
+.game-picker__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.game-picker__stat-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.game-picker__stat-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.game-picker__stat-input {
+  width: 68px;
+  padding: 7px 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
 .game-picker__option--selected {
   background: var(--primary);
   border-color: var(--primary);
@@ -2935,6 +2971,14 @@ textarea:focus {
   font-variant-numeric: tabular-nums;
 }
 
+/* Échéance d'un intervalle de ligue : lue en jours, pas au chronomètre — elle
+   remplace l'horloge dans l'en-tête du portail. */
+.portal-header__deadline {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
 .portal-header__clock--low {
   color: #f6c66a;
 }
@@ -3012,6 +3056,39 @@ textarea:focus {
   line-height: 1;
   letter-spacing: -0.04em;
   font-variant-numeric: tabular-nums;
+}
+
+/* Même rôle que le numéro de table, en plus lisible : une date se lit en
+   entier, elle ne se réduit pas à deux chiffres géants. */
+.table-card__deadline {
+  margin: 4px 0 2px;
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.table-card__scenario {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--surface-2, rgba(127, 127, 127, 0.08));
+  text-align: left;
+}
+
+.table-card__scenario-name {
+  margin: 3px 0 0;
+  font-weight: 700;
+  font-size: 0.98rem;
+}
+
+.table-card__scenario-text {
+  margin: 5px 0 0;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--muted);
+  white-space: pre-wrap;
 }
 
 .table-card__against {

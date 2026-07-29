@@ -418,6 +418,22 @@
     "viewMineAction": "Mein öffentliches Profil ansehen"
   },
   "tournaments": {
+                   "deadlineLabel": "Frist",
+                   "playBefore": "Zu spielen bis",
+                   "scenario": "Szenario",
+                   "matchStatAria": "{{stat}} von {{name}} für Partie {{number}}",
+                   "matchStats": {
+                     "struggles": "Beanspruchte Kampfkarten",
+                     "strugglesShort": "Kampf",
+                     "wounds": "Zugefügte Wunden",
+                     "woundsShort": "Wunden",
+                     "victoryPoints": "Siegpunkte",
+                     "victoryPointsShort": "SP",
+                     "touchdowns": "Touchdowns",
+                     "touchdownsShort": "TD",
+                     "casualties": "Zugefügte Ausfälle",
+                     "casualtiesShort": "Ausf."
+                   },
     "title": "Turniere",
     "subtitle": "Turniere, an denen du teilnimmst. Scanne den QR-Code eines Organisators, um beizutreten.",
     "joinAction": "Turnier beitreten",

@@ -758,6 +758,27 @@ export type TournamentPlayerStatus = "registered" | "pre-registered" | "dropped"
 export type TournamentMatchStatus = "pending" | "in-progress" | "completed" | "disputed";
 export type TournamentResultMode = "points" | "selection";
 export type TournamentAnnouncementLevel = "info" | "urgent";
+/**
+ * Rythme des rondes d'une phase. En `asynchronous` (ligue), chaque ronde est un
+ * intervalle de plusieurs jours : les joueurs planifient eux-mêmes leur partie,
+ * il n'y a ni minuteur ni numéro de table.
+ */
+export type TournamentPhasePacing = "live" | "asynchronous";
+/**
+ * Comment un match s'est conclu. `forfeit` : un joueur l'emporte sans jouer et
+ * est crédité comme s'il avait eu un bye. `double-loss` : intervalle expiré
+ * sans partie, les deux joueurs perdent — `winnerIds` est vide comme pour un
+ * match nul, seul ce champ les distingue.
+ */
+export type TournamentMatchResolution = "played" | "forfeit" | "double-loss";
+
+/** Scénario (ou mission) joué pendant une ronde. */
+export interface TournamentScenario {
+  id: string;
+  name: string;
+  /** Consignes du scénario, contraintes de composition comprises. */
+  description?: string;
+}
 
 export interface TournamentTimer {
   durationSeconds: number;
@@ -964,6 +985,17 @@ export interface TournamentPhase {
   type: TournamentPhaseType;
   bestOf: number;
   resultMode: TournamentResultMode;
+  /** Rythme des rondes. Absent sur les phases antérieures = `live`. */
+  pacing?: TournamentPhasePacing;
+  /** Durée d'un intervalle, en heures. Utile seulement en `asynchronous`. */
+  intervalHours?: number;
+  /**
+   * Preset de statistiques du jeu appliqué à la phase (cf.
+   * `src/lib/tournament-presets.ts`). Absent = aucune statistique relevée.
+   */
+  statsPresetKey?: string;
+  /** Pool de scénarios attribués aux rondes dans l'ordre. */
+  scenarios?: TournamentScenario[];
   /** Nombre de rondes prévues, quand l'organisation l'a annoncé. */
   plannedRounds?: number;
   /** Nombre de joueurs qualifiés à l'entrée de la phase (top cut). Absent = tous. */
@@ -991,6 +1023,12 @@ export interface TournamentRound {
    */
   standings?: TournamentRoundStanding[];
   standingsValidatedAt?: string;
+  /** Ouverture de l'intervalle (ronde asynchrone uniquement). */
+  opensAt?: string;
+  /** Échéance avant laquelle la partie doit être jouée et rapportée. */
+  deadlineAt?: string;
+  /** Scénario joué pendant la ronde, quand la phase en propose un. */
+  scenario?: TournamentScenario;
   completedAt?: string;
 }
 
@@ -1009,6 +1047,12 @@ export interface TournamentMatchPlayer {
 export interface TournamentGameResult {
   winnerId?: string | null;
   points?: Record<string, number>;
+  /**
+   * Statistiques secondaires de la partie : joueur → clé de statistique du
+   * preset → valeur. Elles ne désignent pas le vainqueur, elles départagent le
+   * classement.
+   */
+  stats?: Record<string, Record<string, number>>;
 }
 
 export interface TournamentMatch {
@@ -1019,6 +1063,8 @@ export interface TournamentMatch {
   players: TournamentMatchPlayer[];
   games: TournamentGameResult[];
   winnerIds: string[];
+  /** Comment le match s'est conclu. Absent = `played`. */
+  resolution?: TournamentMatchResolution;
   /** Position dans l'arbre d'élimination (phases `bracket`). */
   bracketPosition?: string;
   /** Table où se joue le match. Absent pour un BYE. */
@@ -1073,6 +1119,8 @@ export interface TournamentStanding {
   gamesLost: number;
   gamesDiff: number;
   opponentMatchWinPercentage?: number;
+  /** Cumul des statistiques du preset, par clé. Absent hors preset. */
+  stats?: Record<string, number>;
 }
 
 /** Réponse de `POST /tournaments/join`. */

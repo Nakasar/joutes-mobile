@@ -418,6 +418,22 @@
     "viewMineAction": "Vedi il mio profilo pubblico"
   },
   "tournaments": {
+                   "deadlineLabel": "scadenza",
+                   "playBefore": "Da giocare entro il",
+                   "scenario": "Scenario",
+                   "matchStatAria": "{{stat}} di {{name}} per la partita {{number}}",
+                   "matchStats": {
+                     "struggles": "Carte lotta reclamate",
+                     "strugglesShort": "Lotta",
+                     "wounds": "Ferite inflitte",
+                     "woundsShort": "Ferite",
+                     "victoryPoints": "Punti vittoria",
+                     "victoryPointsShort": "PV",
+                     "touchdowns": "Touchdown",
+                     "touchdownsShort": "TD",
+                     "casualties": "Infortuni inflitti",
+                     "casualtiesShort": "Inf."
+                   },
     "title": "Tornei",
     "subtitle": "Quelli in cui giochi. Scansiona il QR di un organizzatore per partecipare.",
     "joinAction": "Partecipa a un torneo",

@@ -418,6 +418,22 @@
     "viewMineAction": "Voir mon profil public"
   },
   "tournaments": {
+                   "deadlineLabel": "échéance",
+                   "playBefore": "À jouer avant le",
+                   "scenario": "Scénario",
+                   "matchStatAria": "{{stat}} de {{name}} pour la partie {{number}}",
+                   "matchStats": {
+                     "struggles": "Cartes de lutte revendiquées",
+                     "strugglesShort": "Lutte",
+                     "wounds": "Blessures infligées",
+                     "woundsShort": "Bless.",
+                     "victoryPoints": "Points de victoire",
+                     "victoryPointsShort": "PV",
+                     "touchdowns": "Touchdowns",
+                     "touchdownsShort": "TD",
+                     "casualties": "Sorties adverses",
+                     "casualtiesShort": "Sorties"
+                   },
     "title": "Tournois",
     "subtitle": "Ceux où vous jouez. Scannez le QR d'un organisateur pour en rejoindre un.",
     "joinAction": "Rejoindre un tournoi",
