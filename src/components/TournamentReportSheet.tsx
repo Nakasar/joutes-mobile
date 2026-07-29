@@ -212,21 +212,38 @@ function DetailedResultForm({
    * Statistiques secondaires : elles ne décident jamais d'une partie, elles s'y
    * accrochent. Une partie sans issue renseignée n'est donc pas créée par la
    * seule saisie d'une statistique.
+   *
+   * La valeur est bornée et arrondie ici : `min`/`max` sur un champ HTML
+   * n'empêchent pas la frappe, et l'API refuse un entier hors de [0, 9999] —
+   * mieux vaut brider la saisie qu'afficher au joueur une erreur de validation.
+   * Une statistique effacée est retirée de l'objet, et un joueur sans aucune
+   * statistique est retiré du lot : le serveur complète à zéro ce qu'il reçoit,
+   * envoyer un objet vide reviendrait à enregistrer des zéros non saisis.
    */
-  function setStat(gameIndex: number, playerId: string, key: string, value: string) {
+  function setStat(gameIndex: number, playerId: string, key: string, value: string, max: number) {
     setGames((prev) => {
       const next = [...prev];
       const game = next[gameIndex];
       if (!game) return prev;
+
       const playerStats = { ...(game.stats?.[playerId] ?? {}) };
-      if (value.trim() === "") {
+      const parsed = Number(value);
+      if (value.trim() === "" || !Number.isFinite(parsed)) {
         delete playerStats[key];
       } else {
-        const n = Number(value);
-        if (Number.isFinite(n)) playerStats[key] = n;
+        playerStats[key] = Math.min(max, Math.max(0, Math.round(parsed)));
       }
-      const allStats = { ...(game.stats ?? {}), [playerId]: playerStats };
-      next[gameIndex] = { ...game, stats: allStats };
+
+      const allStats = { ...(game.stats ?? {}) };
+      if (Object.keys(playerStats).length > 0) {
+        allStats[playerId] = playerStats;
+      } else {
+        delete allStats[playerId];
+      }
+
+      next[gameIndex] = Object.keys(allStats).length > 0
+        ? { ...game, stats: allStats }
+        : { winnerId: game.winnerId, points: game.points };
       return next;
     });
   }
@@ -293,7 +310,7 @@ function DetailedResultForm({
                         number: i + 1,
                       })}
                       value={game.stats?.[p.playerId]?.[stat.key] ?? ""}
-                      onChange={(e) => setStat(i, p.playerId, stat.key, e.currentTarget.value)}
+                      onChange={(e) => setStat(i, p.playerId, stat.key, e.currentTarget.value, stat.max)}
                     />
                   ))}
                 </div>

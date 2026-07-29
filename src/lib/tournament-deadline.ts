@@ -5,6 +5,11 @@
  * lit en jours. Les deux formats ci-dessous répondent aux deux questions que se
  * pose le joueur : « c'est quand ? » et « il me reste combien de temps ? ».
  *
+ * Toutes les fonctions prennent l'instant de référence en paramètre plutôt que
+ * de lire l'horloge : c'est l'heure du serveur qui fait foi, corrigée du
+ * décalage de l'appareil (`serverOffsetMs`), comme pour le minuteur. Un
+ * téléphone à l'heure fausse afficherait sinon une échéance déjà dépassée.
+ *
  * Tout passe par `Intl`, déjà présent dans le moteur : aucune dépendance de
  * dates n'est ajoutée au client.
  */
@@ -15,9 +20,14 @@ const RELATIVE_UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
   ["minute", 60_000],
 ];
 
+/** Instant de référence, corrigé du décalage d'horloge client/serveur. */
+export function serverNowMs(serverOffsetMs: number): number {
+  return Date.now() + serverOffsetMs;
+}
+
 /** « dans 5 jours », « il y a 2 heures ». */
-export function formatDeadline(iso: string, locale: string): string {
-  const deltaMs = new Date(iso).getTime() - Date.now();
+export function formatDeadline(iso: string, locale: string, nowMs: number = Date.now()): string {
+  const deltaMs = new Date(iso).getTime() - nowMs;
   if (!Number.isFinite(deltaMs)) return "";
 
   const formatter = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
@@ -27,6 +37,12 @@ export function formatDeadline(iso: string, locale: string): string {
     }
   }
   return "";
+}
+
+/** L'échéance est-elle dépassée, à l'heure du serveur ? */
+export function deadlineIsPast(iso: string, nowMs: number = Date.now()): boolean {
+  const deadlineMs = new Date(iso).getTime();
+  return Number.isFinite(deadlineMs) && deadlineMs < nowMs;
 }
 
 /** « lundi 4 août », sans l'année : une ligue ne s'étale pas sur des années. */
