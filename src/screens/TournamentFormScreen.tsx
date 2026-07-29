@@ -425,11 +425,15 @@ function FieldAnswer({
   );
 }
 
-/** Carte choisie : le visuel identifie plus vite que le nom. */
+/**
+ * Carte choisie : le visuel identifie plus vite que le nom. Il est décoratif
+ * au sens des lecteurs d'écran (`alt=""`) — le nom est juste à côté, en texte,
+ * et l'annoncer deux fois ne renseignerait personne.
+ */
 function CardAnswer({ card }: { card: TournamentFormCard }) {
   return (
     <div className="card-answer">
-      {card.image && <CachedImage src={card.image} alt={card.name} className="card-answer__image" />}
+      {card.image && <CachedImage src={card.image} alt="" className="card-answer__image" />}
       <div className="card-answer__body">
         <p className="card-answer__name">{card.name}</p>
         {(card.setCode || card.collectorNumber) && (
@@ -465,6 +469,9 @@ function CardPicker({
   useEffect(() => {
     if (!gameSlug || query.trim().length <= 2) {
       setResults([]);
+      // Requête raccourcie pendant qu'une recherche tournait : sans cette
+      // remise à zéro, « Recherche… » resterait affiché indéfiniment.
+      setSearching(false);
       return;
     }
     let cancelled = false;
@@ -493,6 +500,8 @@ function CardPicker({
     return () => {
       cancelled = true;
       clearTimeout(timer);
+      // La recherche abandonnée ne clôturera pas son propre indicateur.
+      setSearching(false);
     };
   }, [query, gameSlug]);
 
@@ -503,9 +512,7 @@ function CardPicker({
   if (value) {
     return (
       <div className="card-answer card-answer--picked">
-        {value.image && (
-          <CachedImage src={value.image} alt={value.name} className="card-answer__image" />
-        )}
+        {value.image && <CachedImage src={value.image} alt="" className="card-answer__image" />}
         <div className="card-answer__body">
           <p className="card-answer__name">{value.name}</p>
           {(value.setCode || value.collectorNumber) && (

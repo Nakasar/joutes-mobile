@@ -599,14 +599,19 @@ function FormCard({
   );
 
   const payload = form.data;
-  if (!payload?.form || payload.form.fields.length === 0) return null;
+
+  // Le tournoi porte un formulaire (l'appelant l'a vérifié) : tant que l'état
+  // des réponses n'est pas connu, l'accès reste affiché sans statut. Le retirer
+  // sur une erreur réseau enlèverait au joueur le seul chemin vers l'écran où
+  // il peut réessayer.
+  if (payload && (!payload.form || payload.form.fields.length === 0)) return null;
 
   const answered = new Set(
-    payload.answers
+    (payload?.answers ?? [])
       .filter((a) => a.text || a.number !== undefined || a.choices?.length || a.card || a.decklist)
       .map((a) => a.fieldId),
   );
-  const missingRequired = payload.form.fields.some((f) => f.required && !answered.has(f.id));
+  const missingRequired = payload?.form?.fields.some((f) => f.required && !answered.has(f.id));
 
   return (
     <Link to={`/tournaments/${tournamentId}/form`} className="list-row list-row--link">
@@ -616,17 +621,25 @@ function FormCard({
       <div className="list-row__body">
         <p className="list-row__title">{t("tournamentForm.title")}</p>
         <p className="list-row__sub">
-          {!payload.canEdit ? (
-            <span className="chip">{t("tournamentForm.statusClosed")}</span>
-          ) : missingRequired ? (
-            <span className="chip chip--grad">{t("tournamentForm.statusTodo")}</span>
-          ) : (
-            <span className="chip chip--accent">{t("tournamentForm.statusDone")}</span>
-          )}
-          {payload.canEdit && payload.lateWindow && (
-            <span className="chip chip--danger" style={{ marginLeft: 6 }}>
-              {t("tournamentForm.statusLate")}
+          {!payload ? (
+            <span className="muted">
+              {form.error ? t("tournamentForm.statusUnknown") : t("common.loading")}
             </span>
+          ) : (
+            <>
+              {!payload.canEdit ? (
+                <span className="chip">{t("tournamentForm.statusClosed")}</span>
+              ) : missingRequired ? (
+                <span className="chip chip--grad">{t("tournamentForm.statusTodo")}</span>
+              ) : (
+                <span className="chip chip--accent">{t("tournamentForm.statusDone")}</span>
+              )}
+              {payload.canEdit && payload.lateWindow && (
+                <span className="chip chip--danger" style={{ marginLeft: 6 }}>
+                  {t("tournamentForm.statusLate")}
+                </span>
+              )}
+            </>
           )}
         </p>
       </div>

@@ -545,6 +545,7 @@
     "statusTodo": "To fill in",
     "statusDone": "Filled in",
     "statusClosed": "Closed",
+    "statusUnknown": "Status unknown",
     "statusLate": "Late window",
     "closedByOrganizer": "Answers can no longer be edited.",
     "closedByDeadline": "The answer deadline has passed ({{date}}).",

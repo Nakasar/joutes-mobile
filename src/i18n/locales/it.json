@@ -545,6 +545,7 @@
     "statusTodo": "Da compilare",
     "statusDone": "Compilato",
     "statusClosed": "Chiuso",
+    "statusUnknown": "Stato sconosciuto",
     "statusLate": "Fuori tempo",
     "closedByOrganizer": "Le risposte non sono più modificabili.",
     "closedByDeadline": "La scadenza per rispondere è passata ({{date}}).",

@@ -545,6 +545,7 @@
     "statusTodo": "À remplir",
     "statusDone": "Rempli",
     "statusClosed": "Fermé",
+    "statusUnknown": "État inconnu",
     "statusLate": "Hors délai",
     "closedByOrganizer": "Les réponses ne sont plus modifiables.",
     "closedByDeadline": "La date limite de réponse est dépassée ({{date}}).",
