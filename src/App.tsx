@@ -23,6 +23,7 @@ import { RulesScreen } from "./screens/RulesScreen";
 import { SettingsScreen } from "./screens/SettingsScreen";
 import { SocialScreen } from "./screens/SocialScreen";
 import { TournamentDetailScreen } from "./screens/TournamentDetailScreen";
+import { TournamentFormScreen } from "./screens/TournamentFormScreen";
 import { TournamentsScreen } from "./screens/TournamentsScreen";
 import { TradeDetailScreen } from "./screens/TradeDetailScreen";
 import { TradesScreen } from "./screens/TradesScreen";
@@ -101,6 +102,10 @@ function Shell() {
                 <Route
                   path="/tournaments/:tournamentId"
                   element={<TournamentDetailScreen />}
+                />
+                <Route
+                  path="/tournaments/:tournamentId/form"
+                  element={<TournamentFormScreen />}
                 />
                 <Route path="/social" element={<SocialScreen />} />
                 <Route

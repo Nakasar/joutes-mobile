@@ -2,8 +2,10 @@ import { api } from "./client";
 import { endpoints } from "./endpoints";
 import type {
   TournamentDetail,
+  TournamentFormAnswerInput,
   TournamentGameResult,
   TournamentHistory,
+  TournamentPlayerForm,
   TournamentJoinResult,
   TournamentLiveState,
   TournamentMatch,
@@ -100,6 +102,41 @@ export function getRound(
   return api.get<TournamentRoundDetail>(
     endpoints.tournaments.round(tournamentId, roundId),
     undefined,
+    authHeaders(syncKey),
+  );
+}
+
+/**
+ * Formulaire d'inscription et réponses d'un joueur. Les réponses sont privées :
+ * l'API ne les sert qu'au joueur concerné et à l'organisation, et elles ne
+ * figurent pas dans la fiche de tournoi renvoyée aux autres participants.
+ */
+export function getPlayerForm(
+  tournamentId: string,
+  playerId: string,
+  syncKey?: string,
+): Promise<TournamentPlayerForm> {
+  return api.get<TournamentPlayerForm>(
+    endpoints.tournaments.playerForm(tournamentId, playerId),
+    undefined,
+    authHeaders(syncKey),
+  );
+}
+
+/**
+ * Enregistre les réponses du joueur. L'envoi porte la saisie brute : l'analyse
+ * d'une liste de deck et le contrôle des champs obligatoires sont faits par le
+ * serveur, qui renvoie l'état à jour du formulaire.
+ */
+export function savePlayerForm(
+  tournamentId: string,
+  playerId: string,
+  answers: TournamentFormAnswerInput[],
+  syncKey?: string,
+): Promise<TournamentPlayerForm> {
+  return api.put<TournamentPlayerForm>(
+    endpoints.tournaments.playerForm(tournamentId, playerId),
+    { answers },
     authHeaders(syncKey),
   );
 }
