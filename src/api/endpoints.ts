@@ -119,6 +119,9 @@ export const endpoints = {
     history: (tournamentId: string) => `/tournaments/${tournamentId}/history`,
     player: (tournamentId: string, playerId: string) =>
       `/tournaments/${tournamentId}/players/${playerId}`,
+    /** Formulaire d'inscription et réponses d'un joueur (privées : lui et l'organisation). */
+    playerForm: (tournamentId: string, playerId: string) =>
+      `/tournaments/${tournamentId}/players/${playerId}/form`,
     phase: (tournamentId: string, phaseId: string) =>
       `/tournaments/${tournamentId}/phases/${phaseId}`,
     round: (tournamentId: string, roundId: string) =>

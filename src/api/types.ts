@@ -790,6 +790,8 @@ export interface Tournament {
   startsAt?: string;
   /** Nombre de places. Absent = pas de limite affichée. */
   capacity?: number;
+  /** Formulaire d'inscription personnalisé. Absent = aucun formulaire. */
+  registrationForm?: TournamentForm;
   createdAt: string;
 }
 
@@ -826,6 +828,133 @@ export interface TournamentDecklist {
   checkedBy?: string;
   checkedAt?: string;
   updatedAt: string;
+}
+
+// ---- Formulaire d'inscription ----
+
+/**
+ * Types de champs du formulaire. Les cinq premiers sont les formats habituels ;
+ * `decklist` et `card` sont adossés au jeu du tournoi (analyse de liste de deck
+ * côté serveur, recherche dans les cartes).
+ */
+export type TournamentFormFieldType =
+  | "text"
+  | "long-text"
+  | "number"
+  | "single-choice"
+  | "multiple-choice"
+  | "decklist"
+  | "card";
+
+export interface TournamentFormField {
+  /** Identifiant stable : les réponses y sont rattachées, il ne change jamais. */
+  id: string;
+  type: TournamentFormFieldType;
+  label: string;
+  /** Consigne affichée sous le libellé (format attendu, précisions…). */
+  description?: string;
+  required: boolean;
+  /** Choix proposés, pour `single-choice` et `multiple-choice` uniquement. */
+  options?: string[];
+}
+
+export interface TournamentForm {
+  fields: TournamentFormField[];
+  /** false = réponses figées côté joueur ; l'organisation reste libre de les corriger. */
+  playerEditable: boolean;
+  /** Instant après lequel les réponses des joueurs ne sont plus acceptées. */
+  closesAt?: string;
+  /** Réponses encore acceptées après la fermeture, mais signalées comme tardives. */
+  lateSubmissions: boolean;
+}
+
+/**
+ * Carte choisie dans un champ `card`. Nom et visuel sont recopiés au moment du
+ * choix : la réponse reste lisible même si la carte quitte l'index de recherche.
+ */
+export interface TournamentFormCard {
+  cardId: string;
+  name: string;
+  image?: string;
+  setCode?: string;
+  collectorNumber?: string;
+}
+
+export interface TournamentDecklistCard {
+  name: string;
+  quantity: number;
+  cardId?: string;
+  image?: string;
+  /** Carte absente de la base du jeu : nom mal orthographié, ou carte inconnue. */
+  recognized?: boolean;
+  banned?: boolean;
+}
+
+/** Liste de deck analysée. Les sections gardent le nom que le jeu leur donne. */
+export interface TournamentParsedDecklist {
+  sections: { key: string; cards: TournamentDecklistCard[] }[];
+  totalCards: number;
+  unrecognizedCards: number;
+  bannedCards: number;
+}
+
+/** Réponse à un champ `decklist`. L'analyse est faite par le serveur, jamais par le client. */
+export interface TournamentFormDecklistAnswer {
+  /**
+   * Contenu retenu : une liste écrite est conservée telle quelle, un lien ou un
+   * code est remplacé par les cartes récupérées (sauf échec de récupération).
+   */
+  input: string;
+  parsed?: TournamentParsedDecklist;
+  /** Analyse tentée mais échouée (lien mort, code invalide…). */
+  parseError?: string;
+  parsedAt?: string;
+}
+
+/**
+ * Réponse à un champ : un seul champ de valeur est renseigné selon le type du
+ * champ, `choices` servant aux deux types de choix (un seul élément pour un
+ * choix unique).
+ */
+export interface TournamentFormAnswer {
+  fieldId: string;
+  text?: string;
+  number?: number;
+  choices?: string[];
+  card?: TournamentFormCard;
+  decklist?: TournamentFormDecklistAnswer;
+  updatedAt: string;
+  /** Réponse donnée après la fermeture, acceptée au titre des réponses tardives. */
+  late?: boolean;
+}
+
+/** Ce qu'un joueur envoie : la saisie brute, l'analyse restant au serveur. */
+export interface TournamentFormAnswerInput {
+  fieldId: string;
+  text?: string;
+  number?: number;
+  choices?: string[];
+  card?: TournamentFormCard;
+  decklist?: string;
+}
+
+/**
+ * Réponse de `GET`/`PUT /tournaments/{id}/players/{playerId}/form` : le
+ * formulaire, les réponses du joueur, et ce que le client ne peut pas déduire
+ * seul (droit de modifier, fenêtre de retard, jeu du tournoi).
+ */
+export interface TournamentPlayerForm {
+  form: TournamentForm | null;
+  answers: TournamentFormAnswer[];
+  /** Le viewer peut enregistrer des réponses (saisie ouverte, ou organisation). */
+  canEdit: boolean;
+  /** La saisie normale est close : ce qui est enregistré sera marqué tardif. */
+  lateWindow: boolean;
+  closesAt: string | null;
+  /** Slug du jeu du tournoi, pour la recherche de cartes. `null` = pas de jeu lié. */
+  gameSlug: string | null;
+  /** Le jeu sait analyser une liste de deck (lien, code ou liste écrite). */
+  decklistSupported: boolean;
 }
 
 export interface TournamentPhase {

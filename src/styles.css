@@ -3424,3 +3424,356 @@ textarea:focus {
   font-weight: 600;
   color: var(--accent);
 }
+
+/* ---- Formulaire d'inscription (tournoi) ---- */
+
+.form-intro {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.form-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 0 14px;
+  padding: 11px 13px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.form-notice--locked {
+  color: var(--muted);
+}
+
+/* Réponses tardives : ce qui sera enregistré partira marqué, il faut le voir. */
+.form-notice--late {
+  border-color: color-mix(in srgb, var(--danger) 45%, transparent);
+  background: color-mix(in srgb, var(--danger) 10%, transparent);
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 20px;
+}
+
+.form-field__head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.form-field__label {
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.form-field__required {
+  margin-left: 3px;
+  color: var(--danger);
+}
+
+.form-field__hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+}
+
+.form-field__preview {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  padding: 12px;
+}
+
+.form-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.form-answer {
+  margin: 0;
+  font-size: 0.92rem;
+  white-space: pre-wrap;
+}
+
+.form-answer--mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.form-saved {
+  margin: 0 0 4px;
+  text-align: center;
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* ---- Liste de deck ---- */
+
+.decklist-input {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+}
+
+.decklist__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.decklist__toggle {
+  flex: 0 0 auto;
+}
+
+.decklist__toggle .segmented__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0.4em 0.7em;
+  font-size: 0.78rem;
+}
+
+.decklist__count {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.decklist-warning {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 8px;
+  color: var(--gold);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.decklist-warning--banned {
+  color: var(--danger);
+}
+
+.decklist-raw {
+  margin: 0;
+  max-height: 320px;
+  overflow: auto;
+  white-space: pre-wrap;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  padding: 10px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.decklist__section {
+  margin-top: 12px;
+}
+
+.decklist__section-title {
+  margin: 0 0 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.decklist__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.decklist__row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 3px 0;
+  font-size: 0.85rem;
+}
+
+.decklist__row-quantity {
+  width: 22px;
+  flex-shrink: 0;
+  text-align: right;
+  font-family: var(--font-mono);
+  color: var(--muted);
+}
+
+.decklist__row-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Carte interdite : barrée, l'arbitrage et le joueur doivent la repérer seule. */
+.decklist__row-name--banned {
+  color: var(--danger);
+  text-decoration: line-through;
+}
+
+/* Carte non reconnue : la liste part quand même, mais la ligne est signalée. */
+.decklist__row-name--unknown {
+  color: var(--gold);
+}
+
+.decklist__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.decklist__tile {
+  position: relative;
+}
+
+.decklist__image {
+  height: 108px;
+  width: auto;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  display: block;
+}
+
+.decklist__image--banned {
+  outline: 2px solid var(--danger);
+  outline-offset: -1px;
+}
+
+.decklist__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 108px;
+  width: 78px;
+  padding: 5px;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 0.62rem;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.decklist__quantity {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: rgba(4, 18, 27, 0.85);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+
+/* ---- Choix d'une carte ---- */
+
+.card-answer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.card-answer--picked {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  padding: 10px 12px;
+}
+
+.card-answer__image {
+  height: 84px;
+  width: auto;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.card-answer__body {
+  min-width: 0;
+  flex: 1;
+}
+
+.card-answer__name {
+  margin: 0;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-answer__meta {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.card-result {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px;
+  margin-top: 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  text-align: left;
+  transition: transform 0.12s;
+}
+
+.card-result:active {
+  transform: scale(0.985);
+}
+
+.card-result__image {
+  height: 52px;
+  width: auto;
+  border-radius: 6px;
+}
+
+.card-result__body {
+  min-width: 0;
+}
+
+.card-result__name {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-result__meta {
+  display: block;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}

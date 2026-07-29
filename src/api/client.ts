@@ -137,8 +137,8 @@ class ApiClient {
     return this.request<T>("POST", path, { body, query, headers });
   }
 
-  put<T>(path: string, body?: unknown): Promise<T> {
-    return this.request<T>("PUT", path, { body });
+  put<T>(path: string, body?: unknown, headers?: Record<string, string>): Promise<T> {
+    return this.request<T>("PUT", path, { body, headers });
   }
 
   patch<T>(path: string, body?: unknown, headers?: Record<string, string>): Promise<T> {

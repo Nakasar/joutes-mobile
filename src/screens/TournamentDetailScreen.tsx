@@ -1,15 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   confirmMatchResult,
   disputeMatchResult,
   dropSelf,
   getHistory,
+  getPlayerForm,
   getStandings,
-  getTournament,
   reportMatchResult,
-  syncTournamentKeys,
 } from "../api/tournaments";
 import type {
   TournamentDetail,
@@ -23,16 +22,16 @@ import type {
   TournamentStanding,
 } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
-import { MegaphoneIcon } from "../components/icons";
+import { ChevronIcon, MegaphoneIcon, ScrollIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { TournamentReportSheet } from "../components/TournamentReportSheet";
 import { useApi } from "../hooks/useApi";
+import { useMyTournamentPlayer } from "../hooks/useMyTournamentPlayer";
 import { useTournamentLive } from "../hooks/useTournamentLive";
 import { currentLocale } from "../i18n";
 import { playerTag } from "../lib/tournament-player";
-import { getSyncKey, removeSyncKey } from "../lib/tournament-sync-storage";
+import { removeSyncKey } from "../lib/tournament-sync-storage";
 import { formatDuration, timerIsPaused, timerRemainingSeconds } from "../lib/tournament-timer";
-import { useAuth } from "../store/auth";
 
 type Tab = "match" | "standings" | "info";
 
@@ -579,19 +578,95 @@ function StandingsTab({
   );
 }
 
+/**
+ * Accès au formulaire d'inscription, avec son état. Les réponses sont privées :
+ * la fiche de tournoi ne les porte pas, il faut les demander pour savoir si le
+ * joueur a répondu — c'est justement ce qu'il vient vérifier ici.
+ */
+function FormCard({
+  tournamentId,
+  myPlayerId,
+  syncKey,
+}: {
+  tournamentId: string;
+  myPlayerId: string;
+  syncKey: string | undefined;
+}) {
+  const { t } = useTranslation();
+  const form = useApi(
+    () => getPlayerForm(tournamentId, myPlayerId, syncKey),
+    [tournamentId, myPlayerId, syncKey],
+  );
+
+  const payload = form.data;
+
+  // Le tournoi porte un formulaire (l'appelant l'a vérifié) : tant que l'état
+  // des réponses n'est pas connu, l'accès reste affiché sans statut. Le retirer
+  // sur une erreur réseau enlèverait au joueur le seul chemin vers l'écran où
+  // il peut réessayer.
+  if (payload && (!payload.form || payload.form.fields.length === 0)) return null;
+
+  const answered = new Set(
+    (payload?.answers ?? [])
+      .filter((a) => a.text || a.number !== undefined || a.choices?.length || a.card || a.decklist)
+      .map((a) => a.fieldId),
+  );
+  const missingRequired = payload?.form?.fields.some((f) => f.required && !answered.has(f.id));
+
+  return (
+    <Link to={`/tournaments/${tournamentId}/form`} className="list-row list-row--link">
+      <span className="list-row__icon" style={{ background: "var(--chip)" }}>
+        <ScrollIcon size={20} style={{ color: "var(--primary)" }} />
+      </span>
+      <div className="list-row__body">
+        <p className="list-row__title">{t("tournamentForm.title")}</p>
+        <p className="list-row__sub">
+          {!payload ? (
+            <span className="muted">
+              {form.error ? t("tournamentForm.statusUnknown") : t("common.loading")}
+            </span>
+          ) : (
+            <>
+              {!payload.canEdit ? (
+                <span className="chip">{t("tournamentForm.statusClosed")}</span>
+              ) : missingRequired ? (
+                <span className="chip chip--grad">{t("tournamentForm.statusTodo")}</span>
+              ) : (
+                <span className="chip chip--accent">{t("tournamentForm.statusDone")}</span>
+              )}
+              {payload.canEdit && payload.lateWindow && (
+                <span className="chip chip--danger" style={{ marginLeft: 6 }}>
+                  {t("tournamentForm.statusLate")}
+                </span>
+              )}
+            </>
+          )}
+        </p>
+      </div>
+      <span className="chevron">
+        <ChevronIcon size={18} />
+      </span>
+    </Link>
+  );
+}
+
 /** Onglet « Tournoi » : ce qu'on se demande entre deux matchs. */
 function InfoTab({
+  tournamentId,
   detail,
   flatRounds,
   myPlayerId,
+  syncKey,
   playerName,
   dropping,
   dropError,
   onLeave,
 }: {
+  tournamentId: string;
   detail: TournamentDetail;
   flatRounds: FlatRound[];
   myPlayerId: string | undefined;
+  syncKey: string | undefined;
   playerName: (playerId: string) => string;
   dropping: boolean;
   dropError: string | null;
@@ -627,6 +702,10 @@ function InfoTab({
 
   return (
     <>
+      {myPlayerId && detail.registrationForm && (
+        <FormCard tournamentId={tournamentId} myPlayerId={myPlayerId} syncKey={syncKey} />
+      )}
+
       {hasPracticalInfo && (
         <div className="card">
           <h2 className="card__title">{t("tournaments.practicalTitle")}</h2>
@@ -760,27 +839,25 @@ export function TournamentDetailScreen() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { tournamentId = "" } = useParams();
-  const { user } = useAuth();
-  const syncKey = getSyncKey(tournamentId);
 
   const [tab, setTab] = useState<Tab>("match");
   const [dropping, setDropping] = useState(false);
   const [dropError, setDropError] = useState<string | null>(null);
 
-  const detail = useApi(() => getTournament(tournamentId, syncKey), [tournamentId, syncKey]);
+  const {
+    syncKey,
+    detail,
+    myPlayerId,
+    loading: topLoading,
+    error: topError,
+    reload: reloadPlayer,
+  } = useMyTournamentPlayer(tournamentId);
+
   const history = useApi<TournamentHistory | null>(
     () => getHistory(tournamentId, syncKey),
     [tournamentId, syncKey],
   );
   const standings = useApi(() => getStandings(tournamentId, syncKey), [tournamentId, syncKey]);
-  const sync = useApi(
-    () => (syncKey ? syncTournamentKeys([syncKey]) : Promise.resolve([])),
-    [tournamentId, syncKey],
-  );
-
-  const myPlayerId = syncKey
-    ? sync.data?.[0]?.player.id
-    : detail.data?.players.find((p) => p.userId === user?.id)?.id;
 
   const playerById = useMemo(
     () => new Map((detail.data?.players ?? []).map((p) => [p.id, p])),
@@ -842,9 +919,6 @@ export function TournamentDetailScreen() {
     detail.reload();
   }
 
-  const topLoading = detail.loading || (syncKey ? sync.loading : false);
-  const topError = detail.error ?? (syncKey ? sync.error : null);
-
   const roundLabel = currentRound
     ? `${t("tournaments.roundLabel", { number: currentRound.round.number })} · ${currentRound.phase.name}`
     : detail.data
@@ -855,14 +929,7 @@ export function TournamentDetailScreen() {
     <div className="screen">
       <BackHeader title={detail.data?.name ?? t("tournaments.detailFallbackTitle")} />
 
-      <StatusView
-        loading={topLoading}
-        error={topError}
-        onRetry={() => {
-          detail.reload();
-          if (syncKey) sync.reload();
-        }}
-      />
+      <StatusView loading={topLoading} error={topError} onRetry={reloadPlayer} />
 
       {detail.data && (
         <>
@@ -932,9 +999,11 @@ export function TournamentDetailScreen() {
 
           {tab === "info" && (
             <InfoTab
+              tournamentId={tournamentId}
               detail={detail.data}
               flatRounds={flatRounds}
               myPlayerId={myPlayerId}
+              syncKey={syncKey}
               playerName={playerName}
               dropping={dropping}
               dropError={dropError}
