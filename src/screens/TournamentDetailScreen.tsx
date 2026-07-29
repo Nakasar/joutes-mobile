@@ -14,11 +14,13 @@ import type {
   TournamentDetail,
   TournamentGameResult,
   TournamentHistory,
+  TournamentLiveState,
   TournamentMatch,
   TournamentMatchStatus,
   TournamentPhase,
   TournamentPlayer,
   TournamentRound,
+  TournamentScenario,
   TournamentStanding,
 } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
@@ -32,6 +34,13 @@ import { currentLocale } from "../i18n";
 import { playerTag } from "../lib/tournament-player";
 import { removeSyncKey } from "../lib/tournament-sync-storage";
 import { formatDuration, timerIsPaused, timerRemainingSeconds } from "../lib/tournament-timer";
+import {
+  deadlineIsPast,
+  formatDeadline,
+  formatDeadlineDate,
+  serverNowMs,
+} from "../lib/tournament-deadline";
+import { presetStats, type MatchStatDefinition } from "../lib/tournament-presets";
 
 type Tab = "match" | "standings" | "info";
 
@@ -80,18 +89,26 @@ function useTick(intervalMs: number): void {
  * ne doit jamais rater, quel que soit l'onglet ouvert.
  */
 function PortalHeader({
-  tournamentId,
   name,
   roundLabel,
   meLabel,
+  deadlineAt,
+  state,
+  serverOffsetMs,
 }: {
-  tournamentId: string;
   name: string;
   roundLabel: string | null;
   meLabel: string | null;
+  /**
+   * Échéance de l'intervalle en cours (ronde asynchrone). Prend la place du
+   * minuteur, qui n'a pas de sens quand la partie se joue sur plusieurs jours.
+   */
+  deadlineAt?: string;
+  /** État public du tournoi, chargé une seule fois par l'écran. */
+  state: TournamentLiveState | null;
+  serverOffsetMs: number;
 }) {
-  const { t } = useTranslation();
-  const { state, serverOffsetMs } = useTournamentLive(tournamentId);
+  const { t, i18n } = useTranslation();
   useTick(1000);
 
   const remaining = timerRemainingSeconds(state?.timer, serverOffsetMs);
@@ -107,17 +124,28 @@ function PortalHeader({
           <p className="portal-header__name">{name}</p>
           {roundLabel && <p className="portal-header__meta">{roundLabel}</p>}
         </div>
-        {remaining !== null && (
+        {deadlineAt ? (
           <div className="portal-header__timer">
             <p
-              className={`portal-header__clock${expired ? " portal-header__clock--expired" : low ? " portal-header__clock--low" : ""}`}
+              className={`portal-header__deadline${deadlineIsPast(deadlineAt, serverNowMs(serverOffsetMs)) ? " portal-header__clock--expired" : ""}`}
             >
-              {formatDuration(remaining)}
+              {formatDeadline(deadlineAt, i18n.language, serverNowMs(serverOffsetMs))}
             </p>
-            <p className="portal-header__timer-label">
-              {paused ? t("tournaments.timerPaused") : t("tournaments.timerRemaining")}
-            </p>
+            <p className="portal-header__timer-label">{t("tournaments.deadlineLabel")}</p>
           </div>
+        ) : (
+          remaining !== null && (
+            <div className="portal-header__timer">
+              <p
+                className={`portal-header__clock${expired ? " portal-header__clock--expired" : low ? " portal-header__clock--low" : ""}`}
+              >
+                {formatDuration(remaining)}
+              </p>
+              <p className="portal-header__timer-label">
+                {paused ? t("tournaments.timerPaused") : t("tournaments.timerRemaining")}
+              </p>
+            </div>
+          )
         )}
       </div>
 
@@ -146,22 +174,43 @@ function MyMatchCard({
   opponent,
   opponentStanding,
   playerName,
+  deadlineAt,
+  scenario,
+  serverOffsetMs,
 }: {
   match: TournamentMatch;
   myPlayerId: string | undefined;
   opponent: TournamentPlayer | undefined;
   opponentStanding: TournamentStanding | undefined;
   playerName: (playerId: string) => string;
+  deadlineAt?: string;
+  scenario?: TournamentScenario;
+  /** Décalage d'horloge client/serveur, pour dater l'échéance sans dériver. */
+  serverOffsetMs: number;
 }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const isBye = match.players.length <= 1;
   const extensionMinutes = Math.round((match.extensionSeconds ?? 0) / 60);
   const opponentEntry = match.players.find((p) => p.playerId !== myPlayerId);
 
   return (
     <div className="table-card">
-      <p className="table-card__eyebrow">{t("tournaments.yourTable")}</p>
-      <p className="table-card__number">{match.tableNumber ?? "—"}</p>
+      {/* Sur un intervalle de ligue, il n'y a pas de table : ce qui compte est
+          la date avant laquelle la partie doit être jouée. */}
+      {deadlineAt ? (
+        <>
+          <p className="table-card__eyebrow">{t("tournaments.playBefore")}</p>
+          <p className="table-card__deadline">{formatDeadlineDate(deadlineAt, i18n.language)}</p>
+          <p className="table-card__record">
+            {formatDeadline(deadlineAt, i18n.language, serverNowMs(serverOffsetMs))}
+          </p>
+        </>
+      ) : (
+        <>
+          <p className="table-card__eyebrow">{t("tournaments.yourTable")}</p>
+          <p className="table-card__number">{match.tableNumber ?? "—"}</p>
+        </>
+      )}
 
       {isBye ? (
         <p className="muted">{t("tournaments.byeAutoWin")}</p>
@@ -191,6 +240,16 @@ function MyMatchCard({
         {t(`tournaments.matchStatus.${match.status}`)}
       </span>
 
+      {scenario && (
+        <div className="table-card__scenario">
+          <p className="table-card__eyebrow">{t("tournaments.scenario")}</p>
+          <p className="table-card__scenario-name">{scenario.name}</p>
+          {scenario.description && (
+            <p className="table-card__scenario-text">{scenario.description}</p>
+          )}
+        </div>
+      )}
+
       {extensionMinutes > 0 && (
         <p className="table-card__extension">
           {t("tournaments.extensionGranted", { minutes: extensionMinutes })}
@@ -209,6 +268,10 @@ function MatchTab({
   otherMatches,
   bestOf,
   resultMode,
+  stats,
+  deadlineAt,
+  scenario,
+  serverOffsetMs,
   standings,
   playerName,
   playerById,
@@ -223,6 +286,12 @@ function MatchTab({
   otherMatches: TournamentMatch[];
   bestOf: number;
   resultMode: TournamentPhase["resultMode"];
+  /** Statistiques secondaires relevées par la phase. Vide = aucune. */
+  stats: MatchStatDefinition[];
+  /** Échéance de l'intervalle en cours (ronde asynchrone). */
+  deadlineAt?: string;
+  scenario?: TournamentScenario;
+  serverOffsetMs: number;
   standings: TournamentStanding[];
   playerName: (playerId: string) => string;
   playerById: Map<string, TournamentPlayer>;
@@ -317,6 +386,9 @@ function MatchTab({
         opponent={opponent}
         opponentStanding={opponentStanding}
         playerName={playerName}
+        deadlineAt={deadlineAt}
+        scenario={scenario}
+        serverOffsetMs={serverOffsetMs}
       />
 
       {canReport && myMatch.status === "pending" && (
@@ -442,6 +514,7 @@ function MatchTab({
           myPlayerId={myPlayerId}
           bestOf={bestOf}
           resultMode={resultMode}
+          stats={stats}
           playerName={playerName}
           opponentName={opponentName}
           busy={busy}
@@ -462,10 +535,13 @@ function MatchTab({
 function StandingsTab({
   liveStandings,
   flatRounds,
+  statColumns,
   myPlayerId,
 }: {
   liveStandings: TournamentStanding[];
   flatRounds: FlatRound[];
+  /** Colonnes de statistiques du preset, dans l'ordre où elles départagent. */
+  statColumns: MatchStatDefinition[];
   myPlayerId: string | undefined;
 }) {
   const { t } = useTranslation();
@@ -549,6 +625,9 @@ function StandingsTab({
                 <th>{t("tournaments.standingsPlayer")}</th>
                 <th>{t("tournaments.standingsPoints")}</th>
                 <th>{t("tournaments.standingsRecord")}</th>
+                {statColumns.map((column) => (
+                  <th key={column.key}>{t(`tournaments.matchStats.${column.labelKey}Short`)}</th>
+                ))}
                 <th>{t("tournaments.standingsOmw")}</th>
               </tr>
             </thead>
@@ -567,6 +646,12 @@ function StandingsTab({
                   <td>
                     {s.wins}-{s.losses}-{s.draws}
                   </td>
+                  {statColumns.map((column) => (
+                    // « — » et non « 0 » quand la statistique est absente : un
+                    // classement figé avant l'ajout du preset n'en porte pas,
+                    // et un zéro affiché s'y lirait comme une contre-performance.
+                    <td key={column.key}>{s.stats?.[column.key] ?? "—"}</td>
+                  ))}
                   <td>{((s.opponentMatchWinPercentage ?? 0) * 100).toFixed(1)}%</td>
                 </tr>
               ))}
@@ -859,6 +944,11 @@ export function TournamentDetailScreen() {
   );
   const standings = useApi(() => getStandings(tournamentId, syncKey), [tournamentId, syncKey]);
 
+  // Un seul polling de l'état public pour tout l'écran : l'en-tête l'affiche,
+  // et l'onglet « Mon match » a besoin du même décalage d'horloge pour dater
+  // l'échéance de l'intervalle sans dériver de l'heure du serveur.
+  const { state: liveState, serverOffsetMs } = useTournamentLive(tournamentId);
+
   const playerById = useMemo(
     () => new Map((detail.data?.players ?? []).map((p) => [p.id, p])),
     [detail.data],
@@ -934,10 +1024,12 @@ export function TournamentDetailScreen() {
       {detail.data && (
         <>
           <PortalHeader
-            tournamentId={tournamentId}
             name={detail.data.name}
             roundLabel={roundLabel}
             meLabel={me ? playerTag(me.displayName, me.discriminator) : null}
+            deadlineAt={currentRound?.round.deadlineAt}
+            state={liveState}
+            serverOffsetMs={serverOffsetMs}
           />
 
           <div className="segmented" style={{ marginBottom: 16 }}>
@@ -975,6 +1067,10 @@ export function TournamentDetailScreen() {
                 otherMatches={otherMatches}
                 bestOf={activePhase?.bestOf ?? 1}
                 resultMode={activePhase?.resultMode ?? "selection"}
+                stats={presetStats(activePhase?.statsPresetKey)}
+                deadlineAt={currentRound?.round.deadlineAt}
+                scenario={currentRound?.round.scenario}
+                serverOffsetMs={serverOffsetMs}
                 standings={standings.data ?? []}
                 playerName={playerName}
                 playerById={playerById}
@@ -993,6 +1089,7 @@ export function TournamentDetailScreen() {
               <StandingsTab
                 liveStandings={standings.data ?? []}
                 flatRounds={flatRounds}
+                statColumns={presetStats(activePhase?.statsPresetKey)}
                 myPlayerId={myPlayerId}
               />
             ))}

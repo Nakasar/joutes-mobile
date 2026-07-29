@@ -6,6 +6,7 @@ import type {
   TournamentResultMode,
 } from "../api/types";
 import { buildQuickResults, type QuickResult } from "../lib/tournament-quick-results";
+import type { MatchStatDefinition } from "../lib/tournament-presets";
 
 /**
  * Saisie du résultat, en feuille de bas d'écran.
@@ -21,6 +22,7 @@ export function TournamentReportSheet({
   myPlayerId,
   bestOf,
   resultMode,
+  stats = [],
   playerName,
   opponentName,
   busy,
@@ -32,6 +34,8 @@ export function TournamentReportSheet({
   myPlayerId: string;
   bestOf: number;
   resultMode: TournamentResultMode;
+  /** Statistiques secondaires à relever. Vide = la phase n'en demande pas. */
+  stats?: MatchStatDefinition[];
   playerName: (playerId: string) => string;
   opponentName: string;
   busy: boolean;
@@ -41,8 +45,12 @@ export function TournamentReportSheet({
 }) {
   const { t } = useTranslation();
   const matchPlayerIds = match.players.map((p) => p.playerId);
+  // Les raccourcis ne savent pas porter de statistiques : dès que la phase en
+  // relève, la saisie détaillée est le seul chemin complet.
   const quickResults =
-    resultMode === "selection" ? buildQuickResults(bestOf, matchPlayerIds) : [];
+    resultMode === "selection" && stats.length === 0
+      ? buildQuickResults(bestOf, matchPlayerIds)
+      : [];
 
   // Sans raccourci applicable, la saisie détaillée est le seul mode : on l'ouvre
   // directement plutôt que d'afficher une feuille vide.
@@ -85,6 +93,7 @@ export function TournamentReportSheet({
               match={match}
               bestOf={bestOf}
               resultMode={resultMode}
+              stats={stats}
               playerName={playerName}
               busy={busy}
               onSubmit={onSubmit}
@@ -158,6 +167,7 @@ function DetailedResultForm({
   match,
   bestOf,
   resultMode,
+  stats,
   playerName,
   busy,
   onSubmit,
@@ -165,6 +175,7 @@ function DetailedResultForm({
   match: TournamentMatch;
   bestOf: number;
   resultMode: TournamentResultMode;
+  stats: MatchStatDefinition[];
   playerName: (playerId: string) => string;
   busy: boolean;
   onSubmit: (games: TournamentGameResult[]) => void;
@@ -193,6 +204,46 @@ function DetailedResultForm({
         if (Number.isFinite(n)) current[playerId] = n;
       }
       next[gameIndex] = Object.keys(current).length > 0 ? { points: current } : undefined;
+      return next;
+    });
+  }
+
+  /**
+   * Statistiques secondaires : elles ne décident jamais d'une partie, elles s'y
+   * accrochent. Une partie sans issue renseignée n'est donc pas créée par la
+   * seule saisie d'une statistique.
+   *
+   * La valeur est bornée et arrondie ici : `min`/`max` sur un champ HTML
+   * n'empêchent pas la frappe, et l'API refuse un entier hors de [0, 9999] —
+   * mieux vaut brider la saisie qu'afficher au joueur une erreur de validation.
+   * Une statistique effacée est retirée de l'objet, et un joueur sans aucune
+   * statistique est retiré du lot : le serveur complète à zéro ce qu'il reçoit,
+   * envoyer un objet vide reviendrait à enregistrer des zéros non saisis.
+   */
+  function setStat(gameIndex: number, playerId: string, key: string, value: string, max: number) {
+    setGames((prev) => {
+      const next = [...prev];
+      const game = next[gameIndex];
+      if (!game) return prev;
+
+      const playerStats = { ...(game.stats?.[playerId] ?? {}) };
+      const parsed = Number(value);
+      if (value.trim() === "" || !Number.isFinite(parsed)) {
+        delete playerStats[key];
+      } else {
+        playerStats[key] = Math.min(max, Math.max(0, Math.round(parsed)));
+      }
+
+      const allStats = { ...(game.stats ?? {}) };
+      if (Object.keys(playerStats).length > 0) {
+        allStats[playerId] = playerStats;
+      } else {
+        delete allStats[playerId];
+      }
+
+      next[gameIndex] = Object.keys(allStats).length > 0
+        ? { ...game, stats: allStats }
+        : { winnerId: game.winnerId, points: game.points };
       return next;
     });
   }
@@ -239,6 +290,33 @@ function DetailedResultForm({
               ))
             )}
           </div>
+          {stats.length > 0 && game !== undefined && (
+            <div className="game-picker__stats">
+              {match.players.map((p) => (
+                <div key={p.playerId} className="game-picker__stat-row">
+                  <span className="game-picker__stat-name">{playerName(p.playerId)}</span>
+                  {stats.map((stat) => (
+                    <input
+                      key={stat.key}
+                      type="number"
+                      inputMode="numeric"
+                      min={0}
+                      max={stat.max}
+                      className="game-picker__stat-input"
+                      placeholder={t(`tournaments.matchStats.${stat.labelKey}Short`)}
+                      aria-label={t("tournaments.matchStatAria", {
+                        stat: t(`tournaments.matchStats.${stat.labelKey}`),
+                        name: playerName(p.playerId),
+                        number: i + 1,
+                      })}
+                      value={game.stats?.[p.playerId]?.[stat.key] ?? ""}
+                      onChange={(e) => setStat(i, p.playerId, stat.key, e.currentTarget.value, stat.max)}
+                    />
+                  ))}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       ))}
       <button
