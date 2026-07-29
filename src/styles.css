@@ -2791,6 +2791,9 @@ textarea:focus {
 .game-picker__row {
   display: flex;
   align-items: center;
+  /* Les statistiques d'une partie passent à la ligne sous les options : à
+     420 px de large, les garder sur la même ligne les pousserait hors écran. */
+  flex-wrap: wrap;
   gap: 8px;
 }
 
@@ -2825,7 +2828,11 @@ textarea:focus {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-top: 8px;
+  /* Pleine largeur sur sa propre ligne, décalée de la colonne du libellé
+     (56 px) et de son écart (8 px) pour s'aligner sous les options. */
+  flex-basis: 100%;
+  padding-left: 64px;
+  margin-top: 2px;
 }
 
 .game-picker__stat-row {
@@ -2845,7 +2852,9 @@ textarea:focus {
 }
 
 .game-picker__stat-input {
-  width: 68px;
+  /* Assez large pour le libellé de substitution le plus long (« Bless. »),
+     pas seulement pour la valeur à deux chiffres. */
+  width: 78px;
   padding: 7px 8px;
   border: 1px solid var(--border);
   border-radius: 10px;
