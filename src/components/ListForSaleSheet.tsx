@@ -70,7 +70,12 @@ function CopyRow({
     <div className="list-row" style={{ flexWrap: "wrap" }}>
       <div className="list-row__body">
         <div className="copy-badges">
-          {entry.foil && <span className="chip chip--accent">Foil</span>}
+          {entry.foil && (
+            <span className="chip chip--accent">{t("printings.foil")}</span>
+          )}
+          {entry.printingName && (
+            <span className="chip">{entry.printingName}</span>
+          )}
           {entry.language && <span className="chip">{entry.language}</span>}
           {entry.condition && <span className="chip">{entry.condition}</span>}
         </div>

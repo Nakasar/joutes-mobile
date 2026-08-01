@@ -96,7 +96,9 @@
       "addOne": "Aggiungi una copia",
       "removeOne": "Rimuovi una copia",
       "empty": "Nessuna carta corrisponde a questi filtri.",
-      "error": "Impossibile caricare la collezione."
+      "error": "Impossibile caricare la collezione.",
+      "addCopyTitle": "Aggiungi una copia",
+      "addCopySubmit": "Aggiungi"
     },
     "wishlistsAction": "Le mie liste dei desideri",
     "sellListAction": "La mia lista di vendita",
@@ -209,6 +211,14 @@
     "errataSection": "Errata e ruling",
     "noErrataDetail": "Nessun errata, chiarimento o ruling per questa carta.",
     "noErrataModal": "Nessun errata per questa carta."
+  },
+  "printings": {
+    "label": "Variante di stampa",
+    "base": "Versione base",
+    "foilOption": "{{name}} (foil)",
+    "foil": "Foil",
+    "sectionTitle": "Varianti di stampa",
+    "baseImage": "Illustrazione della carta"
   },
   "deck": {
     "title": "Verifica deck",

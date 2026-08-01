@@ -42,6 +42,7 @@ export function CardDetailScreen() {
   );
 
   const erratas = data?.erratas ?? [];
+  const printings = data?.printings ?? [];
 
   return (
     <div className="screen">
@@ -51,16 +52,24 @@ export function CardDetailScreen() {
         <>
           {data.image && (
             <div className="card-hero">
-              <img
-                src={data.image}
-                alt={data.name}
-                className="card-hero__image"
-              />
+              {/* Une carte toujours foil porte le voile irisé sur son illustration. */}
+              <div
+                className={`card-hero__frame${data.foil ? " foil-shine" : ""}`}
+              >
+                <img
+                  src={data.image}
+                  alt={data.name}
+                  className="card-hero__image"
+                />
+              </div>
             </div>
           )}
           <h2 className="card-title">{data.name}</h2>
           {data.subtitle && <p className="card-subtitle">{data.subtitle}</p>}
           <p className="card-badges">
+            {data.foil && (
+              <span className="chip chip--accent">{t("printings.foil")}</span>
+            )}
             {data.type && <span className="chip">{data.type}</span>}
             {typeof data.cost === "number" && (
               <span className="chip">{t("card.cost", { cost: data.cost })}</span>
@@ -79,6 +88,36 @@ export function CardDetailScreen() {
             <div className="card-text-block">
               <GameMarkdown markdown={cardTextMarkdown} gameSlug={gameSlug} />
             </div>
+          )}
+          {printings.length > 0 && (
+            <section>
+              <h2 className="section-title">{t("printings.sectionTitle")}</h2>
+              <div className="printings-grid">
+                {printings.map((printing) => (
+                  <div key={printing.id} className="printing-tile">
+                    <span
+                      className={`printing-tile__frame${printing.foil ? " foil-shine" : ""}`}
+                    >
+                      <img
+                        src={printing.image || data.image}
+                        alt={`${data.name} — ${printing.name}`}
+                        loading="lazy"
+                        className="printing-tile__image"
+                      />
+                    </span>
+                    <span className="printing-tile__name">{printing.name}</span>
+                    <span className="printing-tile__note">
+                      {[
+                        printing.foil ? t("printings.foil") : null,
+                        printing.image ? null : t("printings.baseImage"),
+                      ]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </section>
           )}
           {isAuthenticated && (
             <div className="action-row">

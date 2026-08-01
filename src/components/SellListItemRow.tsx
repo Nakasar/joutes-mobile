@@ -186,7 +186,9 @@ export function SellListItemRow({
         }
       >
         {item.image ? (
-          <img src={item.image} alt="" className="list-row__thumb" />
+          <span className={`thumb-frame${item.foil ? " foil-shine" : ""}`}>
+            <img src={item.image} alt="" className="list-row__thumb" />
+          </span>
         ) : (
           <span className="list-row__thumb" />
         )}
@@ -196,7 +198,12 @@ export function SellListItemRow({
             {item.setCode} {item.collectorNumber}
           </p>
           <div className="copy-badges">
-            {item.foil && <span className="chip chip--accent">Foil</span>}
+            {item.foil && (
+              <span className="chip chip--accent">{t("printings.foil")}</span>
+            )}
+            {item.printingName && (
+              <span className="chip">{item.printingName}</span>
+            )}
             {item.condition && <span className="chip">{item.condition}</span>}
             {item.language && <span className="chip">{item.language}</span>}
           </div>

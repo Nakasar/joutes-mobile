@@ -7,7 +7,9 @@ import {
 } from "../api/wishlists";
 import type { CardDetail, Wishlist } from "../api/types";
 import { useApi } from "../hooks/useApi";
+import { resolvePrinting } from "../lib/printings";
 import { HeartIcon, PlusIcon } from "./icons";
+import { PrintingPicker } from "./PrintingPicker";
 import { StatusView } from "./StatusView";
 
 interface AddToWishlistSheetProps {
@@ -66,9 +68,14 @@ export function AddToWishlistSheet({
   const [newName, setNewName] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [note, setNote] = useState("");
+  const [printingId, setPrintingId] = useState("");
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+
+  // Deux variantes d'une même carte comptent pour deux souhaits distincts ;
+  // une variante imprimée en foil rend le souhait foil.
+  const printing = resolvePrinting(card, printingId || undefined);
 
   function submit(wishlistId: string) {
     setSaving(true);
@@ -79,8 +86,13 @@ export function AddToWishlistSheet({
       name: card.name,
       setCode: card.setCode ?? "",
       collectorNumber: card.collectorNumber ?? "",
-      image: card.image ?? "",
+      image: printing.image ?? card.image ?? "",
       type: card.type,
+      ...(printing.printingId !== undefined && {
+        printingId: printing.printingId,
+        printingName: printing.printingName,
+      }),
+      ...(printing.foil && { foil: true }),
       quantity,
       note: note.trim() || undefined,
     })
@@ -123,6 +135,13 @@ export function AddToWishlistSheet({
             <p className="status muted">{t("wishlists.addToSuccess")}</p>
           ) : (
             <>
+              <PrintingPicker
+                printings={card.printings}
+                value={printingId}
+                onChange={setPrintingId}
+                id={`wishlist-printing-${card.id}`}
+              />
+
               <StatusView loading={loading} error={error} onRetry={reload} />
 
               {personal.length > 0 && (

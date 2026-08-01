@@ -70,7 +70,10 @@ function WishlistItemRow({
     <div>
       <div className="list-row">
         {item.image ? (
-          <img src={item.image} alt="" className="list-row__thumb" />
+          // Le voile irisé dit d'un coup d'œil qu'on souhaite un exemplaire foil.
+          <span className={`thumb-frame${item.foil ? " foil-shine" : ""}`}>
+            <img src={item.image} alt="" className="list-row__thumb" />
+          </span>
         ) : (
           <span className="list-row__thumb" />
         )}
@@ -81,6 +84,16 @@ function WishlistItemRow({
             {typeof item.ownedQuantity === "number" &&
               ` · ${t("wishlists.owned", { count: item.ownedQuantity })}`}
           </p>
+          {(item.foil || item.printingName) && (
+            <div className="copy-badges">
+              {item.foil && (
+                <span className="chip chip--accent">{t("printings.foil")}</span>
+              )}
+              {item.printingName && (
+                <span className="chip">{item.printingName}</span>
+              )}
+            </div>
+          )}
         </div>
         <div className="list-row__actions">
           {canEdit ? (
