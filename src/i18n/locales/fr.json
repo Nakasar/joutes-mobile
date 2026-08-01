@@ -96,7 +96,9 @@
       "addOne": "Ajouter un exemplaire",
       "removeOne": "Retirer un exemplaire",
       "empty": "Aucune carte ne correspond à ces filtres.",
-      "error": "Impossible de charger la collection."
+      "error": "Impossible de charger la collection.",
+      "addCopyTitle": "Ajouter un exemplaire",
+      "addCopySubmit": "Ajouter"
     },
     "wishlistsAction": "Mes listes de souhaits",
     "sellListAction": "Ma liste de vente",
@@ -209,6 +211,14 @@
     "errataSection": "Erratas & rulings",
     "noErrataDetail": "Aucun errata, clarification ou ruling pour cette carte.",
     "noErrataModal": "Aucun errata pour cette carte."
+  },
+  "printings": {
+    "label": "Variante d'impression",
+    "base": "Version de base",
+    "foilOption": "{{name}} (foil)",
+    "foil": "Foil",
+    "sectionTitle": "Variantes d'impression",
+    "baseImage": "Illustration de la carte"
   },
   "deck": {
     "title": "Vérificateur de deck",

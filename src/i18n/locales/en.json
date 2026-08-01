@@ -96,7 +96,9 @@
       "addOne": "Add a copy",
       "removeOne": "Remove a copy",
       "empty": "No cards match these filters.",
-      "error": "Couldn't load the collection."
+      "error": "Couldn't load the collection.",
+      "addCopyTitle": "Add a copy",
+      "addCopySubmit": "Add"
     },
     "wishlistsAction": "My wishlists",
     "sellListAction": "My sale list",
@@ -209,6 +211,14 @@
     "errataSection": "Errata & rulings",
     "noErrataDetail": "No errata, clarification or ruling for this card.",
     "noErrataModal": "No errata for this card."
+  },
+  "printings": {
+    "label": "Print variant",
+    "base": "Base version",
+    "foilOption": "{{name}} (foil)",
+    "foil": "Foil",
+    "sectionTitle": "Print variants",
+    "baseImage": "Card artwork"
   },
   "deck": {
     "title": "Deck checker",

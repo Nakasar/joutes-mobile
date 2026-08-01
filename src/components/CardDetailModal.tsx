@@ -81,13 +81,20 @@ export function CardDetailModal({
         <div className="sheet__body">
           {image && (
             <div className="card-hero">
-              <img src={image} alt={name} className="card-hero__image" />
+              <div
+                className={`card-hero__frame${data?.foil ? " foil-shine" : ""}`}
+              >
+                <img src={image} alt={name} className="card-hero__image" />
+              </div>
             </div>
           )}
           <h2 className="card-title">{name}</h2>
           {data?.subtitle && <p className="card-subtitle">{data.subtitle}</p>}
           {data && (
             <p className="card-badges">
+              {data.foil && (
+                <span className="chip chip--accent">{t("printings.foil")}</span>
+              )}
               {data.type && <span className="chip">{data.type}</span>}
               {typeof data.cost === "number" && (
                 <span className="chip">{t("card.cost", { cost: data.cost })}</span>

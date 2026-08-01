@@ -7,9 +7,11 @@ import {
   removeCollectionCard,
 } from "../api/collection";
 import type { CollectionItem } from "../api/types";
+import { AddCollectionCopySheet } from "../components/AddCollectionCopySheet";
 import { BackHeader } from "../components/BackHeader";
 import { LockIcon, MinusIcon, PlusIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
+import { resolvePrinting, type PrintingChoice } from "../lib/printings";
 import { useAuth } from "../store/auth";
 
 const PAGE_SIZE = 30;
@@ -45,6 +47,10 @@ function CollectionGameContent({
   const [error, setError] = useState<string | null>(null);
   const [busyCardIds, setBusyCardIds] = useState<Set<string>>(new Set());
   const [retryTick, setRetryTick] = useState(0);
+  /** Carte dont on choisit la variante avant de l'ajouter, le cas échéant. */
+  const [pickingPrinting, setPickingPrinting] = useState<CollectionItem | null>(
+    null,
+  );
 
   useEffect(() => {
     const timer = setTimeout(() => setSearchQuery(searchInput.trim()), 300);
@@ -125,7 +131,14 @@ function CollectionGameContent({
     });
   };
 
-  const addOne = async (item: CollectionItem) => {
+  /**
+   * Ajoute un exemplaire. `choice` porte la variante retenue : la version de
+   * base quand la carte n'a pas de variante, ou celle choisie dans la feuille.
+   */
+  const addOne = async (
+    item: CollectionItem,
+    choice: PrintingChoice = resolvePrinting(item),
+  ) => {
     setBusy(item.id, true);
     const previousQuantity = item.quantity;
     applyStatsDelta(item, 1);
@@ -137,7 +150,14 @@ function CollectionGameContent({
           name: item.name,
           setCode: item.setCode,
           collectorNumber: item.collectorNumber,
-          image: item.image,
+          image: choice.image ?? item.image,
+          ...(choice.foil && { foil: true }),
+          ...(choice.printingId !== undefined && {
+            printingId: choice.printingId,
+            ...(choice.printingName !== undefined && {
+              printingName: choice.printingName,
+            }),
+          }),
         },
         groupId,
       );
@@ -258,7 +278,7 @@ function CollectionGameContent({
             <div key={item.id} className="card-tile">
               <Link
                 to={`/games/${gameSlug}/cards/${item.id}`}
-                className="card-tile__frame"
+                className={`card-tile__frame${item.foil ? " foil-shine" : ""}`}
               >
                 {item.image ? (
                   <img
@@ -291,7 +311,12 @@ function CollectionGameContent({
                   type="button"
                   className="qty-stepper__btn"
                   disabled={busy}
-                  onClick={() => addOne(item)}
+                  onClick={() =>
+                    // Une carte à variantes demande d'abord laquelle ajouter.
+                    item.printings && item.printings.length > 0
+                      ? setPickingPrinting(item)
+                      : addOne(item)
+                  }
                   aria-label={t("collection.browse.addOne")}
                 >
                   <PlusIcon size={14} />
@@ -320,6 +345,20 @@ function CollectionGameContent({
         >
           {t("cards.loadMore")}
         </button>
+      )}
+
+      {pickingPrinting && (
+        <AddCollectionCopySheet
+          item={pickingPrinting}
+          onClose={() => setPickingPrinting(null)}
+          onConfirm={(choice) => {
+            // La quantité affichée a pu bouger depuis l'ouverture : on repart
+            // de l'élément courant plutôt que de l'instantané de la feuille.
+            const current = items.find((it) => it.id === pickingPrinting.id);
+            setPickingPrinting(null);
+            if (current) void addOne(current, choice);
+          }}
+        />
       )}
     </div>
   );

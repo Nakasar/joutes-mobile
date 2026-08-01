@@ -147,6 +147,80 @@ code {
   }
 }
 
+/* ---- Foil ----
+ *
+ * Marque une carte qui n'existe qu'en foil, ou une variante d'impression
+ * imprimée en foil. Repris de `app/globals.css` côté joutes-app : le voile
+ * irisé (`::before`) est permanent, le reflet (`::after`) balaie
+ * l'illustration. À poser sur l'élément qui porte l'image ; il devient
+ * `position: relative` pour que les deux calques s'y accrochent, et les
+ * commandes posées par-dessus (badge de quantité, coût…) restent au-dessus
+ * grâce à leur propre `z-index`.
+ */
+
+@keyframes jtFoilShine {
+  from {
+    transform: translateX(0) rotate(18deg);
+  }
+  to {
+    transform: translateX(500%) rotate(18deg);
+  }
+}
+
+.foil-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.foil-shine::before,
+.foil-shine::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.foil-shine::before {
+  inset: 0;
+  z-index: 1;
+  background-image: linear-gradient(
+    135deg,
+    rgba(255, 170, 240, 0.18),
+    rgba(140, 220, 255, 0.18) 35%,
+    rgba(255, 240, 150, 0.18) 70%,
+    rgba(180, 255, 220, 0.18)
+  );
+}
+
+.foil-shine::after {
+  top: -50%;
+  bottom: -50%;
+  left: -60%;
+  width: 35%;
+  z-index: 2;
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.28),
+    rgba(140, 220, 255, 0.42),
+    rgba(255, 170, 240, 0.42),
+    rgba(255, 240, 150, 0.32),
+    transparent
+  );
+  filter: blur(2px);
+  animation: jtFoilShine 3s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .foil-shine::after {
+    /* Reflet immobile posé sur l'illustration plutôt qu'un balayage. */
+    animation: none;
+    left: 20%;
+    opacity: 0.6;
+    transform: rotate(18deg);
+  }
+}
+
 /* ---- Structure de l'app (contenu + barre d'onglets) ---- */
 
 .app-shell {
@@ -1062,6 +1136,16 @@ textarea:focus {
   color: inherit;
 }
 
+/*
+ * Le voile foil couvre la vignette : il doit en épouser les coins arrondis.
+ * Le cadre reprend aussi l'ombre de l'image, que son `overflow: hidden`
+ * rognerait.
+ */
+.card-tile__frame.foil-shine {
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+}
+
 .card-tile__image,
 .card-tile__placeholder {
   width: 100%;
@@ -1086,6 +1170,8 @@ textarea:focus {
   position: absolute;
   top: 5px;
   right: 5px;
+  /* Au-dessus des calques foil (z-index 1 et 2). */
+  z-index: 3;
   min-width: 18px;
   height: 18px;
   padding: 0 4px;
@@ -1120,6 +1206,7 @@ textarea:focus {
   position: absolute;
   top: 5px;
   right: 5px;
+  z-index: 3;
   min-width: 20px;
   height: 20px;
   padding: 0 5px;
@@ -1193,6 +1280,67 @@ textarea:focus {
   object-fit: contain;
   border-radius: 16px;
   box-shadow: var(--shadow);
+}
+
+/*
+ * Cadre autour de l'illustration, porteur du voile foil : il reprend la
+ * largeur et les coins de l'image, qui remplit alors tout le cadre.
+ */
+.card-hero__frame {
+  width: 60%;
+  max-width: 230px;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+}
+
+.card-hero__frame .card-hero__image {
+  width: 100%;
+  max-width: none;
+  box-shadow: none;
+  display: block;
+}
+
+/* ---- Variantes d'impression ---- */
+
+.printings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 11px;
+  margin-bottom: 16px;
+}
+
+.printing-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.printing-tile__frame {
+  position: relative;
+  display: block;
+  border-radius: 10px;
+  overflow: hidden;
+  /* L'ombre est portée par le cadre : sur l'image, elle serait rognée. */
+  box-shadow: var(--shadow-sm);
+}
+
+.printing-tile__image {
+  width: 100%;
+  aspect-ratio: 5 / 7;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+}
+
+.printing-tile__name {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.printing-tile__note {
+  font-size: 10px;
+  color: var(--muted);
 }
 
 .card-title {
@@ -2509,6 +2657,25 @@ textarea:focus {
   object-fit: cover;
   box-shadow: var(--shadow-sm);
   background: var(--surface-2);
+}
+
+/* Cadre autour d'une vignette de liste, porteur du voile foil. */
+.thumb-frame {
+  flex-shrink: 0;
+  display: block;
+  width: 42px;
+  height: 58px;
+  border-radius: 8px;
+  overflow: hidden;
+  /* L'ombre est portée par le cadre : sur l'image, elle serait rognée. */
+  box-shadow: var(--shadow-sm);
+}
+
+.thumb-frame .list-row__thumb {
+  width: 100%;
+  height: 100%;
+  box-shadow: none;
+  display: block;
 }
 
 .list-row__icon {

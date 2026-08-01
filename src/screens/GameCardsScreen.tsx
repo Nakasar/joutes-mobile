@@ -146,7 +146,10 @@ export function GameCardsScreen() {
             to={`/games/${gameSlug}/cards/${card.id}`}
             className="card-tile"
           >
-            <span className="card-tile__frame">
+            {/* Une carte toujours foil se reconnaît dans la galerie comme sur sa fiche. */}
+            <span
+              className={`card-tile__frame${card.foil ? " foil-shine" : ""}`}
+            >
               {card.image ? (
                 <img
                   src={card.image}

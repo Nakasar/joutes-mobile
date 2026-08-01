@@ -96,7 +96,9 @@
       "addOne": "Ein Exemplar hinzufügen",
       "removeOne": "Ein Exemplar entfernen",
       "empty": "Keine Karte entspricht diesen Filtern.",
-      "error": "Die Sammlung konnte nicht geladen werden."
+      "error": "Die Sammlung konnte nicht geladen werden.",
+      "addCopyTitle": "Exemplar hinzufügen",
+      "addCopySubmit": "Hinzufügen"
     },
     "wishlistsAction": "Meine Wunschlisten",
     "sellListAction": "Meine Verkaufsliste",
@@ -209,6 +211,14 @@
     "errataSection": "Errata & Rulings",
     "noErrataDetail": "Kein Errata, keine Klarstellung und kein Ruling für diese Karte.",
     "noErrataModal": "Kein Errata für diese Karte."
+  },
+  "printings": {
+    "label": "Druckvariante",
+    "base": "Standardversion",
+    "foilOption": "{{name}} (Foil)",
+    "foil": "Foil",
+    "sectionTitle": "Druckvarianten",
+    "baseImage": "Kartenillustration"
   },
   "deck": {
     "title": "Deck-Prüfer",

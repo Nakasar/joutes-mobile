@@ -79,6 +79,21 @@ export interface Game extends GameSummary {
 // ---- Cartes ----
 
 /**
+ * Variante d'impression d'une carte : une même carte (même numéro de
+ * collection) existe souvent en plusieurs tirages — normal, foil, promo pack,
+ * pre-release, judge… Chaque variante peut avoir sa propre illustration ;
+ * faute d'image, celle de la carte de base est utilisée.
+ */
+export interface CardPrinting {
+  /** Identifiant stable au sein de la carte, dérivé du nom de la variante. */
+  id: string;
+  name: string;
+  /** La variante est imprimée en foil. */
+  foil?: boolean;
+  image?: string;
+}
+
+/**
  * Carte du catalogue d'un jeu. Outre les champs communs ci-dessous, l'API
  * renvoie des attributs propres à chaque jeu (ex. `Domain`, `Set`, `face`
  * pour Riftbound) — accessibles via la signature d'index.
@@ -96,6 +111,10 @@ export interface Card {
   text?: string;
   banned?: boolean;
   isToken?: boolean;
+  /** La carte n'existe qu'en foil. */
+  foil?: boolean;
+  /** Tirages de la même carte, proposés au moment d'enregistrer un exemplaire. */
+  printings?: CardPrinting[];
   [key: string]: unknown;
 }
 
@@ -493,6 +512,10 @@ export interface CollectionItem {
   collectorNumber: string;
   image: string;
   type?: string;
+  /** La carte n'existe qu'en foil. */
+  foil?: boolean;
+  /** Variantes d'impression, proposées au moment d'ajouter un exemplaire. */
+  printings?: CardPrinting[];
   quantity: number;
   /** Nombre d'autres éditions de cette même carte (ex. alt arts) possédées à au moins un exemplaire. */
   variantsOwned: number;
@@ -518,12 +541,19 @@ export interface CollectionCardInput {
   setCode: string;
   collectorNumber: string;
   image: string;
+  foil?: boolean;
+  /** Variante d'impression choisie ; absente = version de base de la carte. */
+  printingId?: string;
+  printingName?: string;
 }
 
 /** Copie possédée d'une carte du catalogue (`GET /collection/cards/{cardId}`). */
 export interface CollectionCardEntry {
   id: string;
   foil?: boolean;
+  /** Variante d'impression de cet exemplaire ; absente = version de base. */
+  printingId?: string;
+  printingName?: string;
   language?: "FR" | "EN" | "ZH" | "IT" | "JA" | "KO";
   condition?: "Damaged" | "Played" | "Good" | "Near Mint" | "Mint";
   grade?: number;
@@ -576,6 +606,10 @@ export interface WishlistItem {
   collectorNumber?: string;
   image?: string;
   type?: string;
+  /** Variante d'impression souhaitée ; absente = version de base de la carte. */
+  printingId?: string;
+  printingName?: string;
+  foil?: boolean;
   quantity: number;
   note?: string;
   addedByUserId?: string;
@@ -625,6 +659,9 @@ export interface SellListItem {
   image?: string;
   type?: string;
   foil?: boolean;
+  /** Variante d'impression de l'exemplaire mis en vente. */
+  printingId?: string;
+  printingName?: string;
   language?: string;
   condition?: string;
   grade?: number;

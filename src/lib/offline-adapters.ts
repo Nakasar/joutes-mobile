@@ -56,6 +56,9 @@ function toCard(raw: Record<string, unknown>): Card {
     text: pick<string>("text"),
     banned: (raw.banned as boolean | undefined) ?? false,
     isToken: raw.isToken as boolean | undefined,
+    // Foil et variantes d'impression sont des champs de carte, jamais de face.
+    foil: raw.foil as boolean | undefined,
+    printings: raw.printings as Card["printings"],
   } as Card;
 }
 
