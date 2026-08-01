@@ -1136,9 +1136,14 @@ textarea:focus {
   color: inherit;
 }
 
-/* Le voile foil couvre la vignette : il doit en épouser les coins arrondis. */
+/*
+ * Le voile foil couvre la vignette : il doit en épouser les coins arrondis.
+ * Le cadre reprend aussi l'ombre de l'image, que son `overflow: hidden`
+ * rognerait.
+ */
 .card-tile__frame.foil-shine {
   border-radius: 10px;
+  box-shadow: var(--shadow-sm);
 }
 
 .card-tile__image,
@@ -1315,6 +1320,8 @@ textarea:focus {
   display: block;
   border-radius: 10px;
   overflow: hidden;
+  /* L'ombre est portée par le cadre : sur l'image, elle serait rognée. */
+  box-shadow: var(--shadow-sm);
 }
 
 .printing-tile__image {
@@ -1322,7 +1329,6 @@ textarea:focus {
   aspect-ratio: 5 / 7;
   object-fit: cover;
   border-radius: 10px;
-  box-shadow: var(--shadow-sm);
   display: block;
 }
 
@@ -2660,6 +2666,9 @@ textarea:focus {
   width: 42px;
   height: 58px;
   border-radius: 8px;
+  overflow: hidden;
+  /* L'ombre est portée par le cadre : sur l'image, elle serait rognée. */
+  box-shadow: var(--shadow-sm);
 }
 
 .thumb-frame .list-row__thumb {
