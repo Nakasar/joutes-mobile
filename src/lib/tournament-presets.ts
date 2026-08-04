@@ -30,6 +30,15 @@ const PRESETS: GameTournamentPreset[] = [
     ],
   },
   {
+    // Jeux de figurines à grande armée : score de bataille (départage) et score
+    // de destruction (conservé pour l'historique du tournoi).
+    key: "battle-points",
+    stats: [
+      { key: "battlePoints", labelKey: "battlePoints", max: 999 },
+      { key: "pointsDestroyed", labelKey: "pointsDestroyed", max: 9999 },
+    ],
+  },
+  {
     key: "victory-points",
     stats: [{ key: "victoryPoints", labelKey: "victoryPoints", max: 999 }],
   },

@@ -23,6 +23,7 @@ export function TournamentReportSheet({
   bestOf,
   resultMode,
   stats = [],
+  requireStats = false,
   playerName,
   opponentName,
   busy,
@@ -36,6 +37,11 @@ export function TournamentReportSheet({
   resultMode: TournamentResultMode;
   /** Statistiques secondaires à relever. Vide = la phase n'en demande pas. */
   stats?: MatchStatDefinition[];
+  /**
+   * La phase exige leur saisie : chaque partie rapportée porte toutes les
+   * statistiques, pour chaque joueur, sans quoi l'API refuse le résultat.
+   */
+  requireStats?: boolean;
   playerName: (playerId: string) => string;
   opponentName: string;
   busy: boolean;
@@ -94,6 +100,7 @@ export function TournamentReportSheet({
               bestOf={bestOf}
               resultMode={resultMode}
               stats={stats}
+              requireStats={requireStats}
               playerName={playerName}
               busy={busy}
               onSubmit={onSubmit}
@@ -168,6 +175,7 @@ function DetailedResultForm({
   bestOf,
   resultMode,
   stats,
+  requireStats,
   playerName,
   busy,
   onSubmit,
@@ -176,6 +184,7 @@ function DetailedResultForm({
   bestOf: number;
   resultMode: TournamentResultMode;
   stats: MatchStatDefinition[];
+  requireStats: boolean;
   playerName: (playerId: string) => string;
   busy: boolean;
   onSubmit: (games: TournamentGameResult[]) => void;
@@ -250,6 +259,18 @@ function DetailedResultForm({
 
   const decided = games.filter((g): g is TournamentGameResult => g !== undefined);
 
+  // Statistiques exigées : chaque partie rapportée les porte toutes, pour
+  // chaque joueur. On bloque l'envoi ici plutôt que de laisser l'API refuser le
+  // résultat une fois la feuille refermée.
+  const statsIncomplete =
+    requireStats &&
+    stats.length > 0 &&
+    decided.some((game) =>
+      match.players.some((p) =>
+        stats.some((stat) => typeof game.stats?.[p.playerId]?.[stat.key] !== "number"),
+      ),
+    );
+
   return (
     <div className="game-picker">
       {games.map((game, i) => (
@@ -319,11 +340,19 @@ function DetailedResultForm({
           )}
         </div>
       ))}
+      {stats.length > 0 && (
+        <p className="status muted">
+          {t(requireStats ? "tournaments.matchStatsRequired" : "tournaments.matchStatsOptional", {
+            stats: stats.map((stat) => t(`tournaments.matchStats.${stat.labelKey}`)).join(", "),
+          })}
+        </p>
+      )}
+      {statsIncomplete && <p className="form-error">{t("tournaments.matchStatsMissing")}</p>}
       <button
         type="button"
         className="btn btn--grad btn--block"
         onClick={() => onSubmit(decided)}
-        disabled={busy || decided.length === 0}
+        disabled={busy || decided.length === 0 || statsIncomplete}
       >
         {busy ? t("common.saving") : t("tournaments.reportSubmit")}
       </button>

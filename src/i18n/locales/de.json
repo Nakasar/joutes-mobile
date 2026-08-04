@@ -432,6 +432,9 @@
                    "playBefore": "Zu spielen bis",
                    "scenario": "Szenario",
                    "matchStatAria": "{{stat}} von {{name}} für Partie {{number}}",
+                   "matchStatsOptional": "Nach jeder Partie erfasst: {{stats}}.",
+                   "matchStatsRequired": "Nach jeder Partie zwingend zu erfassen: {{stats}}.",
+                   "matchStatsMissing": "Erfasse alle Statistiken jedes Spielers für die gespielten Partien.",
                    "matchStats": {
                      "struggles": "Beanspruchte Kampfkarten",
                      "strugglesShort": "Kampf",
@@ -442,7 +445,11 @@
                      "touchdowns": "Touchdowns",
                      "touchdownsShort": "TD",
                      "casualties": "Zugefügte Ausfälle",
-                     "casualtiesShort": "Ausf."
+                     "casualtiesShort": "Ausf.",
+                     "battlePoints": "Kampfpunkte",
+                     "battlePointsShort": "Kampf",
+                     "pointsDestroyed": "Zerstörte Punkte",
+                     "pointsDestroyedShort": "Zerstört"
                    },
     "title": "Turniere",
     "subtitle": "Turniere, an denen du teilnimmst. Scanne den QR-Code eines Organisators, um beizutreten.",

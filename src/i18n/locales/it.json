@@ -432,6 +432,9 @@
                    "playBefore": "Da giocare entro il",
                    "scenario": "Scenario",
                    "matchStatAria": "{{stat}} di {{name}} per la partita {{number}}",
+                   "matchStatsOptional": "Rilevato dopo ogni partita: {{stats}}.",
+                   "matchStatsRequired": "Da rilevare obbligatoriamente dopo ogni partita: {{stats}}.",
+                   "matchStatsMissing": "Compila tutte le statistiche di ogni giocatore per le partite giocate.",
                    "matchStats": {
                      "struggles": "Carte lotta reclamate",
                      "strugglesShort": "Lotta",
@@ -442,7 +445,11 @@
                      "touchdowns": "Touchdown",
                      "touchdownsShort": "TD",
                      "casualties": "Infortuni inflitti",
-                     "casualtiesShort": "Inf."
+                     "casualtiesShort": "Inf.",
+                     "battlePoints": "Punti battaglia",
+                     "battlePointsShort": "Battaglia",
+                     "pointsDestroyed": "Punti distrutti",
+                     "pointsDestroyedShort": "Distrutti"
                    },
     "title": "Tornei",
     "subtitle": "Quelli in cui giochi. Scansiona il QR di un organizzatore per partecipare.",
