@@ -428,6 +428,18 @@
     "viewMineAction": "Voir mon profil public"
   },
   "tournaments": {
+                   "stopwatchElapsed": "écoulé",
+                   "stopwatchPaused": "chrono en pause",
+                   "stopwatchNotStarted": "Chronomètre non lancé",
+                   "standingsTime": "Temps",
+                   "puzzleLabel": "Puzzle",
+                   "puzzleElapsed": "Temps écoulé",
+                   "puzzleYourTime": "Votre temps",
+                   "puzzleRunningHint": "Prévenez dès que vous avez terminé.",
+                   "puzzleDoneHint": "Temps enregistré. Voyez l'organisation pour le corriger.",
+                   "puzzleDeclareFinished": "J'ai terminé le puzzle",
+                   "puzzleOrganizerOnlyHint": "L'organisation enregistrera votre temps quand vous aurez terminé.",
+                   "puzzleFinishedCount": "{{count}} joueur(s) ont terminé",
                    "deadlineLabel": "échéance",
                    "playBefore": "À jouer avant le",
                    "scenario": "Scénario",

@@ -112,7 +112,7 @@ export const endpoints = {
     /** Résout des clés de synchronisation d'invités (`tpsk_...`) en tournois. */
     sync: "/tournaments/sync",
     detail: (tournamentId: string) => `/tournaments/${tournamentId}`,
-    /** État public diffusé aux joueurs : annonces + minuteur (sans auth). */
+    /** État public diffusé aux joueurs : annonces + minuteur/chronomètre (sans auth). */
     live: (tournamentId: string) => `/tournaments/${tournamentId}/live`,
     standings: (tournamentId: string) => `/tournaments/${tournamentId}/standings`,
     /** Phases, rondes, matchs et classements figés — tout l'historique en une requête. */
@@ -124,6 +124,9 @@ export const endpoints = {
       `/tournaments/${tournamentId}/players/${playerId}/form`,
     phase: (tournamentId: string, phaseId: string) =>
       `/tournaments/${tournamentId}/phases/${phaseId}`,
+    /** Temps relevés sur le puzzle d'une phase (lecture et self-report). */
+    puzzleResults: (tournamentId: string, phaseId: string) =>
+      `/tournaments/${tournamentId}/phases/${phaseId}/puzzle-results`,
     round: (tournamentId: string, roundId: string) =>
       `/tournaments/${tournamentId}/rounds/${roundId}`,
     match: (tournamentId: string, matchId: string) =>

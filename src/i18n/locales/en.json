@@ -428,6 +428,18 @@
     "viewMineAction": "View my public profile"
   },
   "tournaments": {
+                   "stopwatchElapsed": "elapsed",
+                   "stopwatchPaused": "stopwatch paused",
+                   "stopwatchNotStarted": "Stopwatch not started",
+                   "standingsTime": "Time",
+                   "puzzleLabel": "Puzzle",
+                   "puzzleElapsed": "Elapsed time",
+                   "puzzleYourTime": "Your time",
+                   "puzzleRunningHint": "Let us know as soon as you are done.",
+                   "puzzleDoneHint": "Time recorded. Ask the organizers to correct it.",
+                   "puzzleDeclareFinished": "I finished the puzzle",
+                   "puzzleOrganizerOnlyHint": "The organizers will record your time once you are done.",
+                   "puzzleFinishedCount": "{{count}} player(s) finished",
                    "deadlineLabel": "deadline",
                    "playBefore": "Play before",
                    "scenario": "Scenario",

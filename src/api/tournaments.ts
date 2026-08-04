@@ -12,6 +12,7 @@ import type {
   TournamentPhaseDetail,
   TournamentPlayer,
   TournamentPlayingEntry,
+  TournamentPuzzleResult,
   TournamentRoundDetail,
   TournamentStanding,
   TournamentSyncEntry,
@@ -150,6 +151,36 @@ export function dropSelf(
   return api.patch<TournamentPlayer>(
     endpoints.tournaments.player(tournamentId, playerId),
     { status: "dropped" },
+    authHeaders(syncKey),
+  );
+}
+
+/** Temps relevés sur le puzzle d'une phase, du plus rapide au plus lent. */
+export function getPuzzleResults(
+  tournamentId: string,
+  phaseId: string,
+  syncKey?: string,
+): Promise<TournamentPuzzleResult[]> {
+  return api.get<TournamentPuzzleResult[]>(
+    endpoints.tournaments.puzzleResults(tournamentId, phaseId),
+    undefined,
+    authHeaders(syncKey),
+  );
+}
+
+/**
+ * Signale que le joueur vient de terminer le puzzle : le serveur relève le
+ * temps courant du chronomètre de la salle. Le joueur ne choisit pas son temps
+ * — seule l'organisation peut le corriger ensuite.
+ */
+export function reportPuzzleFinished(
+  tournamentId: string,
+  phaseId: string,
+  syncKey?: string,
+): Promise<TournamentPuzzleResult> {
+  return api.post<TournamentPuzzleResult>(
+    endpoints.tournaments.puzzleResults(tournamentId, phaseId),
+    {},
     authHeaders(syncKey),
   );
 }

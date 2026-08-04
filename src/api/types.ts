@@ -789,7 +789,17 @@ export type TradeError =
 // ---- Tournois ----
 
 export type TournamentStatus = "draft" | "in-progress" | "completed";
-export type TournamentPhaseType = "freeform" | "swiss" | "elimination" | "bracket";
+/**
+ * Type d'une phase. `puzzle` : personne n'affronte personne — tous les joueurs
+ * résolvent le même puzzle en même temps, un chronomètre parti de 0 remplace le
+ * minuteur, et le classement se fait au temps mis pour terminer.
+ */
+export type TournamentPhaseType =
+  | "freeform"
+  | "swiss"
+  | "elimination"
+  | "bracket"
+  | "puzzle";
 export type TournamentPhaseStatus = "not-started" | "in-progress" | "completed";
 export type TournamentPlayerStatus = "registered" | "pre-registered" | "dropped";
 export type TournamentMatchStatus = "pending" | "in-progress" | "completed" | "disputed";
@@ -826,6 +836,17 @@ export interface TournamentTimer {
   remainingSeconds?: number;
 }
 
+/**
+ * Chronomètre des phases puzzle. Il part de 0 et monte : `startedAt` n'est
+ * présent que pendant qu'il tourne, `elapsedSeconds` fige le temps écoulé en
+ * pause. Il vit à côté du minuteur, qu'il ne remplace qu'à l'affichage.
+ */
+export interface TournamentStopwatch {
+  running: boolean;
+  startedAt?: string;
+  elapsedSeconds?: number;
+}
+
 export interface Tournament {
   id: string;
   name: string;
@@ -836,6 +857,7 @@ export interface Tournament {
   /** Code public à 9 caractères (A-Z0-9) : rejoindre via `/t/{joinCode}/join`. */
   joinCode?: string;
   timer?: TournamentTimer | null;
+  stopwatch?: TournamentStopwatch | null;
   settings: {
     allowSelfReporting: boolean;
     requireConfirmation: boolean;
@@ -1163,6 +1185,11 @@ export interface TournamentStanding {
   opponentMatchWinPercentage?: number;
   /** Cumul des statistiques du preset, par clé. Absent hors preset. */
   stats?: Record<string, number>;
+  /**
+   * Temps de résolution du puzzle, en secondes. Absent hors phase puzzle, ou
+   * tant que le joueur n'a pas terminé. Le plus petit temps passe devant.
+   */
+  puzzleTimeSeconds?: number;
 }
 
 /** Réponse de `POST /tournaments/join`. */
@@ -1202,5 +1229,23 @@ export interface TournamentLiveState {
   roundNumber?: number | null;
   announcements: TournamentAnnouncementPublic[];
   timer: TournamentTimer | null;
+  /** Chronomètre de la salle : il remplace le minuteur en phase puzzle. */
+  stopwatch?: TournamentStopwatch | null;
+  /** Type de la phase en cours : dit laquelle des deux horloges afficher. */
+  phaseType?: TournamentPhaseType | null;
   serverNow: string;
+}
+
+/** Temps relevé pour un joueur sur le puzzle d'une phase. */
+export interface TournamentPuzzleResult {
+  id: string;
+  tournamentId: string;
+  phaseId: string;
+  playerId: string;
+  durationSeconds: number;
+  /** Rapporté par le joueur lui-même plutôt que par l'organisation. */
+  selfReported: boolean;
+  reportedBy: string;
+  createdAt: string;
+  updatedAt?: string;
 }
