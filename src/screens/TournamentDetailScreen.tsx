@@ -38,6 +38,7 @@ import { playerTag } from "../lib/tournament-player";
 import { removeSyncKey } from "../lib/tournament-sync-storage";
 import {
   formatDuration,
+  formatStopwatch,
   stopwatchElapsedSeconds,
   stopwatchIsPaused,
   timerIsPaused,
@@ -309,7 +310,10 @@ function PuzzleTab({
   const { t } = useTranslation();
   useTick(1000);
 
-  const [results, setResults] = useState<TournamentPuzzleResult[]>([]);
+  // `null` = temps pas encore chargés (ou chargement échoué), à distinguer
+  // d'une liste vide : « 0 joueur a terminé » est une information, pas un
+  // repli acceptable quand on n'a simplement rien pu lire.
+  const [results, setResults] = useState<TournamentPuzzleResult[] | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -319,13 +323,14 @@ function PuzzleTab({
       .catch(() => {
         // Lecture d'appoint : un échec laisse simplement la carte sans le
         // compteur, il n'y a rien à signaler au joueur.
+        setResults(null);
       });
   }, [tournamentId, phaseId, syncKey]);
 
   useEffect(load, [load]);
 
   const elapsed = stopwatchElapsedSeconds(state?.stopwatch, serverOffsetMs);
-  const myResult = results.find((result) => result.playerId === myPlayerId);
+  const myResult = results?.find((result) => result.playerId === myPlayerId);
 
   function declareFinished() {
     if (busy) return;
@@ -349,7 +354,7 @@ function PuzzleTab({
           {myResult ? t("tournaments.puzzleYourTime") : t("tournaments.puzzleElapsed")}
         </p>
         <p className="table-card__number">
-          {formatDuration(myResult ? myResult.durationSeconds : (elapsed ?? 0))}
+          {myResult ? formatDuration(myResult.durationSeconds) : formatStopwatch(elapsed)}
         </p>
         <p className="table-card__record">
           {myResult
@@ -385,9 +390,11 @@ function PuzzleTab({
         <p className="status muted">{t("tournaments.puzzleOrganizerOnlyHint")}</p>
       )}
 
-      <p className="status muted">
-        {t("tournaments.puzzleFinishedCount", { count: results.length })}
-      </p>
+      {results !== null && (
+        <p className="status muted">
+          {t("tournaments.puzzleFinishedCount", { count: results.length })}
+        </p>
+      )}
     </>
   );
 }
