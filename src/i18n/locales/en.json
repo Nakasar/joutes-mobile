@@ -434,7 +434,7 @@
                    "matchStatAria": "{{stat}} for {{name}} in game {{number}}",
                    "matchStatsOptional": "Recorded after each game: {{stats}}.",
                    "matchStatsRequired": "Required after each game: {{stats}}.",
-                   "matchStatsMissing": "Fill in every statistic for every player of the games played.",
+                   "matchStatsMissing": "Fill in every statistic for each player in the games you report.",
                    "matchStats": {
                      "struggles": "Struggle cards claimed",
                      "strugglesShort": "Struggle",
