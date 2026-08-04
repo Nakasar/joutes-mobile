@@ -790,16 +790,18 @@ export type TradeError =
 
 export type TournamentStatus = "draft" | "in-progress" | "completed";
 /**
- * Type d'une phase. `puzzle` : personne n'affronte personne — tous les joueurs
- * résolvent le même puzzle en même temps, un chronomètre parti de 0 remplace le
- * minuteur, et le classement se fait au temps mis pour terminer.
+ * Type d'une phase. `time-race` : course contre la montre, personne n'affronte
+ * personne — tous les joueurs affrontent la même épreuve en même temps, un
+ * chronomètre parti de 0 remplace le minuteur, et le classement se fait au
+ * temps mis pour terminer. Nom volontairement générique : le puzzle est le
+ * premier usage, pas le seul format chronométré possible.
  */
 export type TournamentPhaseType =
   | "freeform"
   | "swiss"
   | "elimination"
   | "bracket"
-  | "puzzle";
+  | "time-race";
 export type TournamentPhaseStatus = "not-started" | "in-progress" | "completed";
 export type TournamentPlayerStatus = "registered" | "pre-registered" | "dropped";
 export type TournamentMatchStatus = "pending" | "in-progress" | "completed" | "disputed";

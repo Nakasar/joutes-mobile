@@ -122,7 +122,7 @@ function PortalHeader({
 
   // Phase puzzle : le chronomètre de la salle prend la place du décompte. Il
   // monte depuis 0, donc rien n'expire et rien ne passe au rouge.
-  const isPuzzle = state?.phaseType === "puzzle";
+  const isPuzzle = state?.phaseType === "time-race";
   const remaining = isPuzzle
     ? stopwatchElapsedSeconds(state?.stopwatch, serverOffsetMs)
     : timerRemainingSeconds(state?.timer, serverOffsetMs);
@@ -1209,7 +1209,7 @@ export function TournamentDetailScreen() {
               <p className="status muted">{t("common.loading")}</p>
             ) : history.error ? (
               <StatusView error={history.error} onRetry={history.reload} />
-            ) : activePhase?.type === "puzzle" ? (
+            ) : activePhase?.type === "time-race" ? (
               // Phase puzzle : la carte de match n'a ni table ni adversaire à
               // montrer, le chronomètre et le « j'ai fini » la remplacent.
               <PuzzleTab
