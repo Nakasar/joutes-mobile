@@ -1031,6 +1031,11 @@ export interface TournamentPhase {
    * `src/lib/tournament-presets.ts`). Absent = aucune statistique relevée.
    */
   statsPresetKey?: string;
+  /**
+   * La phase exige la saisie des statistiques pour rapporter un résultat : sans
+   * elles, l'API refuse le rapport. Absent sur les phases antérieures = non.
+   */
+  requireMatchStats?: boolean;
   /** Pool de scénarios attribués aux rondes dans l'ordre. */
   scenarios?: TournamentScenario[];
   /** Nombre de rondes prévues, quand l'organisation l'a annoncé. */

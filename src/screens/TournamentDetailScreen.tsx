@@ -269,6 +269,7 @@ function MatchTab({
   bestOf,
   resultMode,
   stats,
+  requireStats,
   deadlineAt,
   scenario,
   serverOffsetMs,
@@ -288,6 +289,8 @@ function MatchTab({
   resultMode: TournamentPhase["resultMode"];
   /** Statistiques secondaires relevées par la phase. Vide = aucune. */
   stats: MatchStatDefinition[];
+  /** La phase exige leur saisie : l'API refuse un résultat sans elles. */
+  requireStats: boolean;
   /** Échéance de l'intervalle en cours (ronde asynchrone). */
   deadlineAt?: string;
   scenario?: TournamentScenario;
@@ -515,6 +518,7 @@ function MatchTab({
           bestOf={bestOf}
           resultMode={resultMode}
           stats={stats}
+          requireStats={requireStats}
           playerName={playerName}
           opponentName={opponentName}
           busy={busy}
@@ -1068,6 +1072,7 @@ export function TournamentDetailScreen() {
                 bestOf={activePhase?.bestOf ?? 1}
                 resultMode={activePhase?.resultMode ?? "selection"}
                 stats={presetStats(activePhase?.statsPresetKey)}
+                requireStats={activePhase?.requireMatchStats ?? false}
                 deadlineAt={currentRound?.round.deadlineAt}
                 scenario={currentRound?.round.scenario}
                 serverOffsetMs={serverOffsetMs}

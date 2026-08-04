@@ -432,6 +432,9 @@
                    "playBefore": "Play before",
                    "scenario": "Scenario",
                    "matchStatAria": "{{stat}} for {{name}} in game {{number}}",
+                   "matchStatsOptional": "Recorded after each game: {{stats}}.",
+                   "matchStatsRequired": "Required after each game: {{stats}}.",
+                   "matchStatsMissing": "Fill in every statistic for every player of the games played.",
                    "matchStats": {
                      "struggles": "Struggle cards claimed",
                      "strugglesShort": "Struggle",
@@ -442,7 +445,11 @@
                      "touchdowns": "Touchdowns",
                      "touchdownsShort": "TD",
                      "casualties": "Casualties inflicted",
-                     "casualtiesShort": "Cas."
+                     "casualtiesShort": "Cas.",
+                     "battlePoints": "Battle points",
+                     "battlePointsShort": "Battle",
+                     "pointsDestroyed": "Points destroyed",
+                     "pointsDestroyedShort": "Destroyed"
                    },
     "title": "Tournaments",
     "subtitle": "The ones you play in. Scan an organizer's QR code to join one.",

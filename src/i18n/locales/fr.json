@@ -432,6 +432,9 @@
                    "playBefore": "À jouer avant le",
                    "scenario": "Scénario",
                    "matchStatAria": "{{stat}} de {{name}} pour la partie {{number}}",
+                   "matchStatsOptional": "Relevé après chaque partie : {{stats}}.",
+                   "matchStatsRequired": "À relever obligatoirement après chaque partie : {{stats}}.",
+                   "matchStatsMissing": "Renseignez toutes les statistiques de chaque joueur pour les parties jouées.",
                    "matchStats": {
                      "struggles": "Cartes de lutte revendiquées",
                      "strugglesShort": "Lutte",
@@ -442,7 +445,11 @@
                      "touchdowns": "Touchdowns",
                      "touchdownsShort": "TD",
                      "casualties": "Sorties adverses",
-                     "casualtiesShort": "Sorties"
+                     "casualtiesShort": "Sorties",
+                     "battlePoints": "Score de bataille",
+                     "battlePointsShort": "Bataille",
+                     "pointsDestroyed": "Score de destruction",
+                     "pointsDestroyedShort": "Détruits"
                    },
     "title": "Tournois",
     "subtitle": "Ceux où vous jouez. Scannez le QR d'un organisateur pour en rejoindre un.",
