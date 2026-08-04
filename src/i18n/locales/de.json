@@ -428,6 +428,18 @@
     "viewMineAction": "Mein öffentliches Profil ansehen"
   },
   "tournaments": {
+                   "stopwatchElapsed": "vergangen",
+                   "stopwatchPaused": "Stoppuhr pausiert",
+                   "stopwatchNotStarted": "Stoppuhr nicht gestartet",
+                   "standingsTime": "Zeit",
+                   "puzzleLabel": "Puzzle",
+                   "puzzleElapsed": "Vergangene Zeit",
+                   "puzzleYourTime": "Ihre Zeit",
+                   "puzzleRunningHint": "Melden Sie sich, sobald Sie fertig sind.",
+                   "puzzleDoneHint": "Zeit erfasst. Für eine Korrektur wenden Sie sich an die Organisation.",
+                   "puzzleDeclareFinished": "Ich habe das Puzzle gelöst",
+                   "puzzleOrganizerOnlyHint": "Die Organisation erfasst Ihre Zeit, sobald Sie fertig sind.",
+                   "puzzleFinishedCount": "{{count}} Spieler fertig",
                    "deadlineLabel": "Frist",
                    "playBefore": "Zu spielen bis",
                    "scenario": "Szenario",

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -7,8 +7,10 @@ import {
   dropSelf,
   getHistory,
   getPlayerForm,
+  getPuzzleResults,
   getStandings,
   reportMatchResult,
+  reportPuzzleFinished,
 } from "../api/tournaments";
 import type {
   TournamentDetail,
@@ -19,6 +21,7 @@ import type {
   TournamentMatchStatus,
   TournamentPhase,
   TournamentPlayer,
+  TournamentPuzzleResult,
   TournamentRound,
   TournamentScenario,
   TournamentStanding,
@@ -33,7 +36,14 @@ import { useTournamentLive } from "../hooks/useTournamentLive";
 import { currentLocale } from "../i18n";
 import { playerTag } from "../lib/tournament-player";
 import { removeSyncKey } from "../lib/tournament-sync-storage";
-import { formatDuration, timerIsPaused, timerRemainingSeconds } from "../lib/tournament-timer";
+import {
+  formatDuration,
+  formatStopwatch,
+  stopwatchElapsedSeconds,
+  stopwatchIsPaused,
+  timerIsPaused,
+  timerRemainingSeconds,
+} from "../lib/tournament-timer";
 import {
   deadlineIsPast,
   formatDeadline,
@@ -111,10 +121,15 @@ function PortalHeader({
   const { t, i18n } = useTranslation();
   useTick(1000);
 
-  const remaining = timerRemainingSeconds(state?.timer, serverOffsetMs);
-  const paused = timerIsPaused(state?.timer);
-  const expired = remaining !== null && remaining < 0;
-  const low = remaining !== null && remaining >= 0 && remaining < 300;
+  // Phase puzzle : le chronomètre de la salle prend la place du décompte. Il
+  // monte depuis 0, donc rien n'expire et rien ne passe au rouge.
+  const isPuzzle = state?.phaseType === "time-race";
+  const remaining = isPuzzle
+    ? stopwatchElapsedSeconds(state?.stopwatch, serverOffsetMs)
+    : timerRemainingSeconds(state?.timer, serverOffsetMs);
+  const paused = isPuzzle ? stopwatchIsPaused(state?.stopwatch) : timerIsPaused(state?.timer);
+  const expired = !isPuzzle && remaining !== null && remaining < 0;
+  const low = !isPuzzle && remaining !== null && remaining >= 0 && remaining < 300;
   const announcement = state?.announcements[0];
 
   return (
@@ -142,7 +157,13 @@ function PortalHeader({
                 {formatDuration(remaining)}
               </p>
               <p className="portal-header__timer-label">
-                {paused ? t("tournaments.timerPaused") : t("tournaments.timerRemaining")}
+                {paused
+                  ? isPuzzle
+                    ? t("tournaments.stopwatchPaused")
+                    : t("tournaments.timerPaused")
+                  : isPuzzle
+                    ? t("tournaments.stopwatchElapsed")
+                    : t("tournaments.timerRemaining")}
               </p>
             </div>
           )
@@ -256,6 +277,125 @@ function MyMatchCard({
         </p>
       )}
     </div>
+  );
+}
+
+/**
+ * Onglet « Mon match » d'une phase de puzzle : ni table ni adversaire, donc pas
+ * de carte de match. Le chronomètre de la salle et le geste « j'ai fini »
+ * suffisent — c'est tout ce qu'un joueur a à faire pendant un puzzle.
+ */
+function PuzzleTab({
+  tournamentId,
+  phaseId,
+  myPlayerId,
+  allowSelfReporting,
+  dropped,
+  scenario,
+  state,
+  serverOffsetMs,
+  syncKey,
+}: {
+  tournamentId: string;
+  phaseId: string;
+  myPlayerId: string | undefined;
+  allowSelfReporting: boolean;
+  dropped: boolean;
+  /** Le puzzle à résoudre, repris du scénario de la ronde. */
+  scenario?: TournamentScenario;
+  state: TournamentLiveState | null;
+  serverOffsetMs: number;
+  syncKey: string | undefined;
+}) {
+  const { t } = useTranslation();
+  useTick(1000);
+
+  // `null` = temps pas encore chargés (ou chargement échoué), à distinguer
+  // d'une liste vide : « 0 joueur a terminé » est une information, pas un
+  // repli acceptable quand on n'a simplement rien pu lire.
+  const [results, setResults] = useState<TournamentPuzzleResult[] | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = useCallback(() => {
+    getPuzzleResults(tournamentId, phaseId, syncKey)
+      .then(setResults)
+      .catch(() => {
+        // Lecture d'appoint : un échec laisse simplement la carte sans le
+        // compteur, il n'y a rien à signaler au joueur.
+        setResults(null);
+      });
+  }, [tournamentId, phaseId, syncKey]);
+
+  useEffect(load, [load]);
+
+  const elapsed = stopwatchElapsedSeconds(state?.stopwatch, serverOffsetMs);
+  const myResult = results?.find((result) => result.playerId === myPlayerId);
+
+  function declareFinished() {
+    if (busy) return;
+    setBusy(true);
+    setError(null);
+    reportPuzzleFinished(tournamentId, phaseId, syncKey)
+      .then(() => {
+        setBusy(false);
+        load();
+      })
+      .catch((err: unknown) => {
+        setBusy(false);
+        setError(err instanceof Error ? err.message : t("common.error"));
+      });
+  }
+
+  return (
+    <>
+      <div className="table-card">
+        <p className="table-card__eyebrow">
+          {myResult ? t("tournaments.puzzleYourTime") : t("tournaments.puzzleElapsed")}
+        </p>
+        <p className="table-card__number">
+          {myResult ? formatDuration(myResult.durationSeconds) : formatStopwatch(elapsed)}
+        </p>
+        <p className="table-card__record">
+          {myResult
+            ? t("tournaments.puzzleDoneHint")
+            : elapsed === null
+              ? t("tournaments.stopwatchNotStarted")
+              : t("tournaments.puzzleRunningHint")}
+        </p>
+
+        {scenario && (
+          <div className="table-card__scenario">
+            <p className="table-card__eyebrow">{t("tournaments.puzzleLabel")}</p>
+            <p className="table-card__scenario-name">{scenario.name}</p>
+            {scenario.description && (
+              <p className="table-card__scenario-text">{scenario.description}</p>
+            )}
+          </div>
+        )}
+      </div>
+
+      {error && <p className="status error">{error}</p>}
+
+      {!myResult && allowSelfReporting && (
+        <button
+          className="btn btn--grad btn--block btn--lg"
+          onClick={declareFinished}
+          disabled={busy || dropped || elapsed === null || !myPlayerId}
+        >
+          {t("tournaments.puzzleDeclareFinished")}
+        </button>
+      )}
+      {!myResult && !allowSelfReporting && (
+        <p className="status muted">{t("tournaments.puzzleOrganizerOnlyHint")}</p>
+      )}
+
+      {results !== null && (
+        <p className="status muted">
+          {t("tournaments.puzzleFinishedCount", { count: results.length })}
+        </p>
+      )}
+    </>
   );
 }
 
@@ -558,6 +698,10 @@ function StandingsTab({
   const myRankIndex = standings.findIndex((s) => s.playerId === myPlayerId);
   const myStanding = myRankIndex >= 0 ? standings[myRankIndex] : undefined;
 
+  // Colonne du chronomètre : ouverte dès qu'un joueur a un temps (phase
+  // puzzle). Les autres n'ont simplement pas encore terminé.
+  const hasPuzzleTimes = standings.some((s) => s.puzzleTimeSeconds !== undefined);
+
   return (
     <>
       {validatedRounds.length > 0 && (
@@ -608,11 +752,13 @@ function StandingsTab({
           <div className="standings-me__score">
             <p className="standings-me__rank">{myRankIndex + 1}</p>
             <p className="standings-me__record">
-              {t("tournaments.recordLabel", {
-                wins: myStanding.wins,
-                losses: myStanding.losses,
-                draws: myStanding.draws,
-              })}
+              {myStanding.puzzleTimeSeconds !== undefined
+                ? formatDuration(myStanding.puzzleTimeSeconds)
+                : t("tournaments.recordLabel", {
+                    wins: myStanding.wins,
+                    losses: myStanding.losses,
+                    draws: myStanding.draws,
+                  })}
             </p>
           </div>
         </div>
@@ -627,6 +773,7 @@ function StandingsTab({
               <tr>
                 <th>#</th>
                 <th>{t("tournaments.standingsPlayer")}</th>
+                {hasPuzzleTimes && <th>{t("tournaments.standingsTime")}</th>}
                 <th>{t("tournaments.standingsPoints")}</th>
                 <th>{t("tournaments.standingsRecord")}</th>
                 {statColumns.map((column) => (
@@ -646,6 +793,13 @@ function StandingsTab({
                     {playerTag(s.displayName, s.discriminator)}
                     {s.playerStatus === "dropped" && ` ${t("tournaments.droppedSuffix")}`}
                   </td>
+                  {hasPuzzleTimes && (
+                    <td>
+                      {s.puzzleTimeSeconds === undefined
+                        ? "—"
+                        : formatDuration(s.puzzleTimeSeconds)}
+                    </td>
+                  )}
                   <td>{s.matchPoints}</td>
                   <td>
                     {s.wins}-{s.losses}-{s.draws}
@@ -1062,6 +1216,20 @@ export function TournamentDetailScreen() {
               <p className="status muted">{t("common.loading")}</p>
             ) : history.error ? (
               <StatusView error={history.error} onRetry={history.reload} />
+            ) : activePhase?.type === "time-race" ? (
+              // Phase puzzle : la carte de match n'a ni table ni adversaire à
+              // montrer, le chronomètre et le « j'ai fini » la remplacent.
+              <PuzzleTab
+                tournamentId={tournamentId}
+                phaseId={activePhase.id}
+                myPlayerId={myPlayerId}
+                allowSelfReporting={detail.data.settings.allowSelfReporting}
+                dropped={me?.status === "dropped"}
+                scenario={currentRound?.round.scenario}
+                state={liveState}
+                serverOffsetMs={serverOffsetMs}
+                syncKey={syncKey}
+              />
             ) : (
               <MatchTab
                 tournamentId={tournamentId}

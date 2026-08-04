@@ -1,4 +1,4 @@
-import type { TournamentTimer } from "../api/types";
+import type { TournamentStopwatch, TournamentTimer } from "../api/types";
 
 /** `12:03` (mm:ss), ou `1:02:03` (h:mm:ss) au-delà d'une heure. Négatif une fois expiré. */
 export function formatDuration(totalSeconds: number): string {
@@ -34,4 +34,38 @@ export function timerRemainingSeconds(
 
 export function timerIsPaused(timer: TournamentTimer | null | undefined): boolean {
   return !!timer && !timer.running && timer.remainingSeconds !== undefined;
+}
+
+/**
+ * Temps écoulé au chronomètre (phases puzzle), en secondes, corrigé du même
+ * décalage d'horloge que le minuteur. `null` tant qu'il n'a jamais été lancé.
+ */
+export function stopwatchElapsedSeconds(
+  stopwatch: TournamentStopwatch | null | undefined,
+  serverOffsetMs: number,
+): number | null {
+  if (!stopwatch) return null;
+  if (stopwatch.running && stopwatch.startedAt) {
+    const startedAtMs = new Date(stopwatch.startedAt).getTime();
+    // Le chronomètre ne recule jamais : une horloge cliente en avance sur le
+    // serveur ne doit pas afficher un temps négatif au premier dixième.
+    return Math.max(0, (Date.now() + serverOffsetMs - startedAtMs) / 1000);
+  }
+  if (!stopwatch.running && stopwatch.elapsedSeconds !== undefined) {
+    return stopwatch.elapsedSeconds;
+  }
+  return null;
+}
+
+/**
+ * Temps écoulé tel qu'il s'affiche. Un chronomètre jamais lancé (ou remis à
+ * zéro) ne montre pas « 00:00 » : ce serait un temps, là où il n'y en a pas
+ * encore — et le libellé juste à côté dit « non lancé ».
+ */
+export function formatStopwatch(elapsedSeconds: number | null): string {
+  return elapsedSeconds === null ? "—" : formatDuration(elapsedSeconds);
+}
+
+export function stopwatchIsPaused(stopwatch: TournamentStopwatch | null | undefined): boolean {
+  return !!stopwatch && !stopwatch.running && stopwatch.elapsedSeconds !== undefined;
 }
