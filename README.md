@@ -61,6 +61,16 @@ Particularités de l'API constatées (testées contre la production le 2026-07-1
 - [Rust](https://rustup.rs) (stable)
 - Selon la cible : [prérequis Tauri](https://tauri.app/start/prerequisites/) pour Linux/macOS/Windows, Android Studio + NDK pour Android, Xcode pour iOS
 
+Planchers des systèmes visés, déclarés dans `src-tauri/tauri.conf.json` :
+
+| Plateforme | Minimum | Réglage |
+| --- | --- | --- |
+| iOS / iPadOS | 16.0 | `bundle.iOS.minimumSystemVersion` |
+| Android | API 24 (7.0) | `bundle.android.minSdkVersion` (défaut Tauri) |
+
+Le projet Xcode n'est pas versionné : il est régénéré par `tauri ios init` à
+partir de cette configuration, et c'est donc elle qui fait foi.
+
 ## Développement
 
 ```bash
