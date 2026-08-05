@@ -311,6 +311,9 @@
     "confirmListing": "List for sale",
     "invalidPrice": "The price entered is not valid."
   },
+  "scanner": {
+    "hint": "Point the camera at the QR code."
+  },
   "trades": {
     "title": "Trades",
     "subtitle": "Trade cards with other players",
@@ -399,7 +402,7 @@
     "joinOr": "or",
     "joinInvalidCode": "Invalid code.",
     "scanAction": "Scan a QR code",
-    "scanUnavailable": "Scan unavailable or cancelled.",
+    "scanUnavailable": "Scanning is unavailable or camera access was denied.",
     "errors": {
       "notFound": "This trade could not be found.",
       "forbidden": "You're not allowed to do that.",
@@ -486,7 +489,7 @@
     "joinOr": "or",
     "scanAction": "Scan a QR code",
     "joinInvalidCode": "Invalid tournament code.",
-    "scanUnavailable": "Scan unavailable or cancelled.",
+    "scanUnavailable": "Scanning is unavailable or camera access was denied.",
     "detailFallbackTitle": "Tournament",
     "tabMatch": "My match",
     "tabStandings": "Standings",

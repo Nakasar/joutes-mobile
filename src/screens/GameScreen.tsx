@@ -90,7 +90,7 @@ export function GameScreen() {
       <BackHeader title={game?.name ?? t("gameHub.fallbackTitle")} />
 
       {game && (
-        <div className="game-row" style={{ marginBottom: 14 }}>
+        <div className="game-row game-row--barred" style={{ marginBottom: 14 }}>
           <span className="game-row__bar" style={{ background: color }} />
           {game.icon ? (
             <CachedImage
