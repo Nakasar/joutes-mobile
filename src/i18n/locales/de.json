@@ -311,6 +311,9 @@
     "confirmListing": "Zum Verkauf anbieten",
     "invalidPrice": "Der eingegebene Preis ist ungültig."
   },
+  "scanner": {
+    "hint": "Richte die Kamera auf den QR-Code."
+  },
   "trades": {
     "title": "Tauschgeschäfte",
     "subtitle": "Tausche Karten mit anderen Spielern",
@@ -399,7 +402,7 @@
     "joinOr": "oder",
     "joinInvalidCode": "Ungültiger Code.",
     "scanAction": "QR-Code scannen",
-    "scanUnavailable": "Scan nicht verfügbar oder abgebrochen.",
+    "scanUnavailable": "Scannen nicht verfügbar oder Kamerazugriff verweigert.",
     "errors": {
       "notFound": "Dieser Tausch wurde nicht gefunden.",
       "forbidden": "Das ist dir nicht erlaubt.",
@@ -486,7 +489,7 @@
     "joinOr": "oder",
     "scanAction": "QR-Code scannen",
     "joinInvalidCode": "Ungültiger Turniercode.",
-    "scanUnavailable": "Scan nicht verfügbar oder abgebrochen.",
+    "scanUnavailable": "Scannen nicht verfügbar oder Kamerazugriff verweigert.",
     "detailFallbackTitle": "Turnier",
     "tabMatch": "Mein Match",
     "tabStandings": "Tabelle",

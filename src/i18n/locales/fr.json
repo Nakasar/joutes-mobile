@@ -311,6 +311,9 @@
     "confirmListing": "Mettre en vente",
     "invalidPrice": "Le prix indiqué n'est pas valide."
   },
+  "scanner": {
+    "hint": "Placez le QR code dans le cadre."
+  },
   "trades": {
     "title": "Échanges",
     "subtitle": "Échangez des cartes avec d'autres joueurs",
@@ -399,7 +402,7 @@
     "joinOr": "ou",
     "joinInvalidCode": "Code invalide.",
     "scanAction": "Scanner un QR code",
-    "scanUnavailable": "Scan indisponible ou annulé.",
+    "scanUnavailable": "Scan indisponible ou accès à la caméra refusé.",
     "errors": {
       "notFound": "Cet échange est introuvable.",
       "forbidden": "Vous n'êtes pas autorisé à faire cela.",
@@ -486,7 +489,7 @@
     "joinOr": "ou",
     "scanAction": "Scanner un QR code",
     "joinInvalidCode": "Code de tournoi invalide.",
-    "scanUnavailable": "Scan indisponible ou annulé.",
+    "scanUnavailable": "Scan indisponible ou accès à la caméra refusé.",
     "detailFallbackTitle": "Tournoi",
     "tabMatch": "Mon match",
     "tabStandings": "Classement",

@@ -311,6 +311,9 @@
     "confirmListing": "Metti in vendita",
     "invalidPrice": "Il prezzo indicato non è valido."
   },
+  "scanner": {
+    "hint": "Inquadra il QR code nel riquadro."
+  },
   "trades": {
     "title": "Scambi",
     "subtitle": "Scambia carte con altri giocatori",
@@ -399,7 +402,7 @@
     "joinOr": "oppure",
     "joinInvalidCode": "Codice non valido.",
     "scanAction": "Scansiona un QR code",
-    "scanUnavailable": "Scansione non disponibile o annullata.",
+    "scanUnavailable": "Scansione non disponibile o accesso alla fotocamera negato.",
     "errors": {
       "notFound": "Scambio non trovato.",
       "forbidden": "Non sei autorizzato a farlo.",
@@ -486,7 +489,7 @@
     "joinOr": "oppure",
     "scanAction": "Scansiona un codice QR",
     "joinInvalidCode": "Codice torneo non valido.",
-    "scanUnavailable": "Scansione non disponibile o annullata.",
+    "scanUnavailable": "Scansione non disponibile o accesso alla fotocamera negato.",
     "detailFallbackTitle": "Torneo",
     "tabMatch": "Il mio match",
     "tabStandings": "Classifica",

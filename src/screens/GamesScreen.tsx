@@ -26,7 +26,6 @@ function GameRow({
 
   const inner = (
     <>
-      <span className="game-row__bar" style={{ background: color }} />
       {game.icon ? (
         <CachedImage
           src={game.icon}

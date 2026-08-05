@@ -1020,7 +1020,7 @@ textarea:focus {
   animation: jtPop 0.4s;
 }
 
-/* ---- Jeux / cartes de liste avec barre de couleur ---- */
+/* ---- Jeux / cartes de liste ---- */
 
 .game-row {
   position: relative;
@@ -1030,7 +1030,7 @@ textarea:focus {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 14px 14px 14px 18px;
+  padding: 14px;
   margin-bottom: 12px;
   box-shadow: var(--shadow-sm);
   color: var(--text);
@@ -1048,6 +1048,13 @@ textarea:focus {
   opacity: 0.45;
   filter: saturate(0.6);
   cursor: default;
+}
+
+/* Barre de couleur latérale : réservée à l'en-tête d'un jeu (écran de détail).
+   Les listes de jeux s'en passent, la pastille d'icône portant déjà la
+   couleur. */
+.game-row--barred {
+  padding-left: 18px;
 }
 
 .game-row__bar {
@@ -4029,4 +4036,89 @@ textarea:focus {
   color: var(--muted);
   font-family: var(--font-mono);
   font-size: 0.72rem;
+}
+
+/* ---- Scan QR plein écran ----
+   Le plugin natif affiche l'aperçu caméra derrière la webview et rend
+   celle-ci transparente : on efface les fonds de la page et on masque toute
+   l'application, ne laissant visible que la surcouche du scanner (portail sur
+   <body>) avec son bouton retour. */
+
+html.qr-scanning,
+html.qr-scanning body {
+  background: transparent !important;
+}
+
+html.qr-scanning #root {
+  visibility: hidden;
+}
+
+.qr-scanner {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  padding: calc(env(safe-area-inset-top, 0px) + 12px) 16px
+    calc(env(safe-area-inset-bottom, 0px) + 24px);
+}
+
+.qr-scanner__head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.qr-scanner__back {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.qr-scanner__title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+}
+
+/* Réticule de visée : cadre translucide au centre de l'aperçu caméra. */
+.qr-scanner__frame {
+  flex: none;
+  margin: auto 0;
+  width: min(66vw, 260px);
+  aspect-ratio: 1;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  border-radius: 22px;
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.35);
+}
+
+.qr-scanner__footer {
+  width: 100%;
+  max-width: 380px;
+}
+
+.qr-scanner__hint {
+  text-align: center;
+  font-size: 14px;
+  margin: 0 0 14px;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+}
+
+.qr-scanner__cancel {
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  border-color: rgba(255, 255, 255, 0.5);
 }
