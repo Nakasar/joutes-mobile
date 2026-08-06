@@ -30,14 +30,13 @@ export function useApi<T>(
   fnRef.current = fn;
   const lastGeneration = useRef(generation);
   const lastDeps = useRef(deps);
+  const dataRef = useRef<T | null>(null);
 
   useEffect(() => {
-    // Rechargement déclenché par le seul retour du réseau : il se fait en
-    // arrière-plan, sans repasser par l'état de chargement, pour que le contenu
-    // hors ligne déjà affiché soit remplacé sans clignotement. Si les
-    // dépendances ont bougé en même temps, l'écran demande autre chose : on
-    // repasse par le chargement normal plutôt que d'afficher les données
-    // précédentes comme si elles étaient les bonnes.
+    // Rechargement déclenché par le seul retour du réseau. Si les dépendances
+    // ont bougé en même temps, l'écran demande autre chose : on repasse par le
+    // chargement normal plutôt que d'afficher les données précédentes comme si
+    // elles étaient les bonnes.
     const depsChanged =
       lastDeps.current.length !== deps.length ||
       deps.some((dep, index) => !Object.is(dep, lastDeps.current[index]));
@@ -46,8 +45,15 @@ export function useApi<T>(
     const background = !depsChanged && lastGeneration.current !== generation;
     lastGeneration.current = generation;
 
+    // Rafraîchissement silencieux — ni chargement ni erreur affichés, pour
+    // remplacer sans clignotement le contenu hors ligne déjà à l'écran. Il
+    // suppose justement qu'il y a quelque chose à préserver : sans données
+    // affichées, masquer le chargement et l'erreur ne laisserait qu'un écran
+    // vide et muet.
+    const silent = background && dataRef.current !== null;
+
     let cancelled = false;
-    if (!background) {
+    if (!silent) {
       setLoading(true);
       setError(null);
     }
@@ -55,14 +61,12 @@ export function useApi<T>(
       .current()
       .then((result) => {
         if (cancelled) return;
+        dataRef.current = result;
         setData(result);
         setError(null);
       })
       .catch((err: unknown) => {
-        // Un rafraîchissement en arrière-plan qui échoue ne doit pas remplacer
-        // par une erreur ce que l'écran affiche déjà : la bannière hors
-        // connexion suffit à expliquer la situation.
-        if (cancelled || background) return;
+        if (cancelled || silent) return;
         setError(
           err instanceof ApiError || err instanceof Error
             ? err.message
@@ -70,7 +74,9 @@ export function useApi<T>(
         );
       })
       .finally(() => {
-        if (!cancelled && !background) setLoading(false);
+        // Toujours refermer le chargement : un rendu silencieux qui démarre
+        // pendant un chargement initial laisserait sinon l'écran bloqué dessus.
+        if (!cancelled) setLoading(false);
       });
     return () => {
       cancelled = true;
