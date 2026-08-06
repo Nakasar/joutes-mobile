@@ -10,6 +10,7 @@ import {
   DeckCheckIcon,
   GridIcon,
   LayersIcon,
+  QuizIcon,
   ScrollIcon,
 } from "../components/icons";
 import { StatusView } from "../components/StatusView";
@@ -40,9 +41,11 @@ export function GameScreen() {
   const color = colorFor(gameSlug, game?.color);
 
   const features = useMemo<FeatureLink[]>(() => {
-    if (!game?.features) return [];
+    // Le jeu n'est pas encore chargé : rien à proposer. Une fois chargé, les
+    // quizz sont toujours listés — eux seuls n'ont pas de drapeau côté backend.
+    if (!game) return [];
     const list: FeatureLink[] = [];
-    if (game.features.cards) {
+    if (game.features?.cards) {
       list.push({
         key: "cards",
         to: `/games/${gameSlug}/cards`,
@@ -50,7 +53,7 @@ export function GameScreen() {
         label: t("gameHub.cards"),
       });
     }
-    if (game.features.rules) {
+    if (game.features?.rules) {
       list.push({
         key: "rules",
         to: `/games/${gameSlug}/rules`,
@@ -58,7 +61,7 @@ export function GameScreen() {
         label: t("gameHub.rules"),
       });
     }
-    if (game.features.deckChecker) {
+    if (game.features?.deckChecker) {
       list.push({
         key: "deckChecker",
         to: `/games/${gameSlug}/deck-checker`,
@@ -66,7 +69,7 @@ export function GameScreen() {
         label: t("gameHub.deckChecker"),
       });
     }
-    if (game.features.collection) {
+    if (game.features?.collection) {
       list.push({
         key: "collection",
         to: `/collection/${gameSlug}`,
@@ -74,7 +77,7 @@ export function GameScreen() {
         label: t("gameHub.collection"),
       });
     }
-    if (game.features.policies) {
+    if (game.features?.policies) {
       list.push({
         key: "policies",
         to: `/games/${gameSlug}/policies`,
@@ -82,6 +85,14 @@ export function GameScreen() {
         label: t("gameHub.policies"),
       });
     }
+    // Comme sur le web, chaque jeu a sa page de quizz, vide tant qu'aucun quizz
+    // n'y est rattaché.
+    list.push({
+      key: "quizzes",
+      to: `/games/${gameSlug}/quizzes`,
+      icon: <QuizIcon size={20} />,
+      label: t("gameHub.quizzes"),
+    });
     return list;
   }, [game, gameSlug, t]);
 

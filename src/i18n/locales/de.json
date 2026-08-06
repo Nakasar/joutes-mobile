@@ -57,6 +57,7 @@
     "deckChecker": "Deck-Prüfer",
     "collection": "Sammlung",
     "policies": "Richtlinien",
+    "quizzes": "Quiz",
     "empty": "Für dieses Spiel sind keine Funktionen verfügbar."
   },
   "events": {
@@ -249,6 +250,15 @@
     "alert": "Errata / Rulings zu lesen"
   },
   "errata": {
+    "submitAction": "Errata vorschlagen",
+    "submitTitle": "Errata vorschlagen",
+    "submitIntro": "Dein Vorschlag wird „{{card}}“ zugeordnet.",
+    "detailsLabel": "Inhalt",
+    "detailsPlaceholder": "Beschreibe das Errata, die Klarstellung oder das Ruling…",
+    "sourceFieldLabel": "Quelle (optional)",
+    "sourcePlaceholder": "Link oder Verweis auf die offizielle Ankündigung",
+    "dateLabel": "Veröffentlichungsdatum",
+    "submitNote": "Errata sind Community-Inhalte: Sie werden durch Stimmen und Meldungen geprüft.",
     "typeErrata": "Errata",
     "typeClarification": "Klarstellung",
     "typeRuling": "Ruling",
@@ -257,12 +267,36 @@
     "sourceLabel": "Quelle: {{source}}"
   },
   "policies": {
+    "createTitle": "Richtlinie veröffentlichen",
+    "createSubmit": "Veröffentlichen",
+    "titleLabel": "Titel",
+    "titlePlaceholder": "z. B. Verfahren zur Deckkorrektur",
+    "contentLabel": "Inhalt",
+    "contentPlaceholder": "Text der Richtlinie (Markdown erlaubt)…",
+    "createNote": "Eine Richtlinie ist für das Spiel verbindlich und sofort für alle sichtbar.",
     "title": "Richtlinien",
     "searchPlaceholder": "Nach einer Richtlinie suchen…",
     "empty": "Keine Richtlinie entspricht der Suche.",
     "loadMore": "Mehr laden",
     "detailFallbackTitle": "Richtlinie",
     "error": "Ein Fehler ist aufgetreten."
+  },
+  "votes": {
+    "upAction": "Dafür stimmen",
+    "downAction": "Dagegen stimmen",
+    "error": "Stimme nicht gespeichert.",
+    "signInHint": "Melde dich an, um abzustimmen."
+  },
+  "quizzes": {
+    "title": "Quiz",
+    "empty": "Für dieses Spiel gibt es noch kein Quiz.",
+    "detailFallbackTitle": "Quiz",
+    "validate": "Prüfen",
+    "answerPlaceholder": "Deine Antwort",
+    "correct": "Richtig!",
+    "incorrect": "Falsche Antwort.",
+    "originalLang": "Original",
+    "staleTranslation": "Das Quiz wurde nach dieser Übersetzung geändert: Einige Texte können veraltet sein."
   },
   "wishlists": {
     "title": "Wunschlisten",

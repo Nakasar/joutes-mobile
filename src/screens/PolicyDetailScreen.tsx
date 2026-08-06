@@ -1,14 +1,16 @@
 import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { getPolicy } from "../api/policies";
+import { getPolicy, votePolicy } from "../api/policies";
 import type { Policy } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
 import { ExternalLinkIcon } from "../components/icons";
 import { GameMarkdown } from "../components/GameMarkdown";
 import { StatusView } from "../components/StatusView";
+import { VoteButtons } from "../components/VoteButtons";
 import { useApi } from "../hooks/useApi";
 import { currentLocale } from "../i18n";
+import { useAuth } from "../store/auth";
 
 function formatDate(iso?: string): string {
   if (!iso) return "";
@@ -35,6 +37,7 @@ function policyText(policy: Policy, lang: string): { title: string; content: str
 export function PolicyDetailScreen() {
   const { t, i18n } = useTranslation();
   const { gameSlug = "", policyId = "" } = useParams();
+  const { isAuthenticated } = useAuth();
   const lang = i18n.resolvedLanguage ?? i18n.language;
 
   const { data: policy, loading, error, reload } = useApi(
@@ -83,6 +86,11 @@ export function PolicyDetailScreen() {
               )}
             </p>
           )}
+          <VoteButtons
+            votes={policy.votes}
+            canVote={isAuthenticated}
+            submitVote={(vote) => votePolicy(gameSlug, policy.id, vote)}
+          />
         </div>
       )}
     </div>

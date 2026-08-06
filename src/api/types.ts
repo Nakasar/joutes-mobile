@@ -132,6 +132,16 @@ export interface CardsSearchResponse {
 
 export type ErrataType = "errata" | "clarification" | "ruling";
 
+/** Sens d'un vote sur un contenu communautaire (errata, policy). */
+export type VoteType = "positive" | "negative";
+
+/** Décompte des votes d'un contenu, avec le vote de l'utilisateur connecté. */
+export interface VoteTally {
+  positive?: number;
+  negative?: number;
+  userVote?: VoteType;
+}
+
 export interface Errata {
   id: string;
   cardIds?: string[];
@@ -144,10 +154,19 @@ export interface Errata {
   errataDate?: string;
   contentUpdatedAt?: string;
   deprecatedAt?: string;
-  votes?: { positive?: number; negative?: number; userVote?: string };
+  votes?: VoteTally;
 }
 
-export type PolicyVoteType = "positive" | "negative";
+/** Corps d'un `POST /games/{idOrSlug}/erratas`. */
+export interface CreateErrataInput {
+  cardIds: string[];
+  type: ErrataType;
+  details: string;
+  originalLang?: string;
+  source?: string;
+  /** Date de publication de l'errata par l'éditeur (ISO). Défaut : maintenant. */
+  errataDate?: string;
+}
 
 /**
  * Politique / clarification d'organisation de tournoi propre à un jeu
@@ -167,7 +186,21 @@ export interface Policy {
   contentUpdatedAt?: string;
   createdAt?: string;
   deprecatedAt?: string;
-  votes?: { positive?: number; negative?: number; userVote?: PolicyVoteType };
+  votes?: VoteTally;
+}
+
+/** Corps d'un `POST /games/{idOrSlug}/policies`. */
+export interface CreatePolicyInput {
+  title: string;
+  content: string;
+  originalLang?: string;
+  source?: string;
+}
+
+/** Permissions effectives du compte (`GET /users/me/permissions`). */
+export interface MyPermissions {
+  permissions: string[];
+  isAdmin: boolean;
 }
 
 export interface CardDetail extends Card {
@@ -182,6 +215,96 @@ export interface GameSet {
   name: string;
   maxCollectorNumber?: number;
   cardMaxNumber?: number;
+}
+
+// ---- Quizz ----
+
+export type QuizQuestionType = "single" | "multiple" | "text" | "number";
+
+export interface QuizQuestionOption {
+  id: string;
+  text: string;
+}
+
+export interface QuizQuestion {
+  id: string;
+  type: QuizQuestionType;
+  prompt: string;
+  /** `single` et `multiple` uniquement. */
+  options?: QuizQuestionOption[];
+  /** `single` (exactement un id) et `multiple` (un ou plusieurs) uniquement. */
+  correctOptionIds?: string[];
+  /** `text` uniquement — comparé sans casse ni espaces de bord. */
+  correctText?: string;
+  /** `number` uniquement. */
+  correctNumber?: number;
+  correctFeedback?: string;
+  incorrectFeedback?: string;
+}
+
+export interface QuizMarkdownBlock {
+  id: string;
+  type: "markdown";
+  content: string;
+}
+
+export interface QuizFormBlock {
+  id: string;
+  type: "form";
+  questions: QuizQuestion[];
+  /** Le bloc se termine par un bouton qui corrige les questions jusqu'ici. */
+  showSubmitButton: boolean;
+}
+
+export type QuizBlock = QuizMarkdownBlock | QuizFormBlock;
+
+/**
+ * Textes traduits d'un bloc, d'une question ou d'une proposition — les champs
+ * repris sont ceux du nœud désigné.
+ */
+export interface QuizTranslationEntry {
+  content?: string;
+  prompt?: string;
+  text?: string;
+  correctText?: string;
+  correctFeedback?: string;
+  incorrectFeedback?: string;
+}
+
+export interface QuizTranslation {
+  lang: string;
+  title: string;
+  /**
+   * Traductions indexées par identifiant de bloc / question / proposition, et
+   * non par position : réordonner le quizz ne déplace aucune traduction.
+   */
+  entries: Record<string, QuizTranslationEntry>;
+  updatedAt?: string;
+}
+
+export interface Quiz {
+  id: string;
+  title: string;
+  gameId?: string;
+  game?: { id?: string; name?: string; slug?: string; icon?: string };
+  blocks: QuizBlock[];
+  /** Langue dans laquelle le quizz a été écrit : sa « VO ». */
+  originalLang: string;
+  translations?: QuizTranslation[];
+  authorId?: string;
+  author?: { id?: string; displayName?: string; discriminator?: string };
+  createdAt?: string;
+  /** Dernière modification du contenu — les traductions n'y touchent pas. */
+  updatedAt?: string;
+}
+
+/** Réponse de `GET /games/{idOrSlug}/quizzes`. */
+export interface PaginatedQuizzes {
+  quizzes: Quiz[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
 }
 
 // ---- Règles ----

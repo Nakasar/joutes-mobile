@@ -8,6 +8,7 @@ import { DeckCheckerScreen } from "./screens/DeckCheckerScreen";
 import { EventDetailScreen } from "./screens/EventDetailScreen";
 import { EventsScreen } from "./screens/EventsScreen";
 import { GameCardsScreen } from "./screens/GameCardsScreen";
+import { GameQuizzesScreen } from "./screens/GameQuizzesScreen";
 import { GameScreen } from "./screens/GameScreen";
 import { GamesScreen } from "./screens/GamesScreen";
 import { HomeScreen } from "./screens/HomeScreen";
@@ -19,6 +20,7 @@ import { PlayGroupSellListScreen } from "./screens/PlayGroupSellListScreen";
 import { PlayGroupWishlistsScreen } from "./screens/PlayGroupWishlistsScreen";
 import { PoliciesListScreen } from "./screens/PoliciesListScreen";
 import { PolicyDetailScreen } from "./screens/PolicyDetailScreen";
+import { QuizScreen } from "./screens/QuizScreen";
 import { RulesScreen } from "./screens/RulesScreen";
 import { SettingsScreen } from "./screens/SettingsScreen";
 import { SocialScreen } from "./screens/SocialScreen";
@@ -82,6 +84,14 @@ function Shell() {
                 <Route
                   path="/games/:gameSlug/policies/:policyId"
                   element={<PolicyDetailScreen />}
+                />
+                <Route
+                  path="/games/:gameSlug/quizzes"
+                  element={<GameQuizzesScreen />}
+                />
+                <Route
+                  path="/games/:gameSlug/quizzes/:quizId"
+                  element={<QuizScreen />}
                 />
                 <Route path="/events" element={<EventsScreen />} />
                 <Route path="/events/:eventId" element={<EventDetailScreen />} />

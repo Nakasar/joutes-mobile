@@ -1,6 +1,6 @@
 import { api } from "./client";
 import { endpoints } from "./endpoints";
-import type { Policy } from "./types";
+import type { CreatePolicyInput, Policy, VoteTally, VoteType } from "./types";
 import { offlineGetPolicy, offlineSearchPolicies } from "../lib/offline-adapters";
 import { offlineFirst } from "../lib/offline-first";
 
@@ -39,4 +39,31 @@ export function getPolicy(
     () => api.get<Policy>(endpoints.games.policy(gameIdOrSlug, policyId)),
     (exp) => offlineGetPolicy(exp, policyId),
   );
+}
+
+/**
+ * Publie une politique. Réservé aux comptes portant `policies:update` :
+ * contrairement aux erratas, les politiques font autorité.
+ */
+export function createPolicy(
+  gameIdOrSlug: string,
+  input: CreatePolicyInput,
+): Promise<Policy> {
+  return api.post<Policy>(endpoints.games.policies(gameIdOrSlug), input);
+}
+
+/**
+ * Vote sur une politique. Revoter à l'identique retire le vote ; l'API renvoie
+ * le décompte à jour.
+ */
+export function votePolicy(
+  gameIdOrSlug: string,
+  policyId: string,
+  vote: VoteType,
+): Promise<VoteTally> {
+  return api
+    .post<{ votes: VoteTally }>(endpoints.games.policyVote(gameIdOrSlug, policyId), {
+      vote,
+    })
+    .then((result) => result.votes);
 }

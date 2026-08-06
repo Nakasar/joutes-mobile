@@ -25,6 +25,15 @@ export const endpoints = {
     policies: (idOrSlug: string) => `/games/${idOrSlug}/policies`,
     policy: (idOrSlug: string, policyId: string) =>
       `/games/${idOrSlug}/policies/${policyId}`,
+    policyVote: (idOrSlug: string, policyId: string) =>
+      `/games/${idOrSlug}/policies/${policyId}/vote`,
+    erratas: (idOrSlug: string) => `/games/${idOrSlug}/erratas`,
+    errataVote: (idOrSlug: string, errataId: string) =>
+      `/games/${idOrSlug}/erratas/${errataId}/vote`,
+    quizzes: (idOrSlug: string) => `/games/${idOrSlug}/quizzes`,
+  },
+  quizzes: {
+    detail: (quizId: string) => `/quizzes/${quizId}`,
   },
   news: {
     list: "/news",
@@ -97,6 +106,8 @@ export const endpoints = {
   },
   users: {
     myGames: "/users/me/games",
+    /** Permissions effectives du compte connecté (publication de policies…). */
+    myPermissions: "/users/me/permissions",
     detail: (userTagOrId: string) =>
       `/users/${encodeURIComponent(userTagOrId)}`,
     wishlists: (userTagOrId: string) =>

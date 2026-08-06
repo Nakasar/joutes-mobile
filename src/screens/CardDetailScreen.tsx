@@ -6,9 +6,10 @@ import { AddToWishlistSheet } from "../components/AddToWishlistSheet";
 import { BackHeader } from "../components/BackHeader";
 import { ErrataCard } from "../components/ErrataCard";
 import { GameMarkdown } from "../components/GameMarkdown";
-import { HeartIcon, TagIcon } from "../components/icons";
+import { HeartIcon, PlusIcon, TagIcon } from "../components/icons";
 import { ListForSaleSheet } from "../components/ListForSaleSheet";
 import { StatusView } from "../components/StatusView";
+import { SubmitErrataSheet } from "../components/SubmitErrataSheet";
 import { useApi } from "../hooks/useApi";
 import { annotateCardText } from "../lib/card-text-markdown";
 import { useAuth } from "../store/auth";
@@ -23,6 +24,7 @@ export function CardDetailScreen() {
   );
   const [addingToWishlist, setAddingToWishlist] = useState(false);
   const [listingForSale, setListingForSale] = useState(false);
+  const [submittingErrata, setSubmittingErrata] = useState(false);
 
   const cardIdByName = useMemo(
     // `annotateErrataMarkdown` cherche par nom en minuscules : on normalise
@@ -158,6 +160,15 @@ export function CardDetailScreen() {
                 />
               ))
             )}
+            {isAuthenticated && (
+              <button
+                className="btn btn--outline btn--block"
+                onClick={() => setSubmittingErrata(true)}
+              >
+                <PlusIcon size={16} />
+                {t("errata.submitAction")}
+              </button>
+            )}
           </section>
         </>
       )}
@@ -173,6 +184,14 @@ export function CardDetailScreen() {
           card={data}
           gameSlug={gameSlug}
           onClose={() => setListingForSale(false)}
+        />
+      )}
+      {submittingErrata && data && (
+        <SubmitErrataSheet
+          card={data}
+          gameSlug={gameSlug}
+          onClose={() => setSubmittingErrata(false)}
+          onCreated={reload}
         />
       )}
     </div>
