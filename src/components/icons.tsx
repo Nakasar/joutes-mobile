@@ -298,3 +298,47 @@ export function ArrowLeftRightIcon(p: IconProps) {
     </Icon>
   );
 }
+
+export function ThumbUpIcon({ filled, ...p }: IconProps & { filled?: boolean }) {
+  return (
+    <Icon {...p} fill={filled ? "currentColor" : "none"}>
+      <path d="M7 10v10H4.5A1.5 1.5 0 0 1 3 18.5v-7A1.5 1.5 0 0 1 4.5 10Z" />
+      <path d="M7 10l4.2-7a2.2 2.2 0 0 1 2 3.2L12 10h5.6a2 2 0 0 1 2 2.4l-1.3 6A2 2 0 0 1 16.3 20H7" />
+    </Icon>
+  );
+}
+
+export function ThumbDownIcon({ filled, ...p }: IconProps & { filled?: boolean }) {
+  return (
+    <Icon {...p} fill={filled ? "currentColor" : "none"}>
+      <path d="M7 14V4H4.5A1.5 1.5 0 0 0 3 5.5v7A1.5 1.5 0 0 0 4.5 14Z" />
+      <path d="M7 14l4.2 7a2.2 2.2 0 0 0 2-3.2L12 14h5.6a2 2 0 0 0 2-2.4l-1.3-6A2 2 0 0 0 16.3 4H7" />
+    </Icon>
+  );
+}
+
+export function QuizIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <rect x="3.5" y="3.5" width="17" height="17" rx="3" />
+      <path d="M9.3 9.2a2.7 2.7 0 1 1 3.4 2.6c-.6.2-1 .8-1 1.4v.4" />
+      <path d="M11.7 17h.01" />
+    </Icon>
+  );
+}
+
+export function CheckIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="m4.5 12.5 5 5 10-11" />
+    </Icon>
+  );
+}
+
+export function CrossIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="m6 6 12 12M18 6 6 18" />
+    </Icon>
+  );
+}

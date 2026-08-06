@@ -57,6 +57,7 @@
     "deckChecker": "Verifica deck",
     "collection": "Collezione",
     "policies": "Politiche",
+    "quizzes": "Quiz",
     "empty": "Nessuna funzionalità disponibile per questo gioco."
   },
   "events": {
@@ -249,6 +250,15 @@
     "alert": "Errata / ruling da leggere"
   },
   "errata": {
+    "submitAction": "Proporre un errata",
+    "submitTitle": "Proporre un errata",
+    "submitIntro": "La tua proposta sarà collegata a «{{card}}».",
+    "detailsLabel": "Contenuto",
+    "detailsPlaceholder": "Descrivi l'errata, il chiarimento o il ruling…",
+    "sourceFieldLabel": "Fonte (facoltativa)",
+    "sourcePlaceholder": "Link o riferimento all'annuncio ufficiale",
+    "dateLabel": "Data di pubblicazione",
+    "submitNote": "Gli errata sono contenuti della community: sono arbitrati dai voti e dalle segnalazioni.",
     "typeErrata": "Errata",
     "typeClarification": "Chiarimento",
     "typeRuling": "Ruling",
@@ -257,12 +267,36 @@
     "sourceLabel": "Fonte: {{source}}"
   },
   "policies": {
+    "createTitle": "Pubblicare una policy",
+    "createSubmit": "Pubblica",
+    "titleLabel": "Titolo",
+    "titlePlaceholder": "Es. Procedura di correzione del mazzo",
+    "contentLabel": "Contenuto",
+    "contentPlaceholder": "Testo della policy (markdown accettato)…",
+    "createNote": "Una policy fa autorità per il gioco: è subito visibile a tutti.",
     "title": "Politiche",
     "searchPlaceholder": "Cerca una politica…",
     "empty": "Nessuna politica corrisponde alla ricerca.",
     "loadMore": "Carica altre",
     "detailFallbackTitle": "Politica",
     "error": "Si è verificato un errore."
+  },
+  "votes": {
+    "upAction": "Vota a favore",
+    "downAction": "Vota contro",
+    "error": "Voto non salvato.",
+    "signInHint": "Accedi per votare."
+  },
+  "quizzes": {
+    "title": "Quiz",
+    "empty": "Nessun quiz per questo gioco al momento.",
+    "detailFallbackTitle": "Quiz",
+    "validate": "Verifica",
+    "answerPlaceholder": "La tua risposta",
+    "correct": "Risposta corretta!",
+    "incorrect": "Risposta sbagliata.",
+    "originalLang": "originale",
+    "staleTranslation": "Il quiz è stato modificato dopo questa traduzione: alcuni testi potrebbero essere superati."
   },
   "wishlists": {
     "title": "Liste dei desideri",

@@ -1,13 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getGame } from "../api/games";
 import { listPolicies } from "../api/policies";
 import type { Policy } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
-import { ChevronIcon, ScrollIcon, SearchIcon } from "../components/icons";
+import { CreatePolicySheet } from "../components/CreatePolicySheet";
+import { ChevronIcon, PlusIcon, ScrollIcon, SearchIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
+import { usePermissions } from "../hooks/usePermissions";
 
 const PAGE_SIZE = 15;
 
@@ -30,14 +32,24 @@ export function PoliciesListScreen() {
   const { t } = useTranslation();
   const { gameSlug = "" } = useParams();
   const game = useApi(() => getGame(gameSlug), [gameSlug]);
+  const { can } = usePermissions();
 
+  const [creating, setCreating] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [policies, setPolicies] = useState<Policy[]>([]);
   const [page, setPage] = useState(1);
+  // Force un rechargement même quand ni la page ni la recherche ne changent
+  // (nouvelle politique publiée, nouvel essai après erreur).
+  const [reloadTick, setReloadTick] = useState(0);
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const reloadFirstPage = useCallback(() => {
+    setPage(1);
+    setReloadTick((tick) => tick + 1);
+  }, []);
 
   // Débounce de la saisie de recherche.
   useEffect(() => {
@@ -72,11 +84,24 @@ export function PoliciesListScreen() {
       .finally(() => {
         if (id === requestId.current) setLoading(false);
       });
-  }, [gameSlug, searchQuery, page, t]);
+  }, [gameSlug, searchQuery, page, reloadTick, t]);
 
   return (
     <div className="screen">
-      <BackHeader title={t("policies.title")} />
+      <BackHeader
+        title={t("policies.title")}
+        action={
+          can("policies:update") ? (
+            <button
+              className="btn btn--ghost"
+              onClick={() => setCreating(true)}
+              aria-label={t("policies.createTitle")}
+            >
+              <PlusIcon size={20} />
+            </button>
+          ) : undefined
+        }
+      />
       {game.data?.name && <p className="screen-subtitle">{game.data.name}</p>}
 
       <div className="search-field" style={{ marginBottom: 14 }}>
@@ -118,7 +143,7 @@ export function PoliciesListScreen() {
       <StatusView
         loading={loading}
         error={error}
-        onRetry={() => setPage(1)}
+        onRetry={reloadFirstPage}
         empty={
           !loading && !error && policies.length === 0
             ? t("policies.empty")
@@ -133,6 +158,16 @@ export function PoliciesListScreen() {
         >
           {t("policies.loadMore")}
         </button>
+      )}
+
+      {creating && (
+        <CreatePolicySheet
+          gameSlug={gameSlug}
+          onClose={() => setCreating(false)}
+          // La nouvelle politique n'apparaît pas forcément en tête (tri par
+          // titre) : on relance la première page plutôt que de l'insérer.
+          onCreated={reloadFirstPage}
+        />
       )}
     </div>
   );

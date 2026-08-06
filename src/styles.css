@@ -4122,3 +4122,159 @@ html.qr-scanning #root {
   background: rgba(0, 0, 0, 0.55);
   border-color: rgba(255, 255, 255, 0.5);
 }
+
+/* ---- Votes sur un contenu communautaire (errata, policy) ---- */
+
+.vote-buttons {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.vote-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--chip);
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: inherit;
+  transition: transform 0.12s;
+}
+
+.vote-button:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.vote-button:disabled {
+  opacity: 0.6;
+}
+
+.vote-button--on {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.vote-button--down.vote-button--on {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.vote-buttons__error {
+  font-size: 0.8rem;
+  color: var(--danger);
+}
+
+.vote-buttons__hint {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* ---- Quizz ---- */
+
+.quiz-block {
+  margin-bottom: 16px;
+}
+
+.quiz-question {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.quiz-question__prompt {
+  font-weight: 600;
+}
+
+.quiz-question__options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.quiz-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.quiz-option--checked {
+  border-color: var(--primary);
+  background: var(--chip);
+}
+
+.quiz-option input {
+  flex: none;
+  margin-top: 3px;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  accent-color: var(--primary);
+}
+
+.quiz-option__text {
+  min-width: 0;
+}
+
+/* Le markdown d'une proposition ou d'un énoncé tient sur une ligne : on annule
+   les marges de paragraphe qui creuseraient la carte. */
+.quiz-question__prompt .markdown > :first-child,
+.quiz-option__text .markdown > :first-child,
+.quiz-feedback__text .markdown > :first-child {
+  margin-top: 0;
+}
+
+.quiz-question__prompt .markdown > :last-child,
+.quiz-option__text .markdown > :last-child,
+.quiz-feedback__text .markdown > :last-child {
+  margin-bottom: 0;
+}
+
+.quiz-question__input {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.quiz-feedback {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+}
+
+.quiz-feedback--correct {
+  background: rgba(0, 166, 146, 0.14);
+  color: var(--accent);
+}
+
+.quiz-feedback--incorrect {
+  background: rgba(228, 0, 20, 0.12);
+  color: var(--danger);
+}
+
+.quiz-feedback__text {
+  min-width: 0;
+}
+
+/* Note de bas de feuille (rappel de modération sur les contributions). */
+.form-sheet__note {
+  font-size: 0.8rem;
+  margin: 4px 0 0;
+}

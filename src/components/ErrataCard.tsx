@@ -1,10 +1,13 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { voteErrata } from "../api/erratas";
 import type { Errata } from "../api/types";
 import { GameMarkdown } from "./GameMarkdown";
 import { ExternalLinkIcon } from "./icons";
+import { VoteButtons } from "./VoteButtons";
 import { annotateErrataMarkdown } from "../lib/errata-markdown";
 import { currentLocale } from "../i18n";
+import { useAuth } from "../store/auth";
 
 const errataTypeLabelKeys: Record<string, string> = {
   errata: "errata.typeErrata",
@@ -46,6 +49,7 @@ export function ErrataCard({
   cardIdByName: Map<string, string>;
 }) {
   const { t, i18n } = useTranslation();
+  const { isAuthenticated } = useAuth();
   const lang = i18n.resolvedLanguage ?? i18n.language;
   const deprecated = Boolean(errata.deprecatedAt);
   const markdown = useMemo(
@@ -73,9 +77,9 @@ export function ErrataCard({
       <div className="errata__details">
         <GameMarkdown markdown={markdown} gameSlug={gameSlug} />
       </div>
-      <p className="errata__footer">
-        {errata.source &&
-          (isUrl(errata.source) ? (
+      {errata.source && (
+        <p className="errata__footer">
+          {isUrl(errata.source) ? (
             <a
               className="errata__source"
               href={errata.source}
@@ -87,14 +91,14 @@ export function ErrataCard({
             </a>
           ) : (
             <span>{t("errata.sourceLabel", { source: errata.source })}</span>
-          ))}
-        {errata.votes &&
-          (errata.votes.positive ?? 0) + (errata.votes.negative ?? 0) > 0 && (
-            <span>
-              👍 {errata.votes.positive ?? 0} · 👎 {errata.votes.negative ?? 0}
-            </span>
           )}
-      </p>
+        </p>
+      )}
+      <VoteButtons
+        votes={errata.votes}
+        canVote={isAuthenticated}
+        submitVote={(vote) => voteErrata(gameSlug, errata.id, vote)}
+      />
     </div>
   );
 }

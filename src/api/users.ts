@@ -1,6 +1,6 @@
 import { api } from "./client";
 import { endpoints } from "./endpoints";
-import type { PublicUserProfile, SellList, Wishlist } from "./types";
+import type { MyPermissions, PublicUserProfile, SellList, Wishlist } from "./types";
 import { withCache } from "../lib/response-cache";
 
 /** Profil public d'un utilisateur (soi-même ou un autre). */
@@ -39,4 +39,9 @@ export function getMyFollowedGameIds(): Promise<string[]> {
   return api
     .get<{ gameIds: string[] }>(endpoints.users.myGames)
     .then((r) => r.gameIds ?? []);
+}
+
+/** Permissions effectives du compte connecté (session requise). */
+export function getMyPermissions(): Promise<MyPermissions> {
+  return api.get<MyPermissions>(endpoints.users.myPermissions);
 }

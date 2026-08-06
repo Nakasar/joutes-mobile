@@ -57,6 +57,7 @@
     "deckChecker": "Deck checker",
     "collection": "Collection",
     "policies": "Policies",
+    "quizzes": "Quizzes",
     "empty": "No features available for this game."
   },
   "events": {
@@ -249,6 +250,15 @@
     "alert": "Errata / rulings to read"
   },
   "errata": {
+    "submitAction": "Submit an errata",
+    "submitTitle": "Submit an errata",
+    "submitIntro": "Your submission will be attached to “{{card}}”.",
+    "detailsLabel": "Content",
+    "detailsPlaceholder": "Describe the errata, clarification or ruling…",
+    "sourceFieldLabel": "Source (optional)",
+    "sourcePlaceholder": "Link or reference to the official announcement",
+    "dateLabel": "Publication date",
+    "submitNote": "Erratas are community content: they are arbitrated by votes and reports.",
     "typeErrata": "Errata",
     "typeClarification": "Clarification",
     "typeRuling": "Ruling",
@@ -257,12 +267,36 @@
     "sourceLabel": "Source: {{source}}"
   },
   "policies": {
+    "createTitle": "Publish a policy",
+    "createSubmit": "Publish",
+    "titleLabel": "Title",
+    "titlePlaceholder": "e.g. Deck correction procedure",
+    "contentLabel": "Content",
+    "contentPlaceholder": "Policy text (markdown accepted)…",
+    "createNote": "A policy is authoritative for the game: it becomes visible to everyone right away.",
     "title": "Policies",
     "searchPlaceholder": "Search for a policy…",
     "empty": "No policy matches the search.",
     "loadMore": "Load more",
     "detailFallbackTitle": "Policy",
     "error": "Something went wrong."
+  },
+  "votes": {
+    "upAction": "Upvote",
+    "downAction": "Downvote",
+    "error": "Vote not saved.",
+    "signInHint": "Sign in to vote."
+  },
+  "quizzes": {
+    "title": "Quizzes",
+    "empty": "No quiz for this game yet.",
+    "detailFallbackTitle": "Quiz",
+    "validate": "Check",
+    "answerPlaceholder": "Your answer",
+    "correct": "Correct!",
+    "incorrect": "Wrong answer.",
+    "originalLang": "original",
+    "staleTranslation": "The quiz changed after this translation: some texts may be out of date."
   },
   "wishlists": {
     "title": "Wishlists",
