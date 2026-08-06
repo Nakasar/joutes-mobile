@@ -150,6 +150,10 @@
     "socialText": "Finde deine Freunde, Spielgruppen und verfolgten Läden.",
     "socialAction": "Zum Bereich Social"
   },
+  "network": {
+    "offlineBanner": "Offline",
+    "unreachableDetail": "Netzwerk nicht verfügbar oder zu langsam – lokale Inhalte werden angezeigt"
+  },
   "offline": {
     "title": "Offline",
     "description": "Lade die Regeln (FR/EN), Karten und Errata eines Spiels herunter, um sie ohne Verbindung zu lesen.",

@@ -150,6 +150,10 @@
     "socialText": "Retrouvez vos amis, vos groupes de jeu et les repaires suivis.",
     "socialAction": "Voir la section Social"
   },
+  "network": {
+    "offlineBanner": "Hors connexion",
+    "unreachableDetail": "réseau indisponible ou trop lent — contenu local affiché"
+  },
   "offline": {
     "title": "Hors ligne",
     "description": "Téléchargez les règles (FR/EN), les cartes et les erratas d'un jeu pour les consulter sans connexion.",
