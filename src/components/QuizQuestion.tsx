@@ -83,14 +83,12 @@ export function QuizQuestion({
       {question.type === "number" && (
         <input
           type="number"
-          inputMode="numeric"
+          inputMode="decimal"
           className="quiz-question__input"
-          value={typeof answer === "number" ? answer : ""}
-          onChange={(e) =>
-            onAnswerChange(
-              e.currentTarget.value === "" ? undefined : Number(e.currentTarget.value),
-            )
-          }
+          // Saisie conservée brute, convertie seulement à la correction : la
+          // convertir à chaque frappe empêcherait de taper « - » ou « 1. ».
+          value={typeof answer === "string" || typeof answer === "number" ? answer : ""}
+          onChange={(e) => onAnswerChange(e.currentTarget.value)}
           placeholder={t("quizzes.answerPlaceholder")}
         />
       )}

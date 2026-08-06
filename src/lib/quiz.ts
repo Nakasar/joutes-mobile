@@ -135,12 +135,15 @@ export function isCorrect(question: QuizQuestion, answer: QuizAnswerValue): bool
       const given = typeof answer === "string" ? answer.trim().toLowerCase() : "";
       return !!expected && given === expected;
     }
-    case "number":
-      return (
-        question.correctNumber !== undefined &&
-        typeof answer === "number" &&
-        answer === question.correctNumber
-      );
+    case "number": {
+      if (question.correctNumber === undefined) return false;
+      // La saisie d'un champ nombre est conservée telle quelle et convertie
+      // ici : la convertir à chaque frappe rendrait les états intermédiaires
+      // (« - », « 1. ») inéditables.
+      const raw = typeof answer === "number" ? answer : (answer ?? "").toString().trim();
+      if (raw === "") return false;
+      return Number(raw) === question.correctNumber;
+    }
   }
 }
 

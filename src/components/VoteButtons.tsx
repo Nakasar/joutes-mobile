@@ -10,10 +10,13 @@ import { ThumbDownIcon, ThumbUpIcon } from "./icons";
  */
 function applyVote(tally: VoteTally, vote: VoteType): VoteTally {
   const counts = {
-    positive: tally.positive ?? 0,
-    negative: tally.negative ?? 0,
+    positive: Math.max(0, tally.positive ?? 0),
+    negative: Math.max(0, tally.negative ?? 0),
   };
-  if (tally.userVote) counts[tally.userVote] -= 1;
+  // Un décompte absent alors qu'un vote est posé ne doit pas passer sous zéro :
+  // le serveur reprend la main juste après, autant ne rien afficher d'absurde
+  // entre-temps.
+  if (tally.userVote) counts[tally.userVote] = Math.max(0, counts[tally.userVote] - 1);
   const userVote = tally.userVote === vote ? undefined : vote;
   if (userVote) counts[userVote] += 1;
   return { ...counts, userVote };
