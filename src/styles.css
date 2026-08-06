@@ -236,6 +236,34 @@ code {
   -webkit-overflow-scrolling: touch;
 }
 
+/* Bandeau « hors connexion » : premier enfant de la colonne, il pousse le
+   contenu vers le bas plutôt que de le recouvrir. */
+.offline-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  padding: calc(env(safe-area-inset-top, 0px) + 8px) 14px 8px;
+  background: var(--gold);
+  color: #1b1400;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: center;
+  animation: jtIn 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.offline-banner__detail {
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+/* Le bandeau occupe déjà la zone de sécurité haute : l'écran n'a plus à la
+   réserver, sinon un large vide se creuse sous le bandeau. */
+.app-shell--banner .screen {
+  padding-top: 18px;
+}
+
 .screen {
   padding: calc(env(safe-area-inset-top, 0px) + 18px) 16px
     calc(env(safe-area-inset-bottom, 0px) + 20px);

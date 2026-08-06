@@ -1,5 +1,6 @@
 import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { OfflineBanner } from "./components/OfflineBanner";
 import { TabBar } from "./components/TabBar";
 import { CardDetailScreen } from "./screens/CardDetailScreen";
 import { CollectionGameScreen } from "./screens/CollectionGameScreen";
@@ -32,12 +33,19 @@ import { TradesScreen } from "./screens/TradesScreen";
 import { UserProfileScreen } from "./screens/UserProfileScreen";
 import { WishlistDetailScreen } from "./screens/WishlistDetailScreen";
 import { WishlistsScreen } from "./screens/WishlistsScreen";
+import { useNetworkStatus } from "./hooks/useNetworkStatus";
+import { useOnline } from "./hooks/useOnline";
 import { AuthProvider, useAuth } from "./store/auth";
 import "./styles.css";
 
 function Shell() {
   const { ready } = useAuth();
   const { t } = useTranslation();
+  const online = useOnline();
+  const { degraded } = useNetworkStatus();
+  // Hors connexion au sens de l'app : appareil déconnecté, ou réseau si lent
+  // qu'on a préféré servir le contenu local plutôt que de le faire attendre.
+  const offline = !online || degraded;
 
   if (!ready) {
     return (
@@ -54,7 +62,10 @@ function Shell() {
       <Route
         path="*"
         element={
-          <div className="app-shell">
+          <div className={`app-shell${offline ? " app-shell--banner" : ""}`}>
+            {offline && (
+              <OfflineBanner reason={online ? "unreachable" : "disconnected"} />
+            )}
             <main className="app-shell__content">
               <Routes>
                 <Route path="/" element={<HomeScreen />} />

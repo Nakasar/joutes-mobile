@@ -150,6 +150,10 @@
     "socialText": "Trova i tuoi amici, i gruppi di gioco e i negozi seguiti.",
     "socialAction": "Vai alla sezione Social"
   },
+  "network": {
+    "offlineBanner": "Offline",
+    "unreachableDetail": "rete non disponibile o troppo lenta — contenuti locali mostrati"
+  },
   "offline": {
     "title": "Offline",
     "description": "Scarica le regole (FR/EN), le carte e gli errata di un gioco per consultarli senza connessione.",

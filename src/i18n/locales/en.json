@@ -150,6 +150,10 @@
     "socialText": "Find your friends, play groups and followed game stores.",
     "socialAction": "View the Social section"
   },
+  "network": {
+    "offlineBanner": "Offline",
+    "unreachableDetail": "network unavailable or too slow — showing local content"
+  },
   "offline": {
     "title": "Offline",
     "description": "Download a game's rules (FR/EN), cards and errata to browse them without a connection.",

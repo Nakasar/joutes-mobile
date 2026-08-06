@@ -9,6 +9,12 @@
  */
 
 import { ApiError } from "../api/client";
+import {
+  isNetworkDegraded,
+  reportOfflineFallback,
+  staleWhileSlow,
+  trackNetwork,
+} from "./network-status";
 
 const DB_NAME = "joutes-cache";
 const DB_VERSION = 1;
@@ -88,7 +94,10 @@ export async function cacheSet<T>(key: string, value: T): Promise<void> {
  * Exécute `fetcher` en s'appuyant sur le cache :
  * - hors ligne, on sert directement la dernière réponse mémorisée si elle
  *   existe ;
- * - sinon on tente le réseau (et on met le cache à jour), avec repli sur la
+ * - si le réseau met trop longtemps à répondre, on sert la dernière réponse
+ *   mémorisée **sans annuler la requête** : quand elle aboutit, elle met le
+ *   cache à jour et l'affichage se rafraîchit (voir `network-status`) ;
+ * - sinon on attend le réseau (et on met le cache à jour), avec repli sur la
  *   dernière réponse en cas d'échec.
  */
 export async function withCache<T>(
@@ -103,10 +112,26 @@ export async function withCache<T>(
     if (cached !== null) return cached;
   }
 
+  const request = trackNetwork(fetcher());
+  // Le cache est alimenté même lorsque la réponse arrive après qu'on a servi la
+  // version mémorisée : c'est elle qui sera relue au rechargement.
+  void request.then(
+    (result) => cacheSet(key, result),
+    () => {},
+  );
+
+  // Réseau déjà jugé inexploitable : on sert la dernière réponse connue sans
+  // refaire patienter, la requête en fond constatera son retour.
+  if (isNetworkDegraded()) {
+    const cached = await cacheGet<T>(key);
+    if (cached !== null) return cached;
+  }
+
+  const stale = await staleWhileSlow(request, () => cacheGet<T>(key));
+  if (stale !== null) return stale;
+
   try {
-    const result = await fetcher();
-    void cacheSet(key, result);
-    return result;
+    return await request;
   } catch (error) {
     // On ne se rabat sur le cache que pour les erreurs réseau (statut 0 dans ce
     // client). Une erreur HTTP légitime (401 session expirée, 403, 404…) doit
@@ -114,7 +139,10 @@ export async function withCache<T>(
     // ou obsolètes.
     if (error instanceof ApiError && error.status === 0) {
       const cached = await cacheGet<T>(key);
-      if (cached !== null) return cached;
+      if (cached !== null) {
+        reportOfflineFallback();
+        return cached;
+      }
     }
     throw error;
   }
