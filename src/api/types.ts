@@ -304,6 +304,21 @@ export interface Quiz {
   cardIdByName?: Record<string, string>;
 }
 
+/**
+ * Validation d'une section : le bloc dont le bouton a été pressé, et les
+ * réponses données. Le score n'est pas transmis — le serveur recorrige.
+ */
+export interface QuizAnswerPayload {
+  blockId: string;
+  answers: Record<string, string | string[] | number>;
+}
+
+/** Score d'une section, tel que le serveur l'a compté. */
+export interface QuizScore {
+  correct: number;
+  total: number;
+}
+
 /** Réponse de `GET /games/{idOrSlug}/quizzes`. */
 export interface PaginatedQuizzes {
   quizzes: Quiz[];

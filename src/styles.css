@@ -4219,6 +4219,26 @@ html.qr-scanning #root {
   box-shadow: var(--shadow-sm);
 }
 
+/* Bouton de validation et score de la section. Le bouton ne prend plus toute
+   la largeur : le score se lit à côté de lui, non en dessous. */
+.quiz-submit {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.quiz-submit .btn {
+  flex: 1 1 auto;
+}
+
+.quiz-submit__score {
+  flex: 0 0 auto;
+  margin: 0;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
 .quiz-question__prompt {
   font-weight: 600;
 }

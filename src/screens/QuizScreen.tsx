@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { getQuiz } from "../api/quizzes";
+import { getQuiz, recordQuizScore } from "../api/quizzes";
 import { AnnotatedMarkdown } from "../components/AnnotatedMarkdown";
 import { BackHeader } from "../components/BackHeader";
 import { QuizQuestion } from "../components/QuizQuestion";
@@ -9,28 +9,38 @@ import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { LANGUAGE_LABELS, type Language } from "../i18n";
 import { toCardIdByName } from "../lib/errata-markdown";
+import { useAuth } from "../store/auth";
 import {
   availableQuizLangs,
   isCorrect,
   isTranslationStale,
   localizeQuiz,
   questionsValidatedBy,
+  toAnswerPayload,
   type QuizAnswerValue,
 } from "../lib/quiz";
 
+/** Score d'une section, tel qu'affiché à côté de son bouton de validation. */
+type SectionScore = { correct: number; total: number };
+
 /**
- * Écran de réponse à un quizz. La correction est entièrement locale : l'API
- * renvoie les bonnes réponses avec le quizz et rien n'est enregistré, comme sur
- * le web. La création et la traduction d'un quizz restent réservées au web.
+ * Écran de réponse à un quizz. La correction s'affiche sans attendre le réseau :
+ * l'API renvoie les bonnes réponses avec le quizz. Le score d'une section
+ * validée part en revanche au serveur quand le joueur est connecté — c'est lui
+ * qui recorrige et enregistre. La création et la traduction d'un quizz restent
+ * réservées au web.
  */
 export function QuizScreen() {
   const { t, i18n } = useTranslation();
   const { gameSlug = "", quizId = "" } = useParams();
+  const { isAuthenticated } = useAuth();
   const { data: quiz, loading, error, reload } = useApi(() => getQuiz(quizId), [quizId]);
 
   const [lang, setLang] = useState<string | null>(null);
   const [answers, setAnswers] = useState<Record<string, QuizAnswerValue>>({});
   const [results, setResults] = useState<Record<string, boolean>>({});
+  /** Score de chaque section validée, indexé par l'identifiant de son bloc. */
+  const [scores, setScores] = useState<Record<string, SectionScore>>({});
 
   const availableLangs = useMemo(
     () => (quiz ? availableQuizLangs(quiz) : []),
@@ -62,13 +72,35 @@ export function QuizScreen() {
   const blocks = localized?.blocks ?? [];
 
   function validateBlock(blockIndex: number) {
-    setResults((previous) => {
-      const next = { ...previous };
-      for (const question of questionsValidatedBy(blocks, blockIndex)) {
-        next[question.id] = isCorrect(question, answers[question.id]);
-      }
-      return next;
-    });
+    const questions = questionsValidatedBy(blocks, blockIndex);
+    const block = blocks[blockIndex];
+
+    // La correction est calculée hors des mises à jour d'état : compter dans un
+    // `setState` la doublerait, React rejouant l'appel en mode strict.
+    const corrected: Record<string, boolean> = {};
+    let correct = 0;
+    for (const question of questions) {
+      const result = isCorrect(question, answers[question.id]);
+      corrected[question.id] = result;
+      if (result) correct += 1;
+    }
+
+    setResults((previous) => ({ ...previous, ...corrected }));
+    setScores((previous) => ({
+      ...previous,
+      [block.id]: { correct, total: questions.length },
+    }));
+
+    if (isAuthenticated) {
+      // L'enregistrement ne conditionne pas l'affichage : hors ligne, ou si le
+      // serveur refuse, le joueur garde sa correction et son score à l'écran.
+      recordQuizScore(quizId, {
+        blockId: block.id,
+        answers: toAnswerPayload(answers),
+      }).catch((err) => {
+        console.error("Score de quizz non enregistré:", err);
+      });
+    }
   }
 
   return (
@@ -121,13 +153,26 @@ export function QuizScreen() {
                   />
                 ))}
                 {block.showSubmitButton && (
-                  <button
-                    type="button"
-                    className="btn btn--grad btn--block"
-                    onClick={() => validateBlock(index)}
-                  >
-                    {t("quizzes.validate")}
-                  </button>
+                  <div className="quiz-submit">
+                    <button
+                      type="button"
+                      className="btn btn--grad"
+                      onClick={() => validateBlock(index)}
+                    >
+                      {t("quizzes.validate")}
+                    </button>
+                    {scores[block.id] && (
+                      <p className="quiz-submit__score" role="status">
+                        {/* L'accord porte sur le total : « 1 / 1 bonne
+                            réponse », « 3 / 5 bonnes réponses ». */}
+                        {t("quizzes.score", {
+                          count: scores[block.id].total,
+                          correct: scores[block.id].correct,
+                          total: scores[block.id].total,
+                        })}
+                      </p>
+                    )}
+                  </div>
                 )}
               </div>
             ),
