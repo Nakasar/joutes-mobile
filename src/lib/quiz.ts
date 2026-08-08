@@ -169,3 +169,24 @@ export function questionsValidatedBy(blocks: QuizBlock[], blockIndex: number): Q
   }
   return questions;
 }
+
+/**
+ * Réponses telles qu'elles partent au serveur.
+ *
+ * L'état local garde une entrée par question touchée, y compris vidée après
+ * coup — `undefined` y signifie « pas de réponse ». Le schéma de l'API n'accepte
+ * que des valeurs, une question sans réponse étant simplement absente : elle
+ * sera comptée fausse de toute façon.
+ */
+export function toAnswerPayload(
+  answers: Record<string, QuizAnswerValue>,
+): Record<string, string | string[] | number> {
+  const payload: Record<string, string | string[] | number> = {};
+
+  for (const [questionId, answer] of Object.entries(answers)) {
+    if (answer === undefined) continue;
+    payload[questionId] = answer;
+  }
+
+  return payload;
+}

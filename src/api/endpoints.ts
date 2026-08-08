@@ -34,6 +34,7 @@ export const endpoints = {
   },
   quizzes: {
     detail: (quizId: string) => `/quizzes/${quizId}`,
+    scores: (quizId: string) => `/quizzes/${quizId}/scores`,
   },
   news: {
     list: "/news",

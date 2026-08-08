@@ -296,6 +296,7 @@
     "empty": "Nessun quiz per questo gioco al momento.",
     "detailFallbackTitle": "Quiz",
     "validate": "Verifica",
+    "score": "{{correct}} / {{total}} corrette",
     "answerPlaceholder": "La tua risposta",
     "correct": "Risposta corretta!",
     "incorrect": "Risposta sbagliata.",
