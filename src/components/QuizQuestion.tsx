@@ -1,12 +1,16 @@
 import { useTranslation } from "react-i18next";
 import type { QuizQuestion as QuizQuestionType } from "../api/types";
 import type { QuizAnswerValue } from "../lib/quiz";
-import { GameMarkdown } from "./GameMarkdown";
+import { AnnotatedMarkdown } from "./AnnotatedMarkdown";
 import { CheckIcon, CrossIcon } from "./icons";
 
 /**
  * Une question de quizz et sa correction. `result` vaut `undefined` tant que le
  * bloc n'a pas été validé.
+ *
+ * Énoncé, propositions et corrections sont du markdown annoté : les cartes
+ * qu'ils citent deviennent des liens, les mots-clés des badges et les balises
+ * d'icônes des glyphes.
  */
 export function QuizQuestion({
   question,
@@ -14,12 +18,14 @@ export function QuizQuestion({
   onAnswerChange,
   result,
   gameSlug,
+  cardIdByName,
 }: {
   question: QuizQuestionType;
   answer: QuizAnswerValue;
   onAnswerChange: (value: QuizAnswerValue) => void;
   result?: boolean;
   gameSlug: string;
+  cardIdByName: Map<string, string>;
 }) {
   const { t } = useTranslation();
   const choice = question.type === "single" || question.type === "multiple";
@@ -27,7 +33,11 @@ export function QuizQuestion({
   return (
     <div className="quiz-question">
       <div className="quiz-question__prompt">
-        <GameMarkdown markdown={question.prompt} gameSlug={gameSlug} />
+        <AnnotatedMarkdown
+          content={question.prompt}
+          cardIdByName={cardIdByName}
+          gameSlug={gameSlug}
+        />
       </div>
 
       {choice && (
@@ -61,7 +71,11 @@ export function QuizQuestion({
                   }}
                 />
                 <span className="quiz-option__text">
-                  <GameMarkdown markdown={option.text} gameSlug={gameSlug} />
+                  <AnnotatedMarkdown
+                    content={option.text}
+                    cardIdByName={cardIdByName}
+                    gameSlug={gameSlug}
+                  />
                 </span>
               </label>
             );
@@ -100,11 +114,12 @@ export function QuizQuestion({
         >
           {result ? <CheckIcon size={16} /> : <CrossIcon size={16} />}
           <div className="quiz-feedback__text">
-            <GameMarkdown
-              markdown={
+            <AnnotatedMarkdown
+              content={
                 (result ? question.correctFeedback : question.incorrectFeedback) ||
                 t(result ? "quizzes.correct" : "quizzes.incorrect")
               }
+              cardIdByName={cardIdByName}
               gameSlug={gameSlug}
             />
           </div>

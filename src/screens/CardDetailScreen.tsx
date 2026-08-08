@@ -12,6 +12,7 @@ import { StatusView } from "../components/StatusView";
 import { SubmitErrataSheet } from "../components/SubmitErrataSheet";
 import { useApi } from "../hooks/useApi";
 import { annotateCardText } from "../lib/card-text-markdown";
+import { toCardIdByName } from "../lib/errata-markdown";
 import { useAuth } from "../store/auth";
 
 export function CardDetailScreen() {
@@ -26,18 +27,7 @@ export function CardDetailScreen() {
   const [listingForSale, setListingForSale] = useState(false);
   const [submittingErrata, setSubmittingErrata] = useState(false);
 
-  const cardIdByName = useMemo(
-    // `annotateErrataMarkdown` cherche par nom en minuscules : on normalise
-    // les clés à la construction, au cas où l'API renverrait la casse d'origine.
-    () =>
-      new Map(
-        Object.entries(data?.cardIdByName ?? {}).map(([name, id]) => [
-          name.toLowerCase(),
-          id,
-        ]),
-      ),
-    [data?.cardIdByName],
-  );
+  const cardIdByName = useMemo(() => toCardIdByName(data?.cardIdByName), [data?.cardIdByName]);
   const cardTextMarkdown = useMemo(
     () => (data?.text ? annotateCardText(data.text) : null),
     [data?.text],

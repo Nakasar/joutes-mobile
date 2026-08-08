@@ -296,6 +296,12 @@ export interface Quiz {
   createdAt?: string;
   /** Dernière modification du contenu — les traductions n'y touchent pas. */
   updatedAt?: string;
+  /**
+   * Noms de cartes → identifiants, pour les mentions `[Nom de carte]` du
+   * markdown annoté. Résolu par l'API sur l'ensemble du quizz, traductions
+   * comprises : changer de langue ne demande pas un second appel.
+   */
+  cardIdByName?: Record<string, string>;
 }
 
 /** Réponse de `GET /games/{idOrSlug}/quizzes`. */

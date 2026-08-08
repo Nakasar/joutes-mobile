@@ -118,3 +118,16 @@ export function annotateErrataMarkdown(
 
   return replaceIconTags(result);
 }
+
+/**
+ * Index nom → identifiant tel que l'attend `annotateErrataMarkdown` : la
+ * recherche s'y fait en minuscules, alors que l'API rend les noms dans leur
+ * casse d'origine.
+ */
+export function toCardIdByName(
+  cardIdByName: Record<string, string> | undefined,
+): Map<string, string> {
+  return new Map(
+    Object.entries(cardIdByName ?? {}).map(([name, id]) => [name.toLowerCase(), id]),
+  );
+}
