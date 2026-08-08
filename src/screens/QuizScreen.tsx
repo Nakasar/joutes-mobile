@@ -163,7 +163,10 @@ export function QuizScreen() {
                     </button>
                     {scores[block.id] && (
                       <p className="quiz-submit__score" role="status">
+                        {/* L'accord porte sur le total : « 1 / 1 bonne
+                            réponse », « 3 / 5 bonnes réponses ». */}
                         {t("quizzes.score", {
+                          count: scores[block.id].total,
                           correct: scores[block.id].correct,
                           total: scores[block.id].total,
                         })}
