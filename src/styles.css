@@ -2393,6 +2393,20 @@ textarea:focus {
   cursor: pointer;
 }
 
+/* Une mention qui ouvre un panneau au lieu de naviguer est un bouton : on lui
+   retire l'habillage natif pour qu'elle se lise comme le lien d'à côté. */
+button.card-link {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  text-align: inherit;
+  color: var(--primary);
+}
+
 /* ---- Badges de mots-clés ---- */
 
 .keyword-badge {

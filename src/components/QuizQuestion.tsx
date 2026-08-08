@@ -19,6 +19,7 @@ export function QuizQuestion({
   result,
   gameSlug,
   cardIdByName,
+  onCardClick,
 }: {
   question: QuizQuestionType;
   answer: QuizAnswerValue;
@@ -26,6 +27,8 @@ export function QuizQuestion({
   result?: boolean;
   gameSlug: string;
   cardIdByName: Map<string, string>;
+  /** Ouvre la carte citée en panneau, sans quitter le quizz. */
+  onCardClick: (cardId: string, name: string) => void;
 }) {
   const { t } = useTranslation();
   const choice = question.type === "single" || question.type === "multiple";
@@ -37,6 +40,7 @@ export function QuizQuestion({
           content={question.prompt}
           cardIdByName={cardIdByName}
           gameSlug={gameSlug}
+          onCardClick={onCardClick}
         />
       </div>
 
@@ -75,6 +79,7 @@ export function QuizQuestion({
                     content={option.text}
                     cardIdByName={cardIdByName}
                     gameSlug={gameSlug}
+                    onCardClick={onCardClick}
                   />
                 </span>
               </label>
@@ -121,6 +126,7 @@ export function QuizQuestion({
               }
               cardIdByName={cardIdByName}
               gameSlug={gameSlug}
+              onCardClick={onCardClick}
             />
           </div>
         </div>

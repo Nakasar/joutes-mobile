@@ -1,7 +1,19 @@
+import { isValidElement, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ReactMarkdown, { defaultUrlTransform } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { KeywordBadge } from "./KeywordBadge";
+
+/** Texte brut d'un contenu de lien, pour nommer la carte avant que l'API réponde. */
+function nodeText(node: ReactNode): string {
+  if (typeof node === "string") return node;
+  if (typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(nodeText).join("");
+  if (isValidElement<{ children?: ReactNode }>(node)) {
+    return nodeText(node.props.children);
+  }
+  return "";
+}
 
 /**
  * Rendu du contenu de jeu (erratas, news, texte de carte…) avec badges de
@@ -17,10 +29,17 @@ export function GameMarkdown({
   markdown,
   gameSlug,
   ruleLang = "fr",
+  onCardClick,
 }: {
   markdown: string;
   gameSlug: string;
   ruleLang?: "en" | "fr";
+  /**
+   * Prend la main sur les mentions de cartes au lieu de naviguer vers leur
+   * fiche — pour les afficher en panneau quand quitter l'écran couperait le
+   * fil de ce qu'on est en train de faire (un quizz en cours).
+   */
+  onCardClick?: (cardId: string, name: string) => void;
 }) {
   const navigate = useNavigate();
 
@@ -66,6 +85,26 @@ export function GameMarkdown({
 
             if (href?.startsWith("card://")) {
               const id = href.slice("card://".length);
+
+              if (onCardClick) {
+                return (
+                  <button
+                    type="button"
+                    className="card-link"
+                    onClick={(e) => {
+                      // Une mention peut être rendue dans un <label> (une
+                      // proposition de quizz) : sans ça, ouvrir la carte
+                      // cocherait la réponse au passage.
+                      e.preventDefault();
+                      e.stopPropagation();
+                      onCardClick(id, nodeText(children));
+                    }}
+                  >
+                    {children}
+                  </button>
+                );
+              }
+
               // `Link` rend un vrai <a href> (focusable clavier, sémantique)
               // tout en gérant la navigation côté routeur.
               return (
