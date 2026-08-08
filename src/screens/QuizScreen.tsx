@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { getQuiz, recordQuizScore } from "../api/quizzes";
 import { AnnotatedMarkdown } from "../components/AnnotatedMarkdown";
 import { BackHeader } from "../components/BackHeader";
+import { CardDetailModal } from "../components/CardDetailModal";
 import { QuizQuestion } from "../components/QuizQuestion";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
@@ -23,12 +24,19 @@ import {
 /** Score d'une section, tel qu'affiché à côté de son bouton de validation. */
 type SectionScore = { correct: number; total: number };
 
+/** Carte citée par le quizz, ouverte en panneau plutôt qu'en pleine page. */
+type PreviewCard = { cardId: string; name: string };
+
 /**
  * Écran de réponse à un quizz. La correction s'affiche sans attendre le réseau :
  * l'API renvoie les bonnes réponses avec le quizz. Le score d'une section
  * validée part en revanche au serveur quand le joueur est connecté — c'est lui
  * qui recorrige et enregistre. La création et la traduction d'un quizz restent
  * réservées au web.
+ *
+ * Les cartes citées s'ouvrent en panneau : y naviguer viderait les réponses en
+ * cours de saisie et la correction déjà affichée, que rien ne rétablit au
+ * retour.
  */
 export function QuizScreen() {
   const { t, i18n } = useTranslation();
@@ -41,6 +49,7 @@ export function QuizScreen() {
   const [results, setResults] = useState<Record<string, boolean>>({});
   /** Score de chaque section validée, indexé par l'identifiant de son bloc. */
   const [scores, setScores] = useState<Record<string, SectionScore>>({});
+  const [preview, setPreview] = useState<PreviewCard | null>(null);
 
   const availableLangs = useMemo(
     () => (quiz ? availableQuizLangs(quiz) : []),
@@ -135,6 +144,7 @@ export function QuizScreen() {
                   content={block.content}
                   cardIdByName={cardIdByName}
                   gameSlug={gameSlug}
+                  onCardClick={(cardId, name) => setPreview({ cardId, name })}
                 />
               </div>
             ) : (
@@ -150,6 +160,7 @@ export function QuizScreen() {
                     result={results[question.id]}
                     gameSlug={gameSlug}
                     cardIdByName={cardIdByName}
+                    onCardClick={(cardId, name) => setPreview({ cardId, name })}
                   />
                 ))}
                 {block.showSubmitButton && (
@@ -178,6 +189,15 @@ export function QuizScreen() {
             ),
           )}
         </>
+      )}
+
+      {preview && (
+        <CardDetailModal
+          gameSlug={gameSlug}
+          cardId={preview.cardId}
+          fallbackName={preview.name}
+          onClose={() => setPreview(null)}
+        />
       )}
     </div>
   );
