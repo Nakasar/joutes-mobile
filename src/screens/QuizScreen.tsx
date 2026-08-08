@@ -2,12 +2,13 @@ import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getQuiz } from "../api/quizzes";
+import { AnnotatedMarkdown } from "../components/AnnotatedMarkdown";
 import { BackHeader } from "../components/BackHeader";
-import { GameMarkdown } from "../components/GameMarkdown";
 import { QuizQuestion } from "../components/QuizQuestion";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { LANGUAGE_LABELS, type Language } from "../i18n";
+import { toCardIdByName } from "../lib/errata-markdown";
 import {
   availableQuizLangs,
   isCorrect,
@@ -46,6 +47,13 @@ export function QuizScreen() {
   const localized = useMemo(
     () => (quiz ? localizeQuiz(quiz, selectedLang) : null),
     [quiz, selectedLang],
+  );
+
+  // Résolu par l'API sur tout le quizz, traductions comprises : changer de
+  // langue ne redemande rien, et l'index ne dépend donc pas de `selectedLang`.
+  const cardIdByName = useMemo(
+    () => toCardIdByName(quiz?.cardIdByName),
+    [quiz?.cardIdByName],
   );
 
   const translation = quiz?.translations?.find((tr) => tr.lang === selectedLang);
@@ -91,7 +99,11 @@ export function QuizScreen() {
           {blocks.map((block, index) =>
             block.type === "markdown" ? (
               <div key={block.id} className="quiz-block">
-                <GameMarkdown markdown={block.content} gameSlug={gameSlug} />
+                <AnnotatedMarkdown
+                  content={block.content}
+                  cardIdByName={cardIdByName}
+                  gameSlug={gameSlug}
+                />
               </div>
             ) : (
               <div key={block.id} className="quiz-block">
@@ -105,6 +117,7 @@ export function QuizScreen() {
                     }
                     result={results[question.id]}
                     gameSlug={gameSlug}
+                    cardIdByName={cardIdByName}
                   />
                 ))}
                 {block.showSubmitButton && (

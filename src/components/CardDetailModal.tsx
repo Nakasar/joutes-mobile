@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { getCard } from "../api/cards";
 import { useApi } from "../hooks/useApi";
 import { annotateCardText } from "../lib/card-text-markdown";
+import { toCardIdByName } from "../lib/errata-markdown";
 import { ErrataCard } from "./ErrataCard";
 import { GameMarkdown } from "./GameMarkdown";
 import { BackIcon } from "./icons";
@@ -41,16 +42,7 @@ export function CardDetailModal({
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  const cardIdByName = useMemo(
-    () =>
-      new Map(
-        Object.entries(data?.cardIdByName ?? {}).map(([name, id]) => [
-          name.toLowerCase(),
-          id,
-        ]),
-      ),
-    [data?.cardIdByName],
-  );
+  const cardIdByName = useMemo(() => toCardIdByName(data?.cardIdByName), [data?.cardIdByName]);
   const cardTextMarkdown = useMemo(
     () => (data?.text ? annotateCardText(data.text) : null),
     [data?.text],
