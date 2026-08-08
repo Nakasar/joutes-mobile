@@ -18,17 +18,27 @@ export function AnnotatedMarkdown({
   cardIdByName,
   gameSlug,
   ruleLang,
+  onCardClick,
 }: {
   content: string;
   /** Noms de cartes en minuscules → identifiants, tels que résolus par l'API. */
   cardIdByName: Map<string, string>;
   gameSlug: string;
   ruleLang?: "en" | "fr";
+  /** Voir `GameMarkdown` : ouvre la carte sur place au lieu d'y naviguer. */
+  onCardClick?: (cardId: string, name: string) => void;
 }) {
   const markdown = useMemo(
     () => annotateErrataMarkdown(content, cardIdByName),
     [content, cardIdByName],
   );
 
-  return <GameMarkdown markdown={markdown} gameSlug={gameSlug} ruleLang={ruleLang} />;
+  return (
+    <GameMarkdown
+      markdown={markdown}
+      gameSlug={gameSlug}
+      ruleLang={ruleLang}
+      onCardClick={onCardClick}
+    />
+  );
 }
