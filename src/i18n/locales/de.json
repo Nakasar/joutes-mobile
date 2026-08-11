@@ -20,7 +20,7 @@
     "games": "Spiele",
     "events": "Events",
     "collection": "Sammlung",
-    "tournaments": "Turniere"
+    "play": "Spielen"
   },
   "home": {
     "eyebrow": "Joutes",
@@ -483,6 +483,41 @@
     "sellListTitle": "Verkaufsliste",
     "viewMineAction": "Mein öffentliches Profil ansehen"
   },
+  "play": {
+    "title": "Spielen",
+    "subtitle": "Deine Turniere und deine Partien",
+    "sectionTournaments": "Turniere",
+    "sectionMatches": "Partien"
+  },
+  "gameMatches": {
+    "newAction": "Neue Partie",
+    "empty": "Noch keine Partie erfasst",
+    "loginRequired": "Melde dich an, um deine Partien zu erfassen und wiederzufinden.",
+    "unknownGame": "Unbekanntes Spiel",
+    "unknownPlayer": "Unbekannter Spieler",
+    "playersCount_one": "{{count}} Spieler",
+    "playersCount_other": "{{count}} Spieler",
+    "guest": "Gast",
+    "winner": "Sieger",
+    "detailTitle": "Partie",
+    "createTitle": "Neue Partie",
+    "gameLabel": "Spiel",
+    "gamePlaceholder": "Spiel wählen",
+    "dateLabel": "Datum und Uhrzeit",
+    "friendsLabel": "Freunde am Tisch",
+    "guestsLabel": "Gäste (ohne Konto)",
+    "guestPlaceholder": "Name des Gasts",
+    "addGuest": "Hinzufügen",
+    "removeGuest": "{{name}} entfernen",
+    "winnersLabel": "Sieger",
+    "you": "Ich",
+    "scenarioLabel": "Szenario",
+    "scenarioPlaceholder": "z. B. Stellung halten",
+    "notesLabel": "Notizen",
+    "notesPlaceholder": "Der Verlauf der Partie, die entscheidenden Momente…",
+    "armiesLabel": "Armeelisten",
+    "submit": "Partie speichern"
+  },
   "tournaments": {
                    "stopwatchElapsed": "vergangen",
                    "stopwatchPaused": "Stoppuhr pausiert",
@@ -519,8 +554,6 @@
                      "pointsDestroyed": "Zerstörte Punkte",
                      "pointsDestroyedShort": "Zerstört"
                    },
-    "title": "Turniere",
-    "subtitle": "Turniere, an denen du teilnimmst. Scanne den QR-Code eines Organisators, um beizutreten.",
     "joinAction": "Turnier beitreten",
     "filterCurrent": "Aktuell",
     "filterPast": "Vergangen",

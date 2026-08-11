@@ -1153,7 +1153,7 @@ export function TournamentDetailScreen() {
       .then(() => {
         setDropping(false);
         if (syncKey) removeSyncKey(tournamentId);
-        navigate("/tournaments");
+        navigate("/play");
       })
       .catch((err: unknown) => {
         setDropping(false);

@@ -20,7 +20,7 @@
     "games": "Giochi",
     "events": "Eventi",
     "collection": "Collezione",
-    "tournaments": "Tornei"
+    "play": "Gioca"
   },
   "home": {
     "eyebrow": "Joutes",
@@ -483,6 +483,41 @@
     "sellListTitle": "Lista di vendita",
     "viewMineAction": "Vedi il mio profilo pubblico"
   },
+  "play": {
+    "title": "Gioca",
+    "subtitle": "I tuoi tornei e le tue partite",
+    "sectionTournaments": "Tornei",
+    "sectionMatches": "Partite"
+  },
+  "gameMatches": {
+    "newAction": "Nuova partita",
+    "empty": "Nessuna partita registrata",
+    "loginRequired": "Accedi per registrare e ritrovare le tue partite.",
+    "unknownGame": "Gioco sconosciuto",
+    "unknownPlayer": "Giocatore sconosciuto",
+    "playersCount_one": "{{count}} giocatore",
+    "playersCount_other": "{{count}} giocatori",
+    "guest": "ospite",
+    "winner": "Vincitore",
+    "detailTitle": "Partita",
+    "createTitle": "Nuova partita",
+    "gameLabel": "Gioco",
+    "gamePlaceholder": "Scegli un gioco",
+    "dateLabel": "Data e ora",
+    "friendsLabel": "Amici al tavolo",
+    "guestsLabel": "Ospiti (senza account)",
+    "guestPlaceholder": "Nome dell'ospite",
+    "addGuest": "Aggiungi",
+    "removeGuest": "Rimuovi {{name}}",
+    "winnersLabel": "Vincitore/i",
+    "you": "Io",
+    "scenarioLabel": "Scenario",
+    "scenarioPlaceholder": "Es.: conquista la posizione",
+    "notesLabel": "Note",
+    "notesPlaceholder": "Come è andata la partita, i momenti chiave…",
+    "armiesLabel": "Liste d'armata",
+    "submit": "Salva la partita"
+  },
   "tournaments": {
                    "stopwatchElapsed": "trascorso",
                    "stopwatchPaused": "cronometro in pausa",
@@ -519,8 +554,6 @@
                      "pointsDestroyed": "Punti distrutti",
                      "pointsDestroyedShort": "Distrutti"
                    },
-    "title": "Tornei",
-    "subtitle": "Quelli in cui giochi. Scansiona il QR di un organizzatore per partecipare.",
     "joinAction": "Partecipa a un torneo",
     "filterCurrent": "In corso",
     "filterPast": "Passati",

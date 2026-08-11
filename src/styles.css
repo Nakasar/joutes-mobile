@@ -565,6 +565,33 @@ textarea:focus {
   display: none;
 }
 
+/* Rangée de puces qui passe à la ligne, pour un choix — cocher des joueurs,
+   désigner des vainqueurs — où rien ne doit sortir de l'écran par le côté :
+   contrairement à un filtre, une option non vue est une option perdue. */
+.chip-set {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Une puce de filtre ne se coupe ni ne rétrécit — c'est ce qu'il faut dans une
+   rangée qui défile. Ici elle porte un nom de joueur, qui peut être long : sans
+   cette reprise, un seul nom pousse le panneau hors de l'écran. */
+.chip-set > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.chip-set > .chip,
+.chip-set > .chip-filter {
+  flex-shrink: 1;
+  white-space: normal;
+  text-align: left;
+  /* Un pseudonyme peut n'offrir aucune césure : il faut pouvoir couper dedans. */
+  overflow-wrap: anywhere;
+}
+
 .chip-filter {
   flex-shrink: 0;
   border: 1px solid var(--border);
@@ -4339,4 +4366,19 @@ html.qr-scanning #root {
 .form-sheet__note {
   font-size: 0.8rem;
   margin: 4px 0 0;
+}
+
+/* ---- Liste d'armée d'un rapport de bataille ---- */
+
+.army-list__owner {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.army-list__unit {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
 }

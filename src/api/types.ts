@@ -1395,3 +1395,81 @@ export interface TournamentPuzzleResult {
   createdAt: string;
   updatedAt?: string;
 }
+
+// ---- Parties de jeu (hors tournoi) ----
+
+/**
+ * Un participant d'une partie. `isGuest` marque quelqu'un **sans compte** :
+ * son `id` est local à la partie (`guest_…`), il n'appartient à personne et
+ * n'ouvre aucun droit dessus.
+ */
+export interface GameMatchPlayer {
+  id: string;
+  username: string;
+  displayName?: string;
+  discriminator?: string;
+  isGuest?: boolean;
+  isWinner: boolean;
+}
+
+/** Une ligne de liste d'armée, telle que le rapport l'archive. */
+export interface BattleReportArmyUnit {
+  productId?: string;
+  name: string;
+  image?: string;
+  quantity: number;
+}
+
+export interface BattleReportArmy {
+  name?: string;
+  units: BattleReportArmyUnit[];
+}
+
+/**
+ * Volet « rapport de bataille » d'une partie : listes d'armée par participant,
+ * scénario, notes libres et table de jeu vue de dessus. La table n'est ni
+ * affichée ni modifiée par le mobile — elle se compose au doigt sur un écran
+ * large — mais elle est conservée telle quelle pour ne pas la perdre.
+ */
+export interface BattleReport {
+  scenario?: string;
+  notes?: string;
+  armies?: Record<string, BattleReportArmy>;
+  map?: unknown;
+}
+
+/**
+ * Une partie telle qu'elle est listée. `battleReport` présent — même vide —
+ * signale une partie saisie en rapport de bataille ; seul le scénario y est
+ * repris, les listes d'armée n'étant servies que sur la fiche.
+ */
+export interface GameMatchSummary {
+  id: string;
+  playedAt: string;
+  createdBy: string;
+  game: { id: string; name: string; slug: string | null } | null;
+  lair: { id: string; name: string } | null;
+  players: GameMatchPlayer[];
+  winnerIds: string[];
+  battleReport?: { scenario?: string };
+}
+
+export interface GameMatchDetail extends Omit<GameMatchSummary, "battleReport"> {
+  battleReport?: BattleReport;
+}
+
+/**
+ * Création d'une partie. L'appelant en est joueur sans avoir à se citer dans
+ * `playerIds`. L'identifiant d'un invité peut être omis — le serveur le
+ * fabrique — mais le fournir permet de le désigner vainqueur avant que la
+ * partie existe.
+ */
+export interface GameMatchCreateInput {
+  gameId: string;
+  playedAt?: string;
+  lairId?: string;
+  playerIds?: string[];
+  guests?: { id?: string; name: string }[];
+  winnerIds?: string[];
+  battleReport?: { scenario?: string; notes?: string };
+}
