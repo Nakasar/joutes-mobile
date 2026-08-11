@@ -10,6 +10,7 @@ import { EventDetailScreen } from "./screens/EventDetailScreen";
 import { EventsScreen } from "./screens/EventsScreen";
 import { GameCardsScreen } from "./screens/GameCardsScreen";
 import { GameQuizzesScreen } from "./screens/GameQuizzesScreen";
+import { GameMatchDetailScreen } from "./screens/GameMatchDetailScreen";
 import { GameScreen } from "./screens/GameScreen";
 import { GamesScreen } from "./screens/GamesScreen";
 import { HomeScreen } from "./screens/HomeScreen";
@@ -19,6 +20,7 @@ import { NewsDetailScreen } from "./screens/NewsDetailScreen";
 import { PlayGroupDetailScreen } from "./screens/PlayGroupDetailScreen";
 import { PlayGroupSellListScreen } from "./screens/PlayGroupSellListScreen";
 import { PlayGroupWishlistsScreen } from "./screens/PlayGroupWishlistsScreen";
+import { PlayScreen } from "./screens/PlayScreen";
 import { PoliciesListScreen } from "./screens/PoliciesListScreen";
 import { PolicyDetailScreen } from "./screens/PolicyDetailScreen";
 import { QuizScreen } from "./screens/QuizScreen";
@@ -27,7 +29,6 @@ import { SettingsScreen } from "./screens/SettingsScreen";
 import { SocialScreen } from "./screens/SocialScreen";
 import { TournamentDetailScreen } from "./screens/TournamentDetailScreen";
 import { TournamentFormScreen } from "./screens/TournamentFormScreen";
-import { TournamentsScreen } from "./screens/TournamentsScreen";
 import { TradeDetailScreen } from "./screens/TradeDetailScreen";
 import { TradesScreen } from "./screens/TradesScreen";
 import { UserProfileScreen } from "./screens/UserProfileScreen";
@@ -119,7 +120,14 @@ function Shell() {
                 <Route path="/sell-lists/mine" element={<MySellListScreen />} />
                 <Route path="/trades" element={<TradesScreen />} />
                 <Route path="/trades/:tradeId" element={<TradeDetailScreen />} />
-                <Route path="/tournaments" element={<TournamentsScreen />} />
+                <Route path="/play" element={<PlayScreen />} />
+                <Route
+                  path="/game-matches/:matchId"
+                  element={<GameMatchDetailScreen />}
+                />
+                {/* L'onglet s'appelait « Tournois » et vivait à cette adresse :
+                    les liens déjà posés ailleurs dans l'app y mènent encore. */}
+                <Route path="/tournaments" element={<Navigate to="/play" replace />} />
                 <Route
                   path="/tournaments/:tournamentId"
                   element={<TournamentDetailScreen />}

@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { listMyGameMatches } from "../api/game-matches";
 import { listPlayingTournaments, syncTournamentKeys } from "../api/tournaments";
-import type { TournamentStatus } from "../api/types";
-import { ChevronIcon, PlusIcon, SwordsIcon } from "../components/icons";
+import type { GameMatchSummary, TournamentStatus } from "../api/types";
+import { CreateGameMatchSheet } from "../components/CreateGameMatchSheet";
+import { ChevronIcon, PlusIcon, SwordsIcon, TrophyIcon } from "../components/icons";
 import { JoinTournamentSheet } from "../components/JoinTournamentSheet";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
@@ -14,6 +16,7 @@ import { formatDuration, timerIsPaused, timerRemainingSeconds } from "../lib/tou
 import { useAuth } from "../store/auth";
 
 type Filter = "current" | "past";
+type Section = "tournaments" | "matches";
 
 interface TournamentSummary {
   id: string;
@@ -147,7 +150,11 @@ function TournamentRow({ tournament }: { tournament: TournamentSummary }) {
   );
 }
 
-export function TournamentsScreen() {
+/**
+ * Volet « tournois » : ceux où le compte est inscrit, et ceux rejoints en
+ * invité sur cet appareil.
+ */
+function TournamentsPane() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
@@ -165,14 +172,7 @@ export function TournamentsScreen() {
   const rest = filtered.filter((tournament) => tournament.id !== live?.id);
 
   return (
-    <div className="screen">
-      <div className="screen-head">
-        <div className="screen-head__titles">
-          <h1 className="screen-title">{t("tournaments.title")}</h1>
-          <p className="screen-subtitle">{t("tournaments.subtitle")}</p>
-        </div>
-      </div>
-
+    <>
       <button
         className="btn btn--grad btn--block"
         style={{ marginBottom: 16 }}
@@ -182,15 +182,17 @@ export function TournamentsScreen() {
         {t("tournaments.joinAction")}
       </button>
 
-      <div className="segmented" style={{ marginBottom: 16 }}>
+      {/* Second niveau de filtre : des puces plutôt qu'un second contrôle
+          segmenté, qui se confondrait avec celui des sections. */}
+      <div className="chip-row">
         <button
-          className={`segmented__item${filter === "current" ? " segmented__item--active" : ""}`}
+          className={`chip-filter${filter === "current" ? " chip-filter--active" : ""}`}
           onClick={() => setFilter("current")}
         >
           {t("tournaments.filterCurrent")}
         </button>
         <button
-          className={`segmented__item${filter === "past" ? " segmented__item--active" : ""}`}
+          className={`chip-filter${filter === "past" ? " chip-filter--active" : ""}`}
           onClick={() => setFilter("past")}
         >
           {t("tournaments.filterPast")}
@@ -216,6 +218,132 @@ export function TournamentsScreen() {
           onJoined={(tournamentId) => navigate(`/tournaments/${tournamentId}`)}
         />
       )}
+    </>
+  );
+}
+
+function GameMatchRow({ match }: { match: GameMatchSummary }) {
+  const { t } = useTranslation();
+  const winners = match.players.filter((player) => player.isWinner);
+
+  return (
+    <Link to={`/game-matches/${match.id}`} className="list-row list-row--link">
+      <span className="list-row__icon" style={{ background: "var(--chip)" }}>
+        <SwordsIcon size={20} style={{ color: "var(--primary)" }} />
+      </span>
+      <div className="list-row__body">
+        <p className="list-row__title">
+          {match.game?.name ?? t("gameMatches.unknownGame")}
+        </p>
+        <p className="list-row__sub">
+          <span className="muted">
+            {formatStart(match.playedAt)}
+            {" · "}
+            {t("gameMatches.playersCount", { count: match.players.length })}
+          </span>
+        </p>
+        {winners.length > 0 && (
+          <p className="list-row__sub">
+            <span className="chip">
+              <TrophyIcon size={12} />
+              {winners.map((player) => player.username).join(", ")}
+            </span>
+          </p>
+        )}
+      </div>
+      <span className="chevron">
+        <ChevronIcon size={18} />
+      </span>
+    </Link>
+  );
+}
+
+/** Volet « parties » : les parties hors tournoi du compte connecté. */
+function GameMatchesPane() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const [creating, setCreating] = useState(false);
+
+  const { data, loading, error, reload } = useApi(
+    () => (isAuthenticated ? listMyGameMatches() : Promise.resolve([])),
+    [isAuthenticated],
+  );
+
+  // Une partie se rattache à un compte : contrairement aux tournois, il n'y a
+  // pas de repli en invité à proposer ici.
+  if (!isAuthenticated) {
+    return <p className="status muted">{t("gameMatches.loginRequired")}</p>;
+  }
+
+  const matches = data ?? [];
+
+  return (
+    <>
+      <button
+        className="btn btn--grad btn--block"
+        style={{ marginBottom: 16 }}
+        onClick={() => setCreating(true)}
+      >
+        <PlusIcon size={18} />
+        {t("gameMatches.newAction")}
+      </button>
+
+      <StatusView
+        loading={loading}
+        error={error}
+        onRetry={reload}
+        empty={data && matches.length === 0 ? t("gameMatches.empty") : undefined}
+      />
+
+      {matches.map((match) => (
+        <GameMatchRow key={match.id} match={match} />
+      ))}
+
+      {creating && (
+        <CreateGameMatchSheet
+          onClose={() => setCreating(false)}
+          onCreated={(matchId) => navigate(`/game-matches/${matchId}`)}
+        />
+      )}
+    </>
+  );
+}
+
+/**
+ * L'onglet « Jouer » : ce qu'on joue en tournoi et ce qu'on joue à côté. Les
+ * deux volets ont leurs propres commandes, d'où le contrôle segmenté plutôt
+ * qu'une seule liste mêlant les deux.
+ */
+export function PlayScreen() {
+  const { t } = useTranslation();
+  const [section, setSection] = useState<Section>("tournaments");
+
+  return (
+    <div className="screen">
+      <div className="screen-head">
+        <div className="screen-head__titles">
+          <h1 className="screen-title">{t("play.title")}</h1>
+          <p className="screen-subtitle">{t("play.subtitle")}</p>
+        </div>
+      </div>
+
+      <div className="segmented" style={{ marginBottom: 16 }}>
+        <button
+          className={`segmented__item${section === "tournaments" ? " segmented__item--active" : ""}`}
+          onClick={() => setSection("tournaments")}
+        >
+          {t("play.sectionTournaments")}
+        </button>
+        <button
+          className={`segmented__item${section === "matches" ? " segmented__item--active" : ""}`}
+          onClick={() => setSection("matches")}
+        >
+          {t("play.sectionMatches")}
+        </button>
+      </div>
+
+      {section === "tournaments" ? <TournamentsPane /> : <GameMatchesPane />}
     </div>
   );
 }

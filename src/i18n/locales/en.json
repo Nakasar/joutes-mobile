@@ -20,7 +20,7 @@
     "games": "Games",
     "events": "Events",
     "collection": "Collection",
-    "tournaments": "Tournaments"
+    "play": "Play"
   },
   "home": {
     "eyebrow": "Joutes",
@@ -483,6 +483,41 @@
     "sellListTitle": "Sale list",
     "viewMineAction": "View my public profile"
   },
+  "play": {
+    "title": "Play",
+    "subtitle": "Your tournaments and your games",
+    "sectionTournaments": "Tournaments",
+    "sectionMatches": "Games"
+  },
+  "gameMatches": {
+    "newAction": "New game",
+    "empty": "No game recorded yet",
+    "loginRequired": "Sign in to record and find your games.",
+    "unknownGame": "Unknown game",
+    "unknownPlayer": "Unknown player",
+    "playersCount_one": "{{count}} player",
+    "playersCount_other": "{{count}} players",
+    "guest": "guest",
+    "winner": "Winner",
+    "detailTitle": "Game",
+    "createTitle": "New game",
+    "gameLabel": "Game",
+    "gamePlaceholder": "Pick a game",
+    "dateLabel": "Date and time",
+    "friendsLabel": "Friends at the table",
+    "guestsLabel": "Guests (no account)",
+    "guestPlaceholder": "Guest name",
+    "addGuest": "Add",
+    "removeGuest": "Remove {{name}}",
+    "winnersLabel": "Winner(s)",
+    "you": "Me",
+    "scenarioLabel": "Scenario",
+    "scenarioPlaceholder": "E.g. Take and hold",
+    "notesLabel": "Notes",
+    "notesPlaceholder": "How the game went, the turning points…",
+    "armiesLabel": "Army lists",
+    "submit": "Save game"
+  },
   "tournaments": {
                    "stopwatchElapsed": "elapsed",
                    "stopwatchPaused": "stopwatch paused",
@@ -519,8 +554,6 @@
                      "pointsDestroyed": "Points destroyed",
                      "pointsDestroyedShort": "Destroyed"
                    },
-    "title": "Tournaments",
-    "subtitle": "The ones you play in. Scan an organizer's QR code to join one.",
     "joinAction": "Join a tournament",
     "filterCurrent": "Current",
     "filterPast": "Past",

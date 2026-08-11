@@ -79,6 +79,11 @@ export const endpoints = {
     card: (cardId: string) => `/collection/cards/${cardId}`,
     game: (gameSlug: string) => `/collection/games/${gameSlug}`,
   },
+  gameMatches: {
+    /** Parties de l'utilisateur connecté (lecture) et enregistrement (écriture). */
+    list: "/game-matches",
+    detail: (matchId: string) => `/game-matches/${matchId}`,
+  },
   wishlists: {
     mine: "/wishlists/mine",
     list: "/wishlists",

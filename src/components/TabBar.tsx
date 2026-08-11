@@ -14,7 +14,7 @@ type TabIcon = (p: SVGProps<SVGSVGElement> & { size?: number }) => ReactElement;
 const tabs: { to: string; labelKey: string; Icon: TabIcon }[] = [
   { to: "/", labelKey: "tabs.home", Icon: HomeIcon },
   { to: "/games", labelKey: "tabs.games", Icon: LayersIcon },
-  { to: "/tournaments", labelKey: "tabs.tournaments", Icon: SwordsIcon },
+  { to: "/play", labelKey: "tabs.play", Icon: SwordsIcon },
   { to: "/events", labelKey: "tabs.events", Icon: CalendarIcon },
   { to: "/collection", labelKey: "tabs.collection", Icon: GridIcon },
 ];
