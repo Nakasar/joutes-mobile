@@ -30,6 +30,30 @@
   --radius: 20px;
   --radius-sm: 13px;
 
+  /*
+   * Marges de sécurité, à utiliser partout plutôt que `env()` en direct.
+   *
+   * iOS renseigne `env(safe-area-inset-*)` : encoche, coins arrondis, barre
+   * gestuelle y passent. Android, lui, dessine le WebView **sous la barre
+   * d'état** tout en annonçant zéro — `env()` n'y couvre que les découpes
+   * d'écran, pas la barre système. Le bouton retour du détail d'une actualité
+   * se retrouvait donc sous l'heure et les icônes réseau.
+   *
+   * D'où un plancher, posé pour Android seulement (`src/main.tsx` marque la
+   * racine) : ailleurs, rien ne change. `max()` garde la valeur du système
+   * quand elle est plus grande — un téléphone à découpe généreuse la déclare,
+   * et c'est elle qui gagne.
+   */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  /* Hauteur usuelle d'une barre d'état Android : 24 dp, soit 24 px CSS — dans
+     un WebView réglé sur `width=device-width`, le pixel CSS *est* le pixel
+     indépendant de la densité, les deux valeurs coïncident donc.
+     Un téléphone qui demande plus le déclare par `env()`, et `max()` retient
+     sa valeur. */
+  --android-status-bar: 24px;
+
   --font-body: Inter, "Helvetica Neue", Arial, sans-serif;
   --font-display: Sora, Inter, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -45,6 +69,13 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
+}
+
+/* Android dessine sous la barre d'état sans l'annoncer : le plancher évite que
+   le bouton retour d'une bannière, ou le titre d'un écran, ne passent dessous.
+   La classe est posée au démarrage (`src/main.tsx`). */
+:root.is-android {
+  --safe-top: max(env(safe-area-inset-top, 0px), var(--android-status-bar));
 }
 
 @media (prefers-color-scheme: dark) {
@@ -244,7 +275,7 @@ code {
   justify-content: center;
   flex-wrap: wrap;
   gap: 4px 8px;
-  padding: calc(env(safe-area-inset-top, 0px) + 8px) 14px 8px;
+  padding: calc(var(--safe-top) + 8px) 14px 8px;
   background: var(--gold);
   color: #1b1400;
   font-size: 0.82rem;
@@ -265,8 +296,8 @@ code {
 }
 
 .screen {
-  padding: calc(env(safe-area-inset-top, 0px) + 18px) 16px
-    calc(env(safe-area-inset-bottom, 0px) + 20px);
+  padding: calc(var(--safe-top) + 18px) 16px
+    calc(var(--safe-bottom) + 20px);
   min-height: 100%;
   animation: jtIn 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
@@ -365,7 +396,7 @@ code {
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
   border-top: 1px solid var(--border-2);
-  padding: 8px 6px calc(env(safe-area-inset-bottom, 0px) + 10px);
+  padding: 8px 6px calc(var(--safe-bottom) + 10px);
 }
 
 .tab-bar__item {
@@ -831,7 +862,7 @@ textarea:focus {
 /* Bouton retour flottant (sur bannière) */
 .floating-back {
   position: absolute;
-  top: calc(env(safe-area-inset-top, 0px) + 12px);
+  top: calc(var(--safe-top) + 12px);
   left: 14px;
   width: 40px;
   height: 40px;
@@ -990,10 +1021,19 @@ textarea:focus {
 
 /* ---- Détail actualité ---- */
 
+/*
+ * La bannière touche le haut de l'écran : l'écran met déjà son propre
+ * `padding-top` à zéro (voir `NewsDetailScreen`), il n'y a donc rien à
+ * rattraper par une marge négative. Elle en portait une, calquée sur le
+ * remplissage d'un écran ordinaire : la bannière remontait **au-dessus** du
+ * haut de la fenêtre, emportant avec elle le bouton retour placé à l'intérieur
+ * — qui finissait sous la barre d'état. Seuls les 16 px latéraux, eux bien
+ * présents, restent à annuler.
+ */
 .news-detail__banner {
   position: relative;
   height: 280px;
-  margin: calc(-1 * (env(safe-area-inset-top, 0px) + 18px)) -16px 0;
+  margin: 0 -16px;
 }
 
 .news-detail__banner img {
@@ -2282,7 +2322,7 @@ textarea:focus {
 .sheet__body {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 16px 16px calc(env(safe-area-inset-bottom, 0px) + 24px);
+  padding: 16px 16px calc(var(--safe-bottom) + 24px);
 }
 
 /* ---- Section « Hors ligne » (Réglages) ---- */
@@ -4130,8 +4170,8 @@ html.qr-scanning #root {
   flex-direction: column;
   align-items: center;
   color: #fff;
-  padding: calc(env(safe-area-inset-top, 0px) + 12px) 16px
-    calc(env(safe-area-inset-bottom, 0px) + 24px);
+  padding: calc(var(--safe-top) + 12px) 16px
+    calc(var(--safe-bottom) + 24px);
 }
 
 .qr-scanner__head {
