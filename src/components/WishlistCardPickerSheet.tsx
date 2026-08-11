@@ -38,7 +38,7 @@ export function WishlistCardPickerSheet({
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [result, setResult] = useState<TradeCardSearchResult | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [reloadTick, setReloadTick] = useState(0);
 
@@ -55,10 +55,22 @@ export function WishlistCardPickerSheet({
   // lancée a le droit d'écrire dans les résultats.
   const requestId = useRef(0);
   useEffect(() => {
+    // Tant que rien n'est saisi, la réponse est connue d'avance : le serveur
+    // renverrait `needsQuery` sans rien chercher. On s'épargne l'aller-retour
+    // — et l'attente au moment où le panneau s'ouvre. Le seuil exact reste au
+    // serveur, pour ne pas en recopier ici une deuxième définition.
+    if (!query) {
+      requestId.current++;
+      setResult(null);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
     const id = ++requestId.current;
     setLoading(true);
     setError(null);
-    searchTradeCards({ scope: "catalog", q: query || undefined, page, limit: PAGE_SIZE })
+    searchTradeCards({ scope: "catalog", q: query, page, limit: PAGE_SIZE })
       .then((data) => {
         if (id !== requestId.current) return;
         setResult(data);
@@ -74,6 +86,7 @@ export function WishlistCardPickerSheet({
 
   const items = result?.items ?? [];
   const totalPages = result?.totalPages ?? 1;
+  const needsQuery = !query || (result?.needsQuery ?? false);
 
   function blockedReason(card: TradeCard): string | null {
     if (!card.cardId || !card.gameSlug) return t("wishlists.picker.notInCatalog");
@@ -104,7 +117,7 @@ export function WishlistCardPickerSheet({
             />
           </div>
 
-          {result?.needsQuery ? (
+          {needsQuery ? (
             <p className="status muted">{t("wishlists.picker.typeToSearch")}</p>
           ) : (
             <>
@@ -120,7 +133,11 @@ export function WishlistCardPickerSheet({
               />
               {items.map((card) => {
                 const reason = blockedReason(card);
-                const busy = busyKey !== null && busyKey === card.cardId;
+                // Un ajout à la fois : l'écran de détail ignore les clics tant
+                // que le précédent n'a pas répondu. Tous les boutons se
+                // verrouillent donc ensemble, plutôt que d'accepter des
+                // pressions sans effet.
+                const pending = busyKey !== null;
 
                 return (
                   <div key={`${card.key}|${card.cardId ?? ""}`} className="list-row">
@@ -139,7 +156,7 @@ export function WishlistCardPickerSheet({
                     <button
                       className="btn btn--grad"
                       style={{ padding: "8px 12px" }}
-                      disabled={reason !== null || busy}
+                      disabled={reason !== null || pending}
                       title={reason ?? undefined}
                       onClick={() => onAdd(card)}
                     >
