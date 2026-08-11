@@ -58,7 +58,8 @@
     "collection": "Collection",
     "policies": "Policies",
     "quizzes": "Quizzes",
-    "empty": "No features available for this game."
+    "empty": "No features available for this game.",
+    "products": "Products"
   },
   "events": {
     "title": "Events",
@@ -103,7 +104,95 @@
     },
     "wishlistsAction": "My wishlists",
     "sellListAction": "My sale list",
-    "tradeAction": "Trade cards"
+    "tradeAction": "Trade cards",
+    "productsTitle": "Miniatures and boxes",
+    "productsAction": "This game's products",
+    "productGameStats_one": "{{owned}}/{{total}} miniatures · {{copies}} copy",
+    "productGameStats_other": "{{owned}}/{{total}} miniatures · {{copies}} copies"
+  },
+  "products": {
+    "fallbackTitle": "Products",
+    "loadError": "Products could not be loaded.",
+    "saveError": "Saving failed.",
+    "countWord_one": "product",
+    "countWord_other": "products",
+    "copiesCount_one": "{{count}} copy",
+    "copiesCount_other": "{{count}} copies",
+    "signedOutHint": "Sign in to track what you own.",
+    "kinds": {
+      "box": "Box",
+      "unit": "Miniature",
+      "starter": "Starter set",
+      "bundle": "Bundle",
+      "accessory": "Accessory",
+      "book": "Book",
+      "other": "Other"
+    },
+    "paintStates": {
+      "unassembled": "Unassembled",
+      "assembled": "Assembled",
+      "primed": "Primed",
+      "partial": "In progress",
+      "painted": "Painted",
+      "based": "Based"
+    },
+    "stats": {
+      "catalog": "Catalogue",
+      "units": "Miniatures",
+      "paint": "Painting"
+    },
+    "filters": {
+      "searchPlaceholder": "Search a product…",
+      "allSets": "All ranges",
+      "allKinds": "All kinds",
+      "all": "All",
+      "owned": "Owned",
+      "unowned": "Missing",
+      "shape": {
+        "all": "Everything",
+        "containers": "Boxes",
+        "units": "Miniatures"
+      }
+    },
+    "tile": {
+      "manage": "Manage {{name}}"
+    },
+    "add": {
+      "trigger": "Add a copy",
+      "paintState": "Paint state",
+      "sealed": "Still sealed",
+      "withContents_one": "Also add the contents ({{count}} miniature)",
+      "withContents_other": "Also add the contents ({{count}} miniatures)",
+      "withContentsHint": "Untick what is missing: a second-hand box rarely arrives complete.",
+      "obtainedAt": "Acquisition date",
+      "price": "Price paid",
+      "submit": "Add",
+      "submitWithContents_one": "Add with {{count}} miniature",
+      "submitWithContents_other": "Add with {{count}} miniatures"
+    },
+    "contents": {
+      "title": "Contents",
+      "required_one": "{{count}} copy expected",
+      "required_other": "{{count}} copies expected",
+      "addOne": "Add {{name}} on its own",
+      "presentIn": "Found in"
+    },
+    "copies": {
+      "title": "My copies",
+      "sealed": "Sealed",
+      "sealedLocked": "Still sealed: its contents have not been assembled.",
+      "unseal": "I opened the box",
+      "detach": "Detach",
+      "remove": "Remove",
+      "removeConfirm_one": "Also remove {{count}} copy",
+      "removeConfirm_other": "Also remove {{count}} copies",
+      "removeBoxWarning_one": "Removing this box will also remove the copy it brought and that is still attached to it.",
+      "removeBoxWarning_other": "Removing this box will also remove the {{count}} copies it brought and that are still attached to it."
+    },
+    "empty": {
+      "noCatalog": "No product is listed for this game yet.",
+      "noResults": "No product matches these filters."
+    }
   },
   "social": {
     "title": "Community",

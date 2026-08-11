@@ -1364,6 +1364,287 @@ textarea:focus {
   margin: 16px auto 0;
 }
 
+/* ---- Produits (jeux de figurines) ---- */
+
+/*
+ * L'image d'un produit est **carrée**, quand celle d'une carte est en 5/7 : la
+ * différence de gabarit dit à elle seule qu'on ne regarde pas des cartes.
+ */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 11px;
+}
+
+.product-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  color: var(--text);
+  min-width: 0;
+}
+
+.product-tile__frame {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  border-radius: 10px;
+  color: inherit;
+  transition: transform 0.12s;
+}
+
+.product-tile__frame:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+/* Possédé : anneau émeraude, comme une carte. */
+.product-tile__frame--owned .product-tile__image {
+  box-shadow: 0 0 0 2px var(--accent), var(--shadow-sm);
+}
+
+/*
+ * Contenu complet sans posséder le produit : anneau ambre. C'est le seul
+ * indicateur qui change une décision d'achat — tu as déjà toutes les figurines,
+ * cette boîte ne t'apporterait rien — et il ne s'allume donc que là.
+ */
+.product-tile__frame--redundant .product-tile__image {
+  box-shadow: 0 0 0 2px var(--gold), var(--shadow-sm);
+}
+
+.product-tile__image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+  display: block;
+  background: var(--surface-2);
+}
+
+.product-tile__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+}
+
+.product-tile__image--unowned {
+  opacity: 0.55;
+  filter: grayscale(35%);
+}
+
+.product-tile__badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Complétude du contenu, comptée en références : « 5/8 ». */
+.product-tile__content {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  background: var(--surface-glass);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  color: var(--text);
+  font-size: 10.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.product-tile__content--complete {
+  background: var(--accent);
+  color: #fff;
+}
+
+.product-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.product-stat__head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 6px;
+}
+
+.product-stat__icon {
+  display: flex;
+  color: var(--primary);
+}
+
+.product-stat__label {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.product-stat__value {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.product-thumb {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  object-fit: cover;
+  background: var(--surface-2);
+}
+
+.product-thumb--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+}
+
+.product-section {
+  margin-top: 14px;
+}
+
+.product-section__title {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.product-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 0;
+  border-top: 1px solid var(--border-2);
+}
+
+.product-entry__meta {
+  font-size: 12px;
+}
+
+/* Les boutons ne rétrécissent pas : la rangée doit pouvoir passer à la ligne. */
+.product-entry__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.product-entry__remove {
+  color: var(--danger);
+}
+
+.product-owned {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.product-owned--complete {
+  color: var(--accent);
+}
+
+.product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  margin-top: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.product-form__hint {
+  font-size: 12px;
+  margin: 0;
+}
+
+.product-form__contents {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+}
+
+/* Case à cocher pleine largeur : la cible tactile est la ligne entière. */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  text-align: left;
+  font-size: 13.5px;
+}
+
+.toggle-row--active {
+  border-color: var(--primary);
+  background: var(--chip);
+}
+
+.toggle-row__box {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-fg);
+}
+
+.toggle-row--active .toggle-row__box {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.toggle-row__label {
+  flex: 1;
+  min-width: 0;
+}
+
+.toggle-row__count {
+  flex-shrink: 0;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
 /* ---- Détail carte ---- */
 
 .card-hero {

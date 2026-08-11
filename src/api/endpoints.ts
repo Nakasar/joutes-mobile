@@ -31,6 +31,8 @@ export const endpoints = {
     errataVote: (idOrSlug: string, errataId: string) =>
       `/games/${idOrSlug}/erratas/${errataId}/vote`,
     quizzes: (idOrSlug: string) => `/games/${idOrSlug}/quizzes`,
+    /** Catalogue public des produits (boîtes, figurines…) — sans possession. */
+    products: (idOrSlug: string) => `/games/${idOrSlug}/products`,
   },
   quizzes: {
     detail: (quizId: string) => `/quizzes/${quizId}`,
@@ -78,6 +80,13 @@ export const endpoints = {
     cards: "/collection/cards",
     card: (cardId: string) => `/collection/cards/${cardId}`,
     game: (gameSlug: string) => `/collection/games/${gameSlug}`,
+    /** Catalogue de produits d'un jeu, annoté de ce que l'appelant possède. */
+    gameProducts: (gameSlug: string) => `/collection/games/${gameSlug}/products`,
+    gameProduct: (gameSlug: string, productId: string) =>
+      `/collection/games/${gameSlug}/products/${productId}`,
+    /** Exemplaires de produits : ajout (le jeu passe en query, un id n'étant unique qu'au sein d'un jeu). */
+    products: "/collection/products",
+    productEntry: (entryId: string) => `/collection/products/${entryId}`,
   },
   gameMatches: {
     /** Parties de l'utilisateur connecté (lecture) et enregistrement (écriture). */
