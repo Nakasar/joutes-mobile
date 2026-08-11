@@ -58,7 +58,8 @@
     "collection": "Collection",
     "policies": "Politiques",
     "quizzes": "Quizz",
-    "empty": "Aucune fonctionnalité disponible pour ce jeu."
+    "empty": "Aucune fonctionnalité disponible pour ce jeu.",
+    "products": "Produits"
   },
   "events": {
     "title": "Événements",
@@ -103,7 +104,95 @@
     },
     "wishlistsAction": "Mes listes de souhaits",
     "sellListAction": "Ma liste de vente",
-    "tradeAction": "Échanger des cartes"
+    "tradeAction": "Échanger des cartes",
+    "productsTitle": "Figurines et boîtes",
+    "productsAction": "Les produits de ce jeu",
+    "productGameStats_one": "{{owned}}/{{total}} figurines · {{copies}} exemplaire",
+    "productGameStats_other": "{{owned}}/{{total}} figurines · {{copies}} exemplaires"
+  },
+  "products": {
+    "fallbackTitle": "Produits",
+    "loadError": "Le chargement des produits a échoué.",
+    "saveError": "L'enregistrement a échoué.",
+    "countWord_one": "produit",
+    "countWord_other": "produits",
+    "copiesCount_one": "{{count}} exemplaire",
+    "copiesCount_other": "{{count}} exemplaires",
+    "signedOutHint": "Connectez-vous pour marquer ce que vous possédez.",
+    "kinds": {
+      "box": "Boîte",
+      "unit": "Figurine",
+      "starter": "Coffret de démarrage",
+      "bundle": "Lot",
+      "accessory": "Accessoire",
+      "book": "Livre",
+      "other": "Autre"
+    },
+    "paintStates": {
+      "unassembled": "Non montée",
+      "assembled": "Montée",
+      "primed": "Sous-couchée",
+      "partial": "En cours",
+      "painted": "Peinte",
+      "based": "Socle terminé"
+    },
+    "stats": {
+      "catalog": "Catalogue",
+      "units": "Figurines",
+      "paint": "Peinture"
+    },
+    "filters": {
+      "searchPlaceholder": "Rechercher un produit…",
+      "allSets": "Toutes les gammes",
+      "allKinds": "Tous les types",
+      "all": "Tous",
+      "owned": "Possédés",
+      "unowned": "Manquants",
+      "shape": {
+        "all": "Tout",
+        "containers": "Boîtes",
+        "units": "Figurines"
+      }
+    },
+    "tile": {
+      "manage": "Gérer {{name}}"
+    },
+    "add": {
+      "trigger": "Ajouter un exemplaire",
+      "paintState": "État de peinture",
+      "sealed": "Encore sous blister",
+      "withContents_one": "Ajouter aussi le contenu ({{count}} figurine)",
+      "withContents_other": "Ajouter aussi le contenu ({{count}} figurines)",
+      "withContentsHint": "Décochez ce qui manque : une boîte d'occasion arrive rarement complète.",
+      "obtainedAt": "Date d'acquisition",
+      "price": "Prix payé",
+      "submit": "Ajouter",
+      "submitWithContents_one": "Ajouter avec {{count}} figurine",
+      "submitWithContents_other": "Ajouter avec {{count}} figurines"
+    },
+    "contents": {
+      "title": "Contenu",
+      "required_one": "{{count}} exemplaire attendu",
+      "required_other": "{{count}} exemplaires attendus",
+      "addOne": "Ajouter {{name}} seule",
+      "presentIn": "Présente dans"
+    },
+    "copies": {
+      "title": "Mes exemplaires",
+      "sealed": "Sous blister",
+      "sealedLocked": "Produit encore scellé : son contenu n'a pas été monté.",
+      "unseal": "J'ai ouvert la boîte",
+      "detach": "Détacher",
+      "remove": "Retirer",
+      "removeConfirm_one": "Retirer aussi {{count}} exemplaire",
+      "removeConfirm_other": "Retirer aussi {{count}} exemplaires",
+      "removeBoxWarning_one": "Retirer cette boîte retirera aussi l'exemplaire qu'elle a apporté et qui y est encore rattaché.",
+      "removeBoxWarning_other": "Retirer cette boîte retirera aussi les {{count}} exemplaires qu'elle a apportés et qui y sont encore rattachés."
+    },
+    "empty": {
+      "noCatalog": "Aucun produit n'est encore répertorié pour ce jeu.",
+      "noResults": "Aucun produit ne correspond à ces filtres."
+    }
   },
   "social": {
     "title": "Communauté",

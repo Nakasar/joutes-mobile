@@ -58,7 +58,8 @@
     "collection": "Sammlung",
     "policies": "Richtlinien",
     "quizzes": "Quiz",
-    "empty": "Für dieses Spiel sind keine Funktionen verfügbar."
+    "empty": "Für dieses Spiel sind keine Funktionen verfügbar.",
+    "products": "Produkte"
   },
   "events": {
     "title": "Events",
@@ -103,7 +104,95 @@
     },
     "wishlistsAction": "Meine Wunschlisten",
     "sellListAction": "Meine Verkaufsliste",
-    "tradeAction": "Karten tauschen"
+    "tradeAction": "Karten tauschen",
+    "productsTitle": "Miniaturen und Boxen",
+    "productsAction": "Die Produkte dieses Spiels",
+    "productGameStats_one": "{{owned}}/{{total}} Miniaturen · {{copies}} Exemplar",
+    "productGameStats_other": "{{owned}}/{{total}} Miniaturen · {{copies}} Exemplare"
+  },
+  "products": {
+    "fallbackTitle": "Produkte",
+    "loadError": "Die Produkte konnten nicht geladen werden.",
+    "saveError": "Speichern fehlgeschlagen.",
+    "countWord_one": "Produkt",
+    "countWord_other": "Produkte",
+    "copiesCount_one": "{{count}} Exemplar",
+    "copiesCount_other": "{{count}} Exemplare",
+    "signedOutHint": "Melde dich an, um deinen Besitz zu erfassen.",
+    "kinds": {
+      "box": "Box",
+      "unit": "Miniatur",
+      "starter": "Starterset",
+      "bundle": "Bundle",
+      "accessory": "Zubehör",
+      "book": "Buch",
+      "other": "Sonstiges"
+    },
+    "paintStates": {
+      "unassembled": "Nicht zusammengebaut",
+      "assembled": "Zusammengebaut",
+      "primed": "Grundiert",
+      "partial": "In Arbeit",
+      "painted": "Bemalt",
+      "based": "Base fertig"
+    },
+    "stats": {
+      "catalog": "Katalog",
+      "units": "Miniaturen",
+      "paint": "Bemalung"
+    },
+    "filters": {
+      "searchPlaceholder": "Produkt suchen…",
+      "allSets": "Alle Reihen",
+      "allKinds": "Alle Arten",
+      "all": "Alle",
+      "owned": "Im Besitz",
+      "unowned": "Fehlend",
+      "shape": {
+        "all": "Alles",
+        "containers": "Boxen",
+        "units": "Miniaturen"
+      }
+    },
+    "tile": {
+      "manage": "{{name}} verwalten"
+    },
+    "add": {
+      "trigger": "Exemplar hinzufügen",
+      "paintState": "Bemalungsstand",
+      "sealed": "Noch versiegelt",
+      "withContents_one": "Auch den Inhalt hinzufügen ({{count}} Miniatur)",
+      "withContents_other": "Auch den Inhalt hinzufügen ({{count}} Miniaturen)",
+      "withContentsHint": "Abwählen, was fehlt: eine gebrauchte Box kommt selten vollständig an.",
+      "obtainedAt": "Erwerbsdatum",
+      "price": "Gezahlter Preis",
+      "submit": "Hinzufügen",
+      "submitWithContents_one": "Mit {{count}} Miniatur hinzufügen",
+      "submitWithContents_other": "Mit {{count}} Miniaturen hinzufügen"
+    },
+    "contents": {
+      "title": "Inhalt",
+      "required_one": "{{count}} Exemplar erwartet",
+      "required_other": "{{count}} Exemplare erwartet",
+      "addOne": "Nur {{name}} hinzufügen",
+      "presentIn": "Enthalten in"
+    },
+    "copies": {
+      "title": "Meine Exemplare",
+      "sealed": "Versiegelt",
+      "sealedLocked": "Noch versiegelt: der Inhalt wurde nicht zusammengebaut.",
+      "unseal": "Ich habe die Box geöffnet",
+      "detach": "Lösen",
+      "remove": "Entfernen",
+      "removeConfirm_one": "Auch {{count}} Exemplar entfernen",
+      "removeConfirm_other": "Auch {{count}} Exemplare entfernen",
+      "removeBoxWarning_one": "Mit dieser Box wird auch das Exemplar entfernt, das sie mitgebracht hat und das noch an ihr hängt.",
+      "removeBoxWarning_other": "Mit dieser Box werden auch die {{count}} Exemplare entfernt, die sie mitgebracht hat und die noch an ihr hängen."
+    },
+    "empty": {
+      "noCatalog": "Für dieses Spiel ist noch kein Produkt erfasst.",
+      "noResults": "Kein Produkt entspricht diesen Filtern."
+    }
   },
   "social": {
     "title": "Community",

@@ -7,10 +7,18 @@ import {
   removeCollectionCard,
 } from "../api/collection";
 import type { CollectionItem } from "../api/types";
+import { getGame } from "../api/games";
 import { AddCollectionCopySheet } from "../components/AddCollectionCopySheet";
 import { BackHeader } from "../components/BackHeader";
-import { LockIcon, MinusIcon, PlusIcon } from "../components/icons";
+import {
+  BoxIcon,
+  ChevronIcon,
+  LockIcon,
+  MinusIcon,
+  PlusIcon,
+} from "../components/icons";
 import { StatusView } from "../components/StatusView";
+import { useApi } from "../hooks/useApi";
 import { resolvePrinting, type PrintingChoice } from "../lib/printings";
 import { useAuth } from "../store/auth";
 
@@ -25,6 +33,11 @@ function CollectionGameContent({
   groupId?: string;
 }) {
   const { t } = useTranslation();
+
+  // Le catalogue de cartes ne dit pas si le jeu a aussi une gamme de produits :
+  // seul le drapeau du jeu le sait.
+  const game = useApi(() => getGame(gameSlug), [gameSlug]);
+  const hasProducts = game.data?.features?.products === true;
 
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -192,6 +205,26 @@ function CollectionGameContent({
   return (
     <div className="screen">
       <BackHeader title={gameName || t("collection.browse.fallbackTitle")} />
+
+      {/* Un jeu peut avoir les deux : des cartes et une gamme de figurines.
+          La collection de produits vit sur son propre écran — les unes se
+          comptent en numéros de collection, l'autre en boîtes. */}
+      {hasProducts && !groupId && (
+        <Link
+          to={`/collection/${gameSlug}/products`}
+          className="list-row list-row--link"
+        >
+          <span className="list-row__icon" style={{ background: "var(--chip)" }}>
+            <BoxIcon size={20} style={{ color: "var(--primary)" }} />
+          </span>
+          <div className="list-row__body">
+            <p className="list-row__title">{t("collection.productsAction")}</p>
+          </div>
+          <span className="chevron">
+            <ChevronIcon size={18} />
+          </span>
+        </Link>
+      )}
 
       {gameTotal > 0 && (
         <div className="collection-game">

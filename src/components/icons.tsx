@@ -342,3 +342,49 @@ export function CrossIcon(p: IconProps) {
     </Icon>
   );
 }
+
+/** Boîte fermée : un produit qui en contient d'autres. */
+export function BoxIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M21 8.5v7a2 2 0 0 1-1 1.7l-7 4a2 2 0 0 1-2 0l-7-4a2 2 0 0 1-1-1.7v-7a2 2 0 0 1 1-1.7l7-4a2 2 0 0 1 2 0l7 4a2 2 0 0 1 1 1.7Z" />
+      <path d="m3.3 7.5 8.7 5 8.7-5" />
+      <path d="M12 12.5V21" />
+    </Icon>
+  );
+}
+
+/** Figurine : un produit feuille, ce que le joueur collectionne vraiment. */
+export function MiniatureIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <circle cx="12" cy="5" r="2.5" />
+      <path d="M12 7.5v6" />
+      <path d="m8 10 4-1.5 4 1.5" />
+      <path d="m9.5 17.5 2.5-4 2.5 4" />
+      <ellipse cx="12" cy="19.5" rx="6" ry="2" />
+    </Icon>
+  );
+}
+
+/** Pinceau : l'avancement de peinture d'une collection de figurines. */
+export function BrushIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M17.5 3.5a2.1 2.1 0 0 1 3 3L14 13l-3-3 6.5-6.5Z" />
+      <path d="m11 10-1.5 1.5" />
+      <path d="M8.5 12.5c1.4 0 2.5 1.1 2.5 2.5 0 2-1.5 3.5-4 3.5-1 0-2 .4-2.5 1 0-3 1-7 4-7Z" />
+    </Icon>
+  );
+}
+
+/** Maillon brisé : détacher une figurine de la boîte qui l'a apportée. */
+export function UnlinkIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M9.5 14.5 7 17a3.5 3.5 0 0 1-5-5l2.5-2.5" />
+      <path d="M14.5 9.5 17 7a3.5 3.5 0 0 1 5 5l-2.5 2.5" />
+      <path d="M4 4l16 16" />
+    </Icon>
+  );
+}

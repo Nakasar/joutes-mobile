@@ -68,6 +68,8 @@ export interface Game extends GameSummary {
   features?: {
     cards?: boolean;
     collection?: boolean;
+    /** Catalogue de boîtes et de figurines : les jeux qui se jouent sans cartes. */
+    products?: boolean;
     rules?: boolean;
     policies?: boolean;
     tournaments?: boolean;
@@ -646,6 +648,18 @@ export interface CollectionOverview {
   gameTotal: number;
   gamesWithItems: number;
   games: (GameCollectionStats | null)[];
+  /**
+   * Avancement sur les jeux qui ont un catalogue de produits (jeux de
+   * figurines). Liste distincte de `games` — et non un champ de plus sur
+   * `GameCollectionStats` — parce que tous les champs de celui-ci parlent de
+   * cartes : un jeu de figurines n'a ni set maître ni exemplaires de cartes.
+   * `totalCopies` garde donc son sens (les cartes) ; les produits ont leurs
+   * propres totaux.
+   */
+  productGames?: ProductCollectionStats[];
+  totalProductCopies?: number;
+  productsOwned?: number;
+  productsTotal?: number;
 }
 
 /** Une carte du catalogue d'un jeu, annotée avec la quantité possédée par le propriétaire consulté. */
@@ -718,6 +732,194 @@ export interface CollectionCardEntry {
 export interface OwnedCopiesResponse {
   quantity: number;
   cards: CollectionCardEntry[];
+}
+
+// ---- Produits (jeux de figurines) ----
+
+/**
+ * Type d'un produit. Ce n'est **qu'une facette d'affichage et de filtre** : ce
+ * qui décide qu'un produit en contient d'autres, c'est son `contents`, jamais
+ * son type. Sinon une boîte dont le contenu n'est pas encore saisi passerait
+ * pour un conteneur vide, et un blister de trois figurines pour une figurine.
+ */
+export type ProductKind =
+  | "box"
+  | "unit"
+  | "starter"
+  | "bundle"
+  | "accessory"
+  | "book"
+  | "other";
+
+/**
+ * État de peinture d'un exemplaire : une échelle **ordonnée**, du non monté au
+ * socle terminé. Une figurine progresse de façon monotone — contrairement à une
+ * carte, qui se dégrade.
+ */
+export type PaintState =
+  | "unassembled"
+  | "assembled"
+  | "primed"
+  | "partial"
+  | "painted"
+  | "based";
+
+/** Une ligne du contenu d'un produit, telle que le catalogue la porte. */
+export interface ProductContent {
+  productId: string;
+  quantity: number;
+}
+
+/**
+ * Complétude comptée en **références**, pas en unités : une boîte de huit
+ * figurines dont deux sont jumelles se lit « 7/7 ».
+ */
+export interface ContentCompletion {
+  owned: number;
+  total: number;
+  complete: boolean;
+}
+
+/**
+ * Un produit du catalogue. `quantity` et `content` viennent de la route de
+ * collection ; ils sont absents de la route publique, qui ne connaît aucun
+ * propriétaire.
+ */
+export interface ProductCollectionItem {
+  id: string;
+  name: string;
+  kind: ProductKind;
+  setCode?: string;
+  image?: string;
+  contents?: ProductContent[];
+  quantity?: number;
+  content?: ContentCompletion;
+}
+
+export interface ProductSetCompletion {
+  setCode: string;
+  productsOwned: number;
+  productsTotal: number;
+  unitsOwned: number;
+  unitsTotal: number;
+}
+
+export interface ProductCollectionStats {
+  gameId: string;
+  name: string;
+  slug?: string;
+  icon?: string;
+  color?: string;
+  type?: string;
+  /** Exemplaires possédés, tous produits confondus. */
+  copies: number;
+  productsOwned: number;
+  productsTotal: number;
+  /** Produits sans contenu — les figurines, ce que le joueur collectionne vraiment. */
+  unitsOwned: number;
+  unitsTotal: number;
+  paintedCopies: number;
+  /** Exemplaires de produits feuilles : le dénominateur de la peinture. */
+  paintableCopies: number;
+  sets?: ProductSetCompletion[];
+}
+
+/** Réponse paginée du catalogue de produits d'un jeu (route publique ou de collection). */
+export interface ProductCollectionResult {
+  items: ProductCollectionItem[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  setCodes: string[];
+  /** Absent sur la route publique. */
+  stats?: ProductCollectionStats | null;
+  game?: { id: string; name: string; slug?: string };
+}
+
+/** Une ligne du contenu, résolue contre le catalogue et annotée de la possession. */
+export interface ProductContentLine extends ProductContent {
+  name: string;
+  image?: string;
+  kind: ProductKind;
+  /** Exemplaires possédés, toutes provenances confondues. */
+  owned: number;
+}
+
+/** Un exemplaire physique possédé. Deux boîtes identiques sont deux exemplaires. */
+export interface ProductEntry {
+  id: string;
+  paintState?: PaintState;
+  sealed?: boolean;
+  obtainedAt?: string;
+  acquisitionPrice?: number;
+  acquisitionCurrency?: string;
+  note?: string;
+  /** Exemplaire de conteneur d'où celui-ci est sorti, s'il en vient d'un. */
+  fromProductEntryId?: string;
+  /** Contenu encore rattaché à **cet** exemplaire. Présent sur les conteneurs. */
+  box?: ContentCompletion;
+  /** Ce que le retrait de cet exemplaire emporterait avec lui. */
+  attachedCopies: number;
+}
+
+export interface ProductDetail {
+  id: string;
+  name: string;
+  kind: ProductKind;
+  setCode?: string;
+  image?: string;
+  contents: ProductContentLine[];
+  /** Complétude du contenu dans toute la collection, quelle qu'en soit la provenance. */
+  content: ContentCompletion;
+  quantity: number;
+  entries: ProductEntry[];
+  /** Les produits dont le contenu cite celui-ci. */
+  containers: {
+    id: string;
+    name: string;
+    image?: string;
+    kind: ProductKind;
+    owned: number;
+  }[];
+}
+
+/**
+ * Ajout d'un exemplaire (POST /collection/products). Seul l'identifiant du
+ * produit est envoyé : nom, image, type et gamme sont relus du catalogue côté
+ * serveur.
+ */
+export interface CollectionProductInput {
+  productId: string;
+  /** Verser aussi le contenu (défaut `true`). Sans effet sur un produit feuille. */
+  addContents?: boolean;
+  /** Sous-ensemble du contenu à verser : une boîte d'occasion arrive rarement complète. */
+  contents?: string[];
+  paintState?: PaintState;
+  sealed?: boolean;
+  obtainedAt?: string;
+  acquisitionPrice?: number;
+  acquisitionCurrency?: string;
+  note?: string;
+}
+
+export interface AddProductResult {
+  entryId: string;
+  addedContents: number;
+  /** Références du contenu absentes du catalogue, ignorées mais rapportées. */
+  missing: string[];
+}
+
+/** Modification d'un exemplaire. `null` efface le champ ; `detach` est à sens unique. */
+export interface CollectionProductPatch {
+  paintState?: PaintState | null;
+  sealed?: boolean;
+  obtainedAt?: string | null;
+  acquisitionPrice?: number | null;
+  acquisitionCurrency?: string | null;
+  note?: string | null;
+  /** Sortir cet exemplaire de la boîte qui l'a apporté : il survivra à son retrait. */
+  detach?: true;
 }
 
 // ---- Listes de souhaits / listes de vente ----

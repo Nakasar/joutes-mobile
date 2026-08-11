@@ -6,6 +6,7 @@ import { BackHeader } from "../components/BackHeader";
 import { CachedImage } from "../components/CachedImage";
 import {
   BookIcon,
+  BoxIcon,
   ChevronIcon,
   DeckCheckIcon,
   GridIcon,
@@ -75,6 +76,16 @@ export function GameScreen() {
         to: `/collection/${gameSlug}`,
         icon: <GridIcon size={20} />,
         label: t("gameHub.collection"),
+      });
+    }
+    // Les jeux de figurines ne se collectionnent pas en cartes mais en
+    // produits : boîtes, blisters, coffrets.
+    if (game.features?.products) {
+      list.push({
+        key: "products",
+        to: `/games/${gameSlug}/products`,
+        icon: <BoxIcon size={20} />,
+        label: t("gameHub.products"),
       });
     }
     if (game.features?.policies) {

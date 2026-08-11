@@ -15,6 +15,9 @@ function CollectionContent() {
   );
 
   const games = data?.games.filter((game) => game !== null) ?? [];
+  // Les jeux de figurines n'ont pas de cartes : sans cette liste, une gamme
+  // suivie de bout en bout n'apparaîtrait nulle part dans la collection.
+  const productGames = data?.productGames ?? [];
 
   return (
     <>
@@ -57,7 +60,9 @@ function CollectionContent() {
         error={error}
         onRetry={reload}
         empty={
-          data && games.length === 0 ? t("collection.empty") : undefined
+          data && games.length === 0 && productGames.length === 0
+            ? t("collection.empty")
+            : undefined
         }
       />
       {data && games.length > 0 && (
@@ -131,6 +136,71 @@ function CollectionContent() {
           </div>
         );
       })}
+
+      {productGames.length > 0 && (
+        <>
+          <h2 className="section-title">{t("collection.productsTitle")}</h2>
+          {productGames.map((game) => {
+            // La gamme de figurines est ce qu'un joueur suit vraiment : les
+            // boîtes sont un moyen, pas la fin. C'est donc elle que la jauge
+            // montre, et non le catalogue entier.
+            const percent =
+              game.unitsTotal > 0
+                ? Math.round((game.unitsOwned / game.unitsTotal) * 100)
+                : 0;
+            // Couleur dérivée du slug, et non celle déclarée par le jeu :
+            // Shatterpoint annonce du blanc, illisible sur le thème clair. La
+            // pastille de repli n'apparaît de toute façon qu'à défaut d'icône.
+            const color = colorFor(game.slug ?? game.gameId);
+            const body = (
+              <>
+                <div className="collection-game__head">
+                  {game.icon ? (
+                    <CachedImage
+                      src={game.icon}
+                      alt=""
+                      className="avatar avatar--sm"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <span className="avatar avatar--sm" style={tintStyle(color)}>
+                      {initialOf(game.name)}
+                    </span>
+                  )}
+                  <div className="collection-game__body">
+                    <h3 className="collection-game__name">{game.name}</h3>
+                    <p className="collection-game__sub">
+                      {t("collection.productGameStats", {
+                        count: game.copies,
+                        owned: game.unitsOwned,
+                        total: game.unitsTotal,
+                        copies: game.copies,
+                      })}
+                    </p>
+                  </div>
+                  <span className="collection-game__pct">{percent}%</span>
+                </div>
+                <div className="progress">
+                  <div className="progress__bar" style={{ width: `${percent}%` }} />
+                </div>
+              </>
+            );
+            return game.slug ? (
+              <Link
+                key={game.gameId}
+                to={`/collection/${game.slug}/products`}
+                className="collection-game collection-game--link"
+              >
+                {body}
+              </Link>
+            ) : (
+              <div key={game.gameId} className="collection-game">
+                {body}
+              </div>
+            );
+          })}
+        </>
+      )}
     </>
   );
 }

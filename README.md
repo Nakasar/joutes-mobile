@@ -18,6 +18,7 @@ Application mobile (et desktop) pour [Joutes](https://joutes.app) — plateforme
 - **Tournois — formulaire d'inscription** : réponses au formulaire demandé par l'organisation (texte, nombre, choix, carte du jeu recherchée dans le catalogue, liste de deck analysée par le serveur), avec date limite, réponses tardives signalées et consultation en lecture seule une fois la saisie close
 - **Parties hors tournoi** : dans l'onglet « Jouer », enregistrer une partie (jeu, date, amis à la table, invités sans compte, vainqueurs, scénario et notes) et consulter ses parties passées — listes d'armée du rapport de bataille comprises. La table de jeu vue de dessus reste sur le web, où elle se compose au doigt sur un grand écran.
 - **Collection** : vue d'ensemble de la collection par jeu avec taux de complétion (connexion requise)
+- **Produits — jeux de figurines** : les jeux qui ne se jouent pas avec des cartes (Star Wars: Shatterpoint…) exposent un catalogue de **produits** — boîtes, blisters, coffrets, dont certains en contiennent d'autres. Le catalogue se parcourt sans compte (recherche, gamme, type) ; connecté, chaque tuile porte la possession et la complétude de son contenu comptée en références (« 5/8 »), avec l'anneau ambre du « tu as déjà tout dedans » sur une boîte qu'on ne possède pas. La fiche d'un produit gère ses exemplaires : ajout d'une boîte avec son contenu (décochable, une boîte d'occasion arrive rarement complète) ou d'une figurine seule, état de peinture, sous blister, descellement, détachement d'une figurine de sa boîte, retrait annoncé quand il emporte du contenu. L'écran de collection liste ces jeux à part : ils n'ont ni cartes ni set maître, et la gamme de figurines y sert de jauge.
 - **Connexion** : par code OTP e-mail (Better Auth), session persistante
 
 ## Architecture
@@ -30,17 +31,18 @@ src/
     endpoints.ts  Chemins des endpoints
     types.ts      Types alignés sur la spec OpenAPI 2.0.0
     auth.ts       Connexion OTP / session / déconnexion (Better Auth)
-    games.ts, news.ts, events.ts, collection.ts   Services par ressource
+    games.ts, news.ts, events.ts, collection.ts, products.ts   Services par ressource
   store/
     auth.tsx      Contexte React : session, restauration au démarrage
   hooks/
     useApi.ts     Hook de chargement de données (loading / error / reload)
   screens/        Écrans (Accueil, Jeux, Événements, Collection, Réglages, Login)
   components/     Composants partagés (TabBar, StatusView)
-  lib/            Logique pure et stockage local (dont `tournament-presets.ts`
-                  et `printings.ts`, copies de joutes-app — table de presets et
-                  résolution des variantes d'impression : toute modification
-                  doit être reportée dans les deux dépôts)
+  lib/            Logique pure et stockage local (dont `tournament-presets.ts`,
+                  `printings.ts` et `products.ts`, copies de joutes-app — table de
+                  presets, résolution des variantes d'impression, tables des types
+                  de produits et des états de peinture : toute modification doit
+                  être reportée dans les deux dépôts)
   config.ts       Configuration (URL de l'API…)
 src-tauri/        Projet Rust Tauri (plugins http + cookies, opener)
 ```

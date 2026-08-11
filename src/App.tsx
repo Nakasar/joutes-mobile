@@ -9,6 +9,7 @@ import { DeckCheckerScreen } from "./screens/DeckCheckerScreen";
 import { EventDetailScreen } from "./screens/EventDetailScreen";
 import { EventsScreen } from "./screens/EventsScreen";
 import { GameCardsScreen } from "./screens/GameCardsScreen";
+import { GameProductsScreen } from "./screens/GameProductsScreen";
 import { GameQuizzesScreen } from "./screens/GameQuizzesScreen";
 import { GameMatchDetailScreen } from "./screens/GameMatchDetailScreen";
 import { GameScreen } from "./screens/GameScreen";
@@ -98,6 +99,10 @@ function Shell() {
                   element={<PolicyDetailScreen />}
                 />
                 <Route
+                  path="/games/:gameSlug/products"
+                  element={<GameProductsScreen />}
+                />
+                <Route
                   path="/games/:gameSlug/quizzes"
                   element={<GameQuizzesScreen />}
                 />
@@ -111,6 +116,14 @@ function Shell() {
                 <Route
                   path="/collection/:gameSlug"
                   element={<CollectionGameScreen />}
+                />
+                {/* Même écran que `/games/:gameSlug/products` : le catalogue
+                    d'un jeu de figurines *est* sa collection, annotée de ce
+                    qu'on possède. Les deux chemins existent parce que les deux
+                    lectures existent — explorer un jeu, ou suivre sa gamme. */}
+                <Route
+                  path="/collection/:gameSlug/products"
+                  element={<GameProductsScreen />}
                 />
                 <Route path="/wishlists" element={<WishlistsScreen />} />
                 <Route

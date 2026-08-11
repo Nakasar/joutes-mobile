@@ -58,7 +58,8 @@
     "collection": "Collezione",
     "policies": "Politiche",
     "quizzes": "Quiz",
-    "empty": "Nessuna funzionalità disponibile per questo gioco."
+    "empty": "Nessuna funzionalità disponibile per questo gioco.",
+    "products": "Prodotti"
   },
   "events": {
     "title": "Eventi",
@@ -103,7 +104,95 @@
     },
     "wishlistsAction": "Le mie liste dei desideri",
     "sellListAction": "La mia lista di vendita",
-    "tradeAction": "Scambia carte"
+    "tradeAction": "Scambia carte",
+    "productsTitle": "Miniature e scatole",
+    "productsAction": "I prodotti di questo gioco",
+    "productGameStats_one": "{{owned}}/{{total}} miniature · {{copies}} copia",
+    "productGameStats_other": "{{owned}}/{{total}} miniature · {{copies}} copie"
+  },
+  "products": {
+    "fallbackTitle": "Prodotti",
+    "loadError": "Caricamento dei prodotti non riuscito.",
+    "saveError": "Salvataggio non riuscito.",
+    "countWord_one": "prodotto",
+    "countWord_other": "prodotti",
+    "copiesCount_one": "{{count}} copia",
+    "copiesCount_other": "{{count}} copie",
+    "signedOutHint": "Accedi per segnare ciò che possiedi.",
+    "kinds": {
+      "box": "Scatola",
+      "unit": "Miniatura",
+      "starter": "Set introduttivo",
+      "bundle": "Lotto",
+      "accessory": "Accessorio",
+      "book": "Libro",
+      "other": "Altro"
+    },
+    "paintStates": {
+      "unassembled": "Non montata",
+      "assembled": "Montata",
+      "primed": "Primerizzata",
+      "partial": "In corso",
+      "painted": "Dipinta",
+      "based": "Base finita"
+    },
+    "stats": {
+      "catalog": "Catalogo",
+      "units": "Miniature",
+      "paint": "Pittura"
+    },
+    "filters": {
+      "searchPlaceholder": "Cerca un prodotto…",
+      "allSets": "Tutte le gamme",
+      "allKinds": "Tutti i tipi",
+      "all": "Tutti",
+      "owned": "Posseduti",
+      "unowned": "Mancanti",
+      "shape": {
+        "all": "Tutto",
+        "containers": "Scatole",
+        "units": "Miniature"
+      }
+    },
+    "tile": {
+      "manage": "Gestisci {{name}}"
+    },
+    "add": {
+      "trigger": "Aggiungi una copia",
+      "paintState": "Stato di pittura",
+      "sealed": "Ancora sigillato",
+      "withContents_one": "Aggiungi anche il contenuto ({{count}} miniatura)",
+      "withContents_other": "Aggiungi anche il contenuto ({{count}} miniature)",
+      "withContentsHint": "Deseleziona ciò che manca: una scatola usata arriva raramente completa.",
+      "obtainedAt": "Data di acquisto",
+      "price": "Prezzo pagato",
+      "submit": "Aggiungi",
+      "submitWithContents_one": "Aggiungi con {{count}} miniatura",
+      "submitWithContents_other": "Aggiungi con {{count}} miniature"
+    },
+    "contents": {
+      "title": "Contenuto",
+      "required_one": "{{count}} copia prevista",
+      "required_other": "{{count}} copie previste",
+      "addOne": "Aggiungi solo {{name}}",
+      "presentIn": "Presente in"
+    },
+    "copies": {
+      "title": "Le mie copie",
+      "sealed": "Sigillato",
+      "sealedLocked": "Ancora sigillato: il contenuto non è stato montato.",
+      "unseal": "Ho aperto la scatola",
+      "detach": "Stacca",
+      "remove": "Rimuovi",
+      "removeConfirm_one": "Rimuovi anche {{count}} copia",
+      "removeConfirm_other": "Rimuovi anche {{count}} copie",
+      "removeBoxWarning_one": "Rimuovendo questa scatola sparirà anche la copia che ha portato e che è ancora collegata.",
+      "removeBoxWarning_other": "Rimuovendo questa scatola spariranno anche le {{count}} copie che ha portato e che sono ancora collegate."
+    },
+    "empty": {
+      "noCatalog": "Nessun prodotto è ancora elencato per questo gioco.",
+      "noResults": "Nessun prodotto corrisponde a questi filtri."
+    }
   },
   "social": {
     "title": "Comunità",
