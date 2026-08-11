@@ -111,6 +111,14 @@ export function ProductSheet({
   const addOne = async (productId: string, withContents: boolean) => {
     setBusy(true);
     setError(null);
+    // Une saisie que le navigateur n'a pas su lire comme un nombre ne doit pas
+    // partir : `NaN` traverse `JSON.stringify` en `null`, que le serveur
+    // rejette, et le prix serait perdu sans rien dire.
+    const amount = Number(price);
+    const acquisitionPrice =
+      price.trim() !== "" && Number.isFinite(amount) && amount >= 0
+        ? amount
+        : undefined;
     try {
       await addCollectionProduct(gameSlug, {
         productId,
@@ -122,8 +130,8 @@ export function ProductSheet({
         ...(paintState ? { paintState } : {}),
         ...(sealed ? { sealed: true } : {}),
         ...(obtainedAt ? { obtainedAt } : {}),
-        ...(price
-          ? { acquisitionPrice: Number(price), acquisitionCurrency: currency }
+        ...(acquisitionPrice !== undefined
+          ? { acquisitionPrice, acquisitionCurrency: currency }
           : {}),
       });
       setShowAdd(false);

@@ -93,6 +93,18 @@ export function GameProductsScreen() {
     setPage(1);
   }, [searchQuery, setCode, kind, ownership, shape, gameSlug]);
 
+  // Une session qui expire pendant la consultation fait retomber l'écran sur
+  // la route publique. Ce qu'elle ne sait pas rendre doit alors disparaître :
+  // les jauges de possession, qui figeraient un relevé périmé, et les deux
+  // filtres qu'elle ignore, qui resteraient en vigueur sans être affichés.
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setStats(null);
+      setOwnership("all");
+      setShape("all");
+    }
+  }, [isAuthenticated]);
+
   const requestId = useRef(0);
   useEffect(() => {
     const id = ++requestId.current;
@@ -331,7 +343,10 @@ export function GameProductsScreen() {
         {items.map((item) => {
           const quantity = item.quantity ?? 0;
           const owned = quantity > 0;
-          const isContainer = (item.content?.total ?? 0) > 0;
+          // Le contenu du catalogue, et non la complétude : celle-ci n'existe
+          // que sur la route de collection, et une boîte sans illustration
+          // porterait l'icône d'une figurine tant qu'on n'est pas connecté.
+          const isContainer = (item.contents?.length ?? 0) > 0;
           const redundant = suggestsRedundantPurchase(item);
           const frameClass = `product-tile__frame${
             owned
