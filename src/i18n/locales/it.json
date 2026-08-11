@@ -331,7 +331,20 @@
     "addToAction": "Aggiungi ai desideri",
     "addToTitle": "Aggiungi a una lista dei desideri",
     "addToSubmit": "Aggiungi",
-    "addToSuccess": "Carta aggiunta alla lista."
+    "addToSuccess": "Carta aggiunta alla lista.",
+    "picker": {
+      "action": "Aggiungi una carta",
+      "title": "Aggiungi una carta",
+      "searchPlaceholder": "Cerca una carta…",
+      "typeToSearch": "Scrivi almeno due lettere per cercare.",
+      "noResults": "Nessuna carta corrisponde.",
+      "add": "Aggiungi",
+      "alreadyAdded": "Già nella lista",
+      "notInCatalog": "Carta assente dal catalogo",
+      "previous": "Precedente",
+      "next": "Successivo",
+      "pageOf": "Pagina {{page}} / {{totalPages}}"
+    }
   },
   "sellLists": {
     "title": "Lista di vendita",

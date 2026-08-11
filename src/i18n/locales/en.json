@@ -331,7 +331,20 @@
     "addToAction": "Add to wishlist",
     "addToTitle": "Add to a wishlist",
     "addToSubmit": "Add",
-    "addToSuccess": "Card added to the list."
+    "addToSuccess": "Card added to the list.",
+    "picker": {
+      "action": "Add a card",
+      "title": "Add a card",
+      "searchPlaceholder": "Search for a card…",
+      "typeToSearch": "Type at least two letters to search.",
+      "noResults": "No card matches.",
+      "add": "Add",
+      "alreadyAdded": "Already on the list",
+      "notInCatalog": "Card not in the catalogue",
+      "previous": "Previous",
+      "next": "Next",
+      "pageOf": "Page {{page}} / {{totalPages}}"
+    }
   },
   "sellLists": {
     "title": "Sale list",

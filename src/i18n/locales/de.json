@@ -331,7 +331,20 @@
     "addToAction": "Zur Wunschliste hinzufügen",
     "addToTitle": "Zu einer Wunschliste hinzufügen",
     "addToSubmit": "Hinzufügen",
-    "addToSuccess": "Karte zur Liste hinzugefügt."
+    "addToSuccess": "Karte zur Liste hinzugefügt.",
+    "picker": {
+      "action": "Karte hinzufügen",
+      "title": "Karte hinzufügen",
+      "searchPlaceholder": "Nach einer Karte suchen…",
+      "typeToSearch": "Gib mindestens zwei Buchstaben ein, um zu suchen.",
+      "noResults": "Keine Karte gefunden.",
+      "add": "Hinzufügen",
+      "alreadyAdded": "Schon auf der Liste",
+      "notInCatalog": "Karte nicht im Katalog",
+      "previous": "Zurück",
+      "next": "Weiter",
+      "pageOf": "Seite {{page}} / {{totalPages}}"
+    }
   },
   "sellLists": {
     "title": "Verkaufsliste",

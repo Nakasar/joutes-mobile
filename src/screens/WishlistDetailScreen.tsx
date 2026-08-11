@@ -2,16 +2,18 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
+  addWishlistItem,
   deleteWishlist,
   getWishlist,
   listWishlistItems,
   removeWishlistItem,
   updateWishlistItem,
 } from "../api/wishlists";
-import type { WishlistItem, WishlistVisibility } from "../api/types";
+import type { TradeCard, WishlistItem, WishlistVisibility } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
-import { TrashIcon } from "../components/icons";
+import { PlusIcon, TrashIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
+import { WishlistCardPickerSheet } from "../components/WishlistCardPickerSheet";
 import { useApi } from "../hooks/useApi";
 
 function visibilityLabel(
@@ -144,9 +146,13 @@ export function WishlistDetailScreen() {
   const detail = useApi(() => getWishlist(wishlistId), [wishlistId]);
   const items = useApi(() => listWishlistItems(wishlistId), [wishlistId]);
   const [deleting, setDeleting] = useState(false);
+  const [picking, setPicking] = useState(false);
+  const [addingCardId, setAddingCardId] = useState<string | null>(null);
+  const [addError, setAddError] = useState<string | null>(null);
 
   const wishlist = detail.data?.wishlist;
   const canEdit = detail.data?.canEdit ?? false;
+  const addedCardIds = new Set((items.data?.items ?? []).map((item) => item.cardId));
 
   function handleDelete() {
     if (deleting) return;
@@ -154,6 +160,33 @@ export function WishlistDetailScreen() {
     deleteWishlist(wishlistId)
       .then(() => navigate(-1))
       .catch(() => setDeleting(false));
+  }
+
+  /**
+   * La carte entre en un exemplaire : la quantité se règle ensuite à la ligne,
+   * avec le même pas que pour les cartes déjà présentes. Le panneau reste
+   * ouvert, une liste de souhaits se remplissant rarement d'une seule carte.
+   */
+  function handleAdd(card: TradeCard) {
+    if (!card.cardId || !card.gameSlug || addingCardId) return;
+
+    setAddingCardId(card.cardId);
+    setAddError(null);
+    addWishlistItem(wishlistId, {
+      cardId: card.cardId,
+      gameSlug: card.gameSlug,
+      name: card.name,
+      setCode: card.setCode,
+      collectorNumber: card.collectorNumber,
+      image: card.image,
+      type: card.type,
+      quantity: 1,
+    })
+      .then(() => items.reload())
+      .catch((err: unknown) => {
+        setAddError(err instanceof Error ? err.message : t("common.error"));
+      })
+      .finally(() => setAddingCardId(null));
   }
 
   return (
@@ -184,6 +217,20 @@ export function WishlistDetailScreen() {
             </span>
           </p>
 
+          {canEdit && (
+            <button
+              className="btn btn--grad btn--block"
+              onClick={() => {
+                setAddError(null);
+                setPicking(true);
+              }}
+            >
+              <PlusIcon size={16} />
+              {t("wishlists.picker.action")}
+            </button>
+          )}
+          {addError && <p className="form-error">{addError}</p>}
+
           <StatusView
             loading={items.loading}
             error={items.error}
@@ -203,6 +250,15 @@ export function WishlistDetailScreen() {
             />
           ))}
         </>
+      )}
+
+      {picking && (
+        <WishlistCardPickerSheet
+          addedKeys={addedCardIds}
+          busyKey={addingCardId}
+          onAdd={handleAdd}
+          onClose={() => setPicking(false)}
+        />
       )}
     </div>
   );
