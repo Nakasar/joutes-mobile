@@ -92,6 +92,10 @@ export const endpoints = {
     /** Parties de l'utilisateur connecté (lecture) et enregistrement (écriture). */
     list: "/game-matches",
     detail: (matchId: string) => `/game-matches/${matchId}`,
+    /** Table de jeu d'un rapport de bataille : écrite d'un bloc, par le créateur. */
+    battleMap: (matchId: string) => `/game-matches/${matchId}/battle-map`,
+    /** Rejoindre une partie sur invitation (QR code). En POST, la réponse est en JSON. */
+    join: (matchId: string) => `/game-matches/${matchId}/join`,
   },
   wishlists: {
     mine: "/wishlists/mine",

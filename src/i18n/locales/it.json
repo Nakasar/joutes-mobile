@@ -576,7 +576,22 @@
     "title": "Gioca",
     "subtitle": "I tuoi tornei e le tue partite",
     "sectionTournaments": "Tornei",
-    "sectionMatches": "Partite"
+    "sectionMatches": "Partite",
+    "joinAction": "Scansiona o inserisci un codice",
+    "joinTitle": "Unisciti",
+    "joinHint": "È il codice stesso a dire se apre un torneo o una partita.",
+    "joinCodeLabel": "Codice o link",
+    "joinCodePlaceholder": "Codice del torneo, o link della partita",
+    "joinSubmit": "Unisciti",
+    "joinInvalidCode": "Questo codice non corrisponde né a un torneo né a una partita.",
+    "joinMatchLoginRequired": "Accedi per unirti a una partita.",
+    "scanAction": "Scansiona un QR code",
+    "filters": {
+      "allGames": "Tutti i giochi",
+      "from": "Dal",
+      "to": "Al",
+      "clear": "Azzera i filtri"
+    }
   },
   "gameMatches": {
     "newAction": "Nuova partita",
@@ -605,7 +620,22 @@
     "notesLabel": "Note",
     "notesPlaceholder": "Come è andata la partita, i momenti chiave…",
     "armiesLabel": "Liste d'armata",
-    "submit": "Salva la partita"
+    "submit": "Salva la partita",
+    "error": "Impossibile caricare le partite."
+  },
+  "battleMap": {
+    "title": "Tavolo di gioco",
+    "tableLabel": "Tavolo di gioco di {{width}} per {{height}} centimetri, {{snapshot}}",
+    "firstSnapshot": "Inizio partita",
+    "snapshotDefault": "Istante {{number}}",
+    "snapshotName": "Nome dell'istante",
+    "addSnapshot": "Nuovo istante",
+    "removeSnapshot": "Elimina l'istante",
+    "addToken": "Posiziona una miniatura",
+    "removeToken": "Rimuovi",
+    "noArmies": "Nessuna lista d'armata inserita: le miniature da posizionare vengono da lì.",
+    "save": "Salva il tavolo",
+    "saveError": "Salvataggio del tavolo non riuscito."
   },
   "tournaments": {
                    "stopwatchElapsed": "trascorso",
@@ -758,7 +788,9 @@
     "droppedBadge": "Ritirato",
     "checkedInBadge": "Registrato",
     "preRegisteredBadge": "Pre-iscritto",
-    "leaveAction": "Lascia il torneo"
+    "leaveAction": "Lascia il torneo",
+    "searchPlaceholder": "Cerca un torneo…",
+    "error": "Impossibile caricare i tornei."
   },
   "tournamentForm": {
     "title": "Le mie informazioni",

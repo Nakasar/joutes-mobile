@@ -1,20 +1,37 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { isTauri } from "../api/http";
+import { joinGameMatch } from "../api/game-matches";
 import { joinTournament } from "../api/tournaments";
 import { ScanIcon } from "./icons";
 import { QrScannerOverlay } from "./QrScannerOverlay";
 import { useQrScanner } from "../hooks/useQrScanner";
-import { parseInviteInput } from "../lib/tournament-invite";
+import { parsePlayInvite } from "../lib/play-invite";
 import { storeSyncKey } from "../lib/tournament-sync-storage";
 import { useAuth } from "../store/auth";
 
-export function JoinTournamentSheet({
+/**
+ * Rejoindre ce qu'on va jouer : un tournoi ou une partie, sans avoir à dire
+ * lequel.
+ *
+ * Le code le dit lui-même — 9 caractères pour un tournoi, 24 hexadécimaux pour
+ * une partie —, et devant un QR code personne ne sait ce qu'il contient avant
+ * de l'avoir lu. Demander « tournoi ou partie ? » d'abord, ce serait faire
+ * poser une question dont la réponse est dans le code.
+ *
+ * Le nom d'affichage ne concerne que les tournois : une partie se rattache à un
+ * compte, il n'y a pas d'invité à nommer. Le champ n'apparaît donc que
+ * lorsqu'il peut servir — déconnecté — et n'est exigé qu'une fois le code
+ * reconnu comme celui d'un tournoi.
+ */
+export function JoinPlaySheet({
   onClose,
-  onJoined,
+  onJoinedTournament,
+  onJoinedMatch,
 }: {
   onClose: () => void;
-  onJoined: (tournamentId: string) => void;
+  onJoinedTournament: (tournamentId: string) => void;
+  onJoinedMatch: (matchId: string) => void;
 }) {
   const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
@@ -25,11 +42,34 @@ export function JoinTournamentSheet({
   const [error, setError] = useState<string | null>(null);
 
   function join(raw: string) {
-    const parsedCode = parseInviteInput(raw);
-    if (!parsedCode) {
-      setError(t("tournaments.joinInvalidCode"));
+    const invite = parsePlayInvite(raw);
+    if (!invite) {
+      setError(t("play.joinInvalidCode"));
       return;
     }
+
+    if (invite.kind === "match") {
+      // Une partie ne se rejoint qu'avec un compte : l'API répondrait 401, et
+      // le dire ici évite un aller-retour pour l'apprendre.
+      if (!isAuthenticated) {
+        setError(t("play.joinMatchLoginRequired"));
+        return;
+      }
+      setSaving(true);
+      setError(null);
+      joinGameMatch(invite.matchId)
+        .then((result) => {
+          setSaving(false);
+          onClose();
+          onJoinedMatch(result.match.id);
+        })
+        .catch((err: unknown) => {
+          setSaving(false);
+          setError(err instanceof Error ? err.message : t("common.error"));
+        });
+      return;
+    }
+
     const trimmedName = displayName.trim();
     if (!isAuthenticated && trimmedName.length === 0) {
       setError(t("tournaments.joinNameRequired"));
@@ -37,14 +77,17 @@ export function JoinTournamentSheet({
     }
     setSaving(true);
     setError(null);
-    joinTournament({ code: parsedCode, displayName: isAuthenticated ? undefined : trimmedName })
+    joinTournament({
+      code: invite.code,
+      displayName: isAuthenticated ? undefined : trimmedName,
+    })
       .then((result) => {
         if (result.player.syncKey) {
           storeSyncKey(result.tournamentId, result.player.syncKey);
         }
         setSaving(false);
         onClose();
-        onJoined(result.tournamentId);
+        onJoinedTournament(result.tournamentId);
       })
       .catch((err: unknown) => {
         setSaving(false);
@@ -64,8 +107,10 @@ export function JoinTournamentSheet({
           setError(t("tournaments.scanUnavailable"));
           return;
         }
-        const parsedCode = parseInviteInput(result.content);
-        if (parsedCode) setCode(parsedCode);
+        const invite = parsePlayInvite(result.content);
+        // Le champ montre ce qui a été lu : en cas d'échec, l'utilisateur voit
+        // sur quoi porter la correction plutôt qu'un formulaire vide.
+        if (invite?.kind === "tournament") setCode(invite.code);
         join(result.content);
       })
       .catch(() => setError(t("tournaments.scanUnavailable")));
@@ -74,10 +119,7 @@ export function JoinTournamentSheet({
   return (
     <>
       {scanner.scanning && (
-        <QrScannerOverlay
-          title={t("tournaments.scanAction")}
-          onCancel={scanner.cancel}
-        />
+        <QrScannerOverlay title={t("play.scanAction")} onCancel={scanner.cancel} />
       )}
       <div className="sheet-overlay" onClick={onClose}>
         <div
@@ -88,26 +130,23 @@ export function JoinTournamentSheet({
         >
           <div className="sheet__handle" />
           <div className="sheet__body form-sheet">
-            <h2 className="form-sheet__title">{t("tournaments.joinTitle")}</h2>
+            <h2 className="form-sheet__title">{t("play.joinTitle")}</h2>
+            <p className="muted form-sheet__note">{t("play.joinHint")}</p>
             <div className="join-options">
               <label className="field">
-                <span className="field__label">
-                  {t("tournaments.joinCodeLabel")}
-                </span>
+                <span className="field__label">{t("play.joinCodeLabel")}</span>
                 <input
                   type="text"
                   value={code}
                   onChange={(e) => setCode(e.currentTarget.value)}
-                  placeholder={t("tournaments.joinCodePlaceholder")}
+                  placeholder={t("play.joinCodePlaceholder")}
                   autoFocus
-                  maxLength={120}
+                  maxLength={200}
                 />
               </label>
               {!isAuthenticated && (
                 <label className="field">
-                  <span className="field__label">
-                    {t("tournaments.joinNameLabel")}
-                  </span>
+                  <span className="field__label">{t("tournaments.joinNameLabel")}</span>
                   <input
                     type="text"
                     value={displayName}
@@ -122,7 +161,7 @@ export function JoinTournamentSheet({
                 onClick={() => join(code)}
                 disabled={saving || code.trim().length === 0}
               >
-                {saving ? t("common.saving") : t("tournaments.joinSubmit")}
+                {saving ? t("common.saving") : t("play.joinSubmit")}
               </button>
 
               {isTauri() && (
@@ -135,7 +174,7 @@ export function JoinTournamentSheet({
                     disabled={saving}
                   >
                     <ScanIcon size={18} />
-                    {t("tournaments.scanAction")}
+                    {t("play.scanAction")}
                   </button>
                 </>
               )}

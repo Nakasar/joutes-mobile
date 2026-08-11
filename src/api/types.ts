@@ -1553,6 +1553,15 @@ export interface TournamentPlayingEntry {
   player: TournamentPlayer;
 }
 
+/** Réponse paginée de `GET /tournaments/playing`, quand une page est demandée. */
+export interface TournamentPlayingPage {
+  tournaments: TournamentPlayingEntry[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
 /** Une entrée de `POST /tournaments/sync`, pour une clé de joueur invité. */
 export interface TournamentSyncEntry {
   key: string;
@@ -1627,17 +1636,72 @@ export interface BattleReportArmy {
   units: BattleReportArmyUnit[];
 }
 
+/** Formes de décor posables sur la table. Volontairement peu nombreuses : on
+ * note une position approximative, pas un plan d'architecte. */
+export type BattleMapShape = "circle" | "rectangle" | "triangle";
+
+/**
+ * Une pièce de décor. Tout est en centimètres, `x`/`y` désignant le **centre** —
+ * c'est ce qu'on déplace au doigt, et ce qui reste juste quand la pièce change
+ * de taille.
+ */
+export interface BattleMapTerrain {
+  id: string;
+  shape: BattleMapShape;
+  name?: string;
+  color: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+/**
+ * Un jeton d'unité : toujours rond, à la couleur de son joueur, rattaché à une
+ * ligne de sa liste d'armée. Le nom et l'image y sont recopiés — un rapport est
+ * une archive, il survit à la disparition du produit.
+ */
+export interface BattleMapUnitToken {
+  id: string;
+  playerId: string;
+  unitName: string;
+  productId?: string;
+  image?: string;
+  x: number;
+  y: number;
+  /** Diamètre du socle, en centimètres. */
+  diameter: number;
+}
+
+/** Un état de la table à un moment de la partie. */
+export interface BattleMapSnapshot {
+  id: string;
+  label: string;
+  units: BattleMapUnitToken[];
+}
+
+/**
+ * La table vue de dessus. Le décor appartient à la table, les unités à
+ * l'instant : un décor ne bouge pas de la partie, et le recopier dans chaque
+ * instant obligerait à le corriger partout.
+ */
+export interface BattleMap {
+  /** Dimensions du plateau, en centimètres. */
+  table: { width: number; height: number };
+  terrain: BattleMapTerrain[];
+  snapshots: BattleMapSnapshot[];
+  playerColors?: Record<string, string>;
+}
+
 /**
  * Volet « rapport de bataille » d'une partie : listes d'armée par participant,
- * scénario, notes libres et table de jeu vue de dessus. La table n'est ni
- * affichée ni modifiée par le mobile — elle se compose au doigt sur un écran
- * large — mais elle est conservée telle quelle pour ne pas la perdre.
+ * scénario, notes libres et table de jeu vue de dessus avec ses instants.
  */
 export interface BattleReport {
   scenario?: string;
   notes?: string;
   armies?: Record<string, BattleReportArmy>;
-  map?: unknown;
+  map?: BattleMap;
 }
 
 /**
@@ -1666,6 +1730,15 @@ export interface GameMatchDetail extends Omit<GameMatchSummary, "battleReport"> 
  * fabrique — mais le fournir permet de le désigner vainqueur avant que la
  * partie existe.
  */
+/** Réponse paginée de `GET /game-matches`. */
+export interface GameMatchListResult {
+  matches: GameMatchSummary[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
 export interface GameMatchCreateInput {
   gameId: string;
   playedAt?: string;
