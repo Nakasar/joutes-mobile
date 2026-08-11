@@ -47,8 +47,11 @@
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 
-  /* Hauteur usuelle d'une barre d'état Android (24 dp). Un téléphone qui en
-     demande plus le déclare par `env()`, et `max()` retient sa valeur. */
+  /* Hauteur usuelle d'une barre d'état Android : 24 dp, soit 24 px CSS — dans
+     un WebView réglé sur `width=device-width`, le pixel CSS *est* le pixel
+     indépendant de la densité, les deux valeurs coïncident donc.
+     Un téléphone qui demande plus le déclare par `env()`, et `max()` retient
+     sa valeur. */
   --android-status-bar: 24px;
 
   --font-body: Inter, "Helvetica Neue", Arial, sans-serif;
