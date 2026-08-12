@@ -108,9 +108,16 @@ export function JoinPlaySheet({
           return;
         }
         const invite = parsePlayInvite(result.content);
-        // Le champ montre ce qui a été lu : en cas d'échec, l'utilisateur voit
-        // sur quoi porter la correction plutôt qu'un formulaire vide.
-        if (invite?.kind === "tournament") setCode(invite.code);
+        // Le champ montre ce qui a été lu, quelle que soit la nature du code :
+        // en cas d'échec, l'utilisateur voit sur quoi porter la correction — et
+        // surtout, il ne reste pas la valeur d'un scan précédent.
+        setCode(
+          invite === null
+            ? result.content
+            : invite.kind === "tournament"
+              ? invite.code
+              : invite.matchId,
+        );
         join(result.content);
       })
       .catch(() => setError(t("tournaments.scanUnavailable")));

@@ -142,10 +142,13 @@ export function GameMatchDetailScreen() {
             <>
               <h2 className="section-title">{t("battleMap.title")}</h2>
               <BattleMapPanel
-                // Remonter la table du serveur à chaque chargement : le panneau
-                // tient son propre état, il ne doit pas repartir d'une table
-                // périmée si la fiche a été rechargée entre-temps.
-                key={`${data.id}-${data.battleReport.map?.snapshots.length ?? 0}`}
+                // Une clé par partie, et rien de plus : le panneau tient sa
+                // propre copie de travail, et la refaire à chaque rechargement
+                // de la fiche — `useApi` en déclenche un au retour du réseau —
+                // jetterait les déplacements en cours. La table du serveur
+                // reprend la main à l'enregistrement, qui rend la version
+                // normalisée.
+                key={data.id}
                 matchId={data.id}
                 gameSlug={data.game?.slug ?? undefined}
                 players={players}

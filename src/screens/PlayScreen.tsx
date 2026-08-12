@@ -294,6 +294,14 @@ function TournamentsPane({
           }),
         );
 
+        // La synchronisation invité est secondaire tant que le compte a lui-même
+        // des résultats ; sinon son échec devient la seule explication d'une
+        // liste vide, et un « aucun tournoi » à la place d'une panne réseau
+        // ferait croire à l'utilisateur qu'il n'a rien rejoint.
+        if (guestResult.status === "rejected" && fromAccount.length === 0) {
+          throw guestResult.reason;
+        }
+
         const fromGuests: TournamentSummary[] =
           guestResult.status === "fulfilled"
             ? guestResult.value
