@@ -383,6 +383,36 @@ code {
   color: var(--primary);
 }
 
+/* Bouton d'icône qui commande un panneau ouvert (la loupe, une fois dépliée). */
+.icon-button--active {
+  border-color: var(--primary);
+  background: var(--chip);
+  color: var(--primary);
+}
+
+/*
+ * Rangée de commandes d'un volet : les puces prennent la place disponible et
+ * défilent, le bouton d'icône garde la sienne au bout.
+ */
+.pane-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.pane-toolbar .chip-row {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.pane-toolbar .icon-button {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+}
+
 .icon-button:active {
   transform: scale(0.94);
 }

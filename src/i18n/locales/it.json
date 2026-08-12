@@ -790,6 +790,7 @@
     "preRegisteredBadge": "Pre-iscritto",
     "leaveAction": "Lascia il torneo",
     "searchPlaceholder": "Cerca un torneo…",
+    "searchAction": "Cerca un torneo",
     "error": "Impossibile caricare i tornei."
   },
   "tournamentForm": {

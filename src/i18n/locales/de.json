@@ -790,6 +790,7 @@
     "preRegisteredBadge": "Vorangemeldet",
     "leaveAction": "Turnier verlassen",
     "searchPlaceholder": "Turnier suchen…",
+    "searchAction": "Turnier suchen",
     "error": "Die Turniere konnten nicht geladen werden."
   },
   "tournamentForm": {

@@ -790,6 +790,7 @@
     "preRegisteredBadge": "Pre-registered",
     "leaveAction": "Leave tournament",
     "searchPlaceholder": "Search a tournament…",
+    "searchAction": "Search a tournament",
     "error": "Tournaments could not be loaded."
   },
   "tournamentForm": {

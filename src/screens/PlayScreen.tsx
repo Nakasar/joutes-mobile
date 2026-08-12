@@ -10,7 +10,14 @@ import type {
   TournamentStatus,
 } from "../api/types";
 import { CreateGameMatchSheet } from "../components/CreateGameMatchSheet";
-import { ChevronIcon, PlusIcon, ScanIcon, SwordsIcon, TrophyIcon } from "../components/icons";
+import {
+  ChevronIcon,
+  PlusIcon,
+  ScanIcon,
+  SearchIcon,
+  SwordsIcon,
+  TrophyIcon,
+} from "../components/icons";
 import { JoinPlaySheet } from "../components/JoinPlaySheet";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
@@ -217,6 +224,8 @@ function TournamentsPane({
   const { isAuthenticated } = useAuth();
 
   const [filter, setFilter] = useState<Filter>("current");
+  /** La recherche n'a pas de champ tant qu'on ne l'a pas demandée. */
+  const [searchOpen, setSearchOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -338,33 +347,60 @@ function TournamentsPane({
         {t("play.joinAction")}
       </button>
 
-      <div className="search-field">
-        <input
-          type="search"
-          placeholder={t("tournaments.searchPlaceholder")}
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.currentTarget.value)}
-        />
-      </div>
-
       <FiltersRow filters={filters} onChange={onFiltersChange} games={games} />
 
       {/* Second niveau de filtre : des puces plutôt qu'un second contrôle
-          segmenté, qui se confondrait avec celui des sections. */}
-      <div className="chip-row">
+          segmenté, qui se confondrait avec celui des sections. La loupe leur
+          tient compagnie plutôt que d'occuper une rangée à elle seule — on
+          cherche un tournoi par son nom une fois de temps en temps, et le champ
+          mangeait un écran de haut à chaque ouverture de l'onglet. */}
+      <div className="pane-toolbar">
+        <div className="chip-row">
+          <button
+            className={`chip-filter${filter === "current" ? " chip-filter--active" : ""}`}
+            onClick={() => setFilter("current")}
+          >
+            {t("tournaments.filterCurrent")}
+          </button>
+          <button
+            className={`chip-filter${filter === "past" ? " chip-filter--active" : ""}`}
+            onClick={() => setFilter("past")}
+          >
+            {t("tournaments.filterPast")}
+          </button>
+        </div>
         <button
-          className={`chip-filter${filter === "current" ? " chip-filter--active" : ""}`}
-          onClick={() => setFilter("current")}
+          type="button"
+          className={`icon-button${searchOpen ? " icon-button--active" : ""}`}
+          aria-label={t("tournaments.searchAction")}
+          aria-expanded={searchOpen}
+          title={t("tournaments.searchAction")}
+          onClick={() => {
+            // Refermer efface la recherche : un champ replié qui continuerait
+            // de filtrer expliquerait une liste courte par une raison
+            // invisible. Le débounce est court-circuité pour la même raison.
+            if (searchOpen) {
+              setSearchInput("");
+              setSearch("");
+            }
+            setSearchOpen((open) => !open);
+          }}
         >
-          {t("tournaments.filterCurrent")}
-        </button>
-        <button
-          className={`chip-filter${filter === "past" ? " chip-filter--active" : ""}`}
-          onClick={() => setFilter("past")}
-        >
-          {t("tournaments.filterPast")}
+          <SearchIcon size={18} />
         </button>
       </div>
+
+      {searchOpen && (
+        <div className="search-field">
+          <input
+            type="search"
+            placeholder={t("tournaments.searchPlaceholder")}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.currentTarget.value)}
+            autoFocus
+          />
+        </div>
+      )}
 
       {live.map((tournament) => (
         <LiveTournamentCard key={tournament.id} tournament={tournament} />
