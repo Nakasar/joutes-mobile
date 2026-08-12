@@ -16,7 +16,10 @@ Application mobile (et desktop) pour [Joutes](https://joutes.app) — plateforme
 - **Tournois — ligues et jeux de figurines** : sur une phase au rythme asynchrone, l'échéance de l'intervalle remplace le minuteur et la date de jeu remplace le numéro de table ; scénario de la ronde affiché avec ses consignes de composition ; statistiques secondaires du jeu (cartes de lutte, blessures, points de victoire…) saisies partie par partie et reprises en colonnes de départage au classement
 - **Tournois — puzzles** : sur une phase de type puzzle, l'en-tête montre un chronomètre parti de 0 au lieu du minuteur, l'onglet du match cède la place au puzzle à résoudre et au bouton « j'ai terminé » (quand le self-report est activé), et le classement se lit au temps, le plus rapide en tête
 - **Tournois — formulaire d'inscription** : réponses au formulaire demandé par l'organisation (texte, nombre, choix, carte du jeu recherchée dans le catalogue, liste de deck analysée par le serveur), avec date limite, réponses tardives signalées et consultation en lecture seule une fois la saisie close
-- **Parties hors tournoi** : dans l'onglet « Jouer », enregistrer une partie (jeu, date, amis à la table, invités sans compte, vainqueurs, scénario et notes) et consulter ses parties passées — listes d'armée du rapport de bataille comprises. La table de jeu vue de dessus reste sur le web, où elle se compose au doigt sur un grand écran.
+- **Parties hors tournoi** : dans l'onglet « Jouer », enregistrer une partie (jeu, date, amis à la table, invités sans compte, vainqueurs, scénario et notes) et consulter ses parties passées — listes d'armée du rapport de bataille comprises.
+- **Table de jeu et instants** : la fiche d'une partie en rapport de bataille montre la table vue de dessus — décor, jetons à la couleur de chaque joueur, graduation tous les 10 cm — et la suite de ses **instants** (« début de partie », « fin du tour 2 »). Le créateur les édite : basculer d'un instant à l'autre, en ouvrir un nouveau (qui reprend l'état courant, une partie évolue, elle ne se redéploie pas), le renommer, le supprimer, poser une figurine tirée d'une liste d'armée, la traîner au doigt, la retirer. Tout est en centimètres : la `viewBox` **est** la table. Le décor, lui, se pose sur le web — il appartient à la table, pas à l'instant, et se met en place une fois pour toutes.
+- **Rejoindre par QR code ou par code** : un seul bouton de l'onglet « Jouer » ouvre un tournoi comme une partie. Le code le dit lui-même — neuf caractères pour un tournoi, vingt-quatre hexadécimaux pour une partie — et devant un QR code personne ne sait ce qu'il contient avant de l'avoir lu : la question n'est donc jamais posée d'avance.
+- **Retrouver un tournoi ou une partie** : recherche par nom sur les tournois, filtres par jeu et par fenêtre de dates partagés entre les deux volets, pagination des deux listes. Les tournois en cours passent en tête, les terminés sont derrière une puce plutôt que dans la liste — ce qu'on ouvre l'application pour retrouver, c'est le tournoi de la journée.
 - **Collection** : vue d'ensemble de la collection par jeu avec taux de complétion (connexion requise)
 - **Produits — jeux de figurines** : les jeux qui ne se jouent pas avec des cartes (Star Wars: Shatterpoint…) exposent un catalogue de **produits** — boîtes, blisters, coffrets, dont certains en contiennent d'autres. Le catalogue se parcourt sans compte (recherche, gamme, type) ; connecté, chaque tuile porte la possession et la complétude de son contenu comptée en références (« 5/8 »), avec l'anneau ambre du « tu as déjà tout dedans » sur une boîte qu'on ne possède pas. La fiche d'un produit gère ses exemplaires : ajout d'une boîte avec son contenu (décochable, une boîte d'occasion arrive rarement complète) ou d'une figurine seule, état de peinture, sous blister, descellement, détachement d'une figurine de sa boîte, retrait annoncé quand il emporte du contenu. L'écran de collection liste ces jeux à part : ils n'ont ni cartes ni set maître, et la gamme de figurines y sert de jauge.
 - **Connexion** : par code OTP e-mail (Better Auth), session persistante
@@ -39,10 +42,12 @@ src/
   screens/        Écrans (Accueil, Jeux, Événements, Collection, Réglages, Login)
   components/     Composants partagés (TabBar, StatusView)
   lib/            Logique pure et stockage local (dont `tournament-presets.ts`,
-                  `printings.ts` et `products.ts`, copies de joutes-app — table de
-                  presets, résolution des variantes d'impression, tables des types
-                  de produits et des états de peinture : toute modification doit
-                  être reportée dans les deux dépôts)
+                  `printings.ts`, `products.ts` et `battle-map.ts`, copies de
+                  joutes-app — table de presets, résolution des variantes
+                  d'impression, tables des types de produits et des états de
+                  peinture, géométrie et bornes de la table de jeu : toute
+                  modification doit être reportée dans les deux dépôts, le
+                  serveur normalisant avec le même code à l'enregistrement)
   config.ts       Configuration (URL de l'API…)
 src-tauri/        Projet Rust Tauri (plugins http + cookies, opener)
 ```

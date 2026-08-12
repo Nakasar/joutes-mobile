@@ -12,6 +12,8 @@ import type {
   TournamentPhaseDetail,
   TournamentPlayer,
   TournamentPlayingEntry,
+  TournamentPlayingPage,
+  TournamentStatus,
   TournamentPuzzleResult,
   TournamentRoundDetail,
   TournamentStanding,
@@ -35,6 +37,65 @@ export function joinTournament(input: { code: string; displayName?: string }): P
 /** Tournois où l'utilisateur connecté est inscrit (session requise). */
 export function listPlayingTournaments(): Promise<TournamentPlayingEntry[]> {
   return api.get<TournamentPlayingEntry[]>(endpoints.tournaments.playing);
+}
+
+export interface PlayingTournamentsParams {
+  page?: number;
+  limit?: number;
+  /** Recherche sur le nom du tournoi, insensible à la casse. */
+  search?: string;
+  /** Statuts retenus. Vide = tous. */
+  statuses?: TournamentStatus[];
+  gameId?: string;
+  /** Commence à partir de ce jour (`AAAA-MM-JJ`), borne incluse. */
+  from?: string;
+  /** Commence jusqu'à ce jour compris. */
+  to?: string;
+}
+
+/**
+ * Les mêmes tournois, page par page et filtrés côté serveur.
+ *
+ * L'API rend le tableau nu tant qu'on ne lui demande rien ; c'est la page qui
+ * fait basculer la réponse en enveloppe. On lui en demande donc toujours une —
+ * et on sait lire les deux formes, pour qu'une API plus ancienne que cette
+ * version de l'app ne laisse pas l'écran vide.
+ */
+export function listPlayingTournamentsPage(
+  params: PlayingTournamentsParams = {},
+): Promise<TournamentPlayingPage> {
+  const page = params.page ?? 1;
+  return api
+    .get<TournamentPlayingEntry[] | Partial<TournamentPlayingPage>>(
+      endpoints.tournaments.playing,
+      {
+        page,
+        limit: params.limit,
+        search: params.search,
+        status: params.statuses?.length ? params.statuses.join(",") : undefined,
+        gameId: params.gameId,
+        from: params.from,
+        to: params.to,
+      },
+    )
+    .then((response) => {
+      if (Array.isArray(response)) {
+        return {
+          tournaments: response,
+          total: response.length,
+          page: 1,
+          limit: response.length,
+          totalPages: 1,
+        };
+      }
+      return {
+        tournaments: response.tournaments ?? [],
+        total: response.total ?? response.tournaments?.length ?? 0,
+        page: response.page ?? page,
+        limit: response.limit ?? params.limit ?? 0,
+        totalPages: response.totalPages ?? 1,
+      };
+    });
 }
 
 /**

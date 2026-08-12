@@ -576,7 +576,22 @@
     "title": "Play",
     "subtitle": "Your tournaments and your games",
     "sectionTournaments": "Tournaments",
-    "sectionMatches": "Games"
+    "sectionMatches": "Games",
+    "joinAction": "Scan or enter a code",
+    "joinTitle": "Join",
+    "joinHint": "The code itself says whether it opens a tournament or a match.",
+    "joinCodeLabel": "Code or link",
+    "joinCodePlaceholder": "Tournament code, or match link",
+    "joinSubmit": "Join",
+    "joinInvalidCode": "This code matches neither a tournament nor a match.",
+    "joinMatchLoginRequired": "Sign in to join a match.",
+    "scanAction": "Scan a QR code",
+    "filters": {
+      "allGames": "All games",
+      "from": "From",
+      "to": "Until",
+      "clear": "Clear filters"
+    }
   },
   "gameMatches": {
     "newAction": "New game",
@@ -605,7 +620,22 @@
     "notesLabel": "Notes",
     "notesPlaceholder": "How the game went, the turning points…",
     "armiesLabel": "Army lists",
-    "submit": "Save game"
+    "submit": "Save game",
+    "error": "Matches could not be loaded."
+  },
+  "battleMap": {
+    "title": "Game table",
+    "tableLabel": "Game table {{width}} by {{height}} centimetres, {{snapshot}}",
+    "firstSnapshot": "Start of play",
+    "snapshotDefault": "Instant {{number}}",
+    "snapshotName": "Instant name",
+    "addSnapshot": "New instant",
+    "removeSnapshot": "Delete instant",
+    "addToken": "Place a miniature",
+    "removeToken": "Remove",
+    "noArmies": "No army list yet: the miniatures to place come from it.",
+    "save": "Save the table",
+    "saveError": "The table could not be saved."
   },
   "tournaments": {
                    "stopwatchElapsed": "elapsed",
@@ -758,7 +788,10 @@
     "droppedBadge": "Dropped",
     "checkedInBadge": "Checked in",
     "preRegisteredBadge": "Pre-registered",
-    "leaveAction": "Leave tournament"
+    "leaveAction": "Leave tournament",
+    "searchPlaceholder": "Search a tournament…",
+    "searchAction": "Search a tournament",
+    "error": "Tournaments could not be loaded."
   },
   "tournamentForm": {
     "title": "My information",

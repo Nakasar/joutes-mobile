@@ -576,7 +576,22 @@
     "title": "Spielen",
     "subtitle": "Deine Turniere und deine Partien",
     "sectionTournaments": "Turniere",
-    "sectionMatches": "Partien"
+    "sectionMatches": "Partien",
+    "joinAction": "Code scannen oder eingeben",
+    "joinTitle": "Beitreten",
+    "joinHint": "Der Code sagt selbst, ob er ein Turnier oder eine Partie öffnet.",
+    "joinCodeLabel": "Code oder Link",
+    "joinCodePlaceholder": "Turniercode oder Partie-Link",
+    "joinSubmit": "Beitreten",
+    "joinInvalidCode": "Dieser Code passt weder zu einem Turnier noch zu einer Partie.",
+    "joinMatchLoginRequired": "Melde dich an, um einer Partie beizutreten.",
+    "scanAction": "QR-Code scannen",
+    "filters": {
+      "allGames": "Alle Spiele",
+      "from": "Ab",
+      "to": "Bis",
+      "clear": "Filter zurücksetzen"
+    }
   },
   "gameMatches": {
     "newAction": "Neue Partie",
@@ -605,7 +620,22 @@
     "notesLabel": "Notizen",
     "notesPlaceholder": "Der Verlauf der Partie, die entscheidenden Momente…",
     "armiesLabel": "Armeelisten",
-    "submit": "Partie speichern"
+    "submit": "Partie speichern",
+    "error": "Die Partien konnten nicht geladen werden."
+  },
+  "battleMap": {
+    "title": "Spieltisch",
+    "tableLabel": "Spieltisch {{width}} auf {{height}} Zentimeter, {{snapshot}}",
+    "firstSnapshot": "Spielbeginn",
+    "snapshotDefault": "Moment {{number}}",
+    "snapshotName": "Name des Moments",
+    "addSnapshot": "Neuer Moment",
+    "removeSnapshot": "Moment löschen",
+    "addToken": "Miniatur setzen",
+    "removeToken": "Entfernen",
+    "noArmies": "Noch keine Armeeliste: von dort kommen die Miniaturen.",
+    "save": "Tisch speichern",
+    "saveError": "Der Tisch konnte nicht gespeichert werden."
   },
   "tournaments": {
                    "stopwatchElapsed": "vergangen",
@@ -758,7 +788,10 @@
     "droppedBadge": "Ausgestiegen",
     "checkedInBadge": "Eingecheckt",
     "preRegisteredBadge": "Vorangemeldet",
-    "leaveAction": "Turnier verlassen"
+    "leaveAction": "Turnier verlassen",
+    "searchPlaceholder": "Turnier suchen…",
+    "searchAction": "Turnier suchen",
+    "error": "Die Turniere konnten nicht geladen werden."
   },
   "tournamentForm": {
     "title": "Meine Angaben",

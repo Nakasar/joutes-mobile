@@ -3,10 +3,12 @@ import { useTranslation } from "react-i18next";
 import { getGameMatch } from "../api/game-matches";
 import type { BattleReportArmy, GameMatchPlayer } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
+import { BattleMapPanel } from "../components/BattleMapPanel";
 import { StatusView } from "../components/StatusView";
 import { PinIcon, TrophyIcon } from "../components/icons";
 import { useApi } from "../hooks/useApi";
 import { currentLocale } from "../i18n";
+import { useAuth } from "../store/auth";
 
 function formatPlayedAt(iso: string): string {
   return new Date(iso).toLocaleDateString(currentLocale(), {
@@ -73,12 +75,17 @@ function ArmySection({
 }
 
 /**
- * Fiche d'une partie jouée hors tournoi. En lecture seule : la partie se
- * modifie sur le web, où la table de jeu et les listes d'armée se composent
- * confortablement.
+ * Fiche d'une partie jouée hors tournoi.
+ *
+ * Le récit se lit ici, et la table de jeu s'y tient : ses instants se
+ * consultent, et le créateur les édite — c'est en cours de partie, la table
+ * devant soi, qu'on note où en sont les figurines, et c'est là qu'on a un
+ * téléphone en main plutôt qu'un ordinateur. Le reste du rapport (scénario,
+ * notes, listes d'armée) se compose toujours sur le web.
  */
 export function GameMatchDetailScreen() {
   const { t } = useTranslation();
+  const { user } = useAuth();
   const { matchId } = useParams<{ matchId: string }>();
   const { data, loading, error, reload } = useApi(
     () => getGameMatch(matchId ?? ""),
@@ -128,6 +135,27 @@ export function GameMatchDetailScreen() {
                   army={army}
                 />
               ))}
+            </>
+          )}
+
+          {data.battleReport && (
+            <>
+              <h2 className="section-title">{t("battleMap.title")}</h2>
+              <BattleMapPanel
+                // Une clé par partie, et rien de plus : le panneau tient sa
+                // propre copie de travail, et la refaire à chaque rechargement
+                // de la fiche — `useApi` en déclenche un au retour du réseau —
+                // jetterait les déplacements en cours. La table du serveur
+                // reprend la main à l'enregistrement, qui rend la version
+                // normalisée.
+                key={data.id}
+                matchId={data.id}
+                gameSlug={data.game?.slug ?? undefined}
+                players={players}
+                armies={data.battleReport.armies ?? {}}
+                map={data.battleReport.map}
+                editable={Boolean(user && data.createdBy === user.id)}
+              />
             </>
           )}
 

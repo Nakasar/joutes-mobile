@@ -383,6 +383,36 @@ code {
   color: var(--primary);
 }
 
+/* Bouton d'icône qui commande un panneau ouvert (la loupe, une fois dépliée). */
+.icon-button--active {
+  border-color: var(--primary);
+  background: var(--chip);
+  color: var(--primary);
+}
+
+/*
+ * Rangée de commandes d'un volet : les puces prennent la place disponible et
+ * défilent, le bouton d'icône garde la sienne au bout.
+ */
+.pane-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.pane-toolbar .chip-row {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.pane-toolbar .icon-button {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+}
+
 .icon-button:active {
   transform: scale(0.94);
 }
@@ -506,6 +536,13 @@ button {
 .field__label {
   font-size: 0.85rem;
   font-weight: 600;
+}
+
+/* Deux champs côte à côte dans une rangée de filtres : chacun prend sa moitié
+   et rétrécit, sinon la rangée élargit l'écran. */
+.field--inline {
+  flex: 1;
+  min-width: 0;
 }
 
 input,
@@ -1592,6 +1629,73 @@ textarea:focus {
   padding: 10px;
   border: 1px dashed var(--border);
   border-radius: var(--radius-sm);
+}
+
+
+/* ---- Table de jeu d'un rapport de bataille ---- */
+
+.battle-map {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+/*
+ * La `viewBox` est la table, en centimètres : l'affichage n'en est qu'une mise
+ * à l'échelle, et la hauteur suit d'elle-même le rapport du plateau.
+ * `touch-action: none` est ce qui permet de traîner un jeton : sans lui, le
+ * doigt fait défiler la page.
+ */
+.battle-map__table {
+  width: 100%;
+  height: auto;
+  display: block;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.battle-map__label {
+  fill: var(--text);
+  pointer-events: none;
+}
+
+.battle-map__selection {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+}
+
+.battle-map__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.battle-map__remove {
+  color: var(--danger);
+}
+
+.battle-map__units {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.battle-map__owner {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 700;
 }
 
 /* Case à cocher pleine largeur : la cible tactile est la ligne entière. */

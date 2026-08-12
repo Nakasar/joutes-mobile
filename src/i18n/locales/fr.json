@@ -576,7 +576,22 @@
     "title": "Jouer",
     "subtitle": "Tes tournois et tes parties",
     "sectionTournaments": "Tournois",
-    "sectionMatches": "Parties"
+    "sectionMatches": "Parties",
+    "joinAction": "Scanner ou saisir un code",
+    "joinTitle": "Rejoindre",
+    "joinHint": "Le code dit lui-même s'il ouvre un tournoi ou une partie.",
+    "joinCodeLabel": "Code ou lien",
+    "joinCodePlaceholder": "Code du tournoi, ou lien de la partie",
+    "joinSubmit": "Rejoindre",
+    "joinInvalidCode": "Ce code ne correspond ni à un tournoi ni à une partie.",
+    "joinMatchLoginRequired": "Connecte-toi pour rejoindre une partie.",
+    "scanAction": "Scanner un QR code",
+    "filters": {
+      "allGames": "Tous les jeux",
+      "from": "À partir du",
+      "to": "Jusqu'au",
+      "clear": "Effacer les filtres"
+    }
   },
   "gameMatches": {
     "newAction": "Nouvelle partie",
@@ -605,7 +620,22 @@
     "notesLabel": "Notes",
     "notesPlaceholder": "Le déroulé de la partie, les moments marquants…",
     "armiesLabel": "Listes d'armée",
-    "submit": "Enregistrer la partie"
+    "submit": "Enregistrer la partie",
+    "error": "Impossible de charger les parties."
+  },
+  "battleMap": {
+    "title": "Table de jeu",
+    "tableLabel": "Table de jeu de {{width}} sur {{height}} centimètres, {{snapshot}}",
+    "firstSnapshot": "Début de partie",
+    "snapshotDefault": "Instant {{number}}",
+    "snapshotName": "Nom de l'instant",
+    "addSnapshot": "Nouvel instant",
+    "removeSnapshot": "Supprimer l'instant",
+    "addToken": "Poser une figurine",
+    "removeToken": "Retirer",
+    "noArmies": "Aucune liste d'armée saisie : les figurines à poser en viennent.",
+    "save": "Enregistrer la table",
+    "saveError": "L'enregistrement de la table a échoué."
   },
   "tournaments": {
                    "stopwatchElapsed": "écoulé",
@@ -758,7 +788,10 @@
     "droppedBadge": "Retiré",
     "checkedInBadge": "Pointé",
     "preRegisteredBadge": "Pré-inscrit",
-    "leaveAction": "Quitter le tournoi"
+    "leaveAction": "Quitter le tournoi",
+    "searchPlaceholder": "Rechercher un tournoi…",
+    "searchAction": "Rechercher un tournoi",
+    "error": "Impossible de charger les tournois."
   },
   "tournamentForm": {
     "title": "Mes informations",
