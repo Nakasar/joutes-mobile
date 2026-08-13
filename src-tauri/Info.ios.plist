@@ -4,5 +4,15 @@
 <dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Joutes utilise l'appareil photo pour scanner le QR code d'invitation d'un tournoi.</string>
+	<!--
+	  Réveil de l'application à l'arrivée d'une notification. Ce fichier est
+	  versionné et fusionné par Tauri dans le projet Xcode généré : c'est le
+	  seul endroit où une clé Info.plist survit à `tauri ios init`, qui écrase
+	  `src-tauri/gen/` à chaque construction.
+	-->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 </dict>
 </plist>

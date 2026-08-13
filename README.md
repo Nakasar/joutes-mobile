@@ -126,9 +126,28 @@ Secrets à configurer dans le dépôt pour la signature :
 | Android | `ANDROID_KEYSTORE_PASSWORD` | mot de passe du keystore |
 | Android | `ANDROID_KEY_ALIAS` | alias de la clé |
 | Android | `ANDROID_KEY_PASSWORD` | mot de passe de la clé |
-| iOS | `IOS_CERTIFICATE` | certificat de distribution `.p12` en base64 |
-| iOS | `IOS_CERTIFICATE_PASSWORD` | mot de passe du `.p12` |
-| iOS | `IOS_MOBILE_PROVISION` | profil `.mobileprovision` en base64 |
+| iOS | `ASC_KEY_ID` | Key ID de la clé App Store Connect |
+| iOS | `ASC_ISSUER_ID` | Issuer ID de la clé App Store Connect |
+| iOS | `ASC_API_KEY` | fichier `.p8` de la clé App Store Connect, en base64 |
 | iOS | `APPLE_DEVELOPMENT_TEAM` | identifiant d'équipe Apple (ex. `ABCDE12345`) |
+| Android | `GOOGLE_SERVICES_JSON` | `google-services.json` du projet Firebase, en base64 |
 
-L'IPA App Store nécessite un profil de provisionnement de distribution correspondant à l'identifiant `app.joutes.mobile`.
+L'IPA App Store nécessite un profil de provisionnement de distribution correspondant à l'identifiant `app.joutes.mobile` ; avec la clé App Store Connect, `xcodebuild` le résout ou le crée lui-même (`-allowProvisioningUpdates`).
+
+## Notifications push
+
+L'application enregistre son jeton auprès de l'API dès que la session est
+établie, et le retire à la déconnexion — **avant** de fermer la session, sans
+quoi la requête part sans cookie et le téléphone continue de recevoir les
+notifications du compte quitté.
+
+Le projet natif n'étant pas versionné (`src-tauri/gen/` est recréé à chaque
+construction), la configuration Firebase et l'entitlement APNs sont rejoués
+après l'`init` par `scripts/setup-android-push.sh` et `scripts/setup-ios-push.sh`,
+sur le modèle de l'étape qui réapplique l'icône.
+
+Deux choses ne peuvent pas être automatisées et se font une fois pour toutes :
+la capacité **Push Notifications** sur l'App ID `app.joutes.mobile` dans le
+portail Apple Developer, et la clé APNs `.p8` — **distincte** de la clé App
+Store Connect ci-dessus, ce sont deux `.p8` de nature différente. Le reste est
+documenté dans `docs/PUSH_NOTIFICATIONS.md` du dépôt `joutes-app`.

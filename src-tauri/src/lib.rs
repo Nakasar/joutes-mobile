@@ -4,6 +4,7 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_barcode_scanner::init())
+        .plugin(tauri_plugin_notifications::init())
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

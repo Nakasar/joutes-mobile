@@ -81,6 +81,19 @@ function reportLateResponse(): void {
 }
 
 /**
+ * Demande le rechargement silencieux de tous les écrans montés.
+ *
+ * La génération n'était jusqu'ici incrémentée que par le réseau, à son retour.
+ * Une notification reçue application ouverte est le même événement vu
+ * autrement : quelque chose a changé côté serveur, et les listes affichées
+ * datent d'avant. Passer par la génération évite d'écrire, écran par écran,
+ * un rafraîchissement que `useApi` sait déjà faire.
+ */
+export function requestRefresh(): void {
+  update({ ...snapshot, generation: snapshot.generation + 1 });
+}
+
+/**
  * Suit une requête réseau pour en déduire l'état de la connexion, sans en
  * modifier le résultat. C'est la durée qui tranche : une réponse dans les temps
  * signe le retour du réseau, une réponse tardive confirme sa lenteur.

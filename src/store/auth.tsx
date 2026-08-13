@@ -11,6 +11,7 @@ import { api } from "../api/client";
 import * as authApi from "../api/auth";
 import type { SessionUser } from "../api/types";
 import { cacheClear } from "../lib/response-cache";
+import { revokeThisDevice } from "../lib/push-device";
 
 interface AuthContextValue {
   /** false tant que la vérification de session au démarrage n'est pas finie. */
@@ -71,6 +72,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const signOut = useCallback(async () => {
+    // AVANT de fermer la session, et non après : le retrait de l'appareil est
+    // une requête authentifiée. Dans l'autre ordre elle part sans cookie,
+    // répond 401, et le téléphone continue de recevoir les notifications du
+    // compte qu'on vient de quitter.
+    await revokeThisDevice();
+
     try {
       await authApi.signOut();
     } catch {

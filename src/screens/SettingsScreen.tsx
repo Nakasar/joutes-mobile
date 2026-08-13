@@ -88,6 +88,13 @@ export function SettingsScreen() {
           {t("settings.socialAction")}
         </Link>
       </section>
+      <section className="card">
+        <h2 className="card__title">{t("notifications.title")}</h2>
+        <p className="muted" style={{ marginBottom: 12 }}>{t("notifications.settingsText")}</p>
+        <Link to="/notifications" className="btn btn--outline btn--block">
+          {t("notifications.settingsAction")}
+        </Link>
+      </section>
       <LanguageSection />
       <OfflineSection />
       <section className="card">

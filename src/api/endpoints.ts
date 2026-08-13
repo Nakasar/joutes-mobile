@@ -134,6 +134,16 @@ export const endpoints = {
     sellList: (userTagOrId: string) =>
       `/users/${encodeURIComponent(userTagOrId)}/sell-list`,
   },
+  notifications: {
+    list: "/notifications",
+    unreadCount: "/notifications/unread-count",
+    readAll: "/notifications/read-all",
+    read: (notificationId: string) => `/notifications/${notificationId}/read`,
+    hide: (notificationId: string) => `/notifications/${notificationId}/hide`,
+    /** Enregistrement d'un appareil pour le push, et liste des siens. */
+    devices: "/notifications/devices",
+    device: (deviceId: string) => `/notifications/devices/${deviceId}`,
+  },
   tournaments: {
     /** Rejoindre via le code public d'un tournoi (`Tournament.joinCode`). */
     join: "/tournaments/join",

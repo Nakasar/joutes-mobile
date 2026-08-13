@@ -4815,3 +4815,81 @@ html.qr-scanning #root {
   font-size: 0.85rem;
   color: var(--muted);
 }
+
+/* ---------------------------------------------------------- Notifications */
+
+.notifications__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.notification {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Une notification non lue se signale par un liseré, pas par un fond : le mode
+   sombre rend les fonds teintés illisibles, et le liseré tient dans les deux. */
+.notification--unread {
+  border-left: 3px solid var(--primary);
+}
+
+.notification__body {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+}
+
+.notification__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--chip);
+  color: var(--primary);
+}
+
+/* Le corps est un bouton : toute la zone de texte est touchable, ce qui compte
+   plus au pouce qu'un lien de la largeur du titre. */
+.notification__text {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: left;
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.notification__title {
+  font-weight: 600;
+  margin: 0 0 2px;
+}
+
+.notification__description {
+  margin: 0 0 4px;
+  color: var(--muted);
+  white-space: pre-wrap;
+}
+
+.notification__meta {
+  margin: 0;
+  font-size: 0.85em;
+  color: var(--muted);
+}
+
+.notification__dismiss {
+  flex: 0 0 auto;
+  background: none;
+  border: 0;
+  padding: 4px;
+  color: var(--muted);
+  cursor: pointer;
+}

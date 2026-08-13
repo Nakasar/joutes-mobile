@@ -226,6 +226,18 @@
       "sellListAction": "Verkaufsliste der Gruppe"
     }
   },
+  "notifications": {
+    "title": "Benachrichtigungen",
+    "empty": "Noch keine Benachrichtigungen.",
+    "markAllRead": "Alle als gelesen markieren",
+    "markRead": "Als gelesen markieren",
+    "open": "Öffnen",
+    "dismiss": "Ausblenden",
+    "loadMore": "Mehr laden",
+    "signedOut": "Melde dich an, um deine Benachrichtigungen zu sehen.",
+    "settingsText": "Die auf diesem Gerät empfangenen Joutes-Benachrichtigungen.",
+    "settingsAction": "Meine Benachrichtigungen ansehen"
+  },
   "settings": {
     "title": "Einstellungen",
     "account": "Konto",
