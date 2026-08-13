@@ -47,6 +47,12 @@ export const MAX_TERRAIN_PIECES = 60;
 export const MAX_UNIT_TOKENS = 60;
 export const MAX_SNAPSHOTS = 20;
 export const MAX_LABEL_LENGTH = 60;
+/**
+ * Longueur des notes d'un instant. Plus court que les notes du rapport
+ * (10 000 caractères) : celles-ci racontent la partie entière, celles-là ce qui
+ * s'est joué à un moment précis — quelques phrases, pas un chapitre.
+ */
+export const MAX_SNAPSHOT_NOTES_LENGTH = 1000;
 
 export const DEFAULT_TERRAIN_COLOR = "#000000";
 export const DEFAULT_TERRAIN_SIZE = 20;
@@ -201,9 +207,14 @@ function normalizeSnapshot(
   playerIds: Set<string>,
   index: number
 ): BattleMapSnapshot {
+  // Une note vide disparaît du document plutôt que d'y rester en chaîne vide :
+  // c'est la convention du dépôt, et l'affichage lit ces champs par vérité.
+  const notes = snapshot.notes?.trim().slice(0, MAX_SNAPSHOT_NOTES_LENGTH);
+
   return {
     id: snapshot.id,
     label: normalizeLabel(snapshot.label, `Instant ${index + 1}`),
+    ...(notes ? { notes } : {}),
     units: byUniqueId(snapshot.units ?? [], MAX_UNIT_TOKENS)
       // Un jeton dont le joueur a quitté la partie n'a plus de couleur ni de
       // liste d'armée : il ne veut plus rien dire sur la table.
@@ -243,9 +254,18 @@ export function normalizeBattleMap(map: BattleMap, playerIds: string[]): BattleM
   };
 }
 
-/** Une table sans décor, sans instant et aux dimensions par défaut n'a rien à dire. */
+/**
+ * Une table sans décor, sans jeton et sans note n'a rien à dire.
+ *
+ * Les notes comptent autant que les jetons : un rapport peut raconter ses
+ * instants sans avoir posé une seule figurine, et le tenir pour vide
+ * l'effacerait.
+ */
 export function isEmptyBattleMap(map: BattleMap): boolean {
-  return map.terrain.length === 0 && map.snapshots.every((snapshot) => snapshot.units.length === 0);
+  return (
+    map.terrain.length === 0 &&
+    map.snapshots.every((snapshot) => snapshot.units.length === 0 && !snapshot.notes?.trim())
+  );
 }
 
 /**

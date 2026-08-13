@@ -11,6 +11,7 @@ import type {
 import {
   DEFAULT_TOKEN_DIAMETER,
   MAX_SNAPSHOTS,
+  MAX_SNAPSHOT_NOTES_LENGTH,
   MAX_UNIT_TOKENS,
   colorForPlayer,
   defaultTableForGame,
@@ -440,7 +441,7 @@ export function BattleMapPanel({
               onChange={(e) => updateSnapshotFields({ notes: e.currentTarget.value })}
               placeholder={t("battleMap.snapshotNotesPlaceholder")}
               rows={3}
-              maxLength={1000}
+              maxLength={MAX_SNAPSHOT_NOTES_LENGTH}
             />
           </label>
 

@@ -629,7 +629,7 @@
     "firstSnapshot": "Start of play",
     "snapshotDefault": "Instant {{number}}",
     "snapshotName": "Instant name",
-    "snapshotNotes": "Moment notes",
+    "snapshotNotes": "Instant notes",
     "snapshotNotesPlaceholder": "What happened: the decisive charge, the objective taken, the failed roll…",
     "addSnapshot": "New instant",
     "removeSnapshot": "Delete instant",
