@@ -196,11 +196,12 @@ export function BattleMapPanel({
     setSelectedId(null);
   };
 
-  const renameSnapshot = (label: string) => {
+  /** Ce que porte l'instant courant en dehors de ses jetons : nom, notes. */
+  const updateSnapshotFields = (fields: Partial<Omit<BattleMapSnapshot, "id" | "units">>) => {
     update({
       ...map,
       snapshots: map.snapshots.map((entry, index) =>
-        index === snapshotIndex ? { ...entry, label } : entry,
+        index === snapshotIndex ? { ...entry, ...fields } : entry,
       ),
     });
   };
@@ -397,6 +398,15 @@ export function BattleMapPanel({
         })}
       </svg>
 
+      {/* Ce qui s'est passé à cet instant. En lecture seule uniquement : celui
+          qui dispose la table a le champ de saisie sous les yeux, plus bas, et
+          la note s'y relit au fil de la frappe. */}
+      {!editable && snapshot.notes && (
+        /* Les notes sont saisies au fil de la plume : leurs retours à la ligne
+           font le récit, et les perdre le rendrait illisible. */
+        <p className="battle-map__notes">{snapshot.notes}</p>
+      )}
+
       {selectedUnit && (
         <p className="battle-map__selection">
           <span className="chip" style={{ color: playerColor(selectedUnit.playerId) }}>
@@ -418,8 +428,19 @@ export function BattleMapPanel({
             <input
               type="text"
               value={snapshot.label}
-              onChange={(e) => renameSnapshot(e.currentTarget.value)}
+              onChange={(e) => updateSnapshotFields({ label: e.currentTarget.value })}
               maxLength={60}
+            />
+          </label>
+
+          <label className="field">
+            <span className="field__label">{t("battleMap.snapshotNotes")}</span>
+            <textarea
+              value={snapshot.notes ?? ""}
+              onChange={(e) => updateSnapshotFields({ notes: e.currentTarget.value })}
+              placeholder={t("battleMap.snapshotNotesPlaceholder")}
+              rows={3}
+              maxLength={1000}
             />
           </label>
 
