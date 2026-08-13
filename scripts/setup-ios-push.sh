@@ -20,21 +20,28 @@ set -euo pipefail
 # binaires App Store Connect.
 ENVIRONMENT="${APS_ENVIRONMENT:-production}"
 
-mapfile -t ENTITLEMENTS < <(find src-tauri/gen/apple -name "*.entitlements" 2>/dev/null || true)
+# Boucle `while read` et non `mapfile` : ce dernier est un builtin de bash 4,
+# et macOS livre encore bash 3.2 — celui-là même qui exécute ce script, en
+# local comme sur les agents `macos-latest`.
+#
+# Le `< <(...)` évite le sous-shell d'un tube, où le compteur ne survivrait pas
+# à la fin de la boucle.
+FOUND=0
 
-if [ "${#ENTITLEMENTS[@]}" -eq 0 ]; then
-  echo "setup-ios-push: aucun fichier .entitlements dans src-tauri/gen/apple." >&2
-  echo "  Le scaffolding de Tauri a changé — le script doit être mis à jour." >&2
-  exit 1
-fi
-
-for file in "${ENTITLEMENTS[@]}"; do
+while IFS= read -r file; do
   if /usr/libexec/PlistBuddy -c "Print :aps-environment" "$file" >/dev/null 2>&1; then
     /usr/libexec/PlistBuddy -c "Set :aps-environment $ENVIRONMENT" "$file"
   else
     /usr/libexec/PlistBuddy -c "Add :aps-environment string $ENVIRONMENT" "$file"
   fi
   echo "setup-ios-push: aps-environment=$ENVIRONMENT dans $file"
-done
+  FOUND=$((FOUND + 1))
+done < <(find src-tauri/gen/apple -name "*.entitlements" 2>/dev/null || true)
+
+if [ "$FOUND" -eq 0 ]; then
+  echo "setup-ios-push: aucun fichier .entitlements dans src-tauri/gen/apple." >&2
+  echo "  Le projet Xcode n'a pas été généré, ou le scaffolding de Tauri a changé." >&2
+  exit 1
+fi
 
 echo "setup-ios-push: terminé."
