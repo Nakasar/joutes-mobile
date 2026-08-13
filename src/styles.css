@@ -1665,6 +1665,14 @@ textarea:focus {
   pointer-events: none;
 }
 
+.battle-map__notes {
+  margin: 0;
+  /* Le récit d'un instant est saisi au fil de la plume : ses retours à la ligne
+     font le texte, et les perdre le rendrait illisible. */
+  white-space: pre-wrap;
+  color: var(--text);
+}
+
 .battle-map__selection {
   display: flex;
   align-items: center;

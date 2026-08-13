@@ -629,6 +629,8 @@
     "firstSnapshot": "Début de partie",
     "snapshotDefault": "Instant {{number}}",
     "snapshotName": "Nom de l'instant",
+    "snapshotNotes": "Notes de l'instant",
+    "snapshotNotesPlaceholder": "Ce qui s'est passé : la charge décisive, l'objectif pris, le jet raté…",
     "addSnapshot": "Nouvel instant",
     "removeSnapshot": "Supprimer l'instant",
     "addToken": "Poser une figurine",

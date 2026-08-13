@@ -629,6 +629,8 @@
     "firstSnapshot": "Inizio partita",
     "snapshotDefault": "Istante {{number}}",
     "snapshotName": "Nome dell'istante",
+    "snapshotNotes": "Note dell'istante",
+    "snapshotNotesPlaceholder": "Cos'è successo: la carica decisiva, l'obiettivo preso, il tiro fallito…",
     "addSnapshot": "Nuovo istante",
     "removeSnapshot": "Elimina l'istante",
     "addToken": "Posiziona una miniatura",

@@ -629,6 +629,8 @@
     "firstSnapshot": "Spielbeginn",
     "snapshotDefault": "Moment {{number}}",
     "snapshotName": "Name des Moments",
+    "snapshotNotes": "Notizen zum Moment",
+    "snapshotNotesPlaceholder": "Was passiert ist: der entscheidende Angriff, das eingenommene Ziel, der misslungene Wurf…",
     "addSnapshot": "Neuer Moment",
     "removeSnapshot": "Moment löschen",
     "addToken": "Miniatur setzen",
