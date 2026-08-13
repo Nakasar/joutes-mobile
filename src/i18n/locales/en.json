@@ -236,7 +236,9 @@
     "loadMore": "Load more",
     "signedOut": "Sign in to see your notifications.",
     "settingsText": "Find the Joutes notifications received on this device.",
-    "settingsAction": "View my notifications"
+    "settingsAction": "View my notifications",
+    "channelName": "Joutes alerts",
+    "channelDescription": "Round pairings, results to confirm, announcements and friend requests."
   },
   "settings": {
     "title": "Settings",

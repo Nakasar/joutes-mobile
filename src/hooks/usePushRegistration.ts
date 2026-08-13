@@ -1,7 +1,14 @@
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../store/auth";
-import { onPushClicked, onPushReceived, registerForPush } from "../lib/push";
+import {
+  ensurePushChannel,
+  onPushClicked,
+  onPushReceived,
+  presentPush,
+  registerForPush,
+} from "../lib/push";
 import { registerPushDevice } from "../api/notifications";
 import { installationId } from "../lib/installation-id";
 import { rememberPushDevice } from "../lib/push-device";
@@ -23,6 +30,19 @@ import { currentLocale } from "../i18n";
 export function usePushRegistration(): void {
   const { ready, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  // Le canal Android, déclaré avant tout le reste : une notification adressée à
+  // un canal qui n'existe pas encore retombe sur le repli discret de Firebase.
+  // Il ne dépend pas de la session — il porte des libellés, pas des données —
+  // et se redéclare à chaque changement de langue, ce qui suffit à renommer ce
+  // que le téléphone affiche dans ses réglages.
+  useEffect(() => {
+    void ensurePushChannel({
+      name: t("notifications.channelName"),
+      description: t("notifications.channelDescription"),
+    });
+  }, [t]);
 
   useEffect(() => {
     if (!ready || !isAuthenticated) return;
@@ -66,11 +86,18 @@ export function usePushRegistration(): void {
     });
   }, [ready, isAuthenticated, navigate]);
 
-  // Reçue application ouverte : on ne déplace personne, mais ce qui est à
-  // l'écran date d'avant. La génération suffit à tout recharger.
+  // Reçue application ouverte : on ne déplace personne, mais deux choses sont
+  // dues. Ce qui est à l'écran date d'avant — la génération suffit à tout
+  // recharger. Et l'alerte elle-même n'a été affichée nulle part : Android
+  // remet à l'application les notifications poussées qui arrivent au premier
+  // plan au lieu de les montrer, si bien qu'un joueur l'écran du tournoi ouvert
+  // ne voyait rien passer de son appariement. On la réaffiche donc en local.
   useEffect(() => {
     if (!ready || !isAuthenticated) return;
 
-    return onPushReceived(() => requestRefresh());
+    return onPushReceived((push) => {
+      requestRefresh();
+      void presentPush(push);
+    });
   }, [ready, isAuthenticated]);
 }

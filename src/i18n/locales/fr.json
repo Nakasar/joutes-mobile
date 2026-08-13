@@ -236,7 +236,9 @@
     "loadMore": "Charger plus",
     "signedOut": "Connectez-vous pour voir vos notifications.",
     "settingsText": "Retrouvez les notifications Joutes reçues sur cet appareil.",
-    "settingsAction": "Voir mes notifications"
+    "settingsAction": "Voir mes notifications",
+    "channelName": "Alertes Joutes",
+    "channelDescription": "Appariements de ronde, résultats à confirmer, annonces et demandes d'amis."
   },
   "settings": {
     "title": "Réglages",

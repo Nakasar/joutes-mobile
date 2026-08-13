@@ -236,7 +236,9 @@
     "loadMore": "Mehr laden",
     "signedOut": "Melde dich an, um deine Benachrichtigungen zu sehen.",
     "settingsText": "Die auf diesem Gerät empfangenen Joutes-Benachrichtigungen.",
-    "settingsAction": "Meine Benachrichtigungen ansehen"
+    "settingsAction": "Meine Benachrichtigungen ansehen",
+    "channelName": "Joutes-Benachrichtigungen",
+    "channelDescription": "Rundenpaarungen, zu bestätigende Ergebnisse, Ankündigungen und Freundschaftsanfragen."
   },
   "settings": {
     "title": "Einstellungen",

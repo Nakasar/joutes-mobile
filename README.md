@@ -141,6 +141,16 @@ L'application enregistre son jeton auprès de l'API dès que la session est
 quoi la requête part sans cookie et le téléphone continue de recevoir les
 notifications du compte quitté.
 
+**Une notification poussée n'est pas affichée par le système quand
+l'application est au premier plan** : Android la remet à l'application au lieu
+de la montrer. C'est la situation d'un joueur qui attend son appariement,
+l'écran du tournoi ouvert — l'alerte n'arrivait alors que dans l'historique.
+`presentPush` (`src/lib/push.ts`) la réaffiche donc en notification locale, sur
+le canal `joutes-alerts` que `ensurePushChannel` crée au démarrage. Ce canal est
+aussi celui que le serveur nomme dans chaque message et que le manifeste déclare
+par défaut : les trois chaînes doivent coïncider, faute de quoi Android retombe
+sur le canal « Divers » de Firebase, sans bandeau ni son.
+
 Le projet natif n'étant pas versionné (`src-tauri/gen/` est recréé à chaque
 construction), la configuration Firebase et l'entitlement APNs sont rejoués
 après l'`init` par `scripts/setup-android-push.sh` et `scripts/setup-ios-push.sh`,

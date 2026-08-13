@@ -236,7 +236,9 @@
     "loadMore": "Carica altro",
     "signedOut": "Accedi per vedere le tue notifiche.",
     "settingsText": "Ritrova le notifiche Joutes ricevute su questo dispositivo.",
-    "settingsAction": "Vedi le mie notifiche"
+    "settingsAction": "Vedi le mie notifiche",
+    "channelName": "Avvisi Joutes",
+    "channelDescription": "Abbinamenti di turno, risultati da confermare, annunci e richieste di amicizia."
   },
   "settings": {
     "title": "Impostazioni",

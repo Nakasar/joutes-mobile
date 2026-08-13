@@ -15,6 +15,20 @@ import { isTauri } from "../api/http";
  * quand l'application est lancée *par* la notification.
  */
 
+/**
+ * Le canal Android des alertes Joutes.
+ *
+ * Sans canal déclaré, Android range les notifications poussées dans le canal de
+ * repli de Firebase — « Divers », d'importance moyenne, sans bandeau ni son.
+ * Une ronde qui s'ouvre mérite mieux que ça, et un canal nommé donne aussi à
+ * l'utilisateur de quoi la couper sans couper le reste.
+ *
+ * L'identifiant est le même côté serveur (`lib/push/payload.ts` de `joutes-app`,
+ * `android.notification.channel_id`) : les deux doivent dire la même chaîne,
+ * faute de quoi le repli reprend la main sans que rien ne le signale.
+ */
+export const PUSH_CHANNEL_ID = "joutes-alerts";
+
 type NotificationsPlugin = typeof import("@choochmeque/tauri-plugin-notifications-api");
 
 let pluginModule: Promise<NotificationsPlugin> | null = null;
@@ -39,6 +53,9 @@ export type PushPayload = {
   /** Chemin du site, à traduire par `toMobileRoute` avant d'y mener. */
   link: string | null;
 };
+
+/** Une notification poussée, texte compris, telle qu'elle arrive application ouverte. */
+export type ReceivedPush = PushPayload & { title: string; body: string };
 
 function currentPlatform(): PushPlatform | null {
   const agent = navigator.userAgent;
@@ -99,6 +116,87 @@ export async function registerForPush(): Promise<PushRegistration> {
 }
 
 /**
+ * Déclare le canal des alertes Joutes. Android seulement — ailleurs, un canal
+ * n'existe pas et l'appel n'aurait rien à créer.
+ *
+ * À poser avant que la première notification n'arrive : Android fige les
+ * réglages d'un canal à sa création, et une notification adressée à un canal
+ * inconnu retombe silencieusement sur le repli de Firebase. Créer un canal
+ * déjà créé ne fait rien — appeler à chaque ouverture est donc sans effet, et
+ * c'est ce qui garantit qu'il existe après une mise à jour.
+ *
+ * Les libellés viennent de l'appelant : ils s'affichent dans les réglages du
+ * téléphone, et cette bibliothèque ne connaît que Tauri.
+ */
+export async function ensurePushChannel(labels: {
+  name: string;
+  description: string;
+}): Promise<void> {
+  if (!isTauri()) return;
+  if (currentPlatform() !== "android") return;
+
+  try {
+    const { createChannel, Importance, Visibility } = await loadPlugin();
+
+    await createChannel({
+      id: PUSH_CHANNEL_ID,
+      name: labels.name,
+      description: labels.description,
+      // `High` et pas `Default` : c'est ce qui fait apparaître le bandeau et
+      // sonner le téléphone. Une ronde qui s'ouvre n'attend pas qu'on déroule
+      // le volet des notifications.
+      importance: Importance.High,
+      visibility: Visibility.Private,
+      vibration: true,
+      lights: true,
+    });
+  } catch (error) {
+    console.error("Push channel creation failed", error);
+  }
+}
+
+/**
+ * Réaffiche une notification poussée sous forme de notification locale.
+ *
+ * C'est le trou que ça bouche. Android ne montre **rien** d'une notification
+ * poussée quand l'application est au premier plan : Firebase la remet à
+ * l'application au lieu de l'afficher, à charge pour elle d'en faire quelque
+ * chose. Or c'est exactement la situation d'un joueur qui attend son
+ * appariement, l'écran du tournoi ouvert — la notification arrivait dans
+ * l'historique et nulle part ailleurs.
+ *
+ * `extra` reprend les champs du push : Android les repasse tels quels dans
+ * l'intention de la notification, si bien qu'un toucher mène au même endroit
+ * qu'un toucher depuis le volet système.
+ *
+ * Android seulement, et pas par symétrie oubliée : sur iOS le plugin ne
+ * remonte au clic que les valeurs textuelles de `userInfo`, où il range
+ * pourtant `extra` sous forme d'objet. Une notification locale y perdrait sa
+ * destination.
+ */
+export async function presentPush(push: ReceivedPush): Promise<void> {
+  if (!isTauri()) return;
+  if (currentPlatform() !== "android") return;
+  if (!push.title) return;
+
+  try {
+    const { sendNotification } = await loadPlugin();
+
+    await sendNotification({
+      title: push.title,
+      // Un corps vide vaut mieux absent : Android dessine sinon une deuxième
+      // ligne blanche sous le titre.
+      body: push.body || undefined,
+      channelId: PUSH_CHANNEL_ID,
+      autoCancel: true,
+      extra: { id: push.notificationId ?? "", link: push.link ?? "" },
+    });
+  } catch (error) {
+    console.error("Push presentation failed", error);
+  }
+}
+
+/**
  * Abonne à un événement du plugin et rend de quoi s'en désabonner.
  *
  * L'abonnement est asynchrone : si l'appelant se démonte entre-temps, on
@@ -135,12 +233,20 @@ function subscribe(
  * Une notification est arrivée pendant qu'on utilise l'application. Les
  * notifications locales sont écartées : seules celles venues du réseau disent
  * que quelque chose a changé côté serveur.
+ *
+ * Ce filtre porte plus qu'il n'y paraît depuis que `presentPush` réaffiche les
+ * poussées en local — sans lui, chaque réaffichage repasserait par ici et
+ * s'annoncerait lui-même, indéfiniment.
  */
-export function onPushReceived(handler: (payload: PushPayload) => void): () => void {
+export function onPushReceived(handler: (push: ReceivedPush) => void): () => void {
   return subscribe((plugin) =>
     plugin.onNotificationReceived((notification) => {
       if (notification.source && notification.source !== "push") return;
-      handler(readPayload(notification.extra));
+      handler({
+        ...readPayload(notification.extra),
+        title: notification.title ?? "",
+        body: notification.body ?? "",
+      });
     }),
   );
 }
