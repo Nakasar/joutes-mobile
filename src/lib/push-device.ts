@@ -36,8 +36,14 @@ export async function revokeThisDevice(): Promise<void> {
     if (deviceId) {
       await deletePushDevice(deviceId);
     } else {
-      // Rien de mémorisé — première version installée, ou stockage vidé. On
-      // retrouve l'appareil par son installation.
+      // Rien de mémorisé : c'est le cas d'une mise à jour depuis une version
+      // qui ne retenait pas encore l'identifiant serveur. L'installation, elle,
+      // a survécu — on retrouve l'appareil par elle.
+      //
+      // Un stockage réellement vidé, lui, échappe à ce rattrapage :
+      // `installationId()` en produit un nouveau, qui ne correspond plus à rien.
+      // L'appareil restera enregistré jusqu'à ce que son jeton devienne
+      // invalide, ce que le premier envoi constatera.
       const mine = installationId();
       const devices = await listPushDevices();
       await Promise.all(

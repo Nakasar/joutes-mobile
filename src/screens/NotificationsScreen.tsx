@@ -79,6 +79,10 @@ export function NotificationsScreen() {
     try {
       await markAllNotificationsRead();
     } catch {
+      // Recharger ne suffit pas : l'optimisme survivrait au rechargement et la
+      // liste continuerait de s'afficher comme lue alors que le serveur dit le
+      // contraire. On retire d'abord ce qu'on vient d'ajouter.
+      setRead((current) => current.filter((id) => !ids.includes(id)));
       reload();
     }
   }
