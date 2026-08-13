@@ -119,11 +119,15 @@ export async function registerForPush(): Promise<PushRegistration> {
  * Déclare le canal des alertes Joutes. Android seulement — ailleurs, un canal
  * n'existe pas et l'appel n'aurait rien à créer.
  *
- * À poser avant que la première notification n'arrive : Android fige les
- * réglages d'un canal à sa création, et une notification adressée à un canal
- * inconnu retombe silencieusement sur le repli de Firebase. Créer un canal
- * déjà créé ne fait rien — appeler à chaque ouverture est donc sans effet, et
- * c'est ce qui garantit qu'il existe après une mise à jour.
+ * À poser avant que la première notification n'arrive : une notification
+ * adressée à un canal inconnu retombe silencieusement sur le repli de Firebase.
+ *
+ * Rejouer l'appel est sans danger, et pas tout à fait sans effet — la nuance
+ * mérite d'être dite, parce qu'elle ne va dans qu'un sens. Android **met à
+ * jour** le nom et la description d'un canal existant, mais **fige à la
+ * création** ce qui touche à l'alerte : importance, son, vibration. Une fois le
+ * canal posé, ces réglages-là appartiennent à l'utilisateur, et c'est voulu :
+ * l'application n'a pas à revenir sur ce qu'il a coupé.
  *
  * Les libellés viennent de l'appelant : ils s'affichent dans les réglages du
  * téléphone, et cette bibliothèque ne connaît que Tauri.

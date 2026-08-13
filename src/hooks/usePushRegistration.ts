@@ -35,8 +35,10 @@ export function usePushRegistration(): void {
   // Le canal Android, déclaré avant tout le reste : une notification adressée à
   // un canal qui n'existe pas encore retombe sur le repli discret de Firebase.
   // Il ne dépend pas de la session — il porte des libellés, pas des données —
-  // et se redéclare à chaque changement de langue, ce qui suffit à renommer ce
-  // que le téléphone affiche dans ses réglages.
+  // et se redéclare à chaque changement de langue : Android met à jour le nom et
+  // la description d'un canal existant, ce qui suffit à faire suivre la langue
+  // dans les réglages du téléphone. Son importance, elle, reste celle de la
+  // création — c'est à l'utilisateur d'en décider ensuite.
   useEffect(() => {
     void ensurePushChannel({
       name: t("notifications.channelName"),
