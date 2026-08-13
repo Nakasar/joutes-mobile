@@ -83,4 +83,30 @@ PY
   echo "setup-android-push: permission POST_NOTIFICATIONS ajoutée."
 fi
 
+# Le canal par défaut des notifications poussées. Le serveur le nomme déjà dans
+# chaque message (`android.notification.channel_id`) ; cette méta-donnée couvre
+# ce qu'il ne nomme pas — un message d'une version antérieure de l'API. Sans
+# elle, Firebase range la notification dans son canal de repli « Divers », sans
+# bandeau ni son. L'identifiant doit rester celui de `PUSH_CHANNEL_ID`
+# (`src/lib/push.ts`), qui crée le canal au démarrage de l'application.
+if ! grep -q "default_notification_channel_id" "$MANIFEST"; then
+  python3 - "$MANIFEST" <<'PY'
+import sys
+
+path = sys.argv[1]
+source = open(path, encoding="utf-8").read()
+meta = (
+    '        <meta-data\n'
+    '            android:name="com.google.firebase.messaging.default_notification_channel_id"\n'
+    '            android:value="joutes-alerts" />\n'
+)
+# On insère au début de la ligne qui ferme `<application>`, pour ne pas hériter
+# de son indentation.
+index = source.rindex("\n", 0, source.index("</application>")) + 1
+
+open(path, "w", encoding="utf-8").write(source[:index] + meta + source[index:])
+PY
+  echo "setup-android-push: canal de notification par défaut déclaré."
+fi
+
 echo "setup-android-push: terminé."
