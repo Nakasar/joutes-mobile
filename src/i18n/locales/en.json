@@ -226,6 +226,18 @@
       "sellListAction": "Group sale list"
     }
   },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No notifications yet.",
+    "markAllRead": "Mark all as read",
+    "markRead": "Mark as read",
+    "open": "Open",
+    "dismiss": "Dismiss",
+    "loadMore": "Load more",
+    "signedOut": "Sign in to see your notifications.",
+    "settingsText": "Find the Joutes notifications received on this device.",
+    "settingsAction": "View my notifications"
+  },
   "settings": {
     "title": "Settings",
     "account": "Account",

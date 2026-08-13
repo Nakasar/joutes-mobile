@@ -1753,3 +1753,47 @@ export interface GameMatchCreateInput {
   winnerIds?: string[];
   battleReport?: { scenario?: string; notes?: string };
 }
+
+/**
+ * Une notification Joutes, telle que `GET /notifications` la rend.
+ *
+ * `type` dit qui elle vise — un utilisateur, un lieu, un événement — et non de
+ * quoi elle parle : il n'existe pas de catégorie métier côté serveur. `link`
+ * est un chemin du **site**, à traduire en route de l'application par
+ * `toMobileRoute` avant d'y mener.
+ */
+export interface JoutesNotification {
+  id: string;
+  type: "user" | "lair" | "event";
+  title: string;
+  description: string;
+  createdAt: string;
+  link: string | null;
+  read: boolean;
+  lair?: { id: string; name: string } | null;
+  event?: { id: string; name: string } | null;
+}
+
+export interface NotificationsPage {
+  notifications: JoutesNotification[];
+  total: number;
+  unreadCount: number;
+  page: number;
+  limit: number;
+}
+
+/**
+ * Un appareil enregistré. Le jeton complet ne quitte jamais le serveur : seuls
+ * ses huit derniers caractères permettent de reconnaître un téléphone.
+ */
+export interface PushDeviceSummary {
+  id: string;
+  platform: "ios" | "android";
+  tokenPreview: string;
+  /** Renvoyé tel que l'application l'avait fourni : elle y reconnaît le sien. */
+  installationId: string;
+  appVersion?: string;
+  state: "active" | "revoked";
+  createdAt: string;
+  lastSeenAt: string;
+}

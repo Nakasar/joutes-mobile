@@ -10,6 +10,7 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@choochmeque/tauri-plugin-notifications-api": "^0.4",
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-barcode-scanner": "^2.4.5",
     "@tauri-apps/plugin-http": "^2",

@@ -226,6 +226,18 @@
       "sellListAction": "Lista di vendita del gruppo"
     }
   },
+  "notifications": {
+    "title": "Notifiche",
+    "empty": "Nessuna notifica per ora.",
+    "markAllRead": "Segna tutte come lette",
+    "markRead": "Segna come letta",
+    "open": "Apri",
+    "dismiss": "Nascondi",
+    "loadMore": "Carica altro",
+    "signedOut": "Accedi per vedere le tue notifiche.",
+    "settingsText": "Ritrova le notifiche Joutes ricevute su questo dispositivo.",
+    "settingsAction": "Vedi le mie notifiche"
+  },
   "settings": {
     "title": "Impostazioni",
     "account": "Account",

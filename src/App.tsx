@@ -37,12 +37,17 @@ import { WishlistDetailScreen } from "./screens/WishlistDetailScreen";
 import { WishlistsScreen } from "./screens/WishlistsScreen";
 import { useNetworkStatus } from "./hooks/useNetworkStatus";
 import { useOnline } from "./hooks/useOnline";
+import { NotificationsScreen } from "./screens/NotificationsScreen";
+import { usePushRegistration } from "./hooks/usePushRegistration";
 import { AuthProvider, useAuth } from "./store/auth";
 import "./styles.css";
 
 function Shell() {
   const { ready } = useAuth();
   const { t } = useTranslation();
+  // Enregistre l'appareil une fois la session établie, et fait suivre le
+  // toucher d'une notification jusqu'à l'écran concerné.
+  usePushRegistration();
   const online = useOnline();
   const { degraded } = useNetworkStatus();
   // Hors connexion au sens de l'app : appareil déconnecté, ou réseau si lent
@@ -167,6 +172,7 @@ function Shell() {
                   element={<PlayGroupSellListScreen />}
                 />
                 <Route path="/users/:userTag" element={<UserProfileScreen />} />
+                <Route path="/notifications" element={<NotificationsScreen />} />
                 <Route path="/settings" element={<SettingsScreen />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>

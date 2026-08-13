@@ -36,6 +36,9 @@ jobs:
       # Expose la présence des secrets de signature via un flag `env` ('true'/'false')
       # afin de simplifier les conditions `if:` des steps.
       HAS_ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE != '' }}
+      # Idem pour la configuration Firebase : sans elle le build passe, mais
+      # l'application ne reçoit pas de notifications.
+      HAS_GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES_JSON != '' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -72,6 +75,16 @@ jobs:
       # AppIcon.appiconset iOS) en plus de `src-tauri/icons/`.
       - name: Apply Joutes app icon
         run: npm run tauri -- icon src-tauri/app-icon.png
+
+      # Même raison que l'icône : `src-tauri/gen/` n'est pas versionné et l'init
+      # vient de le recréer. Le google-services.json, le plugin Gradle de
+      # Google et la permission POST_NOTIFICATIONS doivent donc être rejoués
+      # ici, sur le projet fraîchement scaffoldé.
+      - name: Configure Firebase (push notifications)
+        if: env.HAS_GOOGLE_SERVICES == 'true'
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: bash scripts/setup-android-push.sh
 
       - name: Build APK and AAB (arm64)
         run: npm run tauri -- android build --target aarch64 --apk --aab
@@ -189,6 +202,13 @@ jobs:
       # met à jour l'AppIcon.appiconset du projet `gen/apple` généré.
       - name: Apply Joutes app icon
         run: npm run tauri -- icon src-tauri/app-icon.png
+
+      # `aps-environment` dans l'entitlements généré. La capacité Push
+      # Notifications de l'App ID, elle, s'active une fois pour toutes dans le
+      # portail Apple Developer : sans elle, le profil régénéré par
+      # `-allowProvisioningUpdates` ne porte pas cet entitlement.
+      - name: Configure APNs entitlement
+        run: bash scripts/setup-ios-push.sh
 
       - name: Build signed IPA
         if: env.HAS_ASC_API_KEY == 'true'

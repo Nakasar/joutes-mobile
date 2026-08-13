@@ -1,6 +1,6 @@
 [package]
 name = "joutes-mobile"
-version = "0.2.0"
+version = "0.26.0"
 description = "Application mobile Joutes (client de l'API joutes.app)"
 authors = ["Joutes"]
 edition = "2021"
@@ -25,5 +25,10 @@ tauri-plugin-opener = "2"
 tauri-plugin-http = { version = "2", features = ["cookies"] }
 # Scan QR natif (rejoindre un tournoi) : implémenté sur Android/iOS uniquement.
 tauri-plugin-barcode-scanner = "2"
+# Notifications push. La feature `push-notifications` ajoute APNs sur iOS et
+# FCM sur Android ; sans elle le plugin s'en tient aux notifications locales.
+# Le jeton rendu est celui du système — un jeton APNs sur iOS, pas un jeton FCM
+# obtenu par échange, ce qui est la raison du choix de ce plugin-là.
+tauri-plugin-notifications = { version = "0.4", features = ["push-notifications"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
