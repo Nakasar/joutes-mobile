@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { getCard } from "../api/cards";
 import { AddToWishlistSheet } from "../components/AddToWishlistSheet";
 import { BackHeader } from "../components/BackHeader";
+import { CardPriceDetails } from "../components/CardPriceDetails";
 import { ErrataCard } from "../components/ErrataCard";
 import { GameMarkdown } from "../components/GameMarkdown";
 import { HeartIcon, PlusIcon, TagIcon } from "../components/icons";
@@ -76,6 +77,7 @@ export function CardDetailScreen() {
               <span className="chip chip--danger">{t("card.banned")}</span>
             )}
           </p>
+          <CardPriceDetails price={data.marketPrice} gameSlug={gameSlug} />
           {cardTextMarkdown && (
             <div className="card-text-block">
               <GameMarkdown markdown={cardTextMarkdown} gameSlug={gameSlug} />

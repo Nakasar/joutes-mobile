@@ -4,6 +4,7 @@ import { getCard } from "../api/cards";
 import { useApi } from "../hooks/useApi";
 import { annotateCardText } from "../lib/card-text-markdown";
 import { toCardIdByName } from "../lib/errata-markdown";
+import { CardPriceDetails } from "./CardPriceDetails";
 import { ErrataCard } from "./ErrataCard";
 import { GameMarkdown } from "./GameMarkdown";
 import { BackIcon } from "./icons";
@@ -102,6 +103,9 @@ export function CardDetailModal({
               )}
             </p>
           )}
+          {/* Le prix n'apparaît qu'une fois la fiche chargée : la carte
+              d'origine (vérificateur de deck, scanner) n'en porte pas. */}
+          {data && <CardPriceDetails price={data.marketPrice} gameSlug={gameSlug} />}
           {cardTextMarkdown && (
             <div className="card-text-block">
               <GameMarkdown markdown={cardTextMarkdown} gameSlug={gameSlug} />

@@ -10,6 +10,7 @@ import type { CollectionItem } from "../api/types";
 import { getGame } from "../api/games";
 import { AddCollectionCopySheet } from "../components/AddCollectionCopySheet";
 import { BackHeader } from "../components/BackHeader";
+import { CardPriceTag } from "../components/CardPriceTag";
 import {
   BoxIcon,
   ChevronIcon,
@@ -329,6 +330,9 @@ function CollectionGameContent({
               <span className="card-tile__set">
                 {item.setCode} {item.collectorNumber}
               </span>
+              {/* Le prix se lit ici comme dans la galerie : c'est celui de la
+                  carte au catalogue, pas celui de l'exemplaire possédé. */}
+              <CardPriceTag price={item.marketPrice} />
               <div className="qty-stepper">
                 <button
                   type="button"

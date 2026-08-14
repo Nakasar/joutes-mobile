@@ -56,9 +56,12 @@ function toCard(raw: Record<string, unknown>): Card {
     text: pick<string>("text"),
     banned: (raw.banned as boolean | undefined) ?? false,
     isToken: raw.isToken as boolean | undefined,
-    // Foil et variantes d'impression sont des champs de carte, jamais de face.
+    // Foil, variantes d'impression et prix sont des champs de carte, jamais de
+    // face. Le prix est celui relevé à la génération du document : hors ligne,
+    // il date du téléchargement, comme les cartes et les erratas.
     foil: raw.foil as boolean | undefined,
     printings: raw.printings as Card["printings"],
+    marketPrice: raw.marketPrice as Card["marketPrice"],
   } as Card;
 }
 

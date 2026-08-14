@@ -1336,6 +1336,18 @@ textarea:focus {
   color: var(--muted);
 }
 
+/*
+ * Prix de marché sous une vignette (galerie, collection). Teinté accent pour
+ * ne pas se confondre avec le numéro de collection juste au-dessus, et en
+ * chiffres tabulaires : une colonne de prix se compare d'un coup d'œil.
+ */
+.card-price {
+  font-size: 10px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
 .card-tile__image--unowned {
   opacity: 0.55;
   filter: grayscale(35%);
@@ -1365,6 +1377,17 @@ textarea:focus {
   align-items: center;
   gap: 6px;
   margin-top: 2px;
+}
+
+/*
+ * Dans une grille de collection, le compteur se colle au bas de la vignette :
+ * les tuiles d'une même rangée n'ont pas la même hauteur — un nom sur deux
+ * lignes, une carte sans prix — et des boutons décalés d'une ligne à l'autre
+ * se touchent au jugé.
+ */
+.card-tile .qty-stepper {
+  margin-top: auto;
+  padding-top: 2px;
 }
 
 .qty-stepper__btn {
@@ -1857,6 +1880,58 @@ textarea:focus {
   flex-wrap: wrap;
   gap: 6px;
   margin: 0 0 14px;
+}
+
+/* Prix de marché sur la fiche d'une carte : le montant, et d'où il sort. */
+.card-price-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 18px;
+}
+
+.card-price-details__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.card-price-details__label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.card-price-details__amount {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.card-price-details__source,
+.card-price-details__none {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.card-price-details__none {
+  margin-bottom: 18px;
 }
 
 .card-text-block {

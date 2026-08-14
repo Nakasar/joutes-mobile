@@ -8,6 +8,7 @@ Application mobile (et desktop) pour [Joutes](https://joutes.app) — plateforme
 - **Jeux** : catalogue des jeux (Magic, Star Wars Unlimited, Riftbound…)
 - **Galerie de cartes** : exploration du catalogue de cartes d'un jeu — recherche plein texte (Meilisearch), filtres par set et par type, pagination
 - **Détail d'une carte** : image, coût/type/set, et ses **erratas, clarifications et rulings** (markdown rendu, traduction française affichée quand elle existe, votes, obsolescence)
+- **Prix des cartes** : le prix de marché relevé par la plateforme (Cardmarket, édition anglaise) se lit sous la vignette d'une carte — galerie comme grille de collection — et sur sa fiche, où il porte sa date de relevé et renvoie à la fiche Cardmarket du tirage d'où il sort. C'est un prix « à partir de », celui du tirage le moins cher : une carte sans relevé n'affiche rien du tout, un tiret se lirait comme un prix nul. Les prix voyagent avec les cartes, y compris dans le document hors ligne — un jeu téléchargé montre donc les siens sans connexion, datés de son téléchargement
 - **Contributions communautaires** : proposer un errata / une clarification / un ruling depuis la fiche d'une carte (ouvert à tout compte connecté), publier une politique pour un jeu (comptes portant `policies:update`), et voter 👍/👎 sur les erratas comme sur les politiques — revoter à l'identique retire le vote
 - **Quizz** : liste des quizz d'un jeu et réponse aux questions (choix unique/multiple, texte, nombre) avec correction et retours par section, dans la langue de l'app quand le quizz y est traduit. La création et la traduction d'un quizz restent sur le web.
 - **Foil et variantes d'impression** : une carte qui n'existe qu'en foil porte un voile irisé animé sur son illustration (galerie, fiche, collection, listes) et un badge « Foil » ; ses **variantes d'impression** (promo pack, pre-release, judge…) sont listées sur sa fiche et proposées au choix partout où un exemplaire est enregistré (collection, liste de souhaits), une variante imprimée en foil imposant le foil sur l'exemplaire
@@ -42,10 +43,11 @@ src/
   screens/        Écrans (Accueil, Jeux, Événements, Collection, Réglages, Login)
   components/     Composants partagés (TabBar, StatusView)
   lib/            Logique pure et stockage local (dont `tournament-presets.ts`,
-                  `printings.ts`, `products.ts` et `battle-map.ts`, copies de
-                  joutes-app — table de presets, résolution des variantes
-                  d'impression, tables des types de produits et des états de
-                  peinture, géométrie et bornes de la table de jeu : toute
+                  `printings.ts`, `products.ts`, `prices.ts` et `battle-map.ts`,
+                  copies de joutes-app — table de presets, résolution des
+                  variantes d'impression, tables des types de produits et des
+                  états de peinture, mise en forme des prix et lien vers
+                  Cardmarket, géométrie et bornes de la table de jeu : toute
                   modification doit être reportée dans les deux dépôts, le
                   serveur normalisant avec le même code à l'enregistrement)
   config.ts       Configuration (URL de l'API…)

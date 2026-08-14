@@ -5,6 +5,7 @@ import { searchCards } from "../api/cards";
 import { getGame } from "../api/games";
 import type { Card } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
+import { CardPriceTag } from "../components/CardPriceTag";
 import { BookIcon, DeckCheckIcon, SearchIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
@@ -170,6 +171,9 @@ export function GameCardsScreen() {
                 {card.setCode} {card.collectorNumber}
               </span>
             )}
+            {/* Une carte sans relevé n'affiche rien : un tiret se lirait
+                comme un prix nul. */}
+            <CardPriceTag price={card.marketPrice} />
           </Link>
         ))}
       </div>
