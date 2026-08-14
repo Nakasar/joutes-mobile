@@ -42,6 +42,30 @@ export function cardmarketProductUrl(
 }
 
 /**
+ * Formateurs déjà construits, par langue et par devise.
+ *
+ * Une grille de collection affiche trente prix par page et en empile autant à
+ * chaque « charger plus » : construire un `Intl.NumberFormat` par prix et par
+ * rendu revient à refaire le même travail des centaines de fois. Ils ne
+ * dépendent que du couple (langue, devise), qui ne change presque jamais — le
+ * cache tient donc en une poignée d'entrées.
+ *
+ * Cette mémoïsation est propre au mobile : côté web, un prix est mis en forme
+ * une fois par rendu serveur, sans liste à faire défiler.
+ */
+const formatters = new Map<string, Intl.NumberFormat>();
+
+function currencyFormatter(locale: string, currency: string): Intl.NumberFormat {
+  const key = `${locale}|${currency}`;
+  const cached = formatters.get(key);
+  if (cached) return cached;
+
+  const formatter = new Intl.NumberFormat(locale, { style: "currency", currency });
+  formatters.set(key, formatter);
+  return formatter;
+}
+
+/**
  * Montant dans la langue de l'application (`1,29 €`, `€1.29`). Une devise
  * inconnue de l'environnement ne doit pas faire tomber l'écran : le montant est
  * alors affiché tel quel, suivi de son code.
@@ -51,10 +75,7 @@ export function formatCardPrice(
   locale: string = currentLocale(),
 ): string {
   try {
-    return new Intl.NumberFormat(locale, {
-      style: "currency",
-      currency: price.currency,
-    }).format(price.amount);
+    return currencyFormatter(locale, price.currency).format(price.amount);
   } catch {
     return `${price.amount} ${price.currency}`;
   }
