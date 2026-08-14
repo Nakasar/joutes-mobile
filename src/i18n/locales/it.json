@@ -259,7 +259,7 @@
   },
   "offline": {
     "title": "Offline",
-    "description": "Scarica le regole (FR/EN), le carte e gli errata di un gioco per consultarli senza connessione.",
+    "description": "Scarica le regole (FR/EN), le carte con i loro prezzi e gli errata di un gioco per consultarli senza connessione.",
     "downloading": "Download in corso…",
     "upToDate": "{{size}} · aggiornato il {{date}}",
     "notDownloaded": "Non scaricato",
@@ -327,6 +327,13 @@
     "foil": "Foil",
     "sectionTitle": "Varianti di stampa",
     "baseImage": "Illustrazione della carta"
+  },
+  "prices": {
+    "title": "Prezzo di mercato",
+    "from": "A partire da",
+    "source": "Cardmarket · rilevato il {{date}}",
+    "openOnCardmarket": "Vedi su Cardmarket — prezzo rilevato il {{date}}",
+    "none": "Nessun prezzo rilevato per questa carta."
   },
   "deck": {
     "title": "Verifica deck",

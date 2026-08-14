@@ -259,7 +259,7 @@
   },
   "offline": {
     "title": "Offline",
-    "description": "Download a game's rules (FR/EN), cards and errata to browse them without a connection.",
+    "description": "Download a game's rules (FR/EN), cards with their prices and errata to browse them without a connection.",
     "downloading": "Downloading…",
     "upToDate": "{{size}} · updated on {{date}}",
     "notDownloaded": "Not downloaded",
@@ -327,6 +327,13 @@
     "foil": "Foil",
     "sectionTitle": "Print variants",
     "baseImage": "Card artwork"
+  },
+  "prices": {
+    "title": "Market price",
+    "from": "From",
+    "source": "Cardmarket · recorded on {{date}}",
+    "openOnCardmarket": "View on Cardmarket — price recorded on {{date}}",
+    "none": "No price recorded for this card."
   },
   "deck": {
     "title": "Deck checker",

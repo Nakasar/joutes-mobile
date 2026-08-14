@@ -96,6 +96,24 @@ export interface CardPrinting {
 }
 
 /**
+ * Prix d'une carte sur le marché de l'occasion, relevé par l'API sur une place
+ * de marché (Cardmarket). C'est un prix « à partir de » — le tirage le moins
+ * cher, édition anglaise — daté du relevé, pas une cotation.
+ *
+ * Une carte sans relevé n'a pas le champ du tout : l'absence de prix se lit à
+ * ce vide, jamais à un zéro, qui se lirait comme une carte sans valeur.
+ */
+export interface CardMarketPrice {
+  amount: number;
+  /** Devise ISO 4217 (`EUR`). */
+  currency: string;
+  /** Date du relevé de la place de marché, pas celle de l'affichage. */
+  updatedAt: string;
+  /** Produit de la place de marché d'où vient le montant, pour y renvoyer. */
+  productId?: number;
+}
+
+/**
  * Carte du catalogue d'un jeu. Outre les champs communs ci-dessous, l'API
  * renvoie des attributs propres à chaque jeu (ex. `Domain`, `Set`, `face`
  * pour Riftbound) — accessibles via la signature d'index.
@@ -117,6 +135,8 @@ export interface Card {
   foil?: boolean;
   /** Tirages de la même carte, proposés au moment d'enregistrer un exemplaire. */
   printings?: CardPrinting[];
+  /** Prix de marché de la carte, absent quand elle n'a pas de relevé. */
+  marketPrice?: CardMarketPrice;
   [key: string]: unknown;
 }
 
@@ -560,7 +580,13 @@ export interface RawRuleEntry {
   content: string;
 }
 
-/** Document d'export complet d'un jeu (téléchargé depuis `GameExportInfo.url`). */
+/**
+ * Document d'export complet d'un jeu (téléchargé depuis `GameExportInfo.url`).
+ *
+ * Les cartes y sont brutes : c'est `offline-adapters` qui les normalise. Une
+ * carte cotée porte son `marketPrice`, relevé à la génération du document —
+ * comme ses erratas, un prix hors ligne date du téléchargement.
+ */
 export interface GameExport {
   game: { id?: string; slug?: string; name?: string };
   generatedAt: string;
@@ -677,6 +703,8 @@ export interface CollectionItem {
   quantity: number;
   /** Nombre d'autres éditions de cette même carte (ex. alt arts) possédées à au moins un exemplaire. */
   variantsOwned: number;
+  /** Prix de marché de la carte, absent quand elle n'a pas de relevé. */
+  marketPrice?: CardMarketPrice;
 }
 
 /** Réponse paginée de GET /collection/games/{slug} (ou son équivalent play-group). */

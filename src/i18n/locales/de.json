@@ -259,7 +259,7 @@
   },
   "offline": {
     "title": "Offline",
-    "description": "Lade die Regeln (FR/EN), Karten und Errata eines Spiels herunter, um sie ohne Verbindung zu lesen.",
+    "description": "Lade die Regeln (FR/EN), Karten samt Preisen und Errata eines Spiels herunter, um sie ohne Verbindung zu lesen.",
     "downloading": "Wird heruntergeladen…",
     "upToDate": "{{size}} · aktualisiert am {{date}}",
     "notDownloaded": "Nicht heruntergeladen",
@@ -327,6 +327,13 @@
     "foil": "Foil",
     "sectionTitle": "Druckvarianten",
     "baseImage": "Kartenillustration"
+  },
+  "prices": {
+    "title": "Marktpreis",
+    "from": "Ab",
+    "source": "Cardmarket · Stand {{date}}",
+    "openOnCardmarket": "Auf Cardmarket ansehen — Preis vom {{date}}",
+    "none": "Für diese Karte liegt kein Preis vor."
   },
   "deck": {
     "title": "Deck-Prüfer",
