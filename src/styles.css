@@ -1641,6 +1641,12 @@ textarea:focus {
   margin-bottom: 14px;
 }
 
+.product-stats__scope {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
 .product-stat__head {
   display: flex;
   align-items: center;

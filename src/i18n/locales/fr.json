@@ -143,7 +143,9 @@
     "stats": {
       "catalog": "Catalogue",
       "units": "Figurines",
-      "paint": "Peinture"
+      "paint": "Peinture",
+      "scopedTo": "Complétion de l'édition {{edition}}",
+      "allEditions": "Complétion de tout le catalogue"
     },
     "filters": {
       "searchPlaceholder": "Rechercher un produit…",

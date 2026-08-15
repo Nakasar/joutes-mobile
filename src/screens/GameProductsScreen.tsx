@@ -263,6 +263,13 @@ export function GameProductsScreen() {
 
       {stats && (
         <div className="card product-stats">
+          {/* Les jauges ne comptent qu'une édition : la dire évite de lire une
+              complétion partielle comme celle du catalogue entier. */}
+          <p className="product-stats__scope">
+            {stats.edition
+              ? t("products.stats.scopedTo", { edition: stats.edition })
+              : t("products.stats.allEditions")}
+          </p>
           <CompletionBar
             label={t("products.stats.catalog")}
             owned={productsOwned}

@@ -897,6 +897,12 @@ export interface ProductCollectionStats {
   icon?: string;
   color?: string;
   type?: string;
+  /**
+   * Édition sur laquelle portent ces nombres — celle en cours du jeu, sauf
+   * demande contraire. Absente : tout le catalogue, éditions confondues. Une
+   * complétion qui ne compte qu'une partie du catalogue doit dire laquelle.
+   */
+  edition?: string;
   /** Exemplaires possédés, tous produits confondus. */
   copies: number;
   productsOwned: number;
