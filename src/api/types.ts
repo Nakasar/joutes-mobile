@@ -383,12 +383,23 @@ export interface NewsGameRef {
   slug: string;
 }
 
+/**
+ * D'où vient une actualité reprise d'un site extérieur — le site officiel d'un
+ * jeu, le plus souvent. Renseignée à l'import côté web, elle est ici affichée
+ * et liée, jamais modifiée.
+ */
+export interface NewsSource {
+  name: string;
+  url: string;
+}
+
 export interface News {
   id: string;
   title: string;
   summary?: string;
   content?: string;
   banner?: string;
+  source?: NewsSource;
   gameIds?: string[];
   games?: NewsGameRef[];
   tags?: string[];

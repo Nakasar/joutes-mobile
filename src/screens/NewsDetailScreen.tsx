@@ -9,6 +9,7 @@ import { BackIcon, HeartIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { annotateErrataMarkdown } from "../lib/errata-markdown";
+import { isSafeUrl } from "../lib/safe-url";
 import { currentLocale } from "../i18n";
 
 function formatDate(iso?: string): string {
@@ -104,6 +105,18 @@ export function NewsDetailScreen() {
 
         {data.summary && (
           <p className="news-detail__summary">{data.summary}</p>
+        )}
+
+        {/* Une actualité reprise d'ailleurs dit d'où elle vient, et y renvoie.
+            Le lien est filtré comme partout ailleurs dans l'application : il
+            vient de l'API, et un `href` ne doit porter que du http(s). */}
+        {data.source?.name && data.source.url && isSafeUrl(data.source.url) && (
+          <p className="news-detail__source">
+            <span>{t("news.sourcePrefix")}</span>
+            <a href={data.source.url} target="_blank" rel="noopener noreferrer">
+              {data.source.name}
+            </a>
+          </p>
         )}
         {contentMarkdown && (
           <div className="news-detail__content">
