@@ -393,11 +393,23 @@ export interface NewsSource {
   url: string;
 }
 
+/** Une actualité dans une autre langue que celle où elle a été écrite. */
+export interface NewsTranslation {
+  lang: string;
+  title?: string;
+  summary?: string;
+  content?: string;
+  updatedAt?: string;
+}
+
 export interface News {
   id: string;
   title: string;
   summary?: string;
   content?: string;
+  /** La langue dans laquelle l'actualité a été écrite : sa VO. */
+  originalLang?: string;
+  translations?: NewsTranslation[];
   banner?: string;
   source?: NewsSource;
   gameIds?: string[];

@@ -9,6 +9,7 @@ import { BackIcon, HeartIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { annotateErrataMarkdown } from "../lib/errata-markdown";
+import { localizeNews } from "../lib/news";
 import { isSafeUrl } from "../lib/safe-url";
 import { currentLocale } from "../i18n";
 
@@ -28,7 +29,7 @@ function formatDate(iso?: string): string {
 const EMPTY_CARD_MAP = new Map<string, string>();
 
 export function NewsDetailScreen() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { newsId = "" } = useParams();
   const navigate = useNavigate();
   const { data, loading, error, reload } = useApi(
@@ -39,10 +40,18 @@ export function NewsDetailScreen() {
   // Le jeu principal de l'actualité sert de contexte pour les liens de règles.
   const gameSlug = data?.games?.[0]?.slug ?? "riftbound";
 
+  // L'actualité se lit dans la langue de l'application si elle y est traduite,
+  // sinon en version originale. Le site propose en plus une adresse par langue ;
+  // ici il n'y a qu'un écran, donc qu'un choix : celui du lecteur.
+  const lang = i18n.resolvedLanguage ?? i18n.language;
+  const localized = useMemo(() => (data ? localizeNews(data, lang) : null), [data, lang]);
+
   const contentMarkdown = useMemo(
     () =>
-      data?.content ? annotateErrataMarkdown(data.content, EMPTY_CARD_MAP) : null,
-    [data?.content],
+      localized?.content.text
+        ? annotateErrataMarkdown(localized.content.text, EMPTY_CARD_MAP)
+        : null,
+    [localized?.content.text],
   );
 
   function like() {
@@ -97,14 +106,18 @@ export function NewsDetailScreen() {
           </div>
         )}
 
-        <h1 className="news-detail__title">{data.title}</h1>
+        <h1 className="news-detail__title" lang={localized?.title.lang}>
+          {localized?.title.text ?? data.title}
+        </h1>
         <p className="news-detail__meta">
           {formatDate(data.createdAt)}
           {data.author?.displayName ? ` · ${data.author.displayName}` : ""}
         </p>
 
-        {data.summary && (
-          <p className="news-detail__summary">{data.summary}</p>
+        {localized?.summary.text && (
+          <p className="news-detail__summary" lang={localized.summary.lang}>
+            {localized.summary.text}
+          </p>
         )}
 
         {/* Une actualité reprise d'ailleurs dit d'où elle vient, et y renvoie.
@@ -119,7 +132,7 @@ export function NewsDetailScreen() {
           </p>
         )}
         {contentMarkdown && (
-          <div className="news-detail__content">
+          <div className="news-detail__content" lang={localized?.content.lang}>
             <GameMarkdown markdown={contentMarkdown} gameSlug={gameSlug} />
           </div>
         )}

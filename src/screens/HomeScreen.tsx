@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { listGames } from "../api/games";
 import { listNews } from "../api/news";
+import { localizeNews } from "../lib/news";
 import type { News } from "../api/types";
 import { CachedImage } from "../components/CachedImage";
 import { HeartIcon, SearchIcon, SettingsIcon, UsersIcon } from "../components/icons";
@@ -19,8 +20,10 @@ function formatDate(iso?: string): string {
 }
 
 function FeaturedCard({ item }: { item: News }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const game = item.games?.[0]?.name;
+  // La liste parle la langue du lecteur, comme le détail.
+  const localized = localizeNews(item, i18n.resolvedLanguage ?? i18n.language);
   return (
     <Link to={`/news/${item.id}`} className="featured">
       {item.banner ? (
@@ -38,7 +41,9 @@ function FeaturedCard({ item }: { item: News }) {
           {t("home.featuredBadge")}
           {game ? ` · ${game}` : ""}
         </span>
-        <h2 className="featured__title">{item.title}</h2>
+        <h2 className="featured__title" lang={localized.title.lang}>
+          {localized.title.text}
+        </h2>
         <p className="featured__meta">
           {[game, formatDate(item.createdAt)].filter(Boolean).join(" · ")}
           {typeof item.likesCount === "number" && item.likesCount > 0 && (
@@ -53,7 +58,9 @@ function FeaturedCard({ item }: { item: News }) {
 }
 
 function NewsItem({ item }: { item: News }) {
+  const { i18n } = useTranslation();
   const game = item.games?.[0]?.name;
+  const localized = localizeNews(item, i18n.resolvedLanguage ?? i18n.language);
   return (
     <Link to={`/news/${item.id}`} className="news-item">
       {item.banner ? (
@@ -68,8 +75,14 @@ function NewsItem({ item }: { item: News }) {
       )}
       <div className="news-item__body">
         {game && <p className="news-item__game">{game}</p>}
-        <h3 className="news-item__title">{item.title}</h3>
-        {item.summary && <p className="news-item__summary">{item.summary}</p>}
+        <h3 className="news-item__title" lang={localized.title.lang}>
+          {localized.title.text}
+        </h3>
+        {localized.summary.text && (
+          <p className="news-item__summary" lang={localized.summary.lang}>
+            {localized.summary.text}
+          </p>
+        )}
         <p className="news-item__meta">
           {formatDate(item.createdAt)}
           {typeof item.likesCount === "number" && item.likesCount > 0 && (
