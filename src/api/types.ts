@@ -918,7 +918,11 @@ export interface ProductCollectionResult {
   limit: number;
   totalPages: number;
   setCodes: string[];
-  /** Éditions présentes au catalogue, la plus récente d'abord. Vide = ce jeu n'en a pas. */
+  /**
+   * Éditions présentes au catalogue, triées par libellé en ordre alphabétique
+   * inverse. Vide **ou absent** = ce jeu n'a pas d'éditions ; le champ manque
+   * aux réponses d'une version antérieure de l'API.
+   */
   editions?: string[];
   /** Absent sur la route publique. */
   stats?: ProductCollectionStats | null;

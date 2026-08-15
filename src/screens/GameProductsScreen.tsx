@@ -97,6 +97,19 @@ export function GameProductsScreen() {
     setPage(1);
   }, [searchQuery, setCode, edition, kind, ownership, shape, gameSlug]);
 
+  // Les deux routes qui rendent cet écran ne changent que leur `:gameSlug` :
+  // React Router garde le composant monté, et sans cela un filtre choisi pour
+  // un jeu resterait en vigueur sur le suivant. Une gamme ou une édition ne
+  // valent que pour le jeu où on les a prises, et filtrer sur une valeur que le
+  // nouveau catalogue ne connaît pas le rendrait vide. Le type de produit, lui,
+  // est le même partout : il survit au changement.
+  useEffect(() => {
+    setSetCode("");
+    setSetCodes([]);
+    setEdition("");
+    setEditions([]);
+  }, [gameSlug]);
+
   // Une session qui expire pendant la consultation fait retomber l'écran sur
   // la route publique. Ce qu'elle ne sait pas rendre doit alors disparaître :
   // les jauges de possession, qui figeraient un relevé périmé, et les deux
