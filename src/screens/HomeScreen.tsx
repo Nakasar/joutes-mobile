@@ -41,8 +41,8 @@ function FeaturedCard({ item }: { item: News }) {
           {t("home.featuredBadge")}
           {game ? ` · ${game}` : ""}
         </span>
-        <h2 className="featured__title" lang={localized.lang}>
-          {localized.title}
+        <h2 className="featured__title" lang={localized.title.lang}>
+          {localized.title.text}
         </h2>
         <p className="featured__meta">
           {[game, formatDate(item.createdAt)].filter(Boolean).join(" · ")}
@@ -75,12 +75,12 @@ function NewsItem({ item }: { item: News }) {
       )}
       <div className="news-item__body">
         {game && <p className="news-item__game">{game}</p>}
-        <h3 className="news-item__title" lang={localized.lang}>
-          {localized.title}
+        <h3 className="news-item__title" lang={localized.title.lang}>
+          {localized.title.text}
         </h3>
-        {localized.summary && (
-          <p className="news-item__summary" lang={localized.lang}>
-            {localized.summary}
+        {localized.summary.text && (
+          <p className="news-item__summary" lang={localized.summary.lang}>
+            {localized.summary.text}
           </p>
         )}
         <p className="news-item__meta">

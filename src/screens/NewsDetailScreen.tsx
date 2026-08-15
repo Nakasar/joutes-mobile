@@ -48,8 +48,10 @@ export function NewsDetailScreen() {
 
   const contentMarkdown = useMemo(
     () =>
-      localized?.content ? annotateErrataMarkdown(localized.content, EMPTY_CARD_MAP) : null,
-    [localized?.content],
+      localized?.content.text
+        ? annotateErrataMarkdown(localized.content.text, EMPTY_CARD_MAP)
+        : null,
+    [localized?.content.text],
   );
 
   function like() {
@@ -104,17 +106,17 @@ export function NewsDetailScreen() {
           </div>
         )}
 
-        <h1 className="news-detail__title" lang={localized?.lang}>
-          {localized?.title ?? data.title}
+        <h1 className="news-detail__title" lang={localized?.title.lang}>
+          {localized?.title.text ?? data.title}
         </h1>
         <p className="news-detail__meta">
           {formatDate(data.createdAt)}
           {data.author?.displayName ? ` · ${data.author.displayName}` : ""}
         </p>
 
-        {localized?.summary && (
-          <p className="news-detail__summary" lang={localized.lang}>
-            {localized.summary}
+        {localized?.summary.text && (
+          <p className="news-detail__summary" lang={localized.summary.lang}>
+            {localized.summary.text}
           </p>
         )}
 
@@ -130,7 +132,7 @@ export function NewsDetailScreen() {
           </p>
         )}
         {contentMarkdown && (
-          <div className="news-detail__content" lang={localized?.lang}>
+          <div className="news-detail__content" lang={localized?.content.lang}>
             <GameMarkdown markdown={contentMarkdown} gameSlug={gameSlug} />
           </div>
         )}

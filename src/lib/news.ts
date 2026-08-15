@@ -11,17 +11,33 @@ import type { News } from "../api/types";
  * L'application ne fait que lire : les traductions se saisissent sur le site.
  */
 
+/**
+ * Un texte de l'actualité, et la langue dans laquelle il est **réellement**
+ * écrit.
+ *
+ * Le repli étant champ par champ, les trois ne sont pas forcément dans la même
+ * langue : un titre traduit peut voisiner un résumé resté en VO. Poser une
+ * étiquette unique sur les trois mentirait à la synthèse vocale, qui lirait du
+ * français avec une prononciation anglaise, et à la coupure de mots.
+ */
+export type LocalizedText<T extends string | undefined = string> = { text: T; lang: string };
+
 export type LocalizedNews = {
-  title: string;
-  summary?: string;
-  content?: string;
-  /** La langue effectivement affichée, pour l'attribut `lang` du texte. */
-  lang: string;
+  title: LocalizedText;
+  summary: LocalizedText<string | undefined>;
+  content: LocalizedText<string | undefined>;
 };
 
 /** Un texte traduit mais blanc n'est pas une traduction : la VO reprend la main. */
-function pick(translated: string | undefined, original: string | undefined): string | undefined {
-  return translated?.trim() ? translated : original;
+function pick(
+  translated: string | undefined,
+  original: string | undefined,
+  translatedLang: string,
+  originalLang: string,
+): LocalizedText<string | undefined> {
+  return translated?.trim()
+    ? { text: translated, lang: translatedLang }
+    : { text: original, lang: originalLang };
 }
 
 export function localizeNews(news: News, lang: string): LocalizedNews {
@@ -35,13 +51,18 @@ export function localizeNews(news: News, lang: string): LocalizedNews {
   );
 
   if (!translation || !hasAnyText) {
-    return { title: news.title, summary: news.summary, content: news.content, lang: original };
+    return {
+      title: { text: news.title, lang: original },
+      summary: { text: news.summary, lang: original },
+      content: { text: news.content, lang: original },
+    };
   }
 
+  const title = pick(translation.title, news.title, lang, original);
+
   return {
-    title: pick(translation.title, news.title) ?? news.title,
-    summary: pick(translation.summary, news.summary),
-    content: pick(translation.content, news.content),
-    lang,
+    title: { text: title.text ?? news.title, lang: title.lang },
+    summary: pick(translation.summary, news.summary, lang, original),
+    content: pick(translation.content, news.content, lang, original),
   };
 }
