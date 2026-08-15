@@ -149,6 +149,8 @@
       "searchPlaceholder": "Search a product…",
       "allSets": "All ranges",
       "allKinds": "All kinds",
+      "currentEdition": "Current edition",
+      "allEditions": "All editions",
       "all": "All",
       "owned": "Owned",
       "unowned": "Missing",

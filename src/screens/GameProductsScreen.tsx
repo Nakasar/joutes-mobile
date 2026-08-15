@@ -69,6 +69,9 @@ export function GameProductsScreen() {
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [setCode, setSetCode] = useState("");
+  // Vide = ce que la route applique d'elle-même, l'édition en cours du jeu.
+  // C'est le seul filtre dont la valeur par défaut n'est pas « tout ».
+  const [edition, setEdition] = useState("");
   const [kind, setKind] = useState("");
   const [ownership, setOwnership] = useState<Ownership>("all");
   const [shape, setShape] = useState<Shape>("all");
@@ -76,6 +79,7 @@ export function GameProductsScreen() {
   const [items, setItems] = useState<ProductCollectionItem[]>([]);
   const [stats, setStats] = useState<ProductCollectionStats | null>(null);
   const [setCodes, setSetCodes] = useState<string[]>([]);
+  const [editions, setEditions] = useState<string[]>([]);
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(1);
@@ -91,7 +95,7 @@ export function GameProductsScreen() {
 
   useEffect(() => {
     setPage(1);
-  }, [searchQuery, setCode, kind, ownership, shape, gameSlug]);
+  }, [searchQuery, setCode, edition, kind, ownership, shape, gameSlug]);
 
   // Une session qui expire pendant la consultation fait retomber l'écran sur
   // la route publique. Ce qu'elle ne sait pas rendre doit alors disparaître :
@@ -114,6 +118,7 @@ export function GameProductsScreen() {
     const params = {
       search: searchQuery || undefined,
       setCode: setCode || undefined,
+      edition: edition || undefined,
       kind: kind || undefined,
       page,
       limit: PAGE_SIZE,
@@ -142,6 +147,7 @@ export function GameProductsScreen() {
         setTotal(response.total);
         setTotalPages(response.totalPages);
         setSetCodes(response.setCodes ?? []);
+        setEditions(response.editions ?? []);
         if (response.stats !== undefined) setStats(response.stats);
       })
       .catch((err: unknown) => {
@@ -156,6 +162,7 @@ export function GameProductsScreen() {
     isAuthenticated,
     searchQuery,
     setCode,
+    edition,
     kind,
     ownership,
     shape,
@@ -179,6 +186,7 @@ export function GameProductsScreen() {
         getProductCollection(gameSlug, {
           search: searchQuery || undefined,
           setCode: setCode || undefined,
+          edition: edition || undefined,
           kind: kind || undefined,
           owned:
             ownership === "owned"
@@ -231,6 +239,7 @@ export function GameProductsScreen() {
   const filtered =
     searchQuery.length > 0 ||
     setCode.length > 0 ||
+    edition.length > 0 ||
     kind.length > 0 ||
     ownership !== "all" ||
     shape !== "all";
@@ -282,6 +291,22 @@ export function GameProductsScreen() {
               {setCodes.map((code) => (
                 <option key={code} value={code}>
                   {code}
+                </option>
+              ))}
+            </select>
+          )}
+          {editions.length > 0 && (
+            <select
+              value={edition}
+              onChange={(e) => setEdition(e.currentTarget.value)}
+            >
+              {/* La valeur vide n'est pas « toutes » mais « celle en cours » :
+                  c'est la route qui tranche, et l'étiquette doit le dire. */}
+              <option value="">{t("products.filters.currentEdition")}</option>
+              <option value="all">{t("products.filters.allEditions")}</option>
+              {editions.map((value) => (
+                <option key={value} value={value}>
+                  {value}
                 </option>
               ))}
             </select>
