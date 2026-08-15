@@ -143,7 +143,9 @@
     "stats": {
       "catalog": "Catalogue",
       "units": "Miniatures",
-      "paint": "Painting"
+      "paint": "Painting",
+      "scopedTo": "Completion of the {{edition}} edition",
+      "allEditions": "Completion of the whole catalogue"
     },
     "filters": {
       "searchPlaceholder": "Search a product…",

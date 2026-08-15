@@ -143,7 +143,9 @@
     "stats": {
       "catalog": "Katalog",
       "units": "Miniaturen",
-      "paint": "Bemalung"
+      "paint": "Bemalung",
+      "scopedTo": "Vervollständigung der Edition {{edition}}",
+      "allEditions": "Vervollständigung des gesamten Katalogs"
     },
     "filters": {
       "searchPlaceholder": "Produkt suchen…",
