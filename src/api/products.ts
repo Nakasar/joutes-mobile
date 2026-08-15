@@ -22,6 +22,12 @@ export interface ProductCatalogParams {
   search?: string;
   /** Gamme ou vague, l'équivalent du `setCode` d'une carte. */
   setCode?: string;
+  /**
+   * Édition du jeu. **Omise, la route applique celle en cours** : les gammes qui
+   * traversent plusieurs éditions ne montrent que la dernière par défaut.
+   * `"all"` lève la restriction.
+   */
+  edition?: string;
   kind?: string;
   /** true = uniquement les produits possédés, false = uniquement les manquants, undefined = tous. */
   owned?: boolean;
@@ -43,6 +49,7 @@ export function getGameProducts(
     limit: params.limit,
     search: params.search,
     setCode: params.setCode,
+    edition: params.edition,
     kind: params.kind,
   });
 }
@@ -59,6 +66,7 @@ export function getProductCollection(
       limit: params.limit,
       search: params.search,
       setCode: params.setCode,
+      edition: params.edition,
       kind: params.kind,
       owned: params.owned,
       containers: params.containers,

@@ -874,6 +874,8 @@ export interface ProductCollectionItem {
   name: string;
   kind: ProductKind;
   setCode?: string;
+  /** Édition du jeu à laquelle le produit appartient, quand la gamme en a. */
+  edition?: string;
   image?: string;
   contents?: ProductContent[];
   quantity?: number;
@@ -916,6 +918,12 @@ export interface ProductCollectionResult {
   limit: number;
   totalPages: number;
   setCodes: string[];
+  /**
+   * Éditions présentes au catalogue, triées par libellé en ordre alphabétique
+   * inverse. Vide **ou absent** = ce jeu n'a pas d'éditions ; le champ manque
+   * aux réponses d'une version antérieure de l'API.
+   */
+  editions?: string[];
   /** Absent sur la route publique. */
   stats?: ProductCollectionStats | null;
   game?: { id: string; name: string; slug?: string };
