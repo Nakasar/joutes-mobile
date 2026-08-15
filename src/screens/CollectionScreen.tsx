@@ -7,7 +7,7 @@ import { ArrowLeftRightIcon, ChevronIcon, HeartIcon, LockIcon, TagIcon } from ".
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
-import { formatCardPrice } from "../lib/prices";
+import { formatMoney } from "../lib/prices";
 import { useAuth } from "../store/auth";
 
 function CollectionContent() {
@@ -131,13 +131,7 @@ function CollectionContent() {
                 {/* Valeur telle qu'elle a été calculée ; elle se recalcule sur
                     la page du jeu, où l'on voit ce qu'elle compte. */}
                 {game.value && (
-                  <span className="collection-game__value">
-                    {formatCardPrice({
-                      amount: game.value.amount,
-                      currency: game.value.currency,
-                      updatedAt: game.value.computedAt,
-                    })}
-                  </span>
+                  <span className="collection-game__value">{formatMoney(game.value)}</span>
                 )}
               </div>
             </div>

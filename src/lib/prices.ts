@@ -66,17 +66,30 @@ function currencyFormatter(locale: string, currency: string): Intl.NumberFormat 
 }
 
 /**
- * Montant dans la langue de l'application (`1,29 €`, `€1.29`). Une devise
- * inconnue de l'environnement ne doit pas faire tomber l'écran : le montant est
- * alors affiché tel quel, suivi de son code.
+ * Un montant et sa devise, dans la langue de l'application (`1,29 €`,
+ * `€1.29`). Une devise inconnue de l'environnement ne doit pas faire tomber
+ * l'écran : le montant est alors affiché tel quel, suivi de son code.
+ *
+ * Le prix d'une carte et la valeur d'une collection s'écrivent pareil — seule
+ * la paire montant/devise compte —, mais ce sont deux choses différentes : ce
+ * formateur ne prend que ce qu'il lui faut, plutôt que de faire passer l'une
+ * pour l'autre.
  */
+export function formatMoney(
+  money: { amount: number; currency: string },
+  locale: string = currentLocale(),
+): string {
+  try {
+    return currencyFormatter(locale, money.currency).format(money.amount);
+  } catch {
+    return `${money.amount} ${money.currency}`;
+  }
+}
+
+/** Le prix de marché d'une carte, mis en forme. */
 export function formatCardPrice(
   price: CardMarketPrice,
   locale: string = currentLocale(),
 ): string {
-  try {
-    return currencyFormatter(locale, price.currency).format(price.amount);
-  } catch {
-    return `${price.amount} ${price.currency}`;
-  }
+  return formatMoney(price, locale);
 }

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { CollectionValue } from "../api/types";
-import { formatCardPrice } from "../lib/prices";
+import { formatMoney } from "../lib/prices";
 import { currentLocale } from "../i18n";
 import { RefreshIcon } from "./icons";
 
@@ -84,13 +84,7 @@ export function CollectionValueCard({
           )}
         </div>
         {value && (
-          <span className="collection-value__amount">
-            {formatCardPrice({
-              amount: value.amount,
-              currency: value.currency,
-              updatedAt: value.computedAt,
-            })}
-          </span>
+          <span className="collection-value__amount">{formatMoney(value)}</span>
         )}
       </div>
 
