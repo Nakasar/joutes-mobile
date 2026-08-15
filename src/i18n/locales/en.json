@@ -335,6 +335,17 @@
     "openOnCardmarket": "View on Cardmarket — price recorded on {{date}}",
     "none": "No price recorded for this card."
   },
+  "collectionValue": {
+    "title": "Estimated value",
+    "breakdown_one": "{{priced}} priced copy out of {{copies}}",
+    "breakdown_other": "{{priced}} priced copies out of {{copies}}",
+    "computedAt": "computed on {{date}}",
+    "never": "Never computed.",
+    "outdated": "The collection has changed since this computation.",
+    "recompute": "Recompute",
+    "computing": "Computing…",
+    "error": "The computation failed."
+  },
   "deck": {
     "title": "Deck checker",
     "intro": "Paste a list, a deck code or a Piltover Archive link.",

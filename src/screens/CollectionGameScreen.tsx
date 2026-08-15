@@ -4,13 +4,15 @@ import { useTranslation } from "react-i18next";
 import {
   addCollectionCard,
   getGameCollection,
+  recomputeGameCollectionValue,
   removeCollectionCard,
 } from "../api/collection";
-import type { CollectionItem } from "../api/types";
+import type { CollectionItem, CollectionValue } from "../api/types";
 import { getGame } from "../api/games";
 import { AddCollectionCopySheet } from "../components/AddCollectionCopySheet";
 import { BackHeader } from "../components/BackHeader";
 import { CardPriceTag } from "../components/CardPriceTag";
+import { CollectionValueCard } from "../components/CollectionValueCard";
 import {
   BoxIcon,
   ChevronIcon,
@@ -52,6 +54,9 @@ function CollectionGameContent({
   const [gameTotal, setGameTotal] = useState(0);
   const [masterOwned, setMasterOwned] = useState(0);
   const [masterTotal, setMasterTotal] = useState(0);
+  const [gameValue, setGameValue] = useState<CollectionValue | undefined>();
+  /** Exemplaires possédés, doublons compris : c'est sur eux que porte la valeur. */
+  const [copies, setCopies] = useState(0);
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [setCodes, setSetCodes] = useState<string[]>([]);
@@ -108,6 +113,8 @@ function CollectionGameContent({
           setGameTotal(response.stats.gameTotal);
           setMasterOwned(response.stats.masterOwned);
           setMasterTotal(response.stats.masterTotal);
+          setGameValue(response.stats.value);
+          setCopies(response.stats.copies);
         }
       })
       .catch((err: unknown) => {
@@ -157,6 +164,7 @@ function CollectionGameContent({
     const previousQuantity = item.quantity;
     applyStatsDelta(item, 1);
     applyQuantity(item.id, previousQuantity + 1);
+    setCopies((previous) => previous + 1);
     try {
       await addCollectionCard(
         {
@@ -178,6 +186,7 @@ function CollectionGameContent({
     } catch (err) {
       applyQuantity(item.id, previousQuantity);
       applyStatsDelta({ ...item, quantity: previousQuantity + 1 }, -1);
+      setCopies((previous) => previous - 1);
       setError(err instanceof Error ? err.message : t("collection.browse.error"));
     } finally {
       setBusy(item.id, false);
@@ -190,11 +199,13 @@ function CollectionGameContent({
     const previousQuantity = item.quantity;
     applyStatsDelta(item, -1);
     applyQuantity(item.id, previousQuantity - 1);
+    setCopies((previous) => previous - 1);
     try {
       await removeCollectionCard(item.id, groupId);
     } catch (err) {
       applyQuantity(item.id, previousQuantity);
       applyStatsDelta({ ...item, quantity: previousQuantity - 1 }, 1);
+      setCopies((previous) => previous + 1);
       setError(err instanceof Error ? err.message : t("collection.browse.error"));
     } finally {
       setBusy(item.id, false);
@@ -247,6 +258,20 @@ function CollectionGameContent({
             <div className="progress__bar" style={{ width: `${percent}%` }} />
           </div>
         </div>
+      )}
+
+      {/* La valeur porte sur toute la collection de ce jeu, pas sur ce que le
+          filtre montre : un total qui changerait avec un filtre ne se
+          comparerait plus à rien. */}
+      {gameTotal > 0 && (
+        <CollectionValueCard
+          value={gameValue}
+          copies={copies}
+          onRecompute={async () => {
+            const { value } = await recomputeGameCollectionValue(gameSlug, groupId);
+            setGameValue(value);
+          }}
+        />
       )}
 
       <div className="card-filters">
