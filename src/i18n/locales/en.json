@@ -31,6 +31,10 @@
     "detailTitle": "News article",
     "socialAction": "Social"
   },
+  "news": {
+    "detailTitle": "News article",
+    "sourcePrefix": "Originally published on"
+  },
   "games": {
     "title": "Games",
     "subtitle": "Catalogs, cards and rules",

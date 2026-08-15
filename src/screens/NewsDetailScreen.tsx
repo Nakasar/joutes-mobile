@@ -105,6 +105,16 @@ export function NewsDetailScreen() {
         {data.summary && (
           <p className="news-detail__summary">{data.summary}</p>
         )}
+
+        {/* Une actualité reprise d'ailleurs dit d'où elle vient, et y renvoie. */}
+        {data.source?.url && data.source.name && (
+          <p className="news-detail__source">
+            <span>{t("news.sourcePrefix")}</span>
+            <a href={data.source.url} target="_blank" rel="noopener noreferrer">
+              {data.source.name}
+            </a>
+          </p>
+        )}
         {contentMarkdown && (
           <div className="news-detail__content">
             <GameMarkdown markdown={contentMarkdown} gameSlug={gameSlug} />

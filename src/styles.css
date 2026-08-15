@@ -1119,6 +1119,27 @@ textarea:focus {
   line-height: 1.5;
 }
 
+/* Attribution d'une actualité reprise d'un site extérieur : annoncée avant le
+   corps, pour que le lecteur sache qui parle avant de lire. */
+.news-detail__source {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted);
+  background: var(--surface-2);
+  border-radius: 10px;
+  padding: 8px 10px;
+  margin: 0 0 16px;
+}
+
+.news-detail__source a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
 .news-detail__content {
   font-size: 14.5px;
   line-height: 1.65;
