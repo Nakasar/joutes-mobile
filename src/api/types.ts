@@ -651,6 +651,31 @@ export interface SetCompletion {
   gameTotal: number;
 }
 
+/**
+ * Valeur estimée d'une collection — celle d'un jeu, ou de tout le compte.
+ *
+ * Calculée à la demande et enregistrée par le serveur : elle ne bouge qu'au
+ * recalcul, ce qui la rend comparable d'un mois à l'autre. `pricedCopies` dit
+ * sur combien d'exemplaires elle repose : un total porté par deux cents cartes
+ * sur mille ne se lit pas comme le prix de la collection.
+ */
+export interface CollectionValue {
+  amount: number;
+  /** Devise ISO 4217 (`EUR`). */
+  currency: string;
+  /** Exemplaires possédés au moment du calcul. */
+  copies: number;
+  /** Ceux qui portaient un prix, et ont donc compté. */
+  pricedCopies: number;
+  computedAt: string;
+}
+
+/** Valeur de toute la collection : la somme de celles des jeux. */
+export interface CollectionValueTotal extends CollectionValue {
+  /** Jeux dont une valeur entre dans ce total ; sa date est la plus ancienne des leurs. */
+  games: number;
+}
+
 export interface GameCollectionStats {
   gameId: string;
   name: string;
@@ -664,6 +689,8 @@ export interface GameCollectionStats {
   gameOwned: number;
   gameTotal: number;
   sets?: SetCompletion[];
+  /** Dernière valeur estimée du jeu, absente tant qu'elle n'a jamais été calculée. */
+  value?: CollectionValue;
 }
 
 export interface CollectionOverview {
@@ -686,6 +713,12 @@ export interface CollectionOverview {
   totalProductCopies?: number;
   productsOwned?: number;
   productsTotal?: number;
+  /**
+   * Valeur estimée de toute la collection, datée du plus ancien des calculs par
+   * jeu. Absente tant qu'aucun jeu n'a été estimé. Les produits n'y entrent
+   * pas : une figurine n'a pas de relevé de prix.
+   */
+  value?: CollectionValueTotal;
 }
 
 /** Une carte du catalogue d'un jeu, annotée avec la quantité possédée par le propriétaire consulté. */

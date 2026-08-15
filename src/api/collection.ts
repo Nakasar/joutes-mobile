@@ -3,6 +3,8 @@ import { endpoints } from "./endpoints";
 import type {
   CollectionCardInput,
   CollectionOverview,
+  CollectionValue,
+  CollectionValueTotal,
   GameCollectionResult,
   OwnedCopiesResponse,
 } from "./types";
@@ -59,6 +61,34 @@ export function getGameCollection(
     type: params.type,
     owned: params.owned,
   });
+}
+
+/**
+ * Demande le recalcul de la valeur estimée de toute la collection (personnelle,
+ * ou celle d'un groupe de jeu).
+ *
+ * Le serveur réestime chaque jeu au prix du moment et enregistre le résultat :
+ * la valeur ne bouge qu'ici, ce qui la rend comparable d'une fois sur l'autre.
+ * `value` est nul quand il n'y a plus rien à estimer.
+ */
+export function recomputeCollectionValue(
+  playGroupId?: string,
+): Promise<{ values: Record<string, CollectionValue>; value: CollectionValueTotal | null }> {
+  const path = playGroupId
+    ? endpoints.playGroups.collection.value(playGroupId)
+    : endpoints.collection.value;
+  return api.post(path, {});
+}
+
+/** Le même recalcul, pour un seul jeu. */
+export function recomputeGameCollectionValue(
+  gameSlug: string,
+  playGroupId?: string,
+): Promise<{ value: CollectionValue }> {
+  const path = playGroupId
+    ? endpoints.playGroups.collection.gameValue(playGroupId, gameSlug)
+    : endpoints.collection.gameValue(gameSlug);
+  return api.post(path, {});
 }
 
 /** Ajoute un exemplaire à la collection (personnelle, ou d'un play-group si `playGroupId` est fourni). */

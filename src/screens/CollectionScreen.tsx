@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { getCollectionOverview } from "../api/collection";
+import { getCollectionOverview, recomputeCollectionValue } from "../api/collection";
 import { CachedImage } from "../components/CachedImage";
+import { CollectionValueCard } from "../components/CollectionValueCard";
 import { ArrowLeftRightIcon, ChevronIcon, HeartIcon, LockIcon, TagIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
+import { formatCardPrice } from "../lib/prices";
 import { useAuth } from "../store/auth";
 
 function CollectionContent() {
@@ -78,6 +80,18 @@ function CollectionContent() {
           </p>
         </div>
       )}
+      {/* Le recalcul écrit les valeurs côté serveur ; l'écran se recharge
+          ensuite pour les relire, jeux compris. */}
+      {data && games.length > 0 && (
+        <CollectionValueCard
+          value={data.value}
+          copies={data.totalCopies}
+          onRecompute={async () => {
+            await recomputeCollectionValue();
+            reload();
+          }}
+        />
+      )}
       {games.map((game) => {
         const percent =
           game.gameTotal > 0
@@ -110,9 +124,22 @@ function CollectionContent() {
                   })}
                 </p>
               </div>
-              <span className="collection-game__pct" style={{ color }}>
-                {percent}%
-              </span>
+              <div className="collection-game__side">
+                <span className="collection-game__pct" style={{ color }}>
+                  {percent}%
+                </span>
+                {/* Valeur telle qu'elle a été calculée ; elle se recalcule sur
+                    la page du jeu, où l'on voit ce qu'elle compte. */}
+                {game.value && (
+                  <span className="collection-game__value">
+                    {formatCardPrice({
+                      amount: game.value.amount,
+                      currency: game.value.currency,
+                      updatedAt: game.value.computedAt,
+                    })}
+                  </span>
+                )}
+              </div>
             </div>
             <div className="progress">
               <div

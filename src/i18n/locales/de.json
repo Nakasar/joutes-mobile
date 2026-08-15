@@ -335,6 +335,17 @@
     "openOnCardmarket": "Auf Cardmarket ansehen — Preis vom {{date}}",
     "none": "Für diese Karte liegt kein Preis vor."
   },
+  "collectionValue": {
+    "title": "Geschätzter Wert",
+    "breakdown_one": "{{priced}} Exemplar mit Preis von {{copies}}",
+    "breakdown_other": "{{priced}} Exemplare mit Preis von {{copies}}",
+    "computedAt": "berechnet am {{date}}",
+    "never": "Noch nie berechnet.",
+    "outdated": "Die Sammlung hat sich seit dieser Berechnung geändert.",
+    "recompute": "Neu berechnen",
+    "computing": "Wird berechnet…",
+    "error": "Die Berechnung ist fehlgeschlagen."
+  },
   "deck": {
     "title": "Deck-Prüfer",
     "intro": "Füge eine Liste, einen Deck-Code oder einen Piltover-Archive-Link ein.",

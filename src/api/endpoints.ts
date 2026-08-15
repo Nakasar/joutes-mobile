@@ -65,6 +65,10 @@ export const endpoints = {
         `/play-groups/${playGroupId}/collection/cards/${cardId}`,
       game: (playGroupId: string, gameSlug: string) =>
         `/play-groups/${playGroupId}/collection/games/${gameSlug}`,
+      /** Recalcul de la valeur estimée de la collection commune (POST). */
+      value: (playGroupId: string) => `/play-groups/${playGroupId}/collection/value`,
+      gameValue: (playGroupId: string, gameSlug: string) =>
+        `/play-groups/${playGroupId}/collection/games/${gameSlug}/value`,
     },
     wishlists: (playGroupId: string) => `/play-groups/${playGroupId}/wishlists`,
     sellList: (playGroupId: string) => `/play-groups/${playGroupId}/sell-list`,
@@ -80,6 +84,12 @@ export const endpoints = {
     cards: "/collection/cards",
     card: (cardId: string) => `/collection/cards/${cardId}`,
     game: (gameSlug: string) => `/collection/games/${gameSlug}`,
+    /**
+     * Recalcul de la valeur estimée (POST) : de toute la collection, ou d'un
+     * seul jeu. Le serveur l'enregistre, elle ne bouge qu'à ce moment-là.
+     */
+    value: "/collection/value",
+    gameValue: (gameSlug: string) => `/collection/games/${gameSlug}/value`,
     /** Catalogue de produits d'un jeu, annoté de ce que l'appelant possède. */
     gameProducts: (gameSlug: string) => `/collection/games/${gameSlug}/products`,
     gameProduct: (gameSlug: string, productId: string) =>

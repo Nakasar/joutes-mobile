@@ -335,6 +335,17 @@ export function CheckIcon(p: IconProps) {
   );
 }
 
+/** Deux flèches en boucle : recalculer, rafraîchir. */
+export function RefreshIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M20 11a8 8 0 0 0-13.7-5.6L3 8.5" />
+      <path d="M4 13a8 8 0 0 0 13.7 5.6L21 15.5" />
+      <path d="M3 4v4.5h4.5M21 20v-4.5h-4.5" />
+    </Icon>
+  );
+}
+
 export function CrossIcon(p: IconProps) {
   return (
     <Icon {...p}>

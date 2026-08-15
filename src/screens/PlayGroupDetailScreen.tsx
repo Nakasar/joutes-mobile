@@ -1,8 +1,9 @@
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { getPlayGroupCollectionOverview } from "../api/collection";
+import { getPlayGroupCollectionOverview, recomputeCollectionValue } from "../api/collection";
 import { getPlayGroup } from "../api/social";
 import { BackHeader } from "../components/BackHeader";
+import { CollectionValueCard } from "../components/CollectionValueCard";
 import {
   ChevronIcon,
   HeartIcon,
@@ -119,6 +120,18 @@ function PlayGroupDetailContent({ groupId }: { groupId: string }) {
                 : undefined
             }
           />
+          {/* La collection est commune : n'importe quel membre peut en
+              redemander la valeur. */}
+          {overview.data && games.length > 0 && (
+            <CollectionValueCard
+              value={overview.data.value}
+              copies={overview.data.totalCopies}
+              onRecompute={async () => {
+                await recomputeCollectionValue(groupId);
+                overview.reload();
+              }}
+            />
+          )}
           {games.map((game) => {
             const percent =
               game.gameTotal > 0

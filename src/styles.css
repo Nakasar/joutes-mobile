@@ -1337,6 +1337,84 @@ textarea:focus {
 }
 
 /*
+ * Valeur estimée d'une collection : un montant daté, et le bouton qui le
+ * refait. Le bouton passe sous la ligne plutôt qu'à côté — sur un téléphone,
+ * le montant et une explication de deux lignes ne lui laissent pas la place.
+ */
+.collection-value {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.collection-value__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.collection-value__body {
+  flex: 1 1 60%;
+  min-width: 0;
+}
+
+.collection-value__label {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.collection-value__sub {
+  margin: 2px 0 0;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.collection-value__warn {
+  color: var(--gold);
+}
+
+.collection-value__amount {
+  margin-left: auto;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.collection-value__error {
+  margin: 0;
+  font-size: 11px;
+  color: var(--danger);
+}
+
+/* Valeur d'un jeu, sous son pourcentage de complétion. */
+.collection-game__side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.collection-game__value {
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+/*
  * Prix de marché sous une vignette (galerie, collection). Teinté accent pour
  * ne pas se confondre avec le numéro de collection juste au-dessus, et en
  * chiffres tabulaires : une colonne de prix se compare d'un coup d'œil.
