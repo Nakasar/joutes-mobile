@@ -4,6 +4,7 @@ import { searchTradeCards } from "../api/trades";
 import type { TradeCard, TradeCardSearchResult } from "../api/types";
 import { PlusIcon, SearchIcon } from "./icons";
 import { StatusView } from "./StatusView";
+import { CardImage } from "./CardImage";
 
 const PAGE_SIZE = 20;
 
@@ -142,7 +143,13 @@ export function WishlistCardPickerSheet({
                 return (
                   <div key={`${card.key}|${card.cardId ?? ""}`} className="list-row">
                     {card.image ? (
-                      <img src={card.image} alt="" className="list-row__thumb" />
+                      <CardImage
+                        src={card.image}
+                        orientation={card.orientation}
+                        alt=""
+                        loading="lazy"
+                        className="list-row__thumb"
+                      />
                     ) : (
                       <span className="list-row__thumb" />
                     )}

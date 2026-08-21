@@ -1061,6 +1061,8 @@ export interface WishlistItem {
   collectorNumber?: string;
   image?: string;
   type?: string;
+  /** Sens d'impression de la carte : une carte paysage s'affiche pivotée. */
+  orientation?: CardOrientation;
   /** Variante d'impression souhaitée ; absente = version de base de la carte. */
   printingId?: string;
   printingName?: string;
@@ -1113,6 +1115,8 @@ export interface SellListItem {
   collectorNumber?: string;
   image?: string;
   type?: string;
+  /** Sens d'impression de la carte : une carte paysage s'affiche pivotée. */
+  orientation?: CardOrientation;
   foil?: boolean;
   /** Variante d'impression de l'exemplaire mis en vente. */
   printingId?: string;
@@ -1149,6 +1153,8 @@ export interface TradeCard {
   collectorNumber: string;
   image: string;
   type?: string;
+  /** Sens d'impression de la carte : une carte paysage s'affiche pivotée. */
+  orientation?: CardOrientation;
   gameId?: string;
   gameName?: string;
   gameSlug?: string;
@@ -1181,6 +1187,8 @@ export interface TradeCardSnapshot {
   setCode: string;
   collectorNumber: string;
   image: string;
+  /** Sens d'impression de la carte : une carte paysage s'affiche pivotée. */
+  orientation?: CardOrientation;
   gameId?: string;
   gameName?: string;
   quantity: number;
@@ -1413,6 +1421,8 @@ export interface TournamentFormCard {
   cardId: string;
   name: string;
   image?: string;
+  /** Sens d'impression de la carte : une carte paysage s'affiche pivotée. */
+  orientation?: CardOrientation;
   setCode?: string;
   collectorNumber?: string;
 }

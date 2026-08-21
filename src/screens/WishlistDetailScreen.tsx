@@ -15,6 +15,7 @@ import { PlusIcon, TrashIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { WishlistCardPickerSheet } from "../components/WishlistCardPickerSheet";
 import { useApi } from "../hooks/useApi";
+import { CardImage } from "../components/CardImage";
 
 function visibilityLabel(
   visibility: WishlistVisibility | undefined,
@@ -74,7 +75,13 @@ function WishlistItemRow({
         {item.image ? (
           // Le voile irisé dit d'un coup d'œil qu'on souhaite un exemplaire foil.
           <span className={`thumb-frame${item.foil ? " foil-shine" : ""}`}>
-            <img src={item.image} alt="" className="list-row__thumb" />
+            <CardImage
+              src={item.image}
+              orientation={item.orientation}
+              alt=""
+              loading="lazy"
+              className="list-row__thumb"
+            />
           </span>
         ) : (
           <span className="list-row__thumb" />
