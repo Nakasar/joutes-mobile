@@ -12,7 +12,7 @@ import type {
   TournamentPlayerForm,
 } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
-import { CachedImage } from "../components/CachedImage";
+import { CardImage } from "../components/CardImage";
 import { StatusView } from "../components/StatusView";
 import { TournamentDecklistView } from "../components/TournamentDecklistView";
 import { AlertTriangleIcon, LockIcon, SearchIcon } from "../components/icons";
@@ -433,7 +433,15 @@ function FieldAnswer({
 function CardAnswer({ card }: { card: TournamentFormCard }) {
   return (
     <div className="card-answer">
-      {card.image && <CachedImage src={card.image} alt="" className="card-answer__image" />}
+      {card.image && (
+        <CardImage
+          cached
+          src={card.image}
+          orientation={card.orientation}
+          alt=""
+          className="card-answer__image"
+        />
+      )}
       <div className="card-answer__body">
         <p className="card-answer__name">{card.name}</p>
         {(card.setCode || card.collectorNumber) && (
@@ -512,7 +520,15 @@ function CardPicker({
   if (value) {
     return (
       <div className="card-answer card-answer--picked">
-        {value.image && <CachedImage src={value.image} alt="" className="card-answer__image" />}
+        {value.image && (
+          <CardImage
+            cached
+            src={value.image}
+            orientation={value.orientation}
+            alt=""
+            className="card-answer__image"
+          />
+        )}
         <div className="card-answer__body">
           <p className="card-answer__name">{value.name}</p>
           {(value.setCode || value.collectorNumber) && (
@@ -562,7 +578,13 @@ function CardPicker({
           }}
         >
           {card.image && (
-            <CachedImage src={card.image} alt="" className="card-result__image" />
+            <CardImage
+              cached
+              src={card.image}
+              orientation={card.orientation}
+              alt=""
+              className="card-result__image"
+            />
           )}
           <span className="card-result__body">
             <span className="card-result__name">{card.name}</span>

@@ -6,6 +6,7 @@ import {
 } from "../api/sell-lists";
 import type { SellListItem } from "../api/types";
 import { TrashIcon } from "./icons";
+import { CardImage } from "./CardImage";
 
 const CURRENCIES = ["EUR", "USD", "GBP", "JPY", "CNY"];
 
@@ -187,7 +188,13 @@ export function SellListItemRow({
       >
         {item.image ? (
           <span className={`thumb-frame${item.foil ? " foil-shine" : ""}`}>
-            <img src={item.image} alt="" className="list-row__thumb" />
+            <CardImage
+              src={item.image}
+              orientation={item.orientation}
+              alt=""
+              loading="lazy"
+              className="list-row__thumb"
+            />
           </span>
         ) : (
           <span className="list-row__thumb" />

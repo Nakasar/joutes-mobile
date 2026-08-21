@@ -11,6 +11,7 @@ import type { CollectionItem, CollectionValue } from "../api/types";
 import { getGame } from "../api/games";
 import { AddCollectionCopySheet } from "../components/AddCollectionCopySheet";
 import { BackHeader } from "../components/BackHeader";
+import { CardImage } from "../components/CardImage";
 import { CardPriceTag } from "../components/CardPriceTag";
 import { CollectionValueCard } from "../components/CollectionValueCard";
 import {
@@ -340,8 +341,9 @@ function CollectionGameContent({
                 className={`card-tile__frame${item.foil ? " foil-shine" : ""}`}
               >
                 {item.image ? (
-                  <img
+                  <CardImage
                     src={item.image}
+                    orientation={item.orientation}
                     alt={item.name}
                     loading="lazy"
                     className={`card-tile__image${owned ? "" : " card-tile__image--unowned"}`}

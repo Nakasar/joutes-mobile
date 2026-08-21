@@ -11,6 +11,7 @@ import {
 } from "../api/trades";
 import type {
   Trade,
+  CardOrientation,
   TradeCard,
   TradeCardSnapshot,
   TradeCatalogCardInput,
@@ -23,6 +24,7 @@ import { TradeCardPickerSheet } from "../components/TradeCardPickerSheet";
 import { TradeInviteSheet } from "../components/TradeInviteSheet";
 import { tradeErrorMessage } from "../lib/trade-errors";
 import { useAuth } from "../store/auth";
+import { CardImage } from "../components/CardImage";
 
 const TRADE_MAX_QUANTITY = 99;
 const POLL_INTERVAL_MS = 5000;
@@ -38,6 +40,8 @@ interface DraftCard {
   setCode: string;
   collectorNumber: string;
   image: string;
+  /** Sens d'impression de la carte, relu du catalogue par l'API. */
+  orientation?: CardOrientation;
   gameName?: string;
   quantity: number;
   maxQuantity: number;
@@ -67,6 +71,7 @@ function toDraftCards(
       setCode: card.setCode,
       collectorNumber: card.collectorNumber,
       image: card.image,
+      orientation: card.orientation,
       gameName: card.gameName,
       quantity: card.quantity,
       maxQuantity: capToOwned ? (hints.get(key) ?? TRADE_MAX_QUANTITY) : TRADE_MAX_QUANTITY,
@@ -126,7 +131,13 @@ function OfferPanel({
         cards.map((card) => (
           <div key={card.key} className="list-row">
             {card.image ? (
-              <img src={card.image} alt="" className="list-row__thumb" />
+              <CardImage
+                src={card.image}
+                orientation={card.orientation}
+                alt=""
+                loading="lazy"
+                className="list-row__thumb"
+              />
             ) : (
               <span className="list-row__thumb" />
             )}
@@ -347,6 +358,7 @@ export function TradeDetailScreen() {
               setCode: card.setCode,
               collectorNumber: card.collectorNumber,
               image: card.image,
+              orientation: card.orientation,
               gameName: card.gameName,
               quantity: 1,
               maxQuantity: max,

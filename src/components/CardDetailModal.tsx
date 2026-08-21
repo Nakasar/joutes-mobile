@@ -4,6 +4,7 @@ import { getCard } from "../api/cards";
 import { useApi } from "../hooks/useApi";
 import { annotateCardText } from "../lib/card-text-markdown";
 import { toCardIdByName } from "../lib/errata-markdown";
+import { CardImage } from "./CardImage";
 import { CardPriceDetails } from "./CardPriceDetails";
 import { ErrataCard } from "./ErrataCard";
 import { GameMarkdown } from "./GameMarkdown";
@@ -77,7 +78,12 @@ export function CardDetailModal({
               <div
                 className={`card-hero__frame${data?.foil ? " foil-shine" : ""}`}
               >
-                <img src={image} alt={name} className="card-hero__image" />
+                <CardImage
+                  src={image}
+                  orientation={data?.orientation}
+                  alt={name}
+                  className="card-hero__image"
+                />
               </div>
             </div>
           )}

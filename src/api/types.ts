@@ -114,6 +114,13 @@ export interface CardMarketPrice {
 }
 
 /**
+ * Sens d'impression d'une carte. La quasi-totalité des cartes se lisent à la
+ * verticale ; certaines — les champs de bataille de Riftbound — sont imprimées
+ * dans le sens de la largeur. Une carte qui ne dit rien est en `portrait`.
+ */
+export type CardOrientation = "portrait" | "landscape";
+
+/**
  * Carte du catalogue d'un jeu. Outre les champs communs ci-dessous, l'API
  * renvoie des attributs propres à chaque jeu (ex. `Domain`, `Set`, `face`
  * pour Riftbound) — accessibles via la signature d'index.
@@ -125,6 +132,8 @@ export interface Card {
   type?: string;
   cost?: number;
   image?: string;
+  /** Sens d'impression de la carte : une carte paysage s'affiche pivotée. */
+  orientation?: CardOrientation;
   setCode?: string;
   collectorNumber?: string;
   lang?: string;
@@ -752,6 +761,8 @@ export interface CollectionItem {
   collectorNumber: string;
   image: string;
   type?: string;
+  /** Sens d'impression de la carte : une carte paysage s'affiche pivotée. */
+  orientation?: CardOrientation;
   /** La carte n'existe qu'en foil. */
   foil?: boolean;
   /** Variantes d'impression, proposées au moment d'ajouter un exemplaire. */
@@ -1050,6 +1061,8 @@ export interface WishlistItem {
   collectorNumber?: string;
   image?: string;
   type?: string;
+  /** Sens d'impression de la carte : une carte paysage s'affiche pivotée. */
+  orientation?: CardOrientation;
   /** Variante d'impression souhaitée ; absente = version de base de la carte. */
   printingId?: string;
   printingName?: string;
@@ -1102,6 +1115,8 @@ export interface SellListItem {
   collectorNumber?: string;
   image?: string;
   type?: string;
+  /** Sens d'impression de la carte : une carte paysage s'affiche pivotée. */
+  orientation?: CardOrientation;
   foil?: boolean;
   /** Variante d'impression de l'exemplaire mis en vente. */
   printingId?: string;
@@ -1138,6 +1153,8 @@ export interface TradeCard {
   collectorNumber: string;
   image: string;
   type?: string;
+  /** Sens d'impression de la carte : une carte paysage s'affiche pivotée. */
+  orientation?: CardOrientation;
   gameId?: string;
   gameName?: string;
   gameSlug?: string;
@@ -1170,6 +1187,8 @@ export interface TradeCardSnapshot {
   setCode: string;
   collectorNumber: string;
   image: string;
+  /** Sens d'impression de la carte : une carte paysage s'affiche pivotée. */
+  orientation?: CardOrientation;
   gameId?: string;
   gameName?: string;
   quantity: number;
@@ -1402,6 +1421,8 @@ export interface TournamentFormCard {
   cardId: string;
   name: string;
   image?: string;
+  /** Sens d'impression de la carte : une carte paysage s'affiche pivotée. */
+  orientation?: CardOrientation;
   setCode?: string;
   collectorNumber?: string;
 }
@@ -1411,6 +1432,8 @@ export interface TournamentDecklistCard {
   quantity: number;
   cardId?: string;
   image?: string;
+  /** Sens d'impression de la carte : un champ de bataille s'affiche pivoté. */
+  orientation?: CardOrientation;
   /** Carte absente de la base du jeu : nom mal orthographié, ou carte inconnue. */
   recognized?: boolean;
   banned?: boolean;

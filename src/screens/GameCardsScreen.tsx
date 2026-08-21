@@ -5,6 +5,7 @@ import { searchCards } from "../api/cards";
 import { getGame } from "../api/games";
 import type { Card } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
+import { CardImage } from "../components/CardImage";
 import { CardPriceTag } from "../components/CardPriceTag";
 import { BookIcon, DeckCheckIcon, SearchIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
@@ -152,8 +153,9 @@ export function GameCardsScreen() {
               className={`card-tile__frame${card.foil ? " foil-shine" : ""}`}
             >
               {card.image ? (
-                <img
+                <CardImage
                   src={card.image}
+                  orientation={card.orientation}
                   alt={card.name}
                   loading="lazy"
                   className="card-tile__image"

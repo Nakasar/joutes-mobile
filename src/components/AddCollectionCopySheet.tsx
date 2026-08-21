@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import type { CollectionItem } from "../api/types";
 import { resolvePrinting, type PrintingChoice } from "../lib/printings";
 import { PrintingPicker } from "./PrintingPicker";
+import { CardImage } from "./CardImage";
 
 /**
  * Choix de la variante d'impression avant d'ajouter un exemplaire à la
@@ -45,7 +46,12 @@ export function AddCollectionCopySheet({
               <span
                 className={`thumb-frame${choice.foil ? " foil-shine" : ""}`}
               >
-                <img src={image} alt="" className="list-row__thumb" />
+                <CardImage
+                  src={image}
+                  orientation={item.orientation}
+                  alt=""
+                  className="list-row__thumb"
+                />
               </span>
             ) : (
               <span className="list-row__thumb" />
