@@ -1259,8 +1259,26 @@ textarea:focus {
 .card-landscape {
   position: relative;
   overflow: hidden;
-  /* Proportions largeur/hauteur de la vignette, à corriger si elle n'est pas en 5/7. */
+  /*
+   * Proportions largeur/hauteur de la vignette. Une vignette qui n'est pas au
+   * format d'une carte les corrige — `--card-frame-ratio: calc(42 / 58)` sur
+   * une vignette de liste, par exemple.
+   */
   --card-frame-ratio: calc(5 / 7);
+  /*
+   * Deux garde-fous, parce que le cadre est un `span` là où la vignette
+   * attendait une image :
+   *
+   * - `display` : une boîte en ligne ignore la largeur et la hauteur qu'on lui
+   *   donne. Une vignette qui compte dessus (`width: 42px; height: 58px`, sans
+   *   `display`) s'effondrerait, ces dimensions ne valant que pour une image.
+   * - `aspect-ratio` : un cadre n'a pas de dimensions propres dont déduire le
+   *   côté qu'on ne lui donne pas. Une vignette qui n'en contraint qu'un — la
+   *   liste de deck, haute de 108 px et large « au besoin » — le laisserait
+   *   s'étaler ou s'effondrer, l'image pivotée étant hors flux.
+   */
+  display: block;
+  aspect-ratio: var(--card-frame-ratio);
 }
 
 .card-landscape > img {
@@ -1274,11 +1292,6 @@ textarea:focus {
   object-fit: cover;
   transform: translate(-50%, -50%) rotate(-90deg);
   display: block;
-}
-
-/* Les vignettes de liste sont mesurées en pixels, et non en 5/7. */
-.list-row__thumb.card-landscape {
-  --card-frame-ratio: calc(42 / 58);
 }
 
 /* ---- Galerie de cartes ---- */

@@ -1,10 +1,11 @@
 import type { ImgHTMLAttributes } from "react";
+import type { CardOrientation } from "../api/types";
 import { CachedImage } from "./CachedImage";
 
 type Props = Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> & {
   src?: string;
   /** Sens d'impression de la carte ; tout ce qui n'est pas `landscape` reste vertical. */
-  orientation?: string;
+  orientation?: CardOrientation;
   /** Passe par le cache local d'images (hors ligne), comme `CachedImage`. */
   cached?: boolean;
 };
