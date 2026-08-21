@@ -1240,6 +1240,47 @@ textarea:focus {
   text-overflow: ellipsis;
 }
 
+/* ---- Cartes imprimées dans le sens de la largeur ----
+ *
+ * Les champs de bataille de Riftbound sont les seules cartes plus larges que
+ * hautes. Posée telle quelle dans une vignette au format portrait, leur image
+ * serait rognée de part et d'autre du dessin : on la pose donc à plat — aussi
+ * large que la vignette est haute, aussi haute qu'elle est large — puis on la
+ * pivote d'un quart de tour, comme le fait la galerie officielle. Une fois
+ * tournée, elle recouvre exactement la vignette, qui garde son format et son
+ * rang dans la grille.
+ *
+ * Le quart de tour est anti-horaire : c'est le sens qui remet le titre et le
+ * texte de la carte le long du bord droit de la vignette.
+ *
+ * La classe se pose *en plus* de celle de la vignette (`card-tile__image`,
+ * `list-row__thumb`…), qui continue de porter la taille, les coins et l'ombre.
+ */
+.card-landscape {
+  position: relative;
+  overflow: hidden;
+  /* Proportions largeur/hauteur de la vignette, à corriger si elle n'est pas en 5/7. */
+  --card-frame-ratio: calc(5 / 7);
+}
+
+.card-landscape > img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: none;
+  width: calc(100% / var(--card-frame-ratio));
+  height: calc(100% * var(--card-frame-ratio));
+  /* Absorbe le peu qui manquerait à une image pas tout à fait au format d'une carte. */
+  object-fit: cover;
+  transform: translate(-50%, -50%) rotate(-90deg);
+  display: block;
+}
+
+/* Les vignettes de liste sont mesurées en pixels, et non en 5/7. */
+.list-row__thumb.card-landscape {
+  --card-frame-ratio: calc(42 / 58);
+}
+
 /* ---- Galerie de cartes ---- */
 
 .card-filters {

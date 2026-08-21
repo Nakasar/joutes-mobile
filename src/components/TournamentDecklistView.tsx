@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { TournamentFormDecklistAnswer } from "../api/types";
-import { CachedImage } from "./CachedImage";
+import { CardImage } from "./CardImage";
 import { AlertTriangleIcon, GridIcon, LayersIcon } from "./icons";
 
 /**
@@ -86,8 +86,10 @@ export function TournamentDecklistView({
               {section.cards.map((card, index) => (
                 <div key={`${card.cardId ?? card.name}-${index}`} className="decklist__tile">
                   {card.image ? (
-                    <CachedImage
+                    <CardImage
+                      cached
                       src={card.image}
+                      orientation={card.orientation}
                       alt={card.name}
                       title={card.name}
                       className={`decklist__image${card.banned ? " decklist__image--banned" : ""}`}

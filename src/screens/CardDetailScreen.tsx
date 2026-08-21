@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { getCard } from "../api/cards";
 import { AddToWishlistSheet } from "../components/AddToWishlistSheet";
 import { BackHeader } from "../components/BackHeader";
+import { CardImage } from "../components/CardImage";
 import { CardPriceDetails } from "../components/CardPriceDetails";
 import { ErrataCard } from "../components/ErrataCard";
 import { GameMarkdown } from "../components/GameMarkdown";
@@ -49,8 +50,9 @@ export function CardDetailScreen() {
               <div
                 className={`card-hero__frame${data.foil ? " foil-shine" : ""}`}
               >
-                <img
+                <CardImage
                   src={data.image}
+                  orientation={data.orientation}
                   alt={data.name}
                   className="card-hero__image"
                 />
@@ -92,8 +94,9 @@ export function CardDetailScreen() {
                     <span
                       className={`printing-tile__frame${printing.foil ? " foil-shine" : ""}`}
                     >
-                      <img
+                      <CardImage
                         src={printing.image || data.image}
+                        orientation={data.orientation}
                         alt={`${data.name} — ${printing.name}`}
                         loading="lazy"
                         className="printing-tile__image"
