@@ -1288,10 +1288,33 @@ textarea:focus {
   max-width: none;
   width: calc(100% / var(--card-frame-ratio));
   height: calc(100% * var(--card-frame-ratio));
-  /* Absorbe le peu qui manquerait à une image pas tout à fait au format d'une carte. */
-  object-fit: cover;
+  /*
+   * Absorbe le peu qui manquerait à une image pas tout à fait au format d'une
+   * carte. Une vignette qui préfère ne jamais rogner — la fiche d'une carte —
+   * demande `contain`, quitte à laisser un liseré.
+   */
+  object-fit: var(--card-frame-fit, cover);
   transform: translate(-50%, -50%) rotate(-90deg);
   display: block;
+}
+
+/*
+ * Les vignettes de liste sont mesurées en pixels, et pas tout à fait en 5/7 :
+ * sans leur ratio propre, l'image pivotée laisserait un liseré vide sur deux
+ * bords et déborderait des deux autres.
+ */
+.list-row__thumb.card-landscape {
+  --card-frame-ratio: calc(42 / 58);
+}
+
+/*
+ * La fiche d'une carte la montre entière : `object-fit: contain` y est un
+ * choix, que le pivot ne doit pas défaire. Une carte paysage d'un jeu dont les
+ * proportions ne seraient pas celles de Riftbound serait sinon rognée sur
+ * l'écran même qui sert à la lire.
+ */
+.card-hero__image.card-landscape {
+  --card-frame-fit: contain;
 }
 
 /* ---- Galerie de cartes ---- */
