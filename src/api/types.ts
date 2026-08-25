@@ -4,6 +4,13 @@
  * renvoie `_id` (et non `id` comme indiqué dans la spec).
  */
 
+// Le contenu d'un deck et la forme d'une carte de deck sont définis avec les
+// calculs qui les lisent, dans un module porté depuis joutes-app : les répéter
+// ici en ferait deux définitions à tenir d'accord.
+import type { DeckCards, DeckCardInfo } from "../lib/deck-contents";
+
+export type { DeckCards, DeckCardInfo };
+
 // ---- Auth (Better Auth) ----
 
 export interface SessionUser {
@@ -586,6 +593,30 @@ export interface LairsListResponse {
 
 // ---- Decks ----
 
+/**
+ * Qui voit le deck.
+ *
+ * `unlisted` est l'état intermédiaire : le deck s'ouvre par son lien, mais
+ * n'apparaît ni dans la librairie publique ni dans les moteurs de recherche.
+ * C'est ce qu'attend un joueur qui partage une liste à son groupe sans la
+ * publier au monde entier.
+ */
+export type DeckVisibility = "private" | "unlisted" | "public";
+
+export const DECK_VISIBILITIES: DeckVisibility[] = ["private", "unlisted", "public"];
+
+export type DeckMatchupRating = "favorable" | "even" | "unfavorable";
+
+export interface DeckGuideSection {
+  title: string;
+  body: string;
+}
+
+export interface DeckMatchup {
+  name: string;
+  rating: DeckMatchupRating;
+}
+
 export interface Deck {
   id: string;
   playerId?: string;
@@ -593,9 +624,32 @@ export interface Deck {
   name: string;
   url?: string;
   description?: string;
+  /**
+   * Liste de cartes en texte libre, telle qu'elle existait avant l'éditeur.
+   * Conservée : elle porte encore les decks des jeux sans catalogue de cartes,
+   * et reste ce que l'on colle dans un client de jeu.
+   */
   decklist?: string;
-  visibility?: "private" | "public";
+  /** Contenu structuré, zone par zone (cf. `lib/deck-contents.ts`). */
+  cards?: DeckCards;
+  guide?: DeckGuideSection[];
+  matchups?: DeckMatchup[];
+  /** Aide-mémoire de l'auteur : l'API ne le sert jamais à un autre que lui. */
+  notes?: string;
+  /** Format de jeu visé (« Standard OGN »), tel que déclaré par la fiche du jeu. */
+  format?: string;
+  /** Carte qui donne son identité au deck (la légende, à Riftbound). */
+  legendCardId?: string;
+  /** Son nom au moment de l'enregistrement, pour l'afficher sans relire le catalogue. */
+  legendName?: string;
+  /** Domaines couverts par les cartes du deck. Valeur dérivée, recalculée par le serveur. */
+  domains?: string[];
+  visibility?: DeckVisibility;
   creatorName?: string;
+  favoritedBy?: string[];
+  favoritesCount?: number;
+  views?: number;
+  version?: number;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -606,6 +660,29 @@ export interface DecksListResponse {
   page: number;
   limit: number;
   totalPages: number;
+}
+
+/** Une légende jouée par des decks publiés, et combien en jouent. */
+export interface DeckLegendFacet {
+  cardId: string;
+  name: string;
+  count: number;
+}
+
+/** Corps d'un `POST /decks`, et — partiel — d'un `PATCH /decks/{id}`. */
+export interface DeckInput {
+  name: string;
+  gameId: string;
+  url?: string;
+  description?: string;
+  decklist?: string;
+  cards?: DeckCards;
+  guide?: DeckGuideSection[];
+  matchups?: DeckMatchup[];
+  notes?: string;
+  format?: string;
+  legendCardId?: string;
+  visibility?: DeckVisibility;
 }
 
 // ---- Export hors ligne ----

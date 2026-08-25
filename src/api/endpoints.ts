@@ -33,6 +33,12 @@ export const endpoints = {
     quizzes: (idOrSlug: string) => `/games/${idOrSlug}/quizzes`,
     /** Catalogue public des produits (boîtes, figurines…) — sans possession. */
     products: (idOrSlug: string) => `/games/${idOrSlug}/products`,
+    /**
+     * Cartes d'un deck résolues contre le catalogue du jeu : en GET par
+     * identifiant (`?id=…&id=…`, 500 au plus), en POST par nom, pour appliquer
+     * une liste collée.
+     */
+    deckCards: (idOrSlug: string) => `/games/${idOrSlug}/deck-cards`,
   },
   quizzes: {
     detail: (quizId: string) => `/quizzes/${quizId}`,
@@ -78,6 +84,14 @@ export const endpoints = {
   decks: {
     list: "/decks",
     detail: (deckId: string) => `/decks/${deckId}`,
+    /** « Copier chez moi » : la copie arrive toujours privée. */
+    copy: (deckId: string) => `/decks/${deckId}/copy`,
+    /**
+     * Légendes réellement jouées par les decks publiés, avec leur nombre de
+     * decks : la facette de la librairie sort de ce qui est publié, pas du
+     * catalogue de cartes.
+     */
+    legends: "/decks/legends",
   },
   collection: {
     overview: "/collection",

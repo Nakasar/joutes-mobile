@@ -108,6 +108,7 @@
     },
     "wishlistsAction": "My wishlists",
     "sellListAction": "My sale list",
+    "decksAction": "My decks",
     "tradeAction": "Trade cards",
     "productsTitle": "Miniatures and boxes",
     "productsAction": "This game's products",
@@ -353,6 +354,148 @@
     "recompute": "Recompute",
     "computing": "Computing…",
     "error": "The computation failed."
+  },
+  "decks":   {
+    "title": "My decks",
+    "subtitle": "Your lists, and the community's",
+    "gateText": "Sign in to find your decks. The public library reads without an account.",
+    "createAction": "New deck",
+    "loadMore": "Load more",
+    "detailTitle": "Deck",
+    "noLegend": "No legend",
+    "unknownCard": "Unknown card",
+    "noDescription": "No description.",
+    "noGuide": "No play guide.",
+    "noCards": "This deck has no cards yet.",
+    "legal": "Legal",
+    "zonesToAdjust_one": "{{count}} zone to adjust",
+    "zonesToAdjust_other": "{{count}} zones to adjust",
+    "cardsCount_one": "{{count}} card",
+    "cardsCount_other": "{{count}} cards",
+    "costCurve": "Cost curve",
+    "matchups": "Matchups",
+    "guide": "Play guide",
+    "notes": "Private notes",
+    "build": "Build",
+    "copyToMine": "Copy to my decks",
+    "delete": "Delete this deck",
+    "tabs": {
+      "all": "All",
+      "drafts": "In progress",
+      "published": "Published",
+      "favorites": "Favorites"
+    },
+    "tabs2": {
+      "description": "Description",
+      "guide": "Guide",
+      "cards": "Cards"
+    },
+    "empty": {
+      "all": "No decks yet.",
+      "drafts": "No decks in progress.",
+      "published": "No published decks.",
+      "favorites": "No favorite decks."
+    },
+    "sort": {
+      "popular": "Popular",
+      "recent": "Recent",
+      "favorites": "My favorites"
+    },
+    "matchup": {
+      "favorable": "favorable",
+      "even": "even",
+      "unfavorable": "unfavorable"
+    },
+    "favorite": {
+      "add": "Add to favorites",
+      "remove": "Remove from favorites"
+    },
+    "share": {
+      "copy": "Copy link",
+      "copied": "Link copied"
+    },
+    "library": {
+      "title": "Library",
+      "link": "Browse the public library",
+      "searchPlaceholder": "Search a deck",
+      "empty": "No deck matches."
+    },
+    "facets": {
+      "game": "Game",
+      "allGames": "All games",
+      "format": "Format",
+      "allFormats": "All formats",
+      "legend": "Legend",
+      "allLegends": "All legends"
+    },
+    "create": {
+      "title": "New deck",
+      "name": "Name",
+      "namePlaceholder": "My deck",
+      "game": "Game",
+      "gamePlaceholder": "Pick a game",
+      "visibility": "Visibility",
+      "submit": "Create"
+    },
+    "text": {
+      "edit": "Edit the list",
+      "view": "View the list",
+      "hint": "One card per line, under its zone header. Applying replaces the deck's contents.",
+      "readOnlyHint": "One card per line. This deck is not yours: the list can be copied, not applied.",
+      "placeholder": "Main deck:\n2 Card name",
+      "copy": "Copy",
+      "copied": "Copied",
+      "apply": "Apply",
+      "applying": "Applying…",
+      "failed": "The list could not be read. The deck was left unchanged.",
+      "noMatch": "No card in the list was recognised. The deck was left unchanged.",
+      "unmatched_one": "{{count}} line not recognised",
+      "unmatched_other": "{{count}} lines not recognised"
+    },
+    "edit": {
+      "title": "Edit deck",
+      "format": "Format",
+      "formatPlaceholder": "Standard",
+      "description": "Description",
+      "contents": "Contents",
+      "emptyZone": "This zone is empty.",
+      "addCard": "Add a card",
+      "addTo": "Add to “{{zone}}”",
+      "searchPlaceholder": "Search a card",
+      "noCard": "No card matches.",
+      "decrease": "Remove one copy",
+      "increase": "Add one copy",
+      "addSection": "Add a section",
+      "sectionTitle": "Section title",
+      "sectionBody": "What should one know?",
+      "addMatchup": "Add a matchup",
+      "matchupName": "Archetype name",
+      "notesPlaceholder": "For your eyes only."
+    },
+    "zones": {
+      "legend": "Legend",
+      "champions": "Champions",
+      "maindeck": "Main deck",
+      "runes": "Runes",
+      "battlefields": "Battlefields",
+      "sideboard": "Sideboard",
+      "extra": "Extra zone"
+    },
+    "visibility": {
+      "private": {
+        "label": "Private",
+        "hint": "Only visible to me"
+      },
+      "unlisted": {
+        "label": "Unlisted",
+        "hint": "Reachable by link, absent from the library"
+      },
+      "public": {
+        "label": "Public",
+        "hint": "Visible to everyone, listed in the library"
+      },
+      "action": "Who sees this deck"
+    }
   },
   "deck": {
     "title": "Deck checker",

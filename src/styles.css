@@ -5217,3 +5217,210 @@ html.qr-scanning #root {
   max-height: 30vh;
   overflow-y: auto;
 }
+
+/* ---------------------------------------------------------------- Decks */
+
+.deck-row__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.deck-hero {
+  margin-bottom: 4px;
+}
+
+/*
+ * Prose écrite par un joueur : description d'un deck, section de guide. On ne
+ * lui donne que le rythme vertical qui lui manque — le reste (couleurs, tailles)
+ * vient déjà de la feuille.
+ */
+.user-markdown > :first-child {
+  margin-top: 0;
+}
+
+.user-markdown > :last-child {
+  margin-bottom: 0;
+}
+
+.user-markdown img {
+  max-width: 100%;
+  height: auto;
+}
+
+.deck-facets {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.deck-zone {
+  margin-bottom: 18px;
+}
+
+.deck-zone__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+/*
+ * Les vignettes d'une zone. `auto-fill` plutôt qu'un nombre de colonnes fixe :
+ * la grille se resserre sur un téléphone étroit et se remplit sur une tablette,
+ * sans point de rupture à maintenir.
+ */
+.deck-zone__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  gap: 8px;
+}
+
+/*
+ * Une vignette de deck ne se touche pas : il n'y a rien à en faire. Ni curseur
+ * de main ni état désactivé, donc — les deux venaient du bouton qu'elle a été
+ * un temps, et promettaient un geste qui n'existe pas.
+ */
+.deck-thumb {
+  position: relative;
+  display: block;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.deck-thumb__image {
+  display: block;
+  width: 100%;
+  border-radius: var(--radius-sm);
+}
+
+/* Une carte que le catalogue ne rend pas garde sa place : c'est son nom qui
+   remplace l'illustration, pas un trou dans la grille. */
+.deck-thumb__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 5 / 7;
+  padding: 6px;
+  background: var(--chip);
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-align: center;
+  border-radius: var(--radius-sm);
+}
+
+.deck-thumb__qty {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* La courbe de coûts : sept colonnes qui se lisent à leur forme. */
+.deck-curve {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 120px;
+  margin-top: 8px;
+}
+
+.deck-curve__col {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  gap: 4px;
+}
+
+.deck-curve__bar {
+  width: 100%;
+  background: var(--grad);
+  border-radius: 6px 6px 0 0;
+}
+
+.deck-curve__count,
+.deck-curve__label {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.deck-matchup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 0;
+}
+
+.deck-matchup--favorable {
+  color: var(--primary);
+}
+
+.deck-matchup--unfavorable {
+  color: var(--danger);
+}
+
+.deck-actions {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.deck-editor__zone-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.deck-guide-section,
+.deck-matchup-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.deck-visibility-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  text-align: left;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: inherit;
+  cursor: pointer;
+}
+
+.deck-visibility-option--active {
+  border-color: var(--primary);
+  background: var(--chip);
+}
+
+.deck-visibility-option__label {
+  font-weight: 600;
+}
+
+.deck-visibility-option__hint {
+  font-size: 0.85rem;
+  color: var(--muted);
+}

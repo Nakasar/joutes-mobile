@@ -108,6 +108,7 @@
     },
     "wishlistsAction": "Meine Wunschlisten",
     "sellListAction": "Meine Verkaufsliste",
+    "decksAction": "Meine Decks",
     "tradeAction": "Karten tauschen",
     "productsTitle": "Miniaturen und Boxen",
     "productsAction": "Die Produkte dieses Spiels",
@@ -353,6 +354,148 @@
     "recompute": "Neu berechnen",
     "computing": "Wird berechnet…",
     "error": "Die Berechnung ist fehlgeschlagen."
+  },
+  "decks":   {
+    "title": "Meine Decks",
+    "subtitle": "Deine Listen und die der Community",
+    "gateText": "Melde dich an, um deine Decks zu finden. Die öffentliche Bibliothek liest sich ohne Konto.",
+    "createAction": "Neues Deck",
+    "loadMore": "Mehr laden",
+    "detailTitle": "Deck",
+    "noLegend": "Ohne Legende",
+    "unknownCard": "Unbekannte Karte",
+    "noDescription": "Keine Beschreibung.",
+    "noGuide": "Kein Spielleitfaden.",
+    "noCards": "Dieses Deck hat noch keine Karten.",
+    "legal": "Regelkonform",
+    "zonesToAdjust_one": "{{count}} Zone anzupassen",
+    "zonesToAdjust_other": "{{count}} Zonen anzupassen",
+    "cardsCount_one": "{{count}} Karte",
+    "cardsCount_other": "{{count}} Karten",
+    "costCurve": "Kostenkurve",
+    "matchups": "Duelle",
+    "guide": "Spielleitfaden",
+    "notes": "Private Notizen",
+    "build": "Bauen",
+    "copyToMine": "Zu meinen Decks kopieren",
+    "delete": "Dieses Deck löschen",
+    "tabs": {
+      "all": "Alle",
+      "drafts": "In Arbeit",
+      "published": "Veröffentlicht",
+      "favorites": "Favoriten"
+    },
+    "tabs2": {
+      "description": "Beschreibung",
+      "guide": "Leitfaden",
+      "cards": "Karten"
+    },
+    "empty": {
+      "all": "Noch keine Decks.",
+      "drafts": "Keine Decks in Arbeit.",
+      "published": "Keine veröffentlichten Decks.",
+      "favorites": "Keine Favoriten."
+    },
+    "sort": {
+      "popular": "Beliebt",
+      "recent": "Neu",
+      "favorites": "Meine Favoriten"
+    },
+    "matchup": {
+      "favorable": "günstig",
+      "even": "ausgeglichen",
+      "unfavorable": "ungünstig"
+    },
+    "favorite": {
+      "add": "Zu Favoriten",
+      "remove": "Aus Favoriten entfernen"
+    },
+    "share": {
+      "copy": "Link kopieren",
+      "copied": "Link kopiert"
+    },
+    "library": {
+      "title": "Bibliothek",
+      "link": "Öffentliche Bibliothek durchsuchen",
+      "searchPlaceholder": "Deck suchen",
+      "empty": "Kein Deck passt."
+    },
+    "facets": {
+      "game": "Spiel",
+      "allGames": "Alle Spiele",
+      "format": "Format",
+      "allFormats": "Alle Formate",
+      "legend": "Legende",
+      "allLegends": "Alle Legenden"
+    },
+    "create": {
+      "title": "Neues Deck",
+      "name": "Name",
+      "namePlaceholder": "Mein Deck",
+      "game": "Spiel",
+      "gamePlaceholder": "Spiel wählen",
+      "visibility": "Sichtbarkeit",
+      "submit": "Erstellen"
+    },
+    "text": {
+      "edit": "Liste bearbeiten",
+      "view": "Liste ansehen",
+      "hint": "Eine Karte pro Zeile, unter der Überschrift ihrer Zone. Übernehmen ersetzt den Inhalt des Decks.",
+      "readOnlyHint": "Eine Karte pro Zeile. Dieses Deck gehört dir nicht: Die Liste lässt sich kopieren, nicht übernehmen.",
+      "placeholder": "Hauptdeck:\n2 Kartenname",
+      "copy": "Kopieren",
+      "copied": "Kopiert",
+      "apply": "Übernehmen",
+      "applying": "Wird übernommen…",
+      "failed": "Die Liste konnte nicht gelesen werden. Das Deck bleibt unverändert.",
+      "noMatch": "Keine Karte der Liste wurde erkannt. Das Deck bleibt unverändert.",
+      "unmatched_one": "{{count}} Zeile nicht erkannt",
+      "unmatched_other": "{{count}} Zeilen nicht erkannt"
+    },
+    "edit": {
+      "title": "Deck bearbeiten",
+      "format": "Format",
+      "formatPlaceholder": "Standard",
+      "description": "Beschreibung",
+      "contents": "Inhalt",
+      "emptyZone": "Diese Zone ist leer.",
+      "addCard": "Karte hinzufügen",
+      "addTo": "Zu „{{zone}}“ hinzufügen",
+      "searchPlaceholder": "Karte suchen",
+      "noCard": "Keine Karte passt.",
+      "decrease": "Ein Exemplar entfernen",
+      "increase": "Ein Exemplar hinzufügen",
+      "addSection": "Abschnitt hinzufügen",
+      "sectionTitle": "Titel des Abschnitts",
+      "sectionBody": "Was sollte man wissen?",
+      "addMatchup": "Duell hinzufügen",
+      "matchupName": "Name des Archetyps",
+      "notesPlaceholder": "Nur für dich."
+    },
+    "zones": {
+      "legend": "Legende",
+      "champions": "Champions",
+      "maindeck": "Hauptdeck",
+      "runes": "Runen",
+      "battlefields": "Schlachtfelder",
+      "sideboard": "Sideboard",
+      "extra": "Extra-Zone"
+    },
+    "visibility": {
+      "private": {
+        "label": "Privat",
+        "hint": "Nur für mich sichtbar"
+      },
+      "unlisted": {
+        "label": "Nicht gelistet",
+        "hint": "Über den Link erreichbar, nicht in der Bibliothek"
+      },
+      "public": {
+        "label": "Öffentlich",
+        "hint": "Für alle sichtbar, in der Bibliothek gelistet"
+      },
+      "action": "Wer sieht dieses Deck"
+    }
   },
   "deck": {
     "title": "Deck-Prüfer",
