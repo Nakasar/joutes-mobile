@@ -232,10 +232,10 @@ PATCH bimodal liste bien les nouveaux champs.
 **Écarté** : le catalogue permanent à l'écran et le glisser-déposer ; `DeckAnalysis`
 réduit à la courbe de coûts et au compteur de légalité par zone.
 
-**À signaler dans la PR** : l'API n'a **pas** de contrôle de version optimiste sur
-les decks (`version` est incrémenté mais jamais vérifié). Éditer depuis deux
-appareils écrase en silence. Ajouter un `expectedVersion` au PATCH est hors
-périmètre mais mérite une décision.
+**Signalé dans la PR, puis traité** : l'API n'avait pas de contrôle de version
+optimiste sur les decks — `version` était incrémenté mais jamais comparé, et
+éditer depuis deux appareils écrasait en silence. `expectedVersion` a été ajouté
+au PATCH depuis (joutes-app#289), et l'écran d'édition l'envoie.
 
 ---
 

@@ -1114,6 +1114,14 @@ export interface DeckInput {
   format?: string;
   legendCardId?: string;
   visibility?: DeckVisibility;
+  /**
+   * La `version` que le client croyait à jour, sur un `PATCH`.
+   *
+   * Elle arme la concurrence optimiste : le serveur refuse d'écrire par-dessus
+   * un enregistrement qu'on n'a pas vu et rend `409` avec l'état frais. Sans
+   * elle, l'écriture reste « le dernier gagne ».
+   */
+  expectedVersion?: number;
 }
 
 // ---- Export hors ligne ----

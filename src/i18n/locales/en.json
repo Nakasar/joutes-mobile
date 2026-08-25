@@ -584,7 +584,8 @@
       "sectionBody": "What should one know?",
       "addMatchup": "Add a matchup",
       "matchupName": "Archetype name",
-      "notesPlaceholder": "For your eyes only."
+      "notesPlaceholder": "For your eyes only.",
+      "conflict": "This deck was saved elsewhere since you opened it. Nothing was overwritten: save again to impose your version, or go back to start from theirs."
     },
     "zones": {
       "legend": "Legend",
