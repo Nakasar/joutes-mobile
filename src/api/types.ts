@@ -1247,6 +1247,25 @@ export type TradeOfferUpdateInput =
   | { target: "mine"; cards: TradeOwnedCardInput[] }
   | { target: "counterparty"; cards: TradeCatalogCardInput[] };
 
+/**
+ * Désignation d'une carte lue dans une liste écrite en texte : le nom, et ce
+ * qui la précise quand la ligne le dit (cf. `lib/trade-text.ts`).
+ */
+export interface TradeCardDesignation {
+  name: string;
+  setCode?: string;
+  collectorNumber?: string;
+}
+
+/**
+ * Réponse de l'appariement d'une liste : **même longueur et même ordre** que
+ * les désignations envoyées, `null` marquant celles qu'aucune carte ne
+ * satisfait. C'est l'index qui relie une carte à sa ligne.
+ */
+export interface TradeCardResolveResponse {
+  matches: (TradeCard | null)[];
+}
+
 /** Code d'erreur renvoyé par les opérations d'échange (voir `ApiError.body.error`). */
 export type TradeError =
   | "not-found"

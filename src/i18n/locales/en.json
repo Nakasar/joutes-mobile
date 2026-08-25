@@ -598,6 +598,22 @@
       "unknownCards": "Some cards couldn't be found in the catalog.",
       "userNotFound": "No user matches that identifier.",
       "failed": "Something went wrong."
+    },
+    "text": {
+      "open": "View list as text",
+      "hint": "One card per line: “2 Card name (SET) 123”. Applying replaces the contents of this offer.",
+      "readOnlyHint": "One card per line. This offer is read-only: the list can be copied, not applied.",
+      "placeholder": "2 Card name (SET) 123",
+      "copy": "Copy",
+      "copied": "Copied",
+      "apply": "Apply",
+      "applying": "Applying…",
+      "failed": "The list could not be read. The offer was left unchanged.",
+      "noMatch": "No card in the list was recognised. The offer was left unchanged.",
+      "unmatched_one": "{{count}} line not recognised",
+      "unmatched_other": "{{count}} lines not recognised",
+      "dropped_one": "{{count}} card left out: an offer holds at most {{max}} cards.",
+      "dropped_other": "{{count}} cards left out: an offer holds at most {{max}} cards."
     }
   },
   "profile": {

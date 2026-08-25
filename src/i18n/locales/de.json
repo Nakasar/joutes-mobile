@@ -598,6 +598,22 @@
       "unknownCards": "Einige Karten wurden im Katalog nicht gefunden.",
       "userNotFound": "Kein Benutzer entspricht dieser Kennung.",
       "failed": "Ein Fehler ist aufgetreten."
+    },
+    "text": {
+      "open": "Liste als Text anzeigen",
+      "hint": "Eine Karte pro Zeile: „2 Kartenname (SET) 123“. Übernehmen ersetzt den Inhalt dieses Angebots.",
+      "readOnlyHint": "Eine Karte pro Zeile. Dieses Angebot ist schreibgeschützt: Die Liste lässt sich kopieren, nicht übernehmen.",
+      "placeholder": "2 Kartenname (SET) 123",
+      "copy": "Kopieren",
+      "copied": "Kopiert",
+      "apply": "Übernehmen",
+      "applying": "Wird übernommen…",
+      "failed": "Die Liste konnte nicht gelesen werden. Das Angebot bleibt unverändert.",
+      "noMatch": "Keine Karte der Liste wurde erkannt. Das Angebot bleibt unverändert.",
+      "unmatched_one": "{{count}} Zeile nicht erkannt",
+      "unmatched_other": "{{count}} Zeilen nicht erkannt",
+      "dropped_one": "{{count}} Karte ausgelassen: Ein Angebot fasst höchstens {{max}} Karten.",
+      "dropped_other": "{{count}} Karten ausgelassen: Ein Angebot fasst höchstens {{max}} Karten."
     }
   },
   "profile": {

@@ -5150,3 +5150,70 @@ html.qr-scanning #root {
   color: var(--muted);
   cursor: pointer;
 }
+
+/* ---------------------------------------- Offre d'échange en texte */
+
+/*
+ * Le badge de validation et le bouton de la vue texte, en tête d'une offre.
+ * Ils passent à la ligne : une rangée qui ne se coupe pas élargit la page
+ * entière sur un téléphone, pas seulement elle-même.
+ */
+.offer-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/*
+ * La liste tient en colonnes : une carte par ligne, et le nom aligné derrière
+ * sa quantité. D'où la police à chasse fixe — c'est ce qui distingue une liste
+ * d'un paragraphe, et ce qui laisse voir qu'une ligne n'a pas la forme des
+ * autres avant même de l'appliquer.
+ */
+.trade-text__area {
+  width: 100%;
+  min-height: 180px;
+  resize: vertical;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  /* Les listes collées viennent d'ailleurs : une ligne trop longue se coupe
+     plutôt que d'imposer un défilement horizontal au pouce. */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.trade-text__area:read-only {
+  color: var(--muted);
+}
+
+.trade-text__report {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--chip);
+}
+
+.trade-text__report-title {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.trade-text__unmatched {
+  margin: 6px 0 0;
+  padding-left: 18px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+  /* Une liste d'erreurs ne doit pas pousser la feuille modale hors de l'écran :
+     passé quelques lignes, elle défile dans son propre cadre. */
+  max-height: 30vh;
+  overflow-y: auto;
+}

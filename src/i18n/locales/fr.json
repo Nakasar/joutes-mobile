@@ -598,6 +598,22 @@
       "unknownCards": "Certaines cartes sont introuvables dans le catalogue.",
       "userNotFound": "Aucun utilisateur ne correspond à cet identifiant.",
       "failed": "Une erreur est survenue."
+    },
+    "text": {
+      "open": "Voir la liste en texte",
+      "hint": "Une carte par ligne : « 2 Nom de la carte (EXT) 123 ». Appliquer remplace le contenu de cette offre.",
+      "readOnlyHint": "Une carte par ligne. Cette offre est en lecture seule : la liste se copie, elle ne s'applique pas.",
+      "placeholder": "2 Nom de la carte (EXT) 123",
+      "copy": "Copier",
+      "copied": "Copié",
+      "apply": "Appliquer",
+      "applying": "Application…",
+      "failed": "La liste n'a pas pu être lue. L'offre n'a pas été modifiée.",
+      "noMatch": "Aucune carte de la liste n'a été reconnue. L'offre n'a pas été modifiée.",
+      "unmatched_one": "{{count}} ligne non reconnue",
+      "unmatched_other": "{{count}} lignes non reconnues",
+      "dropped_one": "{{count}} carte laissée de côté : une offre ne porte pas plus de {{max}} cartes.",
+      "dropped_other": "{{count}} cartes laissées de côté : une offre ne porte pas plus de {{max}} cartes."
     }
   },
   "profile": {
