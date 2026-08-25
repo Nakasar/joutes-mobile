@@ -25,6 +25,7 @@ import { NewsDetailScreen } from "./screens/NewsDetailScreen";
 import { PlayGroupDetailScreen } from "./screens/PlayGroupDetailScreen";
 import { PlayGroupSellListScreen } from "./screens/PlayGroupSellListScreen";
 import { PlayGroupWishlistsScreen } from "./screens/PlayGroupWishlistsScreen";
+import { PlayersScreen } from "./screens/PlayersScreen";
 import { PlayScreen } from "./screens/PlayScreen";
 import { PoliciesListScreen } from "./screens/PoliciesListScreen";
 import { PolicyDetailScreen } from "./screens/PolicyDetailScreen";
@@ -36,6 +37,7 @@ import { TournamentDetailScreen } from "./screens/TournamentDetailScreen";
 import { TournamentFormScreen } from "./screens/TournamentFormScreen";
 import { TradeDetailScreen } from "./screens/TradeDetailScreen";
 import { TradesScreen } from "./screens/TradesScreen";
+import { UserContentScreen } from "./screens/UserContentScreen";
 import { UserProfileScreen } from "./screens/UserProfileScreen";
 import { WishlistDetailScreen } from "./screens/WishlistDetailScreen";
 import { WishlistsScreen } from "./screens/WishlistsScreen";
@@ -183,7 +185,12 @@ function Shell() {
                   path="/social/groups/:groupId/sell-list"
                   element={<PlayGroupSellListScreen />}
                 />
+                <Route path="/players" element={<PlayersScreen />} />
                 <Route path="/users/:userTag" element={<UserProfileScreen />} />
+                <Route
+                  path="/users/:userTag/contents/:contentId"
+                  element={<UserContentScreen />}
+                />
                 <Route path="/notifications" element={<NotificationsScreen />} />
                 <Route path="/settings" element={<SettingsScreen />} />
                 <Route path="*" element={<Navigate to="/" replace />} />

@@ -765,11 +765,80 @@
     "gamesEmpty": "No games followed yet.",
     "lairsTitle": "Followed stores",
     "lairsEmpty": "No stores followed yet.",
-    "achievementsTitle": "Achievements",
-    "privateNote": "This profile is private: followed games, stores and achievements aren't visible.",
+    "privateNote": "This profile is private: its activity — followed games and stores, decks, publications, achievements, live — isn't visible.",
     "wishlistsTitle": "Wishlists",
     "sellListTitle": "Sale list",
-    "viewMineAction": "View my public profile"
+    "viewMineAction": "View my public profile",
+    "decksTitle": "Public decks",
+    "followers_one": "{{count}} follower",
+    "followers_other": "{{count}} followers",
+    "tabs": {
+      "showcase": "Showcase",
+      "decks": "Decks",
+      "publications": "Publications",
+      "achievements": "Achievements",
+      "trade": "Trade"
+    },
+    "follow": {
+      "action": "Follow",
+      "following": "Following"
+    },
+    "achievements": {
+      "title": "Achievements",
+      "progress": "{{unlocked}} / {{total}}",
+      "unlocked": "Unlocked",
+      "unlockedOn": "Unlocked on {{date}}",
+      "locked": "Not unlocked yet",
+      "points_one": "{{count}} point",
+      "points_other": "{{count}} points"
+    },
+    "publications": {
+      "title": "Publications",
+      "missing": "This publication no longer exists.",
+      "noBody": "This publication has nothing to show here.",
+      "open": "Open the publication",
+      "kind": {
+        "article": "Article",
+        "video": "Video",
+        "replay": "Replay"
+      }
+    },
+    "live": {
+      "title": "Live",
+      "watch": "Watch the stream"
+    }
+  },
+  "players": {
+    "title": "Players",
+    "entrySub": "The community registry",
+    "tabRegistry": "Registry",
+    "tabLeaderboard": "Leaderboard",
+    "searchPlaceholder": "Search for a player…",
+    "empty": "No player matches this search.",
+    "results_one": "{{count}} player",
+    "results_other": "{{count}} players",
+    "loadMore": "Load more",
+    "live": "Live",
+    "noGames": "No games followed",
+    "sort": {
+      "active": "Active",
+      "followers": "Followers",
+      "name": "Name"
+    },
+    "filters": {
+      "game": "Game",
+      "allGames": "All games",
+      "city": "City",
+      "cityPlaceholder": "All cities",
+      "live": "Live",
+      "sells": "Sells cards"
+    },
+    "leaderboard": {
+      "empty": "The leaderboard is empty for now.",
+      "yourRank": "Your rank: {{rank}} / {{total}}",
+      "score_one": "{{points}} pts · {{count}} achievement",
+      "score_other": "{{points}} pts · {{count}} achievements"
+    }
   },
   "play": {
     "title": "Play",

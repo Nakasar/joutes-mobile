@@ -9,7 +9,7 @@ import {
   listPlayGroups,
 } from "../api/social";
 import type { PlayGroup, PublicUser } from "../api/types";
-import { ChevronIcon, PinIcon, UserPlusIcon } from "../components/icons";
+import { ChevronIcon, PinIcon, UserPlusIcon, UsersIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
@@ -25,6 +25,31 @@ function friendTag(u: PublicUser): string {
   if (u.username) return `@${u.username}`;
   if (u.discriminator) return `#${u.discriminator}`;
   return "";
+}
+
+/**
+ * L'entrée du registre, en tête de l'onglet Amis.
+ *
+ * C'est là qu'on va chercher les gens qu'on n'a pas encore, donc là qu'elle se
+ * pose — plutôt que d'occuper une sixième place dans la barre du bas. Au-dessus
+ * du portillon : le registre est public, et se le voir refuser serait absurde.
+ */
+function RegistryLink() {
+  const { t } = useTranslation();
+  return (
+    <Link to="/players" className="list-row list-row--link">
+      <span className="list-row__icon" style={{ background: "var(--chip)" }}>
+        <UsersIcon size={18} />
+      </span>
+      <div className="list-row__body">
+        <p className="list-row__title">{t("players.title")}</p>
+        <p className="list-row__sub">{t("players.entrySub")}</p>
+      </div>
+      <span className="chevron">
+        <ChevronIcon size={18} />
+      </span>
+    </Link>
+  );
 }
 
 function AuthGate() {
@@ -256,6 +281,7 @@ export function SocialScreen() {
         </button>
       </div>
 
+      {tab === "amis" && <RegistryLink />}
       {tab === "amis" && (isAuthenticated ? <FriendsTab /> : <AuthGate />)}
       {tab === "groups" && (isAuthenticated ? <GroupsTab /> : <AuthGate />)}
       {tab === "lairs" && <LairsTab />}

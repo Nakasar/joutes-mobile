@@ -765,11 +765,80 @@
     "gamesEmpty": "Nessun gioco seguito per ora.",
     "lairsTitle": "Negozi seguiti",
     "lairsEmpty": "Nessun negozio seguito per ora.",
-    "achievementsTitle": "Successi",
-    "privateNote": "Questo profilo è privato: giochi, negozi seguiti e successi non sono visibili.",
+    "privateNote": "Questo profilo è privato: la sua attività — giochi e negozi seguiti, mazzi, pubblicazioni, successi, dirette — non è visibile.",
     "wishlistsTitle": "Liste dei desideri",
     "sellListTitle": "Lista di vendita",
-    "viewMineAction": "Vedi il mio profilo pubblico"
+    "viewMineAction": "Vedi il mio profilo pubblico",
+    "decksTitle": "Mazzi pubblici",
+    "followers_one": "{{count}} follower",
+    "followers_other": "{{count}} follower",
+    "tabs": {
+      "showcase": "Vetrina",
+      "decks": "Mazzi",
+      "publications": "Pubblicazioni",
+      "achievements": "Successi",
+      "trade": "Scambi"
+    },
+    "follow": {
+      "action": "Segui",
+      "following": "Seguito"
+    },
+    "achievements": {
+      "title": "Successi",
+      "progress": "{{unlocked}} / {{total}}",
+      "unlocked": "Sbloccato",
+      "unlockedOn": "Sbloccato il {{date}}",
+      "locked": "Da sbloccare",
+      "points_one": "{{count}} punto",
+      "points_other": "{{count}} punti"
+    },
+    "publications": {
+      "title": "Pubblicazioni",
+      "missing": "Questa pubblicazione non esiste più.",
+      "noBody": "Questa pubblicazione non ha nulla da mostrare qui.",
+      "open": "Apri la pubblicazione",
+      "kind": {
+        "article": "Articolo",
+        "video": "Video",
+        "replay": "Replay"
+      }
+    },
+    "live": {
+      "title": "In diretta",
+      "watch": "Guarda la diretta"
+    }
+  },
+  "players": {
+    "title": "Giocatori",
+    "entrySub": "Il registro della community",
+    "tabRegistry": "Registro",
+    "tabLeaderboard": "Classifica",
+    "searchPlaceholder": "Cerca un giocatore…",
+    "empty": "Nessun giocatore corrisponde a questa ricerca.",
+    "results_one": "{{count}} giocatore",
+    "results_other": "{{count}} giocatori",
+    "loadMore": "Carica altri",
+    "live": "In diretta",
+    "noGames": "Nessun gioco seguito",
+    "sort": {
+      "active": "Attivi",
+      "followers": "Follower",
+      "name": "Nome"
+    },
+    "filters": {
+      "game": "Gioco",
+      "allGames": "Tutti i giochi",
+      "city": "Città",
+      "cityPlaceholder": "Tutte le città",
+      "live": "In diretta",
+      "sells": "Vende carte"
+    },
+    "leaderboard": {
+      "empty": "La classifica è vuota per ora.",
+      "yourRank": "Il tuo rango: {{rank}} / {{total}}",
+      "score_one": "{{points}} pt · {{count}} successo",
+      "score_other": "{{points}} pt · {{count}} successi"
+    }
   },
   "play": {
     "title": "Gioca",

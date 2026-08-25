@@ -8,6 +8,7 @@
 // calculs qui les lisent, dans un module porté depuis joutes-app : les répéter
 // ici en ferait deux définitions à tenir d'accord.
 import type { DeckCards, DeckCardInfo } from "../lib/deck-contents";
+import type { UserShowcaseSectionState } from "../lib/user-showcase";
 
 export type { DeckCards, DeckCardInfo };
 
@@ -536,14 +537,150 @@ export interface PublicUserAchievement {
  * `socialLinks` sont toujours présents ; `games`/`lairs`/`achievements` ne sont
  * peuplés que si `isPublicProfile` est vrai (tableaux vides sinon).
  */
+/**
+ * Un badge dérivé du compte : son palier d'abonnement, et les succès marqués
+ * comme statuts. Jamais stocké ni réglable — un statut n'ouvre aucun droit,
+ * c'est ce qui le sépare d'un palier.
+ */
+export interface UserBadges {
+  plan: string | null;
+  statuses: { id: string; name: string; icon?: string }[];
+}
+
+/** Un lien sortant d'un profil, reconnu par son hôte. */
+export interface UserLink {
+  url: string;
+  kind: string;
+  host: string;
+  label?: string;
+}
+
+/**
+ * Un direct en cours, tel qu'il s'annonce sur ce profil. La liste des
+ * destinations d'une chaîne liée *est* le réglage : une chaîne qui n'annonce
+ * que sur un lieu n'apparaît pas ici.
+ */
+export interface StreamLinkLive {
+  url: string;
+  title?: string;
+  startedAt: string;
+}
+
+/** Un succès du catalogue, et la date à laquelle ce joueur l'a décroché. */
+export interface AchievementWithUnlockInfo {
+  id: string;
+  name: string;
+  description?: string;
+  icon?: string;
+  points?: number;
+  /** Absent : le succès reste à atteindre. */
+  unlockedAt?: string;
+}
+
+export interface UserAchievementsResponse {
+  achievements: AchievementWithUnlockInfo[];
+  unlocked: number;
+  total: number;
+  /** Points des succès décrochés. Un succès-statut en vaut zéro. */
+  points: number;
+}
+
+export type UserContentKind = "video" | "article" | "replay";
+
+/** Ce qu'un joueur publie. Les brouillons ne sortent jamais de son compte. */
+export interface UserContent {
+  id: string;
+  authorId: string;
+  kind: UserContentKind;
+  title: string;
+  summary?: string;
+  /** Markdown, articles seulement. */
+  body?: string;
+  /** Vidéos et replays seulement. */
+  url?: string;
+  thumbnail?: string;
+  /** Affichée telle quelle : la plateforme ne l'interprète pas. */
+  duration?: string;
+  gameId?: string;
+  publishedAt: string;
+  updatedAt?: string;
+}
+
 export interface PublicUserProfile extends PublicUser {
   description: string | null;
   website: string | null;
   socialLinks: string[];
   isPublicProfile: boolean;
+  /** Le « membre depuis ». */
+  createdAt?: string;
+  banner?: string;
+  showcase?: {
+    sections?: UserShowcaseSectionState[];
+    links?: UserLink[];
+    pinnedDeckId?: string;
+    playStyles?: string[];
+  };
+  badges?: UserBadges;
+  followersCount?: number;
+  /** Faux sans session : l'API ne lit rien pour le dire. */
+  isFollowing?: boolean;
+  /** Profils publics seulement. */
+  live?: StreamLinkLive | null;
   games: PublicUserGame[];
   lairs: PublicUserLair[];
+  /** Décrochés seulement — le catalogue entier a sa propre route. */
   achievements: PublicUserAchievement[];
+}
+
+// ---- Registre de la communauté ----
+
+/** Un compte public tel que le registre le liste. */
+export interface RegistryUser {
+  id: string;
+  username: string;
+  displayName?: string;
+  discriminator?: string;
+  avatar?: string;
+  description?: string;
+  /** N'apparaît que pour les comptes qui ont accepté de la montrer. */
+  city?: string;
+  games: string[];
+  isPublicProfile: boolean;
+  createdAt?: string;
+}
+
+export interface RegistryEntry {
+  user: RegistryUser;
+  badges: UserBadges;
+  followers: number;
+  isFollowing: boolean;
+  isLive: boolean;
+  games: GameSummary[];
+}
+
+export type RegistrySort = "active" | "followers" | "name";
+
+export interface RegistryResponse {
+  entries: RegistryEntry[];
+  /** Comptes correspondant aux filtres, quel que soit `count`. */
+  total: number;
+  /** Faux au plafond, même si `total` est plus grand : il n'y a plus rien à charger. */
+  hasMore: boolean;
+  /** Le compteur réellement appliqué, après arrondi et plafonnement. */
+  count: number;
+}
+
+export interface LeaderboardRow {
+  userId: string;
+  points: number;
+  unlocked: number;
+  user?: RegistryUser;
+  badges?: UserBadges;
+}
+
+export interface LeaderboardResponse {
+  rows: LeaderboardRow[];
+  rank: { rank: number; points: number; unlocked: number; total: number } | null;
 }
 
 export interface FriendRequest {

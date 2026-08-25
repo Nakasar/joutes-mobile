@@ -158,12 +158,28 @@ export const endpoints = {
     myGames: "/users/me/games",
     /** Permissions effectives du compte connecté (publication de policies…). */
     myPermissions: "/users/me/permissions",
+    /** Le registre de la communauté : les comptes qui ont ouvert leur vitrine. */
+    list: "/users",
+    /** Le classement des succès, et le rang de l'appelant. */
+    leaderboard: "/users/leaderboard",
     detail: (userTagOrId: string) =>
       `/users/${encodeURIComponent(userTagOrId)}`,
     wishlists: (userTagOrId: string) =>
       `/users/${encodeURIComponent(userTagOrId)}/wishlists`,
     sellList: (userTagOrId: string) =>
       `/users/${encodeURIComponent(userTagOrId)}/sell-list`,
+    /**
+     * Suivre, ou cesser de suivre. Deux verbes idempotents (`PUT` / `DELETE`)
+     * plutôt qu'une bascule : deux envois partis d'un double toucher
+     * laisseraient sinon l'abonnement dans l'état contraire à celui voulu.
+     */
+    follow: (userTagOrId: string) =>
+      `/users/${encodeURIComponent(userTagOrId)}/follow`,
+    /** Tous les succès, décrochés ou non — le profil ne porte que les premiers. */
+    achievements: (userTagOrId: string) =>
+      `/users/${encodeURIComponent(userTagOrId)}/achievements`,
+    contents: (userTagOrId: string) =>
+      `/users/${encodeURIComponent(userTagOrId)}/contents`,
   },
   notifications: {
     list: "/notifications",
