@@ -584,7 +584,8 @@
       "sectionBody": "Cosa bisogna sapere?",
       "addMatchup": "Aggiungi un confronto",
       "matchupName": "Nome dell'archetipo",
-      "notesPlaceholder": "Solo per te."
+      "notesPlaceholder": "Solo per te.",
+      "conflict": "Questo mazzo è stato salvato altrove da quando l'hai aperto. Nulla è stato sovrascritto: salva di nuovo per imporre la tua versione, o torna indietro per ripartire dalla sua."
     },
     "zones": {
       "legend": "Leggenda",

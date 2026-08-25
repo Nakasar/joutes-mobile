@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getDeck, getDeckCards, updateDeck } from "../api/decks";
@@ -9,6 +9,7 @@ import { DeckCardPickerSheet } from "../components/DeckCardPickerSheet";
 import { DeckLegalityBadge, DeckSizeLabel } from "../components/DeckBadges";
 import { MinusIcon, PlusIcon, TrashIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
+import { ApiError } from "../api/client";
 import { useApi } from "../hooks/useApi";
 import {
   changeCardQuantity,
@@ -46,6 +47,21 @@ const MATCHUP_RATINGS: DeckMatchupRating[] = ["favorable", "even", "unfavorable"
  * deck depuis deux appareils écrase donc en silence. C'est une limite connue de
  * l'API, pas de cet écran.
  */
+/**
+ * La version du deck qui nous a devancés, lue dans le corps d'un `409`.
+ *
+ * Le corps d'une `ApiError` est `unknown` : le serveur promet
+ * `{ error: "conflict", deck }`, mais un intermédiaire peut rendre autre chose,
+ * et un `as` à l'aveugle ferait planter l'écran au lieu d'afficher le conflit.
+ */
+function readConflictVersion(body: unknown): number | null {
+  if (typeof body !== "object" || body === null || !("deck" in body)) return null;
+  const deck = (body as { deck: unknown }).deck;
+  if (typeof deck !== "object" || deck === null || !("version" in deck)) return null;
+  const version = (deck as { version: unknown }).version;
+  return typeof version === "number" ? version : null;
+}
+
 export function DeckEditScreen() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -83,8 +99,18 @@ export function DeckEditScreen() {
     setCards(deck.cards ?? {});
     setGuide(deck.guide ?? []);
     setMatchups(deck.matchups ?? []);
+    versionRef.current = deck.version ?? 1;
     setHydratedFor(deck.id);
   }, [loaded.data, hydratedFor]);
+
+  /**
+   * La version serveur, telle qu'on l'a lue — puis telle que le serveur la
+   * renvoie à chaque enregistrement.
+   *
+   * Une ref plutôt qu'un état : elle ne redessine rien, et `loaded.data` ne
+   * bouge pas après un `PATCH` — `useApi` garde sa réponse.
+   */
+  const versionRef = useRef(1);
 
   // Le deck chargé est-il bien celui de l'adresse ? Entre deux decks, la
   // réponse précédente reste un instant en mémoire : on n'affiche pas un
@@ -126,7 +152,7 @@ export function DeckEditScreen() {
     setSaving(true);
     setError(null);
     try {
-      await updateDeck(deckId, {
+      const saved = await updateDeck(deckId, {
         name: name.trim(),
         description,
         format: format.trim() || undefined,
@@ -136,9 +162,23 @@ export function DeckEditScreen() {
         // l'enregistrement plutôt que refusée par le serveur.
         guide: guide.filter((section) => section.title.trim()),
         matchups: matchups.filter((matchup) => matchup.name.trim()),
+        expectedVersion: versionRef.current,
       });
+      versionRef.current = saved.version ?? versionRef.current;
       navigate(`/decks/${deckId}`, { replace: true });
     } catch (err: unknown) {
+      // Le deck a été enregistré ailleurs — l'autre appareil, ou le site.
+      // Rien n'a été écrit : la saisie reste à l'écran, et son auteur décide.
+      // La version fraîche est adoptée, si bien qu'un second enregistrement
+      // impose la sienne — délibérément, cette fois.
+      if (err instanceof ApiError && err.status === 409) {
+        const fresh = readConflictVersion(err.body);
+        if (fresh !== null) versionRef.current = fresh;
+        setError(t("decks.edit.conflict"));
+        setSaving(false);
+        return;
+      }
+
       setError(err instanceof Error ? err.message : t("common.error"));
       setSaving(false);
     }

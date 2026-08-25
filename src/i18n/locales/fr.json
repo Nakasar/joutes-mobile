@@ -584,7 +584,8 @@
       "sectionBody": "Que faut-il savoir ?",
       "addMatchup": "Ajouter une confrontation",
       "matchupName": "Nom de l'archétype",
-      "notesPlaceholder": "Pour vous seul."
+      "notesPlaceholder": "Pour vous seul.",
+      "conflict": "Ce deck a été enregistré ailleurs depuis que vous l'avez ouvert. Rien n'a été écrasé : enregistrez à nouveau pour imposer votre version, ou revenez en arrière pour repartir de la sienne."
     },
     "zones": {
       "legend": "Légende",

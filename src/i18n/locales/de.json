@@ -584,7 +584,8 @@
       "sectionBody": "Was sollte man wissen?",
       "addMatchup": "Duell hinzufügen",
       "matchupName": "Name des Archetyps",
-      "notesPlaceholder": "Nur für dich."
+      "notesPlaceholder": "Nur für dich.",
+      "conflict": "Dieses Deck wurde anderswo gespeichert, seit du es geöffnet hast. Nichts wurde überschrieben: Speichere erneut, um deine Fassung durchzusetzen, oder geh zurück, um von ihrer auszugehen."
     },
     "zones": {
       "legend": "Legende",
