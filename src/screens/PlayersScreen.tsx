@@ -119,19 +119,21 @@ function Registry() {
 
   const games = useApi(() => listGames(), []);
 
+  // Changer un filtre repart du premier palier : garder cent résultats demandés
+  // ferait payer une recherche large à une recherche qui vient de se resserrer.
+  //
+  // Le retour se fait **avec** le changement, et non dans un effet qui
+  // l'observe : un effet ne part qu'après la requête du rendu en cours,
+  // laquelle est déjà partie avec l'ancien palier. Deux requêtes pour un seul
+  // geste, dont une jetée à l'arrivée.
   useEffect(() => {
     const timer = setTimeout(() => {
       setSearch(searchInput.trim());
       setCity(cityInput.trim());
+      setCount(REGISTRY_STEP);
     }, 300);
     return () => clearTimeout(timer);
   }, [searchInput, cityInput]);
-
-  // Changer un filtre repart du premier palier : garder cent résultats demandés
-  // ferait payer une recherche large à une recherche qui vient de se resserrer.
-  useEffect(() => {
-    setCount(REGISTRY_STEP);
-  }, [search, city, gameId, sells, live, sort]);
 
   const requestId = useRef(0);
   useEffect(() => {
@@ -181,7 +183,10 @@ function Registry() {
           <button
             key={key}
             className={`segmented__item${sort === key ? " segmented__item--active" : ""}`}
-            onClick={() => setSort(key)}
+            onClick={() => {
+              setSort(key);
+              setCount(REGISTRY_STEP);
+            }}
           >
             {t(`players.sort.${key}`)}
           </button>
@@ -191,7 +196,13 @@ function Registry() {
       <div className="registry-filters">
         <label className="field">
           <span className="field__label">{t("players.filters.game")}</span>
-          <select value={gameId} onChange={(e) => setGameId(e.currentTarget.value)}>
+          <select
+            value={gameId}
+            onChange={(e) => {
+              setGameId(e.currentTarget.value);
+              setCount(REGISTRY_STEP);
+            }}
+          >
             <option value={ALL}>{t("players.filters.allGames")}</option>
             {(games.data ?? []).map((game) => (
               <option key={game._id} value={game._id}>
@@ -218,14 +229,20 @@ function Registry() {
       <div className="chip-set registry-filters__toggles">
         <button
           className={`chip-filter${live ? " chip-filter--active" : ""}`}
-          onClick={() => setLive((v) => !v)}
+          onClick={() => {
+            setLive((v) => !v);
+            setCount(REGISTRY_STEP);
+          }}
           aria-pressed={live}
         >
           {t("players.filters.live")}
         </button>
         <button
           className={`chip-filter${sells ? " chip-filter--active" : ""}`}
-          onClick={() => setSells((v) => !v)}
+          onClick={() => {
+            setSells((v) => !v);
+            setCount(REGISTRY_STEP);
+          }}
           aria-pressed={sells}
         >
           {t("players.filters.sells")}

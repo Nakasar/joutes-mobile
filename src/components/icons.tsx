@@ -418,3 +418,37 @@ export function TextListIcon(p: IconProps) {
     </Icon>
   );
 }
+
+/** Un œil barré : ce que les autres ne voient pas — un groupe privé. */
+export function EyeOffIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M10.7 5.1A9.8 9.8 0 0 1 12 5c5.5 0 9 6 9 6a15.5 15.5 0 0 1-2.9 3.6" />
+      <path d="M6.5 7.1A15.6 15.6 0 0 0 3 11s3.5 6 9 6a9.6 9.6 0 0 0 4.2-.9" />
+      <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+      <path d="m3 3 18 18" />
+    </Icon>
+  );
+}
+
+/** Deux flèches qui bouclent : le rythme d'un groupe, ce qui revient. */
+export function RepeatIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="m17 2 4 4-4 4" />
+      <path d="M3 11v-1a4 4 0 0 1 4-4h14" />
+      <path d="m7 22-4-4 4-4" />
+      <path d="M21 13v1a4 4 0 0 1-4 4H3" />
+    </Icon>
+  );
+}
+
+/** Une horloge : le temps qui passe sans nouvelle du groupe. */
+export function ClockIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3.5 2" />
+    </Icon>
+  );
+}

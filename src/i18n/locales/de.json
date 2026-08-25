@@ -301,16 +301,51 @@
       "explore": {
        "title": "Gruppen entdecken",
        "entrySub": "Die Übersicht offener Gruppen",
-       "searchPlaceholder": "Gruppe suchen…",
-       "empty": "Keine Gruppe entspricht dieser Suche.",
+       "searchPlaceholder": "Ein Name, eine Stadt, ein Spiel, ein Tag…",
+       "empty": "Keine Gruppe dieses Namens auf der Rolle.",
        "loadMore": "Mehr laden",
        "live": "Live",
-       "liveNow": "Gerade live",
+       "liveNow": "In den Schranken",
+       "private": "Privat",
+       "liveCount_one": "{{count}} Gruppe streamt",
+       "liveCount_other": "{{count}} Gruppen streamen",
        "nearUnavailable": "Die Sortierung nach Nähe braucht deinen Standort, den die App noch nicht lesen kann. Die Liste bleibt nach Lebendigkeit sortiert.",
        "order": {
         "vifs": "Am lebendigsten",
         "proches": "In der Nähe",
-        "neufs": "Neueste"
+        "neufs": "Neuzugänge"
+       },
+       "notice": {
+        "vifs": "Live › Veröffentlichung › kommende Sitzung",
+        "proches": "Entfernung von deinem Standort",
+        "neufs": "Gründungsdatum der Gruppe"
+       },
+       "roll": {
+        "title": "Die Rolle",
+        "results": "Ergebnisse",
+        "count_one": "{{count}} Gruppe auf der Rolle",
+        "count_other": "{{count}} Gruppen auf der Rolle",
+        "reset": "Rolle wieder öffnen"
+       },
+       "entry": {
+        "liveCry_one": "{{streamer}} streamt · {{count}} Zuschauer",
+        "liveCry_other": "{{streamer}} streamt · {{count}} Zuschauer",
+        "liveCryPlain": "{{streamer}} streamt gerade",
+        "quiet": "Seit einer Weile nichts Neues",
+        "deeds": {
+         "content": "{{title}} — {{at}}",
+         "announcement": "{{title}} — {{at}}",
+         "session": "Nächste Sitzung {{at}}"
+        },
+        "follow": "Folgen",
+        "following": "Folge ich",
+        "enter": "Eintreten →",
+        "members_one": "Mitglied",
+        "members_other": "Mitglieder",
+        "followers_one": "Abonnent",
+        "followers_other": "Abonnenten",
+        "published_one": "Veröffentlichung",
+        "published_other": "Veröffentlichungen"
        }
       }
   },

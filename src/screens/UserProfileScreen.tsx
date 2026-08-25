@@ -386,8 +386,11 @@ export function UserProfileScreen() {
             </div>
           </div>
 
+          {/* Cinq onglets ne tiennent pas côte à côte sur un téléphone étroit :
+              la barre défile, comme celle de l'Établi d'un groupe. Sans cela le
+              dernier — « Échanges » — sort de l'écran. */}
           {tabs.length > 0 && (
-            <div className="segmented" style={{ margin: "12px 0" }}>
+            <div className="segmented segmented--scroll" style={{ margin: "12px 0" }}>
               {tabs.map((key) => (
                 <button
                   key={key}
