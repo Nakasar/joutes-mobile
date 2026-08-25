@@ -9,8 +9,10 @@
 // ici en ferait deux définitions à tenir d'accord.
 import type { DeckCards, DeckCardInfo } from "../lib/deck-contents";
 import type { UserShowcaseSectionState } from "../lib/user-showcase";
+import type { LairOpeningHours } from "../lib/lair-hours";
+import type { LairSectionState } from "../lib/lair-sections";
 
-export type { DeckCards, DeckCardInfo };
+export type { DeckCards, DeckCardInfo, LairOpeningHours, LairSectionState };
 
 // ---- Auth (Better Auth) ----
 
@@ -709,15 +711,103 @@ export interface PlayGroup {
 
 // ---- Lairs (boutiques / lieux) ----
 
+/** Un réseau ou un site du lieu. */
+export interface LairLink {
+  type:
+    | "website"
+    | "instagram"
+    | "facebook"
+    | "discord"
+    | "twitch"
+    | "youtube"
+    | "x"
+    | "other";
+  url: string;
+  /** Libellé affiché à la place de l'URL — « @antretemps », « Discord du lieu »… */
+  label?: string;
+}
+
+/** Une annonce publiée par le lieu. */
+export interface LairNewsItem {
+  id: string;
+  title: string;
+  /** Résumé affiché sur la carte ; le corps complet vit dans `content`. */
+  summary?: string;
+  /** Markdown. */
+  content?: string;
+  /** Catégorie libre du lieu — « Promotion », « Nouveauté »… */
+  category?: string;
+  banner?: string;
+  publishedAt: string;
+  /** Une seule annonce épinglée est mise en tête ; les autres suivent par date. */
+  pinned?: boolean;
+  link?: string;
+  linkLabel?: string;
+}
+
+/** Le direct en cours du lieu. */
+export interface LairLiveStream {
+  url: string;
+  title?: string;
+  startedAt?: string;
+  viewers?: number;
+}
+
+/** Un membre de l'équipe du lieu. */
+export interface LairOrganizer {
+  name: string;
+  role?: string;
+  avatar?: string;
+}
+
+export interface LairAbout {
+  /** Markdown. */
+  description?: string;
+  /** Badge de type de lieu affiché sous le titre. */
+  category?: string;
+  amenities?: string[];
+  photos?: string[];
+  videoUrl?: string;
+  transit?: string;
+  parking?: string;
+  organizers?: LairOrganizer[];
+  /** Le rythme habituel du lieu : « Vendredi soir » → « Riftbound ». */
+  rhythm?: { label: string; value: string }[];
+}
+
+export interface LairOptions {
+  calendar?: { mode?: "CALENDAR" | "AGENDA" | "CONFERENCE" };
+  theme?: { logo?: string; accentColor?: string; tintSurfaces?: boolean };
+  sections?: LairSectionState[];
+  live?: LairLiveStream | null;
+  news?: LairNewsItem[];
+  /** L'événement mis en avant dans le bloc « À la une ». */
+  featuredEventId?: string;
+  links?: LairLink[];
+  contact?: { phone?: string; email?: string };
+  openingHours?: LairOpeningHours[];
+  about?: LairAbout;
+}
+
 export interface Lair {
   id: string;
   name: string;
   banner?: string;
   games?: string[];
+  owners?: string[];
   address?: string;
   website?: string;
   isPrivate?: boolean;
   location?: { type: "Point"; coordinates: [number, number] };
+  options?: LairOptions;
+}
+
+/** La fiche complète : le lieu, plus ce qui ne vit pas sur son document. */
+export interface LairDetail extends Lair {
+  /** Un booléen seul — le motif d'un accès offert ne sort jamais de l'administration. */
+  isPro?: boolean;
+  followersCount?: number;
+  isFollowing?: boolean;
 }
 
 export interface LairsListResponse {

@@ -808,6 +808,80 @@
       "watch": "Regarder le direct"
     }
   },
+  "lairs": {
+    "title": "Lieux",
+    "detailTitle": "Lieu",
+    "entrySub": "Boutiques et salles de jeu",
+    "searchPlaceholder": "Rechercher un lieu…",
+    "empty": "Aucun lieu ne correspond à cette recherche.",
+    "loadMore": "Charger plus",
+    "pro": "Pro",
+    "followers_one": "{{count}} abonné",
+    "followers_other": "{{count}} abonnés",
+    "featured": "À la une",
+    "filters": {
+      "game": "Jeu",
+      "allGames": "Tous les jeux"
+    },
+    "follow": {
+      "action": "Suivre",
+      "following": "Suivi"
+    },
+    "tabs": {
+      "news": "Actualités",
+      "agenda": "Agenda",
+      "games": "Jeux",
+      "about": "À propos"
+    },
+    "live": {
+      "title": "En direct",
+      "watch": "Regarder le direct"
+    },
+    "news": {
+      "pinned": "Épinglé",
+      "openLink": "En savoir plus",
+      "empty": "Ce lieu n'a rien publié pour le moment."
+    },
+    "agenda": {
+      "empty": "Aucun événement à venir dans ce lieu."
+    },
+    "games": {
+      "empty": "Ce lieu n'a déclaré aucun jeu."
+    },
+    "hours": {
+      "open": "Ouvert",
+      "openUntil": "Ouvert · ferme à {{time}}",
+      "closed": "Fermé",
+      "closedDay": "Fermé",
+      "days": {
+        "1": "Lundi",
+        "2": "Mardi",
+        "3": "Mercredi",
+        "4": "Jeudi",
+        "5": "Vendredi",
+        "6": "Samedi",
+        "7": "Dimanche"
+      }
+    },
+    "about": {
+      "amenities": "Équipements",
+      "rhythm": "Le rythme du lieu",
+      "team": "L'équipe",
+      "access": "Accès",
+      "links": "Liens",
+      "website": "Site web",
+      "network": {
+        "website": "Site web",
+        "instagram": "Instagram",
+        "facebook": "Facebook",
+        "discord": "Discord",
+        "twitch": "Twitch",
+        "youtube": "YouTube",
+        "x": "X",
+        "other": "Lien"
+      }
+    }
+  },
   "players": {
     "title": "Joueurs",
     "entrySub": "Le registre de la communauté",

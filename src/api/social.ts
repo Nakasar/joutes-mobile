@@ -2,7 +2,6 @@ import { api } from "./client";
 import { endpoints } from "./endpoints";
 import type {
   FriendRequest,
-  LairsListResponse,
   PlayGroup,
   PublicUser,
 } from "./types";
@@ -41,12 +40,5 @@ export function getPlayGroup(playGroupId: string): Promise<PlayGroup> {
     api
       .get<{ group: PlayGroup }>(endpoints.playGroups.detail(playGroupId))
       .then((r) => r.group),
-  );
-}
-
-/** Boutiques / lieux (lairs) — annuaire public. */
-export function listLairs(): Promise<LairsListResponse> {
-  return withCache("social:lairs", () =>
-    api.get<LairsListResponse>(endpoints.lairs.list, { limit: 30 }),
   );
 }

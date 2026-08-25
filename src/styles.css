@@ -5575,3 +5575,199 @@ html.qr-scanning #root {
   font-weight: 700;
   color: var(--muted);
 }
+
+/* ---- Vitrine d'un lieu ---- */
+
+/* La marque blanche d'un lieu s'arrête à l'accent. `readLairAccent` pose
+   `--lair-accent` en ligne sur ce conteneur ; les déclinaisons se dérivent ici,
+   sur le même élément, ce qui laisse `color-mix` voir la valeur posée. Sans
+   accent enregistré, rien n'est posé et chaque usage retombe sur son repli —
+   les couleurs de Joutes, gradient du bouton compris. */
+.lair-theme {
+  /* `--lair-accent` et `--lair-accent-foreground` ne sont **pas** déclarées
+     ici : `readLairAccent` ne les pose en ligne que si le lieu a choisi un
+     accent, et chaque usage porte donc son propre repli. Les déclarer ici
+     donnerait à tous les lieux un accent qu'aucun n'a demandé. */
+  --lair-accent-soft: color-mix(in srgb, var(--lair-accent, var(--primary)) 14%, transparent);
+  --lair-accent-border: color-mix(in srgb, var(--lair-accent, var(--primary)) 32%, transparent);
+}
+
+.lair-card--link {
+  display: block;
+  color: inherit;
+}
+
+.lair-card--link:active {
+  transform: scale(0.99);
+}
+
+.lair-card__name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lair-hero__banner {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+  background: var(--surface-2);
+}
+
+.lair-hero {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+/* Le logo du lieu est une marque, pas une photo : il se pose en entier plutôt
+   que recadré, sur un fond neutre qui accepte aussi bien un logo clair qu'un
+   logo sombre. */
+.lair-hero__logo {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: var(--surface-2);
+  padding: 6px;
+}
+
+.lair-hero__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.lair-hero__name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--lair-accent, var(--text));
+}
+
+.lair-hero__badges {
+  margin-top: 8px;
+  margin-bottom: 6px;
+}
+
+.lair-hours {
+  margin-bottom: 14px;
+}
+
+.lair-hours__now {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+
+/* Fermé par défaut : c'est l'état le plus fréquent sur les vingt-quatre heures,
+   et le vert doit se mériter. */
+.lair-hours__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--muted);
+}
+
+.lair-hours__now--open .lair-hours__dot {
+  background: #34d399;
+}
+
+.lair-hours__week {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lair-hours__day {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.88rem;
+  padding: 3px 0;
+  color: var(--muted);
+}
+
+.lair-hours__day--today {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.lair-hours__label {
+  flex-shrink: 0;
+}
+
+.lair-hours__ranges {
+  text-align: right;
+}
+
+.lair-news {
+  margin-bottom: 12px;
+}
+
+/* L'annonce épinglée porte l'accent du lieu sur sa bordure : c'est ce qui la
+   distingue des suivantes sans lui donner une seconde carte. */
+.lair-news--pinned {
+  border-color: var(--lair-accent-border);
+  background: linear-gradient(var(--lair-accent-soft), var(--lair-accent-soft)), var(--surface);
+}
+
+.lair-news__banner {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  margin-bottom: 10px;
+  background: var(--surface-2);
+}
+
+.lair-news__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.lair-news__pin {
+  color: var(--lair-accent, var(--primary));
+}
+
+.lair-news__title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.lair-news__date {
+  margin: 4px 0 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.lair-news__summary {
+  margin: 8px 0 0;
+  font-size: 0.92rem;
+}
+
+/* L'accent du lieu tient aussi le bouton « Suivre » — c'est pour lui que
+   `readLairAccent` calcule un premier plan clair ou sombre selon la luminance,
+   le seul endroit de l'écran où du texte se pose *sur* l'accent. Une fois suivi,
+   le bouton passe en contour : l'accent y devient la bordure et le texte. */
+.lair-theme .follow-btn.btn--grad {
+  background: var(--lair-accent, var(--grad));
+  color: var(--lair-accent-foreground, #fff);
+}
+
+.lair-theme .follow-btn.btn--outline {
+  border-color: var(--lair-accent-border);
+  color: var(--lair-accent, var(--text));
+}

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { listEvents, toggleEventFavorite } from "../api/events";
 import type { JoutesEvent } from "../api/types";
-import { StarIcon } from "../components/icons";
+import { PinIcon, StarIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { currentLocale } from "../i18n";
@@ -143,6 +143,17 @@ export function EventsScreen() {
       <div className="screen-head">
         <div className="screen-head__titles">
           <h1 className="screen-title">{t("events.title")}</h1>
+        </div>
+        {/* Les événements se tiennent quelque part : l'annuaire des lieux
+            s'ouvre d'ici, où l'on se demande justement où aller. */}
+        <div className="head-actions">
+          <Link
+            to="/lairs"
+            className="icon-button icon-button--primary"
+            aria-label={t("lairs.title")}
+          >
+            <PinIcon size={20} />
+          </Link>
         </div>
       </div>
 

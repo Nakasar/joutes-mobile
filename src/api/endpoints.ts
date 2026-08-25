@@ -56,6 +56,9 @@ export const endpoints = {
   },
   lairs: {
     list: "/lairs",
+    detail: (lairId: string) => `/lairs/${lairId}`,
+    /** Suivre / ne plus suivre : `PUT` et `DELETE` sur le même chemin. */
+    follow: (lairId: string) => `/lairs/${lairId}/follow`,
   },
   friends: {
     list: "/friends",

@@ -808,6 +808,80 @@
       "watch": "Stream ansehen"
     }
   },
+  "lairs": {
+    "title": "Orte",
+    "detailTitle": "Ort",
+    "entrySub": "Läden und Spielräume",
+    "searchPlaceholder": "Ort suchen…",
+    "empty": "Kein Ort entspricht dieser Suche.",
+    "loadMore": "Mehr laden",
+    "pro": "Pro",
+    "followers_one": "{{count}} Abonnent",
+    "followers_other": "{{count}} Abonnenten",
+    "featured": "Im Fokus",
+    "filters": {
+      "game": "Spiel",
+      "allGames": "Alle Spiele"
+    },
+    "follow": {
+      "action": "Folgen",
+      "following": "Folgt"
+    },
+    "tabs": {
+      "news": "Neuigkeiten",
+      "agenda": "Termine",
+      "games": "Spiele",
+      "about": "Über uns"
+    },
+    "live": {
+      "title": "Live",
+      "watch": "Stream ansehen"
+    },
+    "news": {
+      "pinned": "Angepinnt",
+      "openLink": "Mehr erfahren",
+      "empty": "Dieser Ort hat noch nichts veröffentlicht."
+    },
+    "agenda": {
+      "empty": "Keine bevorstehenden Termine an diesem Ort."
+    },
+    "games": {
+      "empty": "Dieser Ort hat keine Spiele angegeben."
+    },
+    "hours": {
+      "open": "Geöffnet",
+      "openUntil": "Geöffnet · schließt um {{time}}",
+      "closed": "Geschlossen",
+      "closedDay": "Geschlossen",
+      "days": {
+        "1": "Montag",
+        "2": "Dienstag",
+        "3": "Mittwoch",
+        "4": "Donnerstag",
+        "5": "Freitag",
+        "6": "Samstag",
+        "7": "Sonntag"
+      }
+    },
+    "about": {
+      "amenities": "Ausstattung",
+      "rhythm": "Der Rhythmus des Ortes",
+      "team": "Das Team",
+      "access": "Anfahrt",
+      "links": "Links",
+      "website": "Website",
+      "network": {
+        "website": "Website",
+        "instagram": "Instagram",
+        "facebook": "Facebook",
+        "discord": "Discord",
+        "twitch": "Twitch",
+        "youtube": "YouTube",
+        "x": "X",
+        "other": "Link"
+      }
+    }
+  },
   "players": {
     "title": "Spieler",
     "entrySub": "Das Verzeichnis der Community",

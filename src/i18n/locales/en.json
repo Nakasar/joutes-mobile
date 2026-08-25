@@ -808,6 +808,80 @@
       "watch": "Watch the stream"
     }
   },
+  "lairs": {
+    "title": "Venues",
+    "detailTitle": "Venue",
+    "entrySub": "Game stores and play spaces",
+    "searchPlaceholder": "Search for a venue…",
+    "empty": "No venue matches this search.",
+    "loadMore": "Load more",
+    "pro": "Pro",
+    "followers_one": "{{count}} follower",
+    "followers_other": "{{count}} followers",
+    "featured": "Featured",
+    "filters": {
+      "game": "Game",
+      "allGames": "All games"
+    },
+    "follow": {
+      "action": "Follow",
+      "following": "Following"
+    },
+    "tabs": {
+      "news": "News",
+      "agenda": "Agenda",
+      "games": "Games",
+      "about": "About"
+    },
+    "live": {
+      "title": "Live",
+      "watch": "Watch the stream"
+    },
+    "news": {
+      "pinned": "Pinned",
+      "openLink": "Read more",
+      "empty": "This venue hasn't posted anything yet."
+    },
+    "agenda": {
+      "empty": "No upcoming events at this venue."
+    },
+    "games": {
+      "empty": "This venue hasn't listed any games."
+    },
+    "hours": {
+      "open": "Open",
+      "openUntil": "Open · closes at {{time}}",
+      "closed": "Closed",
+      "closedDay": "Closed",
+      "days": {
+        "1": "Monday",
+        "2": "Tuesday",
+        "3": "Wednesday",
+        "4": "Thursday",
+        "5": "Friday",
+        "6": "Saturday",
+        "7": "Sunday"
+      }
+    },
+    "about": {
+      "amenities": "Amenities",
+      "rhythm": "The venue's rhythm",
+      "team": "The team",
+      "access": "Getting there",
+      "links": "Links",
+      "website": "Website",
+      "network": {
+        "website": "Website",
+        "instagram": "Instagram",
+        "facebook": "Facebook",
+        "discord": "Discord",
+        "twitch": "Twitch",
+        "youtube": "YouTube",
+        "x": "X",
+        "other": "Link"
+      }
+    }
+  },
   "players": {
     "title": "Players",
     "entrySub": "The community registry",
