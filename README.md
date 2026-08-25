@@ -154,6 +154,17 @@ aussi celui que le serveur nomme dans chaque message et que le manifeste déclar
 par défaut : les trois chaînes doivent coïncider, faute de quoi Android retombe
 sur le canal « Divers » de Firebase, sans bandeau ni son.
 
+**L'écouteur des touchers de notification passe par notre propre commande**
+`set_push_click_listener_active` (`src-tauri/src/lib.rs`), et non par l'aide
+`onNotificationClicked` du plugin. Celle-ci annonce l'écouteur au natif par une
+commande Tauri qui n'est pas `async` : Tauri exécute ces commandes-là sur le fil
+principal, où elle attend la réponse de Swift — laquelle commence par remettre
+au JavaScript le toucher gardé depuis le lancement, par un `Channel` dont
+l'envoi attend ce même fil principal. Les deux s'attendent et l'application iOS
+gèle peu après le démarrage, précisément quand elle a été ouverte *depuis* une
+notification. Notre commande dit la même chose au natif, mais en `async` :
+l'attente quitte le fil principal, qui reste libre de délivrer le toucher.
+
 Le projet natif n'étant pas versionné (`src-tauri/gen/` est recréé à chaque
 construction), la configuration Firebase et l'entitlement APNs sont rejoués
 après l'`init` par `scripts/setup-android-push.sh` et `scripts/setup-ios-push.sh`,
