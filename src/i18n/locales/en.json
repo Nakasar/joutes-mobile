@@ -306,6 +306,7 @@
        "loadMore": "Load more",
        "live": "Live",
        "liveNow": "Live now",
+       "private": "Private group",
        "nearUnavailable": "Sorting by distance needs your location, which the app can't read yet. The list stays ordered by liveliest.",
        "order": {
         "vifs": "Liveliest",

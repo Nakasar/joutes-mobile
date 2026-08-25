@@ -8,6 +8,11 @@ import { DeckVisibilityBadge } from "./DeckBadges";
  * Un deck dans une liste : ce qu'il faut pour le reconnaître et décider de
  * l'ouvrir — son nom, sa légende ou son format, et qui l'a publié.
  *
+ * **Le nom passe avant les pastilles.** Une visibilité comme « Non répertorié »
+ * est large, et sur un téléphone étroit elle prenait la place du nom, réduit à
+ * « Contr… ». La rangée passe donc à la ligne : le nom garde sa largeur, les
+ * pastilles descendent sous lui quand elles ne tiennent plus.
+ *
  * La taille du deck n'y figure pas : elle se dérive du contenu, que la liste ne
  * charge pas. L'annoncer ici demanderait de résoudre le catalogue pour vingt
  * decks à chaque page.
@@ -24,7 +29,7 @@ export function DeckRow({ deck, showAuthor }: { deck: Deck; showAuthor?: boolean
     .join(" · ");
 
   return (
-    <Link to={`/decks/${deck.id}`} className="list-row list-row--link">
+    <Link to={`/decks/${deck.id}`} className="list-row list-row--link deck-row">
       <span className="list-row__icon" style={{ background: "var(--chip)" }}>
         <LayersIcon size={20} style={{ color: "var(--primary)" }} />
       </span>

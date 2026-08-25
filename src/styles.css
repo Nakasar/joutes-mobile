@@ -3469,6 +3469,19 @@ button.card-link {
   white-space: nowrap;
 }
 
+/*
+ * Une icône glissée dans un titre de ligne — le cadenas d'un groupe privé.
+ * `white-space: nowrap` du titre la colle au dernier mot ; la marge la
+ * décolle, et `vertical-align` la pose sur la ligne de base du texte plutôt
+ * que sous elle.
+ */
+.list-row__title-icon {
+  display: inline-flex;
+  margin-left: 6px;
+  vertical-align: -1px;
+  color: var(--muted);
+}
+
 .list-row__sub {
   margin: 2px 0 0;
   font-size: 12.5px;
@@ -5220,12 +5233,27 @@ html.qr-scanning #root {
 
 /* ---------------------------------------------------------------- Decks */
 
+/* Le nom d'un deck passe avant ses pastilles. « Non répertorié » est large, et
+   sur un téléphone étroit elle réduisait le nom à « Contr… » : la rangée passe
+   donc à la ligne, et les pastilles descendent sous le nom quand elles ne
+   tiennent plus à côté. Le minimum sur le corps est ce qui déclenche le
+   passage — sans lui, c'est le nom qui rétrécit. */
+.deck-row {
+  flex-wrap: wrap;
+  row-gap: 8px;
+}
+
+.deck-row .list-row__body {
+  min-width: 55%;
+}
+
 .deck-row__meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 .deck-hero {

@@ -53,6 +53,9 @@ export function DeckLibraryScreen() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // « Réessayer » ne peut pas passer par la page : elle vaut déjà 1 quand la
+  // première demande échoue, et la redemander ne relancerait rien.
+  const [retry, setRetry] = useState(0);
 
   const games = useApi(() => listGames(), []);
   // Les légendes ne se demandent qu'une fois un jeu choisi : sans lui, la
@@ -69,20 +72,36 @@ export function DeckLibraryScreen() {
     .map((entry) => entry.name)
     .filter(Boolean);
 
+  // Le retour à la première page se fait **avec** le changement de filtre, et
+  // non dans un effet qui l'observe : un effet ne part qu'après la requête du
+  // rendu en cours, laquelle est déjà partie avec l'ancienne page. Deux
+  // requêtes pour un seul geste, dont une jetée à l'arrivée.
   useEffect(() => {
-    const timer = setTimeout(() => setSearch(searchInput.trim()), 300);
+    const timer = setTimeout(() => {
+      setSearch(searchInput.trim());
+      setPage(1);
+    }, 300);
     return () => clearTimeout(timer);
   }, [searchInput]);
 
-  useEffect(() => {
-    setPage(1);
-  }, [search, gameId, format, legendCardId, sort]);
-
-  // Changer de jeu invalide la légende choisie : elle appartenait au jeu qu'on
-  // vient de quitter, et la garder viderait silencieusement les résultats.
-  useEffect(() => {
+  /**
+   * Changer de jeu invalide la légende et le format choisis : ils
+   * appartenaient au jeu qu'on vient de quitter, et les garder viderait
+   * silencieusement les résultats.
+   *
+   * Là aussi tout se fait d'un coup, dans le geste : reposer ces deux filtres
+   * dans un effet ferait repartir la recherche une seconde fois.
+   */
+  function chooseGame(next: string) {
+    setGameId(next);
     setLegendCardId("");
     setFormat(ALL);
+    setPage(1);
+  }
+
+  // La facette des légendes, elle, dépend bien du jeu retenu et se lit après
+  // coup : c'est une requête, pas un état à remettre à zéro.
+  useEffect(() => {
     if (gameId === ALL) {
       setLegends([]);
       return;
@@ -128,7 +147,7 @@ export function DeckLibraryScreen() {
       .finally(() => {
         if (id === requestId.current) setLoading(false);
       });
-  }, [search, gameId, format, legendCardId, sort, page, t]);
+  }, [search, gameId, format, legendCardId, sort, page, retry, t]);
 
   return (
     <div className="screen">
@@ -149,7 +168,10 @@ export function DeckLibraryScreen() {
           <button
             key={key}
             className={`segmented__item${sort === key ? " segmented__item--active" : ""}`}
-            onClick={() => setSort(key)}
+            onClick={() => {
+              setSort(key);
+              setPage(1);
+            }}
           >
             {t(`decks.sort.${key}`)}
           </button>
@@ -159,7 +181,7 @@ export function DeckLibraryScreen() {
       <div className="deck-facets">
         <label className="field">
           <span className="field__label">{t("decks.facets.game")}</span>
-          <select value={gameId} onChange={(e) => setGameId(e.currentTarget.value)}>
+          <select value={gameId} onChange={(e) => chooseGame(e.currentTarget.value)}>
             <option value={ALL}>{t("decks.facets.allGames")}</option>
             {(games.data ?? []).map((game) => (
               <option key={game._id} value={game._id}>
@@ -172,7 +194,13 @@ export function DeckLibraryScreen() {
         {formats.length > 0 && (
           <label className="field">
             <span className="field__label">{t("decks.facets.format")}</span>
-            <select value={format} onChange={(e) => setFormat(e.currentTarget.value)}>
+            <select
+              value={format}
+              onChange={(e) => {
+                setFormat(e.currentTarget.value);
+                setPage(1);
+              }}
+            >
               <option value={ALL}>{t("decks.facets.allFormats")}</option>
               {formats.map((name) => (
                 <option key={name} value={name}>
@@ -188,7 +216,10 @@ export function DeckLibraryScreen() {
             <span className="field__label">{t("decks.facets.legend")}</span>
             <select
               value={legendCardId}
-              onChange={(e) => setLegendCardId(e.currentTarget.value)}
+              onChange={(e) => {
+                setLegendCardId(e.currentTarget.value);
+                setPage(1);
+              }}
             >
               <option value="">{t("decks.facets.allLegends")}</option>
               {legends.map((legend) => (
@@ -208,7 +239,7 @@ export function DeckLibraryScreen() {
       <StatusView
         loading={loading}
         error={error}
-        onRetry={() => setPage(1)}
+        onRetry={() => setRetry((r) => r + 1)}
         empty={!loading && !error && decks.length === 0 ? t("decks.library.empty") : undefined}
       />
 

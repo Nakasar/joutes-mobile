@@ -306,6 +306,7 @@
        "loadMore": "Mehr laden",
        "live": "Live",
        "liveNow": "Gerade live",
+       "private": "Private Gruppe",
        "nearUnavailable": "Die Sortierung nach Nähe braucht deinen Standort, den die App noch nicht lesen kann. Die Liste bleibt nach Lebendigkeit sortiert.",
        "order": {
         "vifs": "Am lebendigsten",

@@ -306,6 +306,7 @@
        "loadMore": "Carica altri",
        "live": "In diretta",
        "liveNow": "Ora in diretta",
+       "private": "Gruppo privato",
        "nearUnavailable": "L'ordine per vicinanza richiede la tua posizione, che l'app non sa ancora leggere. L'elenco resta ordinato per vivacità.",
        "order": {
         "vifs": "I più vivaci",

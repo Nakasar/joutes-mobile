@@ -5,7 +5,7 @@ import { explorePlayGroups } from "../api/play-groups";
 import type { ExploreGroup, PlayGroupLive } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
 import { CachedImage } from "../components/CachedImage";
-import { ChevronIcon, SearchIcon, UsersIcon } from "../components/icons";
+import { ChevronIcon, LockIcon, SearchIcon, UsersIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { EXPLORE_ORDERS, type ExploreOrder } from "../lib/play-group-explore";
 import { readPlayGroupAccent } from "../lib/play-group-theme";
@@ -169,6 +169,20 @@ export function PlayGroupsExploreScreen() {
           <div className="list-row__body">
             <p className="list-row__title">
               {group.name}
+              {/* Un groupe privé n'arrive ici que pour ses membres : le cadenas
+                  dit pourquoi les autres ne le trouveront pas en le
+                  partageant. Sans lui, celui qui a posé le réglage ne sait pas
+                  lequel de ses groupes est caché. */}
+              {group.visibility === "private" && (
+                <span
+                  className="list-row__title-icon"
+                  role="img"
+                  aria-label={t("social.explore.private")}
+                  title={t("social.explore.private")}
+                >
+                  <LockIcon size={13} />
+                </span>
+              )}
               {group.lives.length > 0 && (
                 <span className="live-dot" aria-label={t("social.explore.live")} />
               )}
