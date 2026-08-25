@@ -9,6 +9,7 @@ import { SearchIcon, TrophyIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
+import { userLabel, userProfilePath } from "../lib/user-tag";
 import { CachedImage } from "../components/CachedImage";
 import { Link } from "react-router-dom";
 
@@ -61,17 +62,14 @@ function Leaderboard() {
       {rows.map((row, index) => {
         const user = row.user;
         if (!user) return null;
-        const label =
-          user.displayName && user.discriminator
-            ? `${user.displayName}#${user.discriminator}`
-            : user.displayName || user.username;
-        const path =
-          user.displayName && user.discriminator
-            ? `/users/${user.displayName}${user.discriminator}`
-            : `/users/${user.id}`;
+        const label = userLabel(user);
 
         return (
-          <Link key={row.userId} to={path} className="list-row list-row--link">
+          <Link
+            key={row.userId}
+            to={userProfilePath(user)}
+            className="list-row list-row--link"
+          >
             <span className="leaderboard__place">{index + 1}</span>
             {user.avatar ? (
               <CachedImage src={user.avatar} alt="" className="avatar" />
@@ -114,6 +112,10 @@ function Registry() {
   const [count, setCount] = useState(REGISTRY_STEP);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // « Réessayer » ne peut pas passer par `count` : au premier palier — le cas
+  // courant d'un échec — le redemander ne changerait rien, et le bouton ne
+  // relancerait donc rien.
+  const [retry, setRetry] = useState(0);
 
   const games = useApi(() => listGames(), []);
 
@@ -160,7 +162,7 @@ function Registry() {
       .finally(() => {
         if (id === requestId.current) setLoading(false);
       });
-  }, [search, city, gameId, sells, live, sort, count, t]);
+  }, [search, city, gameId, sells, live, sort, count, retry, t]);
 
   return (
     <>
@@ -241,7 +243,7 @@ function Registry() {
       <StatusView
         loading={loading}
         error={error}
-        onRetry={() => setCount(REGISTRY_STEP)}
+        onRetry={() => setRetry((r) => r + 1)}
         empty={!loading && !error && entries.length === 0 ? t("players.empty") : undefined}
       />
 

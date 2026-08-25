@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { searchDecks } from "../api/decks";
@@ -92,6 +92,15 @@ export function UserProfileScreen() {
     null,
   );
 
+  // Passer d'un profil à l'autre garde le composant monté, et `useApi` garde la
+  // fiche précédente le temps de charger la suivante : sans cette remise à zéro,
+  // le second profil hériterait du « je le suis » et du compteur du premier —
+  // et les garderait, puisque rien ne les recalcule ensuite.
+  useEffect(() => {
+    setFollow(null);
+    setTab("showcase");
+  }, [userTag]);
+
   const profile = useApi(() => getUserProfile(userTag), [userTag]);
   const user: PublicUserProfile | null = profile.data ?? null;
   const isPublic = Boolean(user?.isPublicProfile);
@@ -133,6 +142,12 @@ export function UserProfileScreen() {
 
   const unlocked = (achievements.data?.achievements ?? []).filter((a) => a.unlockedAt);
 
+  // Le bloc « échanges » et son onglet se décident sur la même chose : ce qui
+  // s'affiche réellement. Compter sur `sellList.itemsCount` ferait apparaître
+  // l'onglet avant que les cartes ne soient là, donc parfois sur du vide.
+  const hasTrade =
+    (wishlists.data?.length ?? 0) > 0 || (sellListItems.data?.items?.length ?? 0) > 0;
+
   // Ce que chaque bloc a réellement à montrer : c'est ce qui décide des onglets,
   // et cela ne se sait qu'une fois le contenu chargé.
   const tabs = useMemo(
@@ -144,10 +159,9 @@ export function UserProfileScreen() {
         publications: (contents.data?.length ?? 0) > 0,
         achievements: unlocked.length > 0,
         follows: true,
-        trade:
-          (wishlists.data?.length ?? 0) > 0 || (sellList.data?.itemsCount ?? 0) > 0,
+        trade: hasTrade,
       }),
-    [sections, user, decks.data, contents.data, unlocked.length, wishlists.data, sellList.data],
+    [sections, user, decks.data, contents.data, unlocked.length, hasTrade],
   );
 
   const current = readUserProfileTab(tab, tabs);
@@ -277,7 +291,7 @@ export function UserProfileScreen() {
         ) : null;
 
       case "trade":
-        return (
+        return hasTrade ? (
           <section key={key}>
             {(wishlists.data?.length ?? 0) > 0 && (
               <>
@@ -301,7 +315,7 @@ export function UserProfileScreen() {
               </>
             )}
           </section>
-        );
+        ) : null;
     }
   }
 

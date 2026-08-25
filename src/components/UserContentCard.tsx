@@ -45,8 +45,10 @@ export function UserContentCard({
 
   if (content.kind === "article") {
     return (
+      // `userTag` vient de `useParams`, donc déjà décodé : le réencoder est ce
+      // qui rend l'adresse valide pour un pseudonyme à espaces ou à accents.
       <Link
-        to={`/users/${userTag}/contents/${content.id}`}
+        to={`/users/${encodeURIComponent(userTag)}/contents/${encodeURIComponent(content.id)}`}
         className="list-row list-row--link content-card"
       >
         {body}

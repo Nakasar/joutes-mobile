@@ -2,21 +2,9 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import type { RegistryEntry } from "../api/types";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
+import { userLabel, userProfilePath } from "../lib/user-tag";
 import { CachedImage } from "./CachedImage";
 import { ChevronIcon, UsersIcon } from "./icons";
-
-/** Le tag d'une fiche du registre, sous la forme que le routage accepte (sans `#`). */
-function registryPath(user: RegistryEntry["user"]): string {
-  return user.displayName && user.discriminator
-    ? `/users/${user.displayName}${user.discriminator}`
-    : `/users/${user.id}`;
-}
-
-function registryLabel(user: RegistryEntry["user"]): string {
-  return user.displayName && user.discriminator
-    ? `${user.displayName}#${user.discriminator}`
-    : user.displayName || user.username;
-}
 
 /**
  * Une fiche du registre : de quoi reconnaître un joueur et décider de l'ouvrir.
@@ -29,7 +17,7 @@ function registryLabel(user: RegistryEntry["user"]): string {
 export function PlayerRow({ entry }: { entry: RegistryEntry }) {
   const { t } = useTranslation();
   const { user } = entry;
-  const label = registryLabel(user);
+  const label = userLabel(user);
 
   const subtitle = [
     entry.games.map((game) => game.name).join(", "),
@@ -39,7 +27,7 @@ export function PlayerRow({ entry }: { entry: RegistryEntry }) {
     .join(" · ");
 
   return (
-    <Link to={registryPath(user)} className="list-row list-row--link">
+    <Link to={userProfilePath(user)} className="list-row list-row--link">
       {user.avatar ? (
         <CachedImage src={user.avatar} alt="" className="avatar" />
       ) : (
