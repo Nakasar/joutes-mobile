@@ -5424,3 +5424,154 @@ html.qr-scanning #root {
   font-size: 0.85rem;
   color: var(--muted);
 }
+
+/* ---- Vitrine de profil, registre, publications ---- */
+
+/* La bannière précède l'en-tête et n'est qu'un décor : elle se recadre plutôt
+   que de pousser l'avatar et le pseudonyme sous la ligne de flottaison. */
+.profile-hero__banner {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+  background: var(--surface-2);
+}
+
+.profile-badges {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.profile-live {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  color: inherit;
+}
+
+.profile-live > div {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Une pastille rouge qui respire : c'est le signe convenu du direct, et elle
+   suffit à le dire sans mot. */
+.live-dot {
+  flex-shrink: 0;
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: #e5484d;
+  box-shadow: 0 0 0 0 rgba(229, 72, 77, 0.6);
+  animation: live-pulse 1.8s ease-out infinite;
+}
+
+@keyframes live-pulse {
+  70% {
+    box-shadow: 0 0 0 7px rgba(229, 72, 77, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(229, 72, 77, 0);
+  }
+}
+
+/* Ce qui est encore à décrocher reste lisible, mais en retrait : sinon la liste
+   ressemblerait à un palmarès deux fois plus fourni qu'il ne l'est. */
+.achievement-row--locked {
+  opacity: 0.6;
+}
+
+.achievement-row__icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.achievement-row__points {
+  flex-shrink: 0;
+}
+
+/* Le bouton loge dans l'en-tête, à côté du titre : il ne prend que sa place. */
+.follow-btn {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+}
+
+.content-card__thumb {
+  flex-shrink: 0;
+  width: 64px;
+  height: 40px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: var(--surface-2);
+}
+
+.content-card__thumb--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+}
+
+.content-detail__banner {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  margin-bottom: 14px;
+  background: var(--surface-2);
+}
+
+.content-detail__title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.content-detail__meta {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.content-detail__summary {
+  margin: 12px 0 0;
+  font-size: 0.95rem;
+}
+
+.registry-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.registry-filters__toggles {
+  margin-bottom: 14px;
+}
+
+.leaderboard__rank {
+  margin-bottom: 14px;
+}
+
+.leaderboard__rank-title {
+  margin: 0 0 4px;
+  font-weight: 600;
+}
+
+/* Le rang tient la même largeur d'une ligne à l'autre, faute de quoi les
+   avatars du podium ne s'alignent plus dès qu'on passe à deux chiffres. */
+.leaderboard__place {
+  flex-shrink: 0;
+  width: 22px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--muted);
+}

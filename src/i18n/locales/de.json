@@ -765,11 +765,80 @@
     "gamesEmpty": "Noch keine Spiele verfolgt.",
     "lairsTitle": "Verfolgte Läden",
     "lairsEmpty": "Noch keine Läden verfolgt.",
-    "achievementsTitle": "Erfolge",
     "privateNote": "Dieses Profil ist privat: verfolgte Spiele, Läden und Erfolge sind nicht sichtbar.",
     "wishlistsTitle": "Wunschlisten",
     "sellListTitle": "Verkaufsliste",
-    "viewMineAction": "Mein öffentliches Profil ansehen"
+    "viewMineAction": "Mein öffentliches Profil ansehen",
+    "decksTitle": "Öffentliche Decks",
+    "followers_one": "{{count}} Abonnent",
+    "followers_other": "{{count}} Abonnenten",
+    "tabs": {
+      "showcase": "Schaufenster",
+      "decks": "Decks",
+      "publications": "Beiträge",
+      "achievements": "Erfolge",
+      "trade": "Tausch"
+    },
+    "follow": {
+      "action": "Folgen",
+      "following": "Folgt"
+    },
+    "achievements": {
+      "title": "Erfolge",
+      "progress": "{{unlocked}} / {{total}}",
+      "unlocked": "Freigeschaltet",
+      "unlockedOn": "Freigeschaltet am {{date}}",
+      "locked": "Noch nicht freigeschaltet",
+      "points_one": "{{count}} Punkt",
+      "points_other": "{{count}} Punkte"
+    },
+    "publications": {
+      "title": "Beiträge",
+      "missing": "Dieser Beitrag existiert nicht mehr.",
+      "noBody": "Dieser Beitrag hat hier nichts anzuzeigen.",
+      "open": "Beitrag öffnen",
+      "kind": {
+        "article": "Artikel",
+        "video": "Video",
+        "replay": "Replay"
+      }
+    },
+    "live": {
+      "title": "Live",
+      "watch": "Stream ansehen"
+    }
+  },
+  "players": {
+    "title": "Spieler",
+    "entrySub": "Das Verzeichnis der Community",
+    "tabRegistry": "Verzeichnis",
+    "tabLeaderboard": "Rangliste",
+    "searchPlaceholder": "Spieler suchen…",
+    "empty": "Kein Spieler entspricht dieser Suche.",
+    "results_one": "{{count}} Spieler",
+    "results_other": "{{count}} Spieler",
+    "loadMore": "Mehr laden",
+    "live": "Live",
+    "noGames": "Keine Spiele verfolgt",
+    "sort": {
+      "active": "Aktiv",
+      "followers": "Abonnenten",
+      "name": "Name"
+    },
+    "filters": {
+      "game": "Spiel",
+      "allGames": "Alle Spiele",
+      "city": "Stadt",
+      "cityPlaceholder": "Alle Städte",
+      "live": "Live",
+      "sells": "Verkauft Karten"
+    },
+    "leaderboard": {
+      "empty": "Die Rangliste ist derzeit leer.",
+      "yourRank": "Dein Rang: {{rank}} / {{total}}",
+      "score_one": "{{points}} Pkt. · {{count}} Erfolg",
+      "score_other": "{{points}} Pkt. · {{count}} Erfolge"
+    }
   },
   "play": {
     "title": "Spielen",

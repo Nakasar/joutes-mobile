@@ -1,0 +1,65 @@
+import { useTranslation } from "react-i18next";
+import type { AchievementWithUnlockInfo } from "../api/types";
+import { currentLocale } from "../i18n";
+import { CachedImage } from "./CachedImage";
+import { TrophyIcon } from "./icons";
+
+function formatDate(iso: string): string {
+  const date = new Date(iso);
+  // Une date illisible ne doit pas afficher « Invalid Date » sous un succès :
+  // le succès reste décroché, seule sa date manque.
+  return Number.isNaN(date.getTime())
+    ? ""
+    : date.toLocaleDateString(currentLocale(), {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+}
+
+/**
+ * Un succès, décroché ou non.
+ *
+ * Les deux se lisent dans la même liste : ce qui reste à atteindre est
+ * précisément ce qui donne son sens à ce qui l'a été. Un succès verrouillé
+ * garde donc sa place, en retrait, avec sa description — c'est elle qui dit
+ * comment l'obtenir.
+ */
+export function AchievementRow({ achievement }: { achievement: AchievementWithUnlockInfo }) {
+  const { t } = useTranslation();
+  const unlocked = Boolean(achievement.unlockedAt);
+  const date = achievement.unlockedAt ? formatDate(achievement.unlockedAt) : "";
+
+  return (
+    <div className={`list-row achievement-row${unlocked ? "" : " achievement-row--locked"}`}>
+      <span className="list-row__icon" style={{ background: "var(--chip)" }}>
+        {achievement.icon ? (
+          <CachedImage src={achievement.icon} alt="" className="achievement-row__icon" />
+        ) : (
+          <TrophyIcon size={20} style={{ color: unlocked ? "var(--primary)" : "var(--muted)" }} />
+        )}
+      </span>
+      <div className="list-row__body">
+        <p className="list-row__title">{achievement.name}</p>
+        {achievement.description && (
+          <p className="list-row__sub">{achievement.description}</p>
+        )}
+        <p className="list-row__sub">
+          {unlocked
+            ? date
+              ? t("profile.achievements.unlockedOn", { date })
+              : t("profile.achievements.unlocked")
+            : t("profile.achievements.locked")}
+        </p>
+      </div>
+      {/* Un succès-statut vaut zéro point : afficher « 0 » le ferait passer pour
+          un succès sans valeur, alors qu'il en a une autre — il se porte à côté
+          du pseudonyme. */}
+      {unlocked && achievement.points ? (
+        <span className="chip achievement-row__points">
+          {t("profile.achievements.points", { count: achievement.points })}
+        </span>
+      ) : null}
+    </div>
+  );
+}
