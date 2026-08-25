@@ -92,6 +92,10 @@ export function PlayGroupShowcaseScreen() {
 
   const theme = data.group.theme;
   const links = (data.group.links ?? []).filter((link) => isSafeUrl(link.url));
+  // Le direct passe le même filtre que les liens et les contenus : `channelUrl`
+  // est reconstruite par le serveur et devrait toujours être en https, mais un
+  // `href` ne doit porter que ce qu'on a vérifié.
+  const lives = data.lives.filter((live) => isSafeUrl(live.channelUrl));
 
   return (
     <div className="screen play-group-theme" style={accent.style}>
@@ -119,10 +123,7 @@ export function PlayGroupShowcaseScreen() {
         {theme?.logo ? (
           <CachedImage src={theme.logo} alt="" className="group-crest group-crest--lg" />
         ) : (
-          <span
-            className="group-crest group-crest--lg group-crest--initials"
-            style={theme?.accentColor ? { background: theme.accentColor } : undefined}
-          >
+          <span className="group-crest group-crest--lg group-crest--initials">
             {readInitials(data.group.name)}
           </span>
         )}
@@ -159,10 +160,10 @@ export function PlayGroupShowcaseScreen() {
         </section>
       )}
 
-      {data.lives.length > 0 && (
+      {lives.length > 0 && (
         <>
           <p className="section-label">{t("social.showcase.liveNow")}</p>
-          {data.lives.map((live) => (
+          {lives.map((live) => (
             <a
               key={live.id}
               href={live.channelUrl}

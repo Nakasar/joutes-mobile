@@ -8,21 +8,31 @@ import { CachedImage } from "../components/CachedImage";
 import { ChevronIcon, SearchIcon, UsersIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { EXPLORE_ORDERS, type ExploreOrder } from "../lib/play-group-explore";
+import { readPlayGroupAccent } from "../lib/play-group-theme";
+import { isSafeUrl } from "../lib/safe-url";
 
 const STEP = 20;
 const MAX_COUNT = 100;
 
-/** L'écu d'un groupe : son logo, ou ses initiales sur fond d'accent. */
+/**
+ * L'écu d'un groupe : son logo, ou ses initiales sur fond d'accent.
+ *
+ * L'accent passe par `readPlayGroupAccent` plutôt que d'aller tel quel dans le
+ * style : il vient de l'API, et lui seul sait le valider — et calculer le
+ * premier plan clair ou sombre que les initiales demandent, un accent ambre ne
+ * portant pas du blanc.
+ */
 function GroupCrest({ group }: { group: ExploreGroup }) {
   if (group.logo) {
     return <CachedImage src={group.logo} alt="" className="group-crest" />;
   }
 
+  const accent = readPlayGroupAccent({
+    options: { theme: { accentColor: group.accentColor ?? undefined } },
+  });
+
   return (
-    <span
-      className="group-crest group-crest--initials"
-      style={group.accentColor ? { background: group.accentColor } : undefined}
-    >
+    <span className="group-crest group-crest--initials" style={accent.style}>
       {group.initials}
     </span>
   );
@@ -30,13 +40,17 @@ function GroupCrest({ group }: { group: ExploreGroup }) {
 
 function LiveStrip({ lives }: { lives: PlayGroupLive[] }) {
   const { t } = useTranslation();
-  if (lives.length === 0) return null;
+  // Le filtre est posé au rendu et non seulement à l'écriture, comme partout
+  // ailleurs : `channelUrl` est reconstruite par le serveur et devrait toujours
+  // être en https, mais un `href` ne doit porter que ce qu'on a vérifié.
+  const shown = lives.filter((live) => isSafeUrl(live.channelUrl));
+  if (shown.length === 0) return null;
 
   return (
     <>
       <p className="section-label">{t("social.explore.liveNow")}</p>
       <div className="chip-row">
-        {lives.map((live) => (
+        {shown.map((live) => (
           <a
             key={live.id}
             href={live.channelUrl}

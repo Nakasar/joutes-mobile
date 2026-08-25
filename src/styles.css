@@ -5810,6 +5810,9 @@ html.qr-scanning #root {
   background: var(--surface-2);
 }
 
+/* Le premier plan suit l'accent : `readPlayGroupAccent` le calcule sur la
+   luminance, et c'est ici qu'il sert — des initiales blanches sur l'ambre ou la
+   menthe de la palette se lisent mal. */
 .group-crest--initials {
   display: flex;
   align-items: center;
@@ -5817,7 +5820,7 @@ html.qr-scanning #root {
   font-family: var(--font-display);
   font-size: 15px;
   font-weight: 700;
-  color: #fff;
+  color: var(--group-accent-foreground, #fff);
   background: var(--group-accent, var(--primary));
 }
 
@@ -6008,4 +6011,18 @@ html.qr-scanning #root {
 
 .content-article > summary::-webkit-details-marker {
   display: none;
+}
+
+/* L'accent du groupe tient aussi le bouton « Suivre » de sa vitrine, comme
+   celui d'un lieu tient le sien : c'est le seul endroit de l'écran où du texte
+   se pose *sur* l'accent, et donc celui pour lequel le premier plan est
+   calculé. Sans accent enregistré, chaque repli rend les couleurs de Joutes. */
+.play-group-theme .follow-btn.btn--grad {
+  background: var(--group-accent, var(--grad));
+  color: var(--group-accent-foreground, #fff);
+}
+
+.play-group-theme .follow-btn.btn--outline {
+  border-color: var(--group-accent-border);
+  color: var(--group-accent, var(--text));
 }

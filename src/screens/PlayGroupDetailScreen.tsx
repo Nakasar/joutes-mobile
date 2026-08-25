@@ -13,6 +13,7 @@ import { BackHeader } from "../components/BackHeader";
 import { CollectionValueCard } from "../components/CollectionValueCard";
 import { CreateSessionSheet } from "../components/CreateSessionSheet";
 import { SessionCard } from "../components/SessionCard";
+import { UserMarkdown } from "../components/UserMarkdown";
 import {
   ChevronIcon,
   ExternalLinkIcon,
@@ -120,7 +121,10 @@ function PlayGroupDetailContent({ groupId }: { groupId: string }) {
             <>
               {group.data.description && (
                 <section className="card">
-                  <p className="list-row__sub">{group.data.description}</p>
+                  {/* La description est du markdown écrit par le groupe, et la
+                      vitrine la rend déjà comme telle : la laisser en texte brut
+                      ici afficherait les astérisques et perdrait les liens. */}
+                  <UserMarkdown>{group.data.description}</UserMarkdown>
                 </section>
               )}
 
