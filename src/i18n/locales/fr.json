@@ -301,17 +301,51 @@
       "explore": {
        "title": "Découvrir des groupes",
        "entrySub": "Le rôle d'armes des groupes ouverts",
-       "searchPlaceholder": "Rechercher un groupe…",
-       "empty": "Aucun groupe ne correspond à cette recherche.",
+       "searchPlaceholder": "Un nom, une ville, un jeu, un jour…",
+       "empty": "Nul groupe de ce nom au rôle.",
        "loadMore": "Charger plus",
        "live": "En direct",
        "liveNow": "En lice",
-       "private": "Groupe privé",
+       "private": "Privé",
+       "liveCount_one": "{{count}} groupe diffuse",
+       "liveCount_other": "{{count}} groupes diffusent",
        "nearUnavailable": "Le tri par proximité demande votre position, que l'application ne sait pas encore lire. L'ordre affiché reste celui des groupes les plus vifs.",
        "order": {
         "vifs": "Les plus vifs",
         "proches": "Proches",
         "neufs": "Les derniers venus"
+       },
+       "notice": {
+        "vifs": "direct › publication › session à venir",
+        "proches": "distance depuis votre position",
+        "neufs": "date de création du groupe"
+       },
+       "roll": {
+        "title": "Le rôle",
+        "results": "Résultats",
+        "count_one": "{{count}} groupe au rôle",
+        "count_other": "{{count}} groupes au rôle",
+        "reset": "Rouvrir le rôle"
+       },
+       "entry": {
+        "liveCry_one": "{{streamer}} diffuse · {{count}} spectateur",
+        "liveCry_other": "{{streamer}} diffuse · {{count}} spectateurs",
+        "liveCryPlain": "{{streamer}} diffuse en ce moment",
+        "quiet": "Pas de nouvelle depuis un moment",
+        "deeds": {
+         "content": "{{title}} — {{at}}",
+         "announcement": "{{title}} — {{at}}",
+         "session": "Prochaine session {{at}}"
+        },
+        "follow": "Suivre",
+        "following": "Suivi",
+        "enter": "Entrer →",
+        "members_one": "membre",
+        "members_other": "membres",
+        "followers_one": "abonné",
+        "followers_other": "abonnés",
+        "published_one": "publication",
+        "published_other": "publications"
        }
       }
   },

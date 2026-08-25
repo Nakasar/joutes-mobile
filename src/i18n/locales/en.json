@@ -301,17 +301,51 @@
       "explore": {
        "title": "Discover groups",
        "entrySub": "The roll of open groups",
-       "searchPlaceholder": "Search for a group…",
-       "empty": "No group matches this search.",
+       "searchPlaceholder": "A name, a town, a game, a day…",
+       "empty": "No group of that name on the roll.",
        "loadMore": "Load more",
        "live": "Live",
-       "liveNow": "Live now",
-       "private": "Private group",
+       "liveNow": "In the lists",
+       "private": "Private",
+       "liveCount_one": "{{count}} group is streaming",
+       "liveCount_other": "{{count}} groups are streaming",
        "nearUnavailable": "Sorting by distance needs your location, which the app can't read yet. The list stays ordered by liveliest.",
        "order": {
         "vifs": "Liveliest",
         "proches": "Nearby",
-        "neufs": "Newest"
+        "neufs": "Newcomers"
+       },
+       "notice": {
+        "vifs": "live › publication › upcoming session",
+        "proches": "distance from your location",
+        "neufs": "date the group was created"
+       },
+       "roll": {
+        "title": "The roll",
+        "results": "Results",
+        "count_one": "{{count}} group on the roll",
+        "count_other": "{{count}} groups on the roll",
+        "reset": "Reopen the roll"
+       },
+       "entry": {
+        "liveCry_one": "{{streamer}} is streaming · {{count}} viewer",
+        "liveCry_other": "{{streamer}} is streaming · {{count}} viewers",
+        "liveCryPlain": "{{streamer}} is streaming right now",
+        "quiet": "No news for a while",
+        "deeds": {
+         "content": "{{title}} — {{at}}",
+         "announcement": "{{title}} — {{at}}",
+         "session": "Next session {{at}}"
+        },
+        "follow": "Follow",
+        "following": "Following",
+        "enter": "Enter →",
+        "members_one": "member",
+        "members_other": "members",
+        "followers_one": "follower",
+        "followers_other": "followers",
+        "published_one": "publication",
+        "published_other": "publications"
        }
       }
   },

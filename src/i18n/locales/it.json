@@ -301,17 +301,51 @@
       "explore": {
        "title": "Scopri i gruppi",
        "entrySub": "L'elenco dei gruppi aperti",
-       "searchPlaceholder": "Cerca un gruppo…",
-       "empty": "Nessun gruppo corrisponde a questa ricerca.",
+       "searchPlaceholder": "Un nome, una città, un gioco, un giorno…",
+       "empty": "Nessun gruppo con questo nome nel rotolo.",
        "loadMore": "Carica altri",
        "live": "In diretta",
-       "liveNow": "Ora in diretta",
-       "private": "Gruppo privato",
+       "liveNow": "In lizza",
+       "private": "Privato",
+       "liveCount_one": "{{count}} gruppo trasmette",
+       "liveCount_other": "{{count}} gruppi trasmettono",
        "nearUnavailable": "L'ordine per vicinanza richiede la tua posizione, che l'app non sa ancora leggere. L'elenco resta ordinato per vivacità.",
        "order": {
         "vifs": "I più vivaci",
         "proches": "Vicini",
-        "neufs": "Gli ultimi arrivati"
+        "neufs": "Ultimi arrivati"
+       },
+       "notice": {
+        "vifs": "diretta › pubblicazione › sessione in arrivo",
+        "proches": "distanza dalla tua posizione",
+        "neufs": "data di creazione del gruppo"
+       },
+       "roll": {
+        "title": "Il rotolo",
+        "results": "Risultati",
+        "count_one": "{{count}} gruppo nel rotolo",
+        "count_other": "{{count}} gruppi nel rotolo",
+        "reset": "Riaprire il rotolo"
+       },
+       "entry": {
+        "liveCry_one": "{{streamer}} trasmette · {{count}} spettatore",
+        "liveCry_other": "{{streamer}} trasmette · {{count}} spettatori",
+        "liveCryPlain": "{{streamer}} sta trasmettendo ora",
+        "quiet": "Nessuna novità da un po'",
+        "deeds": {
+         "content": "{{title}} — {{at}}",
+         "announcement": "{{title}} — {{at}}",
+         "session": "Prossima sessione {{at}}"
+        },
+        "follow": "Seguire",
+        "following": "Seguito",
+        "enter": "Entrare →",
+        "members_one": "membro",
+        "members_other": "membri",
+        "followers_one": "abbonato",
+        "followers_other": "abbonati",
+        "published_one": "pubblicazione",
+        "published_other": "pubblicazioni"
        }
       }
   },

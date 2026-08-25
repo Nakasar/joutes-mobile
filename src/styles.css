@@ -57,6 +57,9 @@
   --font-body: Inter, "Helvetica Neue", Arial, sans-serif;
   --font-display: Sora, Inter, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* L'héraldique du rôle d'armes, et rien d'autre : Cinzel ne sert qu'aux noms
+     de groupes, aux titres de mouvement et aux initiales d'un écu. */
+  --font-heraldic: Cinzel, Georgia, "Times New Roman", serif;
 
   font-family: var(--font-body);
   font-size: 16px;
@@ -3469,19 +3472,6 @@ button.card-link {
   white-space: nowrap;
 }
 
-/*
- * Une icône glissée dans un titre de ligne — le cadenas d'un groupe privé.
- * `white-space: nowrap` du titre la colle au dernier mot ; la marge la
- * décolle, et `vertical-align` la pose sur la ligne de base du texte plutôt
- * que sous elle.
- */
-.list-row__title-icon {
-  display: inline-flex;
-  margin-left: 6px;
-  vertical-align: -1px;
-  color: var(--muted);
-}
-
 .list-row__sub {
   margin: 2px 0 0;
   font-size: 12.5px;
@@ -5807,6 +5797,24 @@ html.qr-scanning #root {
 .play-group-theme {
   --group-accent-soft: color-mix(in srgb, var(--group-accent, var(--primary)) 14%, transparent);
   --group-accent-border: color-mix(in srgb, var(--group-accent, var(--primary)) 32%, transparent);
+
+  /*
+   * L'accent en **texte**, et non en aplat : l'accent brut posé comme couleur
+   * de texte donne un ambre ou une menthe qui s'efface sur le blanc.
+   *
+   * Le web dérive la même variable en éclaircissant de 18 % (`app/globals.css`),
+   * parce qu'il est sombre par défaut et que ses cartes sont noires. Le mobile
+   * est clair par défaut : la même intention y demande le geste inverse. D'où
+   * les deux valeurs, et non une copie — copier celle du web rendrait ici le
+   * texte moins lisible, pas plus.
+   */
+  --group-accent-text: color-mix(in oklab, var(--group-accent, var(--primary)) 78%, black 22%);
+}
+
+@media (prefers-color-scheme: dark) {
+  .play-group-theme {
+    --group-accent-text: color-mix(in oklab, var(--group-accent, var(--primary)) 82%, white 18%);
+  }
 }
 
 /* Cinq vues ne tiennent pas côté à côté sur un téléphone étroit : la barre
@@ -6053,4 +6061,444 @@ html.qr-scanning #root {
 .play-group-theme .follow-btn.btn--outline {
   border-color: var(--group-accent-border);
   color: var(--group-accent, var(--text));
+}
+
+/* ------------------------------------------------------ Le rôle d'armes */
+
+/*
+ * L'héraldique de l'exploration des groupes, portée de `app/globals.css` de
+ * joutes-app — **toute modification doit être reportée dans les deux dépôts**.
+ *
+ * L'or vit dans `.roll` et non dans `:root` : c'est l'identité de cet écran-là,
+ * pas celle de l'application, qui reste bleu et teal. Deux valeurs selon le
+ * thème — sur fond clair, l'or pur ne tient pas comme texte, on l'assombrit.
+ */
+.roll {
+  --or: #e8b969;
+  --or-text: color-mix(in oklab, var(--or) 58%, black 42%);
+  --or-line: color-mix(in oklab, var(--or) 42%, transparent);
+  --or-faint: color-mix(in oklab, var(--or) 20%, transparent);
+}
+
+@media (prefers-color-scheme: dark) {
+  .roll {
+    --or-text: var(--or);
+    --or-line: color-mix(in oklab, var(--or) 34%, transparent);
+    --or-faint: color-mix(in oklab, var(--or) 16%, transparent);
+  }
+}
+
+/*
+ * L'écu : une forme, pas une image — donc juste à toutes les tailles, et
+ * teintable par l'accent du groupe. Le liseré d'or est un second écu d'un pixel
+ * plus grand posé dessous ; un `border` suivrait le rectangle, pas le contour
+ * découpé.
+ */
+.escu {
+  /* Le repli tient ici et non dans chaque `color-mix` : un `color-mix` sur une
+     variable absente est invalide, et emporterait toute la déclaration. */
+  --escu-accent: var(--group-accent, var(--primary));
+  position: relative;
+  flex: none;
+}
+
+.escu::before,
+.escu__field {
+  clip-path: polygon(0 0, 100% 0, 100% 58%, 50% 100%, 0 58%);
+}
+
+.escu::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  background: var(--or, #e8b969);
+}
+
+.escu__field {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden;
+  padding-top: 22%;
+  background: linear-gradient(
+    165deg,
+    color-mix(in oklab, var(--escu-accent) 88%, white 12%),
+    color-mix(in oklab, var(--escu-accent) 60%, black 40%)
+  );
+}
+
+.escu__logo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.escu__initials {
+  font-family: var(--font-heraldic);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--group-accent-foreground, var(--primary-fg));
+}
+
+/* L'oriflamme du direct, en travers de l'écu. */
+.escu__live {
+  position: absolute;
+  left: -6px;
+  right: -6px;
+  top: 47%;
+  z-index: 1;
+  padding: 3px 0;
+  background: var(--danger);
+  color: var(--danger-fg);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-align: center;
+  text-transform: uppercase;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+}
+
+/* Le rapport hauteur/largeur de l'écu est celui du web (≈ 0,85) ; les tailles,
+   elles, sont resserrées — 78 px de large sur un téléphone de 390 ne laissent
+   pas de quoi écrire un nom à côté. */
+.escu--sm { width: 22px; height: 26px; }
+.escu--sm .escu__initials { font-size: 8px; }
+.escu--md { width: 44px; height: 52px; }
+.escu--md .escu__initials { font-size: 14px; }
+.escu--lg { width: 62px; height: 73px; }
+.escu--lg .escu__initials { font-size: 18px; }
+
+/* Le titre d'un mouvement, son filet d'or et sa mention en petite capitale. */
+.movement {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 0 10px;
+}
+
+.movement__title {
+  margin: 0;
+  font-family: var(--font-heraldic);
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.movement__rule {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--or-line), transparent);
+}
+
+.movement__aside,
+.roll__notice {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.roll__notice {
+  margin: 0 0 4px;
+  white-space: normal;
+}
+
+/*
+ * Une entrée du rôle. Pas de carte : un filet d'or sépare les entrées, comme
+ * les lignes d'un rôle écrit — c'est ce qui distingue le rôle d'armes d'une
+ * liste ordinaire de l'application.
+ *
+ * L'écu et le corps tiennent la première ligne, les comptes et les actions la
+ * seconde, sur toute la largeur. Sur le web les trois blocs sont côte à côte ;
+ * à 390 px, les empiler est la seule mise en page qui laisse un nom lisible.
+ */
+.roll-entry {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--or-faint);
+}
+
+.roll-entry__body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.roll-entry__name {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  font-family: var(--font-heraldic);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.roll-entry__name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Le sceau du privé : seul un membre voit cette ligne, et la mention lui dit
+   que ce groupe-là n'apparaît au rôle de personne d'autre. */
+.roll-entry__seal {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 7px;
+  border: 1px solid var(--or-line);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.roll-entry__tagline {
+  margin: 0;
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+/* Le cri de l'entrée : ce que le groupe a fait de plus récent. */
+.roll-entry__cry {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--group-accent-text, var(--or-text));
+}
+
+.roll-entry__cry svg,
+.roll-entry__cry .live-dot {
+  flex-shrink: 0;
+}
+
+.roll-entry__cry--live { color: var(--danger); }
+.roll-entry__cry--quiet { color: var(--muted); }
+
+/* Le rythme et le lieu. Les filets verticaux du web sautent ici : à cette
+   largeur la ligne passe presque toujours à la ligne, et un filet en début de
+   seconde ligne ne sépare plus rien. Les icônes d'or suffisent. */
+.roll-entry__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 14px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.roll-entry__meta span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.roll-entry__meta svg {
+  flex-shrink: 0;
+  color: var(--or-text);
+}
+
+.roll-entry__games {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--group-accent-text, var(--or-text));
+}
+
+.roll-entry__foot {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* Les comptes du groupe : le nombre au-dessus, ce qu'il compte en dessous. */
+.roll-entry__tally {
+  display: flex;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.roll-entry__tally b {
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: normal;
+  color: var(--text);
+}
+
+.roll-entry__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Boutons carrés en petite capitale : le rôle n'a pas les pilules du reste de
+   l'application. */
+.roll-btn {
+  padding: 9px 13px;
+  border: 1px solid var(--or-line);
+  background: none;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.roll-btn:disabled { opacity: 0.6; }
+
+.roll-btn--on {
+  border-color: var(--or);
+  background: var(--or);
+  color: #17130c;
+  font-weight: 500;
+}
+
+.roll-btn--bare {
+  border-color: transparent;
+  padding-inline: 2px;
+  color: var(--or-text);
+}
+
+/* Le filet double à losange qui ouvre et ferme le rôle. */
+.fleuron {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 0;
+}
+
+.fleuron::before,
+.fleuron::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--or-line) 22%, var(--or-line) 78%, transparent);
+}
+
+.fleuron i {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  rotate: 45deg;
+  background: var(--or);
+}
+
+/* La bande des directs, dans l'or du rôle. */
+.roll-lives {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.roll-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 100%;
+  padding: 7px 11px;
+  border: 1px solid var(--or-line);
+  color: var(--text);
+  font-size: 12.5px;
+  text-decoration: none;
+}
+
+.roll-live__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/*
+ * La recherche et les ordres du rôle, dans l'idiome du web : un filet d'or sous
+ * un champ nu, et des onglets en petite capitale soulignés d'or.
+ *
+ * Le champ en pilule et les pastilles teal du reste de l'application jurent
+ * au-dessus d'un rôle d'armes — et, accessoirement, « Les derniers venus » y
+ * passait à la ligne, quand la petite capitale le tient sur une seule.
+ */
+.roll-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--or-line);
+}
+
+.roll-search svg {
+  flex-shrink: 0;
+  color: var(--or-text);
+}
+
+.roll-search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  outline: none;
+  color: var(--text);
+  font-family: var(--font-heraldic);
+  font-size: 17px;
+}
+
+.roll-search input::placeholder {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.roll-orders {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-bottom: 6px;
+}
+
+.roll-orders button {
+  padding: 0 0 4px;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  background: none;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.roll-orders button[aria-pressed="true"] {
+  border-bottom-color: var(--or);
+  color: var(--or-text);
 }
