@@ -130,6 +130,10 @@ export function LairDetailScreen() {
   const following = follow?.following ?? data?.isFollowing ?? false;
   const followersCount = follow?.followersCount ?? data?.followersCount ?? 0;
 
+  // La section « à propos » éteinte n'a plus de contenu du tout — ni sa
+  // présentation, ni ses équipements, ni son équipe.
+  const about = isSectionEnabled(sections, "about") ? data?.options?.about : undefined;
+
   const news = orderedNews(data?.options?.news);
   const live = externalUrl(data?.options?.live?.url);
   const website = externalUrl(data?.website);
@@ -218,6 +222,9 @@ export function LairDetailScreen() {
           </h1>
           <div className="chip-row lair-hero__badges">
             {data.isPro && <span className="chip chip--grad">{t("lairs.pro")}</span>}
+            {/* Le type de lieu est rangé sous `about` mais s'affiche en tête,
+                comme sur le web (`LairHero`) : c'est de l'identité, pas de la
+                section, et éteindre celle-ci ne doit pas l'effacer. */}
             {data.options?.about?.category && (
               <span className="chip">{data.options.about.category}</span>
             )}
@@ -353,66 +360,72 @@ export function LairDetailScreen() {
 
       {tab === "about" && (
         <>
-          {isSectionEnabled(sections, "about") && data.options?.about?.description && (
-            <section className="card">
-              <UserMarkdown>{data.options.about.description}</UserMarkdown>
-            </section>
-          )}
-
-          {(data.options?.about?.amenities?.length ?? 0) > 0 && (
-            <section className="card">
-              <p className="section-label">{t("lairs.about.amenities")}</p>
-              <div className="chip-set">
-                {data.options?.about?.amenities?.map((amenity) => (
-                  <span key={amenity} className="chip">
-                    {amenity}
-                  </span>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {(data.options?.about?.rhythm?.length ?? 0) > 0 && (
-            <section>
-              <p className="section-label">{t("lairs.about.rhythm")}</p>
-              {data.options?.about?.rhythm?.map((entry, index) => (
-                <div key={`${entry.label}-${index}`} className="list-row">
-                  <div className="list-row__body">
-                    <p className="list-row__title">{entry.label}</p>
-                    <p className="list-row__sub">{entry.value}</p>
-                  </div>
-                </div>
-              ))}
-            </section>
-          )}
-
-          {(data.options?.about?.organizers?.length ?? 0) > 0 && (
-            <section>
-              <p className="section-label">{t("lairs.about.team")}</p>
-              {data.options?.about?.organizers?.map((organizer, index) => (
-                <div key={`${organizer.name}-${index}`} className="list-row">
-                  {organizer.avatar && (
-                    <CachedImage src={organizer.avatar} alt="" className="avatar" />
-                  )}
-                  <div className="list-row__body">
-                    <p className="list-row__title">{organizer.name}</p>
-                    {organizer.role && <p className="list-row__sub">{organizer.role}</p>}
-                  </div>
-                </div>
-              ))}
-            </section>
-          )}
-
-          {(data.options?.about?.transit || data.options?.about?.parking) && (
-            <section className="card">
-              <p className="section-label">{t("lairs.about.access")}</p>
-              {data.options?.about?.transit && (
-                <p className="list-row__sub">{data.options.about.transit}</p>
+          {/* La section « à propos » de la vitrine, si le lieu l'a laissée
+              allumée. Ce qu'elle couvre, c'est exactement `options.about` —
+              présentation, équipements, rythme, équipe, accès. Les liens, le
+              contact et les horaires vivent ailleurs dans `options` et restent
+              affichés : ce sont des informations pratiques, pas la page que le
+              lieu a choisi d'écrire sur lui-même. */}
+          {about && (
+            <>
+              {about.description && (
+                <section className="card">
+                  <UserMarkdown>{about.description}</UserMarkdown>
+                </section>
               )}
-              {data.options?.about?.parking && (
-                <p className="list-row__sub">{data.options.about.parking}</p>
+
+              {(about.amenities?.length ?? 0) > 0 && (
+                <section className="card">
+                  <p className="section-label">{t("lairs.about.amenities")}</p>
+                  <div className="chip-set">
+                    {about.amenities?.map((amenity) => (
+                      <span key={amenity} className="chip">
+                        {amenity}
+                      </span>
+                    ))}
+                  </div>
+                </section>
               )}
-            </section>
+
+              {(about.rhythm?.length ?? 0) > 0 && (
+                <section>
+                  <p className="section-label">{t("lairs.about.rhythm")}</p>
+                  {about.rhythm?.map((entry, index) => (
+                    <div key={`${entry.label}-${index}`} className="list-row">
+                      <div className="list-row__body">
+                        <p className="list-row__title">{entry.label}</p>
+                        <p className="list-row__sub">{entry.value}</p>
+                      </div>
+                    </div>
+                  ))}
+                </section>
+              )}
+
+              {(about.organizers?.length ?? 0) > 0 && (
+                <section>
+                  <p className="section-label">{t("lairs.about.team")}</p>
+                  {about.organizers?.map((organizer, index) => (
+                    <div key={`${organizer.name}-${index}`} className="list-row">
+                      {organizer.avatar && (
+                        <CachedImage src={organizer.avatar} alt="" className="avatar" />
+                      )}
+                      <div className="list-row__body">
+                        <p className="list-row__title">{organizer.name}</p>
+                        {organizer.role && <p className="list-row__sub">{organizer.role}</p>}
+                      </div>
+                    </div>
+                  ))}
+                </section>
+              )}
+
+              {(about.transit || about.parking) && (
+                <section className="card">
+                  <p className="section-label">{t("lairs.about.access")}</p>
+                  {about.transit && <p className="list-row__sub">{about.transit}</p>}
+                  {about.parking && <p className="list-row__sub">{about.parking}</p>}
+                </section>
+              )}
+            </>
           )}
 
           {(website || links.length > 0 || data.options?.contact?.email) && (

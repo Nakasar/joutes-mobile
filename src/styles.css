@@ -5581,12 +5581,15 @@ html.qr-scanning #root {
 /* La marque blanche d'un lieu s'arrête à l'accent. `readLairAccent` pose
    `--lair-accent` en ligne sur ce conteneur ; les déclinaisons se dérivent ici,
    sur le même élément, ce qui laisse `color-mix` voir la valeur posée. Sans
-   accent enregistré, rien n'est posé et tout retombe sur `--primary`. */
+   accent enregistré, rien n'est posé et chaque usage retombe sur son repli —
+   les couleurs de Joutes, gradient du bouton compris. */
 .lair-theme {
-  --lair-accent: var(--primary);
-  --lair-accent-foreground: #fff;
-  --lair-accent-soft: color-mix(in srgb, var(--lair-accent) 14%, transparent);
-  --lair-accent-border: color-mix(in srgb, var(--lair-accent) 32%, transparent);
+  /* `--lair-accent` et `--lair-accent-foreground` ne sont **pas** déclarées
+     ici : `readLairAccent` ne les pose en ligne que si le lieu a choisi un
+     accent, et chaque usage porte donc son propre repli. Les déclarer ici
+     donnerait à tous les lieux un accent qu'aucun n'a demandé. */
+  --lair-accent-soft: color-mix(in srgb, var(--lair-accent, var(--primary)) 14%, transparent);
+  --lair-accent-border: color-mix(in srgb, var(--lair-accent, var(--primary)) 32%, transparent);
 }
 
 .lair-card--link {
@@ -5645,7 +5648,7 @@ html.qr-scanning #root {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--lair-accent);
+  color: var(--lair-accent, var(--text));
 }
 
 .lair-hero__badges {
@@ -5734,7 +5737,7 @@ html.qr-scanning #root {
 }
 
 .lair-news__pin {
-  color: var(--lair-accent);
+  color: var(--lair-accent, var(--primary));
 }
 
 .lair-news__title {
@@ -5753,4 +5756,18 @@ html.qr-scanning #root {
 .lair-news__summary {
   margin: 8px 0 0;
   font-size: 0.92rem;
+}
+
+/* L'accent du lieu tient aussi le bouton « Suivre » — c'est pour lui que
+   `readLairAccent` calcule un premier plan clair ou sombre selon la luminance,
+   le seul endroit de l'écran où du texte se pose *sur* l'accent. Une fois suivi,
+   le bouton passe en contour : l'accent y devient la bordure et le texte. */
+.lair-theme .follow-btn.btn--grad {
+  background: var(--lair-accent, var(--grad));
+  color: var(--lair-accent-foreground, #fff);
+}
+
+.lair-theme .follow-btn.btn--outline {
+  border-color: var(--lair-accent-border);
+  color: var(--lair-accent, var(--text));
 }

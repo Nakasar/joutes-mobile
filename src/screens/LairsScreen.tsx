@@ -45,14 +45,16 @@ export function LairsScreen() {
     return map;
   }, [games.data]);
 
+  // Le retour au premier palier se fait **avec** le changement de filtre, et non
+  // dans un effet qui l'observe : un effet partirait après que la requête de ce
+  // rendu-là est déjà lancée avec l'ancienne page, pour rien.
   useEffect(() => {
-    const timer = setTimeout(() => setSearch(searchInput.trim()), 300);
+    const timer = setTimeout(() => {
+      setSearch(searchInput.trim());
+      setPage(1);
+    }, 300);
     return () => clearTimeout(timer);
   }, [searchInput]);
-
-  useEffect(() => {
-    setPage(1);
-  }, [search, gameId]);
 
   const requestId = useRef(0);
   useEffect(() => {
@@ -95,7 +97,13 @@ export function LairsScreen() {
 
       <label className="field" style={{ marginBottom: 14 }}>
         <span className="field__label">{t("lairs.filters.game")}</span>
-        <select value={gameId} onChange={(e) => setGameId(e.currentTarget.value)}>
+        <select
+          value={gameId}
+          onChange={(e) => {
+            setGameId(e.currentTarget.value);
+            setPage(1);
+          }}
+        >
           <option value={ALL}>{t("lairs.filters.allGames")}</option>
           {(games.data ?? []).map((game) => (
             <option key={game._id} value={game._id}>
