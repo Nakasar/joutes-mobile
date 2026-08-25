@@ -244,6 +244,11 @@ export async function presentPush(push: ReceivedPush): Promise<void> {
   }
 }
 
+/** Un retrait d'écouteur qui échoue se signale, il n'interrompt rien. */
+function logRemovalFailure(error: unknown): void {
+  console.error("Push listener removal failed", error);
+}
+
 /**
  * Abonne à un événement du plugin et rend de quoi s'en désabonner.
  *
@@ -261,7 +266,7 @@ function subscribe(
   void register()
     .then((registered) => {
       if (cancelled) {
-        void registered.unregister();
+        void registered.unregister().catch(logRemovalFailure);
         return;
       }
       listener = registered;
@@ -272,7 +277,7 @@ function subscribe(
 
   return () => {
     cancelled = true;
-    void listener?.unregister();
+    void listener?.unregister().catch(logRemovalFailure);
   };
 }
 
@@ -321,6 +326,13 @@ type NotificationClickedData = { id: number; data?: Record<string, string> };
  * qui reste libre de délivrer le toucher.
  */
 export function onPushClicked(handler: (payload: PushPayload) => void): () => void {
+  // Mobile seulement, et pas par prudence : `set_push_click_listener_active`
+  // n'est déclarée que pour les cibles mobiles, et l'application ne pose de
+  // notification nulle part ailleurs. Sur un bureau Tauri, où `isTauri()` est
+  // vrai aussi, la garde de `subscribe` laisserait partir un appel qui n'a
+  // personne au bout.
+  if (!isTauri() || currentPlatform() === null) return () => {};
+
   return subscribe(async () => {
     const { addPluginListener, invoke } = await loadCore();
 
@@ -332,12 +344,26 @@ export function onPushClicked(handler: (payload: PushPayload) => void): () => vo
 
     // Après l'écouteur, et non avant : c'est cet appel qui fait remonter un
     // toucher déjà en attente, et il n'aurait alors personne à qui le donner.
-    await invoke("set_push_click_listener_active", { active: true });
+    //
+    // S'il échoue, on défait l'écouteur ici même : `subscribe` ne recevra pas
+    // de quoi le retirer, et il resterait sinon en place pour rien — un de plus
+    // à chaque montage.
+    try {
+      await invoke("set_push_click_listener_active", { active: true });
+    } catch (error) {
+      await listener.unregister().catch(logRemovalFailure);
+      throw error;
+    }
 
     return {
       unregister: async () => {
-        await invoke("set_push_click_listener_active", { active: false });
-        await listener.unregister();
+        // `finally` pour la même raison, dans l'autre sens : le retrait de
+        // l'écouteur ne dépend pas de la réussite de l'annonce faite au natif.
+        try {
+          await invoke("set_push_click_listener_active", { active: false });
+        } finally {
+          await listener.unregister();
+        }
       },
     };
   });
