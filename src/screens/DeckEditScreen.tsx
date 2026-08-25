@@ -66,12 +66,16 @@ export function DeckEditScreen() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Le formulaire ne se remplit qu'une fois : recopier la réponse du serveur à
-  // chaque rafraîchissement effacerait ce qui est en train d'être saisi.
-  const [hydrated, setHydrated] = useState(false);
+  // Le formulaire ne se remplit qu'une fois **par deck** : le recopier à chaque
+  // rafraîchissement effacerait la saisie en cours, mais un simple « déjà
+  // rempli » garderait le deck précédent. `/decks/:deckId/edit` est une seule
+  // route : React Router ne remonte pas l'écran quand seul le paramètre change,
+  // et le formulaire enregistrerait alors les valeurs d'un deck sur un autre.
+  // D'où la mémoire de *quel* deck l'a rempli, plutôt qu'un booléen.
+  const [hydratedFor, setHydratedFor] = useState<string | null>(null);
   useEffect(() => {
     const deck: Deck | null = loaded.data ?? null;
-    if (!deck || hydrated) return;
+    if (!deck || deck.id === hydratedFor) return;
     setName(deck.name);
     setDescription(deck.description ?? "");
     setFormat(deck.format ?? "");
@@ -79,8 +83,13 @@ export function DeckEditScreen() {
     setCards(deck.cards ?? {});
     setGuide(deck.guide ?? []);
     setMatchups(deck.matchups ?? []);
-    setHydrated(true);
-  }, [loaded.data, hydrated]);
+    setHydratedFor(deck.id);
+  }, [loaded.data, hydratedFor]);
+
+  // Le deck chargé est-il bien celui de l'adresse ? Entre deux decks, la
+  // réponse précédente reste un instant en mémoire : on n'affiche pas un
+  // formulaire qui porterait l'ancien.
+  const hydrated = hydratedFor !== null && hydratedFor === loaded.data?.id;
 
   const game = useApi(
     () => (loaded.data?.gameId ? getGame(loaded.data.gameId) : Promise.resolve(null)),

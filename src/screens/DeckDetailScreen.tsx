@@ -172,8 +172,12 @@ export function DeckDetailScreen() {
               {deck.matchups && deck.matchups.length > 0 && (
                 <section className="card">
                   <h3 className="section-label">{t("decks.matchups")}</h3>
-                  {deck.matchups.map((matchup) => (
-                    <div key={matchup.name} className="deck-matchup">
+                  {/* Deux confrontations peuvent porter le même nom : c'est un
+                      champ libre, et l'éditeur ne l'interdit pas. Sans l'index,
+                      les clés se confondraient et React réconcilierait de
+                      travers. Le modèle de l'API ne porte pas d'identifiant. */}
+                  {deck.matchups.map((matchup, index) => (
+                    <div key={`${matchup.name}-${index}`} className="deck-matchup">
                       <span>{matchup.name}</span>
                       <span className={`chip deck-matchup--${matchup.rating}`}>
                         {t(`decks.matchup.${matchup.rating}`)}
@@ -198,8 +202,10 @@ export function DeckDetailScreen() {
 
           {tab === "guide" &&
             (deck.guide && deck.guide.length > 0 ? (
-              deck.guide.map((section) => (
-                <section key={section.title} className="card">
+              // Même raison que pour les confrontations : deux sections
+              // peuvent porter le même titre.
+              deck.guide.map((section, index) => (
+                <section key={`${section.title}-${index}`} className="card">
                   <h3 className="section-label">{section.title}</h3>
                   <UserMarkdown>{section.body}</UserMarkdown>
                 </section>

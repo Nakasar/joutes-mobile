@@ -5281,19 +5281,16 @@ html.qr-scanning #root {
   gap: 8px;
 }
 
+/*
+ * Une vignette de deck ne se touche pas : il n'y a rien à en faire. Ni curseur
+ * de main ni état désactivé, donc — les deux venaient du bouton qu'elle a été
+ * un temps, et promettaient un geste qui n'existe pas.
+ */
 .deck-thumb {
   position: relative;
   display: block;
-  padding: 0;
-  border: 0;
-  background: none;
   border-radius: var(--radius-sm);
   overflow: hidden;
-  cursor: pointer;
-}
-
-.deck-thumb:disabled {
-  cursor: default;
 }
 
 .deck-thumb__image {
