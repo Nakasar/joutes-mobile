@@ -13,7 +13,20 @@ export class ApiError extends Error {
   }
 }
 
-type QueryParams = Record<string, string | number | boolean | undefined>;
+/**
+ * Paramètres de requête.
+ *
+ * Un tableau produit **le même paramètre répété** (`?domain=fury&domain=body`)
+ * et non une valeur unique séparée par des virgules : c'est la forme qu'attend
+ * l'API, qui les relit par `searchParams.getAll` — la librairie de decks filtre
+ * ainsi sur plusieurs domaines ou plusieurs visibilités à la fois. Un tableau
+ * vide n'écrit rien, comme `undefined` : un filtre sans valeur ne se distingue
+ * pas d'un filtre absent.
+ */
+type QueryParams = Record<
+  string,
+  string | number | boolean | readonly string[] | undefined
+>;
 
 interface RequestOptions {
   query?: QueryParams;
@@ -50,7 +63,14 @@ class ApiClient {
     const url = new URL(config.apiBaseUrl.replace(/\/$/, "") + path);
     if (options.query) {
       for (const [key, value] of Object.entries(options.query)) {
-        if (value !== undefined) url.searchParams.set(key, String(value));
+        if (value === undefined) continue;
+        if (Array.isArray(value)) {
+          // `append`, et non `set` : c'est toute la différence entre trois
+          // filtres cumulés et le dernier des trois.
+          for (const item of value) url.searchParams.append(key, item);
+        } else {
+          url.searchParams.set(key, String(value));
+        }
       }
     }
 

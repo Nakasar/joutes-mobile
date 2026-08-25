@@ -96,17 +96,29 @@ export interface CardPrinting {
 }
 
 /**
- * Prix d'une carte sur le marché de l'occasion, relevé par l'API sur une place
- * de marché (Cardmarket). C'est un prix « à partir de » — le tirage le moins
- * cher, édition anglaise — daté du relevé, pas une cotation.
+ * Place de marché d'où sort un relevé. La plateforme en lit plusieurs et
+ * choisit carte par carte, selon la préférence du lecteur ; le client n'a qu'à
+ * la nommer et à construire le bon lien.
+ */
+export type CardPriceSource = "cardnexus" | "cardmarket";
+
+/**
+ * Prix d'une carte sur le marché de l'occasion, relevé par l'API sur la place
+ * de marché que porte `source`. C'est un prix « à partir de » — le tirage le
+ * moins cher, édition anglaise — daté du relevé, pas une cotation.
  *
  * Une carte sans relevé n'a pas le champ du tout : l'absence de prix se lit à
  * ce vide, jamais à un zéro, qui se lirait comme une carte sans valeur.
  */
-export interface CardMarketPrice {
+export interface MarketPrice {
   amount: number;
   /** Devise ISO 4217 (`EUR`). */
   currency: string;
+  /**
+   * Place de marché qui a relevé ce montant. `productId` ne veut rien dire
+   * ailleurs que dans son catalogue à elle.
+   */
+  source: CardPriceSource;
   /** Date du relevé de la place de marché, pas celle de l'affichage. */
   updatedAt: string;
   /** Produit de la place de marché d'où vient le montant, pour y renvoyer. */
@@ -145,7 +157,7 @@ export interface Card {
   /** Tirages de la même carte, proposés au moment d'enregistrer un exemplaire. */
   printings?: CardPrinting[];
   /** Prix de marché de la carte, absent quand elle n'a pas de relevé. */
-  marketPrice?: CardMarketPrice;
+  marketPrice?: MarketPrice;
   [key: string]: unknown;
 }
 
@@ -771,7 +783,7 @@ export interface CollectionItem {
   /** Nombre d'autres éditions de cette même carte (ex. alt arts) possédées à au moins un exemplaire. */
   variantsOwned: number;
   /** Prix de marché de la carte, absent quand elle n'a pas de relevé. */
-  marketPrice?: CardMarketPrice;
+  marketPrice?: MarketPrice;
 }
 
 /** Réponse paginée de GET /collection/games/{slug} (ou son équivalent play-group). */
@@ -1234,6 +1246,25 @@ export interface TradeCatalogCardInput {
 export type TradeOfferUpdateInput =
   | { target: "mine"; cards: TradeOwnedCardInput[] }
   | { target: "counterparty"; cards: TradeCatalogCardInput[] };
+
+/**
+ * Désignation d'une carte lue dans une liste écrite en texte : le nom, et ce
+ * qui la précise quand la ligne le dit (cf. `lib/trade-text.ts`).
+ */
+export interface TradeCardDesignation {
+  name: string;
+  setCode?: string;
+  collectorNumber?: string;
+}
+
+/**
+ * Réponse de l'appariement d'une liste : **même longueur et même ordre** que
+ * les désignations envoyées, `null` marquant celles qu'aucune carte ne
+ * satisfait. C'est l'index qui relie une carte à sa ligne.
+ */
+export interface TradeCardResolveResponse {
+  matches: (TradeCard | null)[];
+}
 
 /** Code d'erreur renvoyé par les opérations d'échange (voir `ApiError.body.error`). */
 export type TradeError =

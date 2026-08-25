@@ -1,14 +1,17 @@
-import type { CardMarketPrice } from "../api/types";
+import type { MarketPrice, CardPriceSource } from "../api/types";
 import { currentLocale } from "../i18n";
 
 /**
- * Mise en forme des prix de marché des cartes — copie de `lib/prices/display.ts`
- * et `lib/prices/cardmarket.ts` de joutes-app : une même carte doit afficher le
+ * Mise en forme des prix de marché des cartes — copie de `lib/prices/display.ts`,
+ * `lib/prices/sources.ts`, `lib/prices/cardmarket.ts` et
+ * `lib/prices/cardnexus.ts` de joutes-app : une même carte doit afficher le
  * même montant et renvoyer vers la même fiche des deux côtés. Toute
  * modification doit être reportée dans les deux dépôts.
  *
  * Les montants, eux, ne se calculent pas ici : l'API (et le document hors
- * ligne) livrent déjà le prix de référence de chaque carte.
+ * ligne) livrent déjà le prix de référence de chaque carte, et le serveur a
+ * déjà choisi le fournisseur qui la représente — celui que le joueur a réglé
+ * sur le web, à défaut celui de la plateforme.
  */
 
 /**
@@ -39,6 +42,88 @@ export function cardmarketProductUrl(
   }
 
   return `https://www.cardmarket.com/en/${path}/Products?idProduct=${productId}`;
+}
+
+/**
+ * Identifiant CardNexus des jeux, par slug de jeu. Comme pour Cardmarket, il ne
+ * se devine pas : un jeu absent de cette table n'a pas de lien CardNexus.
+ * Yu-Gi-Oh n'y figure pas, quand Cardmarket le connaît.
+ */
+export const CARDNEXUS_GAME_IDS: Record<string, string> = {
+  mtg: "mtg",
+  pokemon: "pokemon",
+  fab: "fab",
+  op: "onepiece",
+  lorcana: "lorcana",
+  swu: "swu",
+  riftbound: "riftbound",
+};
+
+/**
+ * Page du produit chez CardNexus. L'adresse porte des segments lisibles — jeu,
+ * extension, nom — dont CardNexus ne lit que l'identifiant final : toute autre
+ * adresse de la même forme y est redirigée, d'où les segments neutres.
+ */
+export function cardnexusProductUrl(
+  gameSlug: string | undefined,
+  productId: number | undefined,
+): string | undefined {
+  const gameId = gameSlug ? CARDNEXUS_GAME_IDS[gameSlug] : undefined;
+
+  if (!gameId || productId === undefined) {
+    return undefined;
+  }
+
+  return `https://cardnexus.com/en/explore/${gameId}/card/card/card-${productId}`;
+}
+
+/**
+ * Nom d'une place de marché. Ce sont des marques : elles s'écrivent pareil dans
+ * toutes les langues, et ne passent donc pas par les traductions.
+ */
+export const PRICE_SOURCE_LABELS: Record<CardPriceSource, string> = {
+  cardnexus: "CardNexus",
+  cardmarket: "Cardmarket",
+};
+
+/**
+ * Page du produit d'où vient un prix, chez la place de marché qui l'a relevé.
+ *
+ * Un prix ne se lit pas sans savoir qui le publie — deux places de marché ne
+ * cotent pas la même chose au même moment — et un lien construit pour l'une
+ * mène à une page inexistante chez l'autre. D'où ce point de passage unique,
+ * plutôt qu'un `if` par écran.
+ *
+ * `undefined` quand l'adresse ne se construit pas (jeu inconnu de la place de
+ * marché, relevé sans produit) : le prix s'affiche alors sans lien plutôt
+ * qu'avec un lien mort.
+ *
+ * Une place de marché inconnue n'a pas de lien non plus, et c'est le seul écart
+ * assumé avec `lib/prices/sources.ts` : là-bas un `if` suffit, parce que le web
+ * est déployé avec l'API qui le sert. Ici une application installée reste des
+ * semaines en arrière du serveur, et un troisième fournisseur ajouté d'ici là
+ * doit rester sans lien — un repli sur Cardmarket lui construirait une adresse
+ * à partir d'un identifiant qui appartient au catalogue d'un autre, soit
+ * exactement le lien faux que ce module existe pour empêcher.
+ */
+export function marketProductUrl(
+  source: CardPriceSource,
+  gameSlug: string | undefined,
+  productId: number | undefined,
+): string | undefined {
+  switch (source) {
+    case "cardnexus":
+      return cardnexusProductUrl(gameSlug, productId);
+    case "cardmarket":
+      return cardmarketProductUrl(gameSlug, productId);
+    default:
+      return undefined;
+  }
+}
+
+/** Le nom de la place de marché d'où vient un prix. */
+export function priceSourceLabel(source: CardPriceSource): string {
+  return PRICE_SOURCE_LABELS[source] ?? source;
 }
 
 /**
@@ -88,7 +173,7 @@ export function formatMoney(
 
 /** Le prix de marché d'une carte, mis en forme. */
 export function formatCardPrice(
-  price: CardMarketPrice,
+  price: MarketPrice,
   locale: string = currentLocale(),
 ): string {
   return formatMoney(price, locale);

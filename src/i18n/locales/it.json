@@ -339,8 +339,8 @@
   "prices": {
     "title": "Prezzo di mercato",
     "from": "A partire da",
-    "source": "Cardmarket · rilevato il {{date}}",
-    "openOnCardmarket": "Vedi su Cardmarket — prezzo rilevato il {{date}}",
+    "source": "{{source}} · rilevato il {{date}}",
+    "openOnSource": "Vedi su {{source}} — prezzo rilevato il {{date}}",
     "none": "Nessun prezzo rilevato per questa carta."
   },
   "collectionValue": {
@@ -598,6 +598,22 @@
       "unknownCards": "Alcune carte non sono state trovate nel catalogo.",
       "userNotFound": "Nessun utente corrisponde a questo identificativo.",
       "failed": "Si è verificato un errore."
+    },
+    "text": {
+      "open": "Vedi la lista come testo",
+      "hint": "Una carta per riga: « 2 Nome della carta (EXT) 123 ». Applicare sostituisce il contenuto di questa offerta.",
+      "readOnlyHint": "Una carta per riga. Questa offerta è in sola lettura: la lista si copia, non si applica.",
+      "placeholder": "2 Nome della carta (EXT) 123",
+      "copy": "Copia",
+      "copied": "Copiato",
+      "apply": "Applica",
+      "applying": "Applicazione…",
+      "failed": "Non è stato possibile leggere la lista. L'offerta non è stata modificata.",
+      "noMatch": "Nessuna carta della lista è stata riconosciuta. L'offerta non è stata modificata.",
+      "unmatched_one": "{{count}} riga non riconosciuta",
+      "unmatched_other": "{{count}} righe non riconosciute",
+      "dropped_one": "{{count}} carta lasciata fuori: un'offerta non contiene più di {{max}} carte.",
+      "dropped_other": "{{count}} carte lasciate fuori: un'offerta non contiene più di {{max}} carte."
     }
   },
   "profile": {

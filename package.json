@@ -1,11 +1,12 @@
 {
   "name": "joutes-mobile",
   "private": true,
-  "version": "0.32.1",
+  "version": "0.34.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "check-i18n": "node scripts/check-i18n-parity.mjs",
+    "build": "npm run check-i18n && tsc && vite build",
     "preview": "vite preview",
     "tauri": "tauri"
   },

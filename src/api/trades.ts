@@ -2,6 +2,9 @@ import { api, ApiError } from "./client";
 import { endpoints } from "./endpoints";
 import type {
   Trade,
+  TradeCard,
+  TradeCardDesignation,
+  TradeCardResolveResponse,
   TradeCardScope,
   TradeCardSearchResult,
   TradeError,
@@ -119,6 +122,24 @@ export function revokeTradeValidation(tradeId: string): Promise<TradeActionResul
   return toActionResult(
     api.delete<{ trade: Trade }>(endpoints.trades.validate(tradeId)),
   );
+}
+
+/**
+ * Apparie une liste de cartes écrite en texte à des impressions réelles, dans
+ * sa propre collection (`collection`) ou dans le catalogue (`catalog`).
+ *
+ * Sans cache : le résultat dépend de la collection de l'appelant, qui change à
+ * chaque échange conclu, et il ne sert qu'une fois — au moment d'appliquer la
+ * liste. La réponse suit l'ordre des désignations, `null` marquant celles
+ * qu'aucune carte ne satisfait.
+ */
+export function resolveTradeCards(
+  scope: TradeCardScope,
+  cards: TradeCardDesignation[],
+): Promise<(TradeCard | null)[]> {
+  return api
+    .post<TradeCardResolveResponse>(endpoints.trades.resolveCards, { scope, cards })
+    .then((r) => r.matches ?? []);
 }
 
 export function searchTradeCards(params: {

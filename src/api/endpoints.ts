@@ -128,6 +128,13 @@ export const endpoints = {
     create: "/trades",
     join: "/trades/join",
     cards: "/trades/cards",
+    /**
+     * Apparie une liste de cartes écrite en texte à des impressions réelles.
+     * L'appariement se fait côté serveur : l'application n'a ni la collection
+     * ni le catalogue, et les télécharger pour lire trente lignes coûterait
+     * très cher une commodité.
+     */
+    resolveCards: "/trades/cards/resolve",
     detail: (tradeId: string) => `/trades/${tradeId}`,
     offer: (tradeId: string) => `/trades/${tradeId}/offer`,
     partner: (tradeId: string) => `/trades/${tradeId}/partner`,

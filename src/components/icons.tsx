@@ -408,3 +408,13 @@ export function BellIcon(p: IconProps) {
     </Icon>
   );
 }
+
+/** Trois lignes de texte précédées de leurs puces : une liste écrite. */
+export function TextListIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M4 7h.01M4 12h.01M4 17h.01" />
+      <path d="M9 7h11M9 12h11M9 17h7" />
+    </Icon>
+  );
+}

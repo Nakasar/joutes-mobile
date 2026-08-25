@@ -18,15 +18,16 @@ import type {
   TradeOwnedCardInput,
 } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
-import { MinusIcon, PlusIcon, UserPlusIcon } from "../components/icons";
+import { MinusIcon, PlusIcon, TextListIcon, UserPlusIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { TradeCardPickerSheet } from "../components/TradeCardPickerSheet";
 import { TradeInviteSheet } from "../components/TradeInviteSheet";
+import { TradeTextSheet } from "../components/TradeTextSheet";
 import { tradeErrorMessage } from "../lib/trade-errors";
+import { TRADE_MAX_QUANTITY } from "../lib/trade-constants";
 import { useAuth } from "../store/auth";
 import { CardImage } from "../components/CardImage";
 
-const TRADE_MAX_QUANTITY = 99;
 const POLL_INTERVAL_MS = 5000;
 const SAVE_DEBOUNCE_MS = 400;
 
@@ -97,6 +98,7 @@ function OfferPanel({
   editable,
   badge,
   onAdd,
+  onOpenText,
   onQuantityChange,
   onRemove,
 }: {
@@ -107,6 +109,7 @@ function OfferPanel({
   editable: boolean;
   badge?: string;
   onAdd?: () => void;
+  onOpenText?: () => void;
   onQuantityChange?: (key: string, quantity: number) => void;
   onRemove?: (key: string) => void;
 }) {
@@ -122,7 +125,21 @@ function OfferPanel({
             {subtitle}
           </p>
         </div>
-        {badge && <span className="chip chip--grad">{badge}</span>}
+        {/* La rangée aligne le badge de validation et le bouton de la vue
+            texte : elle passe à la ligne plutôt que d'élargir la page. */}
+        <div className="offer-panel__actions">
+          {badge && <span className="chip chip--grad">{badge}</span>}
+          {/* Ouvert même en lecture : copier l'offre du partenaire, ou celle
+              d'un échange clos, ne demande pas le droit de la modifier. */}
+          <button
+            className="icon-button"
+            onClick={onOpenText}
+            aria-label={t("trades.text.open")}
+            title={t("trades.text.open")}
+          >
+            <TextListIcon size={18} />
+          </button>
+        </div>
       </div>
 
       {cards.length === 0 ? (
@@ -208,6 +225,7 @@ export function TradeDetailScreen() {
   const [busy, setBusy] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
   const [pickerTarget, setPickerTarget] = useState<OfferTarget | null>(null);
+  const [textTarget, setTextTarget] = useState<OfferTarget | null>(null);
   const [inviteOpen, setInviteOpen] = useState(false);
 
   const ownedHints = useRef<Map<string, number>>(new Map());
@@ -369,6 +387,38 @@ export function TradeDetailScreen() {
     [updateDraft],
   );
 
+  /**
+   * Remplace le contenu d'une face par ce qu'une liste collée désigne.
+   *
+   * Le texte fait foi : ce qu'il n'énumère pas sort de l'offre. C'est ce qu'on
+   * attend d'une liste qu'on recopie — sinon elle s'ajouterait à l'ancienne, et
+   * il faudrait vider la face à la main avant chaque collage. Les quantités
+   * sont ramenées à ce que l'on possède, comme le fait déjà l'ajout par la
+   * recherche.
+   */
+  const replaceDraftFromText = useCallback(
+    (target: OfferTarget, entries: { card: TradeCard; quantity: number }[]) => {
+      const next = entries.map(({ card, quantity }): DraftCard => {
+        if (target === "mine") ownedHints.current.set(card.key, card.owned);
+        const max = target === "mine" ? Math.max(1, card.owned) : TRADE_MAX_QUANTITY;
+        return {
+          key: card.key,
+          cardId: card.cardId,
+          name: card.name,
+          setCode: card.setCode,
+          collectorNumber: card.collectorNumber,
+          image: card.image,
+          orientation: card.orientation,
+          gameName: card.gameName,
+          quantity: Math.max(1, Math.min(max, quantity)),
+          maxQuantity: max,
+        };
+      });
+      updateDraft(target, next);
+    },
+    [updateDraft],
+  );
+
   const changeQuantity = useCallback(
     (target: OfferTarget, key: string, quantity: number) => {
       updateDraft(
@@ -518,6 +568,7 @@ export function TradeDetailScreen() {
             editable={isOpen}
             badge={myValidated ? t("trades.validation.mine") : undefined}
             onAdd={() => setPickerTarget("mine")}
+            onOpenText={() => setTextTarget("mine")}
             onQuantityChange={(key, quantity) => changeQuantity("mine", key, quantity)}
             onRemove={(key) => removeCard("mine", key)}
           />
@@ -534,6 +585,7 @@ export function TradeDetailScreen() {
             editable={isOpen && !partner}
             badge={partnerValidated ? t("trades.validation.partner") : undefined}
             onAdd={() => setPickerTarget("counterparty")}
+            onOpenText={() => setTextTarget("counterparty")}
             onQuantityChange={(key, quantity) => changeQuantity("counterparty", key, quantity)}
             onRemove={(key) => removeCard("counterparty", key)}
           />
@@ -608,6 +660,22 @@ export function TradeDetailScreen() {
           selectedQuantities={new Map(drafts[pickerTarget].map((c) => [c.key, c.quantity]))}
           onAdd={(card) => addCard(pickerTarget, card)}
           onClose={() => setPickerTarget(null)}
+        />
+      )}
+
+      {textTarget && (
+        <TradeTextSheet
+          title={
+            textTarget === "mine" ? t("trades.offer.title") : t("trades.request.title")
+          }
+          cards={drafts[textTarget]}
+          // Une face que l'on ne peut pas modifier reste lisible et copiable :
+          // c'est le cas de l'offre du partenaire et de tout échange clos.
+          editable={isOpen && (textTarget === "mine" || !partner)}
+          scope={textTarget === "mine" ? "collection" : "catalog"}
+          requireCardId={textTarget === "counterparty"}
+          onApply={(entries) => replaceDraftFromText(textTarget, entries)}
+          onClose={() => setTextTarget(null)}
         />
       )}
 
