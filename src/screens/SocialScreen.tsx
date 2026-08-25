@@ -2,13 +2,14 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { listGames } from "../api/games";
+import { listLairs } from "../api/lairs";
 import {
   listFriendRequests,
   listFriends,
-  listLairs,
   listPlayGroups,
 } from "../api/social";
 import type { PlayGroup, PublicUser } from "../api/types";
+import { LairCard } from "../components/LairCard";
 import { ChevronIcon, PinIcon, UserPlusIcon, UsersIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
@@ -197,6 +198,21 @@ function LairsTab() {
 
   return (
     <>
+      {/* L'onglet n'affiche qu'une trentaine de lieux, sans filtre : l'annuaire
+          complet, avec sa recherche, s'ouvre au-dessus. */}
+      <Link to="/lairs" className="list-row list-row--link">
+        <span className="list-row__icon" style={{ background: "var(--chip)" }}>
+          <PinIcon size={18} />
+        </span>
+        <div className="list-row__body">
+          <p className="list-row__title">{t("lairs.title")}</p>
+          <p className="list-row__sub">{t("lairs.entrySub")}</p>
+        </div>
+        <span className="chevron">
+          <ChevronIcon size={18} />
+        </span>
+      </Link>
+
       <StatusView
         loading={lairs.loading}
         error={lairs.error}
@@ -208,32 +224,13 @@ function LairsTab() {
         }
       />
       {lairs.data?.lairs.map((lair) => (
-        <div key={lair.id} className="lair-card">
-          <div className="lair-card__media">
-            {lair.banner ? (
-              <img src={lair.banner} alt="" loading="lazy" />
-            ) : (
-              <div className="shimmer" style={{ width: "100%", height: "100%" }} />
-            )}
-          </div>
-          <div className="lair-card__body">
-            <h2 className="lair-card__name">{lair.name}</h2>
-            {lair.address && (
-              <p className="lair-card__where">
-                <PinIcon size={14} />
-                {lair.address}
-              </p>
-            )}
-            {(() => {
-              const names = (lair.games ?? [])
-                .map((id) => gameName.get(id))
-                .filter((n): n is string => Boolean(n));
-              return names.length > 0 ? (
-                <p className="lair-card__games">{names.join(" · ")}</p>
-              ) : null;
-            })()}
-          </div>
-        </div>
+        <LairCard
+          key={lair.id}
+          lair={lair}
+          gameNames={(lair.games ?? [])
+            .map((id) => gameName.get(id))
+            .filter((name): name is string => Boolean(name))}
+        />
       ))}
     </>
   );

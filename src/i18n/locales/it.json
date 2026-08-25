@@ -808,6 +808,80 @@
       "watch": "Guarda la diretta"
     }
   },
+  "lairs": {
+    "title": "Luoghi",
+    "detailTitle": "Luogo",
+    "entrySub": "Negozi e sale da gioco",
+    "searchPlaceholder": "Cerca un luogo…",
+    "empty": "Nessun luogo corrisponde a questa ricerca.",
+    "loadMore": "Carica altri",
+    "pro": "Pro",
+    "followers_one": "{{count}} follower",
+    "followers_other": "{{count}} follower",
+    "featured": "In evidenza",
+    "filters": {
+      "game": "Gioco",
+      "allGames": "Tutti i giochi"
+    },
+    "follow": {
+      "action": "Segui",
+      "following": "Seguito"
+    },
+    "tabs": {
+      "news": "Novità",
+      "agenda": "Agenda",
+      "games": "Giochi",
+      "about": "Informazioni"
+    },
+    "live": {
+      "title": "In diretta",
+      "watch": "Guarda la diretta"
+    },
+    "news": {
+      "pinned": "In evidenza",
+      "openLink": "Scopri di più",
+      "empty": "Questo luogo non ha ancora pubblicato nulla."
+    },
+    "agenda": {
+      "empty": "Nessun evento in programma in questo luogo."
+    },
+    "games": {
+      "empty": "Questo luogo non ha indicato alcun gioco."
+    },
+    "hours": {
+      "open": "Aperto",
+      "openUntil": "Aperto · chiude alle {{time}}",
+      "closed": "Chiuso",
+      "closedDay": "Chiuso",
+      "days": {
+        "1": "Lunedì",
+        "2": "Martedì",
+        "3": "Mercoledì",
+        "4": "Giovedì",
+        "5": "Venerdì",
+        "6": "Sabato",
+        "7": "Domenica"
+      }
+    },
+    "about": {
+      "amenities": "Servizi",
+      "rhythm": "Il ritmo del luogo",
+      "team": "Il team",
+      "access": "Come arrivare",
+      "links": "Link",
+      "website": "Sito web",
+      "network": {
+        "website": "Sito web",
+        "instagram": "Instagram",
+        "facebook": "Facebook",
+        "discord": "Discord",
+        "twitch": "Twitch",
+        "youtube": "YouTube",
+        "x": "X",
+        "other": "Link"
+      }
+    }
+  },
   "players": {
     "title": "Giocatori",
     "entrySub": "Il registro della community",

@@ -19,6 +19,8 @@ import { GameMatchDetailScreen } from "./screens/GameMatchDetailScreen";
 import { GameScreen } from "./screens/GameScreen";
 import { GamesScreen } from "./screens/GamesScreen";
 import { HomeScreen } from "./screens/HomeScreen";
+import { LairDetailScreen } from "./screens/LairDetailScreen";
+import { LairsScreen } from "./screens/LairsScreen";
 import { LoginScreen } from "./screens/LoginScreen";
 import { MySellListScreen } from "./screens/MySellListScreen";
 import { NewsDetailScreen } from "./screens/NewsDetailScreen";
@@ -186,6 +188,8 @@ function Shell() {
                   element={<PlayGroupSellListScreen />}
                 />
                 <Route path="/players" element={<PlayersScreen />} />
+                <Route path="/lairs" element={<LairsScreen />} />
+                <Route path="/lairs/:lairId" element={<LairDetailScreen />} />
                 <Route path="/users/:userTag" element={<UserProfileScreen />} />
                 <Route
                   path="/users/:userTag/contents/:contentId"
