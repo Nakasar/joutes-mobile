@@ -339,8 +339,8 @@
   "prices": {
     "title": "Prezzo di mercato",
     "from": "A partire da",
-    "source": "Cardmarket · rilevato il {{date}}",
-    "openOnCardmarket": "Vedi su Cardmarket — prezzo rilevato il {{date}}",
+    "source": "{{source}} · rilevato il {{date}}",
+    "openOnSource": "Vedi su {{source}} — prezzo rilevato il {{date}}",
     "none": "Nessun prezzo rilevato per questa carta."
   },
   "collectionValue": {

@@ -75,6 +75,29 @@ export async function cacheClear(): Promise<void> {
   }
 }
 
+/**
+ * Oublie une entrée précise (best-effort).
+ *
+ * Ce qu'on écrit peut périmer ce qu'on a lu : suivre un joueur change le
+ * compteur d'abonnés de sa fiche, déjà mémorisée. Purger la seule clé
+ * concernée évite d'attendre l'expiration — il n'y en a pas — sans jeter le
+ * reste du cache comme le ferait `cacheClear`.
+ */
+export async function cacheDelete(key: string): Promise<void> {
+  try {
+    const db = await openDb();
+    await new Promise<void>((resolve, reject) => {
+      const tx = db.transaction(STORE, "readwrite");
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+      tx.onabort = () => reject(tx.error);
+      tx.objectStore(STORE).delete(key);
+    });
+  } catch {
+    /* best-effort : un échec de purge ne doit rien casser */
+  }
+}
+
 export async function cacheSet<T>(key: string, value: T): Promise<void> {
   try {
     const db = await openDb();

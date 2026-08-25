@@ -339,8 +339,8 @@
   "prices": {
     "title": "Market price",
     "from": "From",
-    "source": "Cardmarket · recorded on {{date}}",
-    "openOnCardmarket": "View on Cardmarket — price recorded on {{date}}",
+    "source": "{{source}} · recorded on {{date}}",
+    "openOnSource": "View on {{source}} — price recorded on {{date}}",
     "none": "No price recorded for this card."
   },
   "collectionValue": {

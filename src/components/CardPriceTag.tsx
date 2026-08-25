@@ -1,4 +1,4 @@
-import type { CardMarketPrice } from "../api/types";
+import type { MarketPrice } from "../api/types";
 import { formatCardPrice } from "../lib/prices";
 
 /**
@@ -16,7 +16,7 @@ export function CardPriceTag({
   price,
   className = "",
 }: {
-  price?: CardMarketPrice;
+  price?: MarketPrice;
   className?: string;
 }) {
   if (!price) {

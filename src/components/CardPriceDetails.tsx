@@ -1,6 +1,10 @@
 import { useTranslation } from "react-i18next";
-import type { CardMarketPrice } from "../api/types";
-import { cardmarketProductUrl, formatCardPrice } from "../lib/prices";
+import type { MarketPrice } from "../api/types";
+import {
+  formatCardPrice,
+  marketProductUrl,
+  priceSourceLabel,
+} from "../lib/prices";
 import { currentLocale } from "../i18n";
 import { ExternalLinkIcon } from "./icons";
 
@@ -20,15 +24,20 @@ function formatDate(iso: string): string {
  * a la place de dire ce qu'il vaut vraiment — un prix « à partir de », relevé
  * un jour donné sur le tirage le moins cher de la carte.
  *
- * Le montant renvoie à la fiche Cardmarket du produit d'où il sort, quand le
- * jeu y est connu. Sans relevé, l'écran le dit plutôt que de laisser un vide :
- * c'est ici, et nulle part ailleurs, qu'une carte sans prix s'explique.
+ * Le montant renvoie à la fiche du produit d'où il sort, **chez la place de
+ * marché qui l'a relevé** : la plateforme en lit plusieurs, et un identifiant
+ * de produit ne veut rien dire ailleurs que dans le catalogue d'où il vient.
+ * Un jeu que cette place de marché ne connaît pas n'a pas de lien du tout,
+ * plutôt qu'un lien mort.
+ *
+ * Sans relevé, l'écran le dit plutôt que de laisser un vide : c'est ici, et
+ * nulle part ailleurs, qu'une carte sans prix s'explique.
  */
 export function CardPriceDetails({
   price,
   gameSlug,
 }: {
-  price?: CardMarketPrice;
+  price?: MarketPrice;
   gameSlug?: string;
 }) {
   const { t } = useTranslation();
@@ -38,7 +47,8 @@ export function CardPriceDetails({
   }
 
   const date = formatDate(price.updatedAt);
-  const url = cardmarketProductUrl(gameSlug, price.productId);
+  const source = priceSourceLabel(price.source);
+  const url = marketProductUrl(price.source, gameSlug, price.productId);
   const amount = formatCardPrice(price);
 
   return (
@@ -51,7 +61,7 @@ export function CardPriceDetails({
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={t("prices.openOnCardmarket", { date })}
+            aria-label={t("prices.openOnSource", { source, date })}
           >
             {amount}
             <ExternalLinkIcon size={14} />
@@ -61,7 +71,7 @@ export function CardPriceDetails({
         )}
       </div>
       <p className="card-price-details__source">
-        {t("prices.from")} · {t("prices.source", { date })}
+        {t("prices.from")} · {t("prices.source", { source, date })}
       </p>
     </section>
   );

@@ -339,8 +339,8 @@
   "prices": {
     "title": "Marktpreis",
     "from": "Ab",
-    "source": "Cardmarket · Stand {{date}}",
-    "openOnCardmarket": "Auf Cardmarket ansehen — Preis vom {{date}}",
+    "source": "{{source}} · Stand {{date}}",
+    "openOnSource": "Auf {{source}} ansehen — Preis vom {{date}}",
     "none": "Für diese Karte liegt kein Preis vor."
   },
   "collectionValue": {
