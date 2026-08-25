@@ -38,6 +38,40 @@ function loadPlugin(): Promise<NotificationsPlugin> {
   return pluginModule;
 }
 
+type TauriCore = typeof import("@tauri-apps/api/core");
+
+let coreModule: Promise<TauriCore> | null = null;
+
+/** Le cœur de Tauri, chargé de la même façon et pour la même raison. */
+function loadCore(): Promise<TauriCore> {
+  if (!coreModule) coreModule = import("@tauri-apps/api/core");
+  return coreModule;
+}
+
+/** Délai au-delà duquel on cesse d'attendre un jeton du système. */
+const PUSH_TOKEN_TIMEOUT_MS = 15_000;
+
+/**
+ * Rend `null` si la promesse n'a pas abouti dans le délai imparti — un échec
+ * comme une attente trop longue valent ici la même chose : pas de jeton.
+ */
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T | null> {
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => resolve(null), ms);
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (error) => {
+        clearTimeout(timer);
+        console.error("Push token request failed", error);
+        resolve(null);
+      },
+    );
+  });
+}
+
 export type PushPlatform = "ios" | "android";
 
 export type PushRegistration =
@@ -105,7 +139,17 @@ export async function registerForPush(): Promise<PushRegistration> {
     const permission = await requestPermission();
     if (permission !== "granted") return { status: "denied" };
 
-    const token = await registerForPushNotifications();
+    // Le plugin se donne dix secondes pour obtenir un jeton, puis abandonne —
+    // en théorie seulement : sur iOS il arme ce délai avec un `Timer` posé sur
+    // le fil qui lui rend la réponse d'autorisation, un fil sans boucle
+    // d'exécution, où le minuteur ne se déclenchera jamais. Un appareil qui
+    // n'obtient pas de jeton — pas d'entitlement APNs, réseau absent au
+    // lancement — laisserait donc cette promesse en suspens pour de bon. On
+    // repose le délai ici, du côté qui l'exécutera pour de vrai.
+    const token = await withTimeout(
+      registerForPushNotifications(),
+      PUSH_TOKEN_TIMEOUT_MS,
+    );
     if (!token) return { status: "unavailable" };
 
     return { status: "registered", token, platform };
@@ -207,16 +251,15 @@ export async function presentPush(push: ReceivedPush): Promise<void> {
  * annule l'écouteur dès qu'il arrive plutôt que de le laisser courir.
  */
 function subscribe(
-  register: (plugin: NotificationsPlugin) => Promise<{ unregister: () => Promise<void> }>,
+  register: () => Promise<{ unregister: () => Promise<void> }>,
 ): () => void {
   if (!isTauri()) return () => {};
 
   let listener: { unregister: () => Promise<void> } | null = null;
   let cancelled = false;
 
-  void loadPlugin()
-    .then(async (plugin) => {
-      const registered = await register(plugin);
+  void register()
+    .then((registered) => {
       if (cancelled) {
         void registered.unregister();
         return;
@@ -243,27 +286,59 @@ function subscribe(
  * s'annoncerait lui-même, indéfiniment.
  */
 export function onPushReceived(handler: (push: ReceivedPush) => void): () => void {
-  return subscribe((plugin) =>
-    plugin.onNotificationReceived((notification) => {
+  return subscribe(async () => {
+    const plugin = await loadPlugin();
+    return plugin.onNotificationReceived((notification) => {
       if (notification.source && notification.source !== "push") return;
       handler({
         ...readPayload(notification.extra),
         title: notification.title ?? "",
         body: notification.body ?? "",
       });
-    }),
-  );
+    });
+  });
 }
+
+/** Ce que le natif remonte au toucher d'une notification. */
+type NotificationClickedData = { id: number; data?: Record<string, string> };
 
 /**
  * L'utilisateur a touché une notification. Couvre aussi le démarrage à froid :
  * le plugin garde la notification qui a lancé l'application et la délivre dès
- * qu'un écouteur s'abonne.
+ * qu'un écouteur se déclare.
+ *
+ * L'abonnement est écrit à la main plutôt que confié à `onNotificationClicked`,
+ * et c'est tout l'objet de ce détour : l'aide du plugin annonce l'écouteur au
+ * natif par sa commande `set_click_listener_active`, qui n'est pas `async`.
+ * Tauri exécute ces commandes-là sur le fil principal, où celle-ci attend la
+ * réponse de Swift — laquelle commence par remettre le toucher gardé au chaud,
+ * par un `Channel` dont l'envoi attend ce même fil principal. Les deux
+ * s'attendent : l'application gèle, et justement dans le cas qu'on voulait
+ * servir, celui d'une ouverture depuis une notification.
+ *
+ * `set_push_click_listener_active` (voir `src-tauri/src/lib.rs`) dit la même
+ * chose au même endroit, mais en `async` : l'attente quitte le fil principal,
+ * qui reste libre de délivrer le toucher.
  */
 export function onPushClicked(handler: (payload: PushPayload) => void): () => void {
-  return subscribe((plugin) =>
-    plugin.onNotificationClicked((data) => {
-      handler(readPayload(data.data));
-    }),
-  );
+  return subscribe(async () => {
+    const { addPluginListener, invoke } = await loadCore();
+
+    const listener = await addPluginListener<NotificationClickedData>(
+      "notifications",
+      "notificationClicked",
+      (clicked) => handler(readPayload(clicked.data)),
+    );
+
+    // Après l'écouteur, et non avant : c'est cet appel qui fait remonter un
+    // toucher déjà en attente, et il n'aurait alors personne à qui le donner.
+    await invoke("set_push_click_listener_active", { active: true });
+
+    return {
+      unregister: async () => {
+        await invoke("set_push_click_listener_active", { active: false });
+        await listener.unregister();
+      },
+    };
+  });
 }
