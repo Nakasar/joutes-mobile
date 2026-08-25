@@ -67,6 +67,26 @@ export const endpoints = {
   playGroups: {
     list: "/play-groups",
     detail: (playGroupId: string) => `/play-groups/${playGroupId}`,
+    /** Le rôle d'armes : les groupes ouverts, et ceux qu'on suit déjà. */
+    explore: "/play-groups/explore",
+    showcase: (playGroupId: string) => `/play-groups/${playGroupId}/showcase`,
+    /** Suivre / ne plus suivre : `PUT` et `DELETE` sur le même chemin. */
+    follow: (playGroupId: string) => `/play-groups/${playGroupId}/follow`,
+    sessions: (playGroupId: string) => `/play-groups/${playGroupId}/sessions`,
+    session: (playGroupId: string, sessionId: string) =>
+      `/play-groups/${playGroupId}/sessions/${sessionId}`,
+    sessionVote: (playGroupId: string, sessionId: string) =>
+      `/play-groups/${playGroupId}/sessions/${sessionId}/vote`,
+    sessionConfirm: (playGroupId: string, sessionId: string) =>
+      `/play-groups/${playGroupId}/sessions/${sessionId}/confirm`,
+    sessionRsvp: (playGroupId: string, sessionId: string) =>
+      `/play-groups/${playGroupId}/sessions/${sessionId}/rsvp`,
+    announcements: (playGroupId: string) => `/play-groups/${playGroupId}/announcements`,
+    announcement: (playGroupId: string, announcementId: string) =>
+      `/play-groups/${playGroupId}/announcements/${announcementId}`,
+    contents: (playGroupId: string) => `/play-groups/${playGroupId}/contents`,
+    content: (playGroupId: string, contentId: string) =>
+      `/play-groups/${playGroupId}/contents/${contentId}`,
     collection: {
       overview: (playGroupId: string) => `/play-groups/${playGroupId}/collection`,
       cards: (playGroupId: string) => `/play-groups/${playGroupId}/collection/cards`,

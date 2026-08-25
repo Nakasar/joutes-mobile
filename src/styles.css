@@ -5771,3 +5771,258 @@ html.qr-scanning #root {
   border-color: var(--lair-accent-border);
   color: var(--lair-accent, var(--text));
 }
+
+/* ---- Groupes de jeu : l'Établi, la vitrine, le rôle d'armes ---- */
+
+/* Même mécanique que `.lair-theme` : `readPlayGroupAccent` pose `--group-accent`
+   en ligne quand le groupe en a choisi un, et chaque usage porte son repli. */
+.play-group-theme {
+  --group-accent-soft: color-mix(in srgb, var(--group-accent, var(--primary)) 14%, transparent);
+  --group-accent-border: color-mix(in srgb, var(--group-accent, var(--primary)) 32%, transparent);
+}
+
+/* Cinq vues ne tiennent pas côté à côté sur un téléphone étroit : la barre
+   défile plutôt que de couper les libellés en deux lignes illisibles. */
+.segmented--scroll {
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.segmented--scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.segmented--scroll .segmented__item {
+  flex: 0 0 auto;
+  padding-left: 14px;
+  padding-right: 14px;
+}
+
+/* L'écu du groupe : son logo, ou ses initiales. Le blason animé du web est
+   remplacé par les initiales — une animation qui tourne dans une liste de
+   vingt lignes coûte plus qu'elle n'apporte. */
+.group-crest {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: var(--surface-2);
+}
+
+/* Le premier plan suit l'accent : `readPlayGroupAccent` le calcule sur la
+   luminance, et c'est ici qu'il sert — des initiales blanches sur l'ambre ou la
+   menthe de la palette se lisent mal. */
+.group-crest--initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--group-accent-foreground, #fff);
+  background: var(--group-accent, var(--primary));
+}
+
+.group-crest--lg {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  font-size: 20px;
+}
+
+.group-hero__banner {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+  background: var(--surface-2);
+}
+
+.group-hero {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 6px;
+}
+
+.group-hero__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.group-hero__name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--group-accent, var(--text));
+}
+
+.group-hero__tagline {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.group-hero__badges {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.session-card {
+  margin-bottom: 12px;
+}
+
+/* Annulée mais lisible : c'est elle qui explique un trou dans l'agenda. */
+.session-card--cancelled {
+  opacity: 0.6;
+}
+
+.session-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.session-card__title {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.session-card__when {
+  margin: 0;
+  font-weight: 600;
+}
+
+.session-card__where,
+.session-card__count {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.session-card__answers {
+  margin-top: 10px;
+}
+
+.session-card__hint {
+  margin: 8px 0 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.session-slots {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+/* Chaque créneau tient sur sa ligne, avec son compte de voix : deux créneaux
+   côte à côte se toucheraient au pouce, et un vote raté sur un sondage
+   demande de recommencer à deux. */
+.session-slot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+}
+
+.session-slot__count {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.session-slot__confirm {
+  margin-left: auto;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+}
+
+.session-slot-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.session-slot-input input {
+  flex: 1;
+  min-width: 0;
+}
+
+.announcement-card {
+  margin-bottom: 12px;
+}
+
+.announcement-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.announcement-card__title {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.announcement-card__date {
+  margin: 4px 0 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+/* Un article du groupe se déplie sur place : son corps est déjà chargé, et
+   l'ouvrir ailleurs demanderait un écran pour rien. */
+.content-article {
+  margin-bottom: 12px;
+}
+
+.content-article > summary {
+  cursor: pointer;
+  margin-bottom: 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.content-article > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* L'accent du groupe tient aussi le bouton « Suivre » de sa vitrine, comme
+   celui d'un lieu tient le sien : c'est le seul endroit de l'écran où du texte
+   se pose *sur* l'accent, et donc celui pour lequel le premier plan est
+   calculé. Sans accent enregistré, chaque repli rend les couleurs de Joutes. */
+.play-group-theme .follow-btn.btn--grad {
+  background: var(--group-accent, var(--grad));
+  color: var(--group-accent-foreground, #fff);
+}
+
+.play-group-theme .follow-btn.btn--outline {
+  border-color: var(--group-accent-border);
+  color: var(--group-accent, var(--text));
+}

@@ -232,8 +232,87 @@
       "collectionTitle": "Group collection",
       "collectionEmpty": "This group doesn't have a collection yet.",
       "wishlistsAction": "Group wishlists",
-      "sellListAction": "Group sale list"
-    }
+      "sellListAction": "Group sale list",
+        "showcaseAction": "Showcase",
+         "rhythm": "The group's rhythm",
+         "manageOnWeb": "Inviting, promoting and removing members are done on the website.",
+         "views": {
+          "etabli": "Workbench",
+          "sessions": "Sessions",
+          "announcements": "News",
+          "lists": "Lists",
+          "members": "Members"
+         }
+    },
+      "sessions": {
+       "next": "Next session",
+       "noneUpcoming": "No upcoming session.",
+       "empty": "This group hasn't proposed any session.",
+       "poll": "Poll",
+       "cancelled": "Cancelled",
+       "confirmSlot": "Pick",
+       "attending_one": "{{count}} attending",
+       "attending_other": "{{count}} attending",
+       "answerHint": "Tapping the same answer again cancels it.",
+       "answer": {
+        "yes": "I'm in",
+        "maybe": "Maybe",
+        "no": "Can't make it"
+       },
+       "create": {
+        "action": "Propose a session",
+        "title": "New session",
+        "fixed": "Fixed date",
+        "poll": "Poll",
+        "name": "Title",
+        "namePlaceholder": "Riftbound night",
+        "when": "When",
+        "slots": "Proposed slots",
+        "addSlot": "Add a slot",
+        "place": "Where",
+        "placePlaceholder": "Yann's place, the club…",
+        "submit": "Propose"
+       }
+      },
+      "announcements": {
+       "title": "News",
+       "empty": "No announcement yet.",
+       "publishOnWeb": "Publishing an announcement is done on the website.",
+       "scope": {
+        "group": "Internal",
+        "public": "Public"
+       }
+      },
+      "showcase": {
+       "fallbackTitle": "Showcase",
+       "follow": "Follow",
+       "following": "Following",
+       "followers_one": "{{count}} follower",
+       "followers_other": "{{count}} followers",
+       "openHub": "Open the workbench",
+       "privateNote": "This group is private: its showcase opens for anyone with the address, but it doesn't appear on the roll.",
+       "liveNow": "Live",
+       "news": "News",
+       "contents": "The group's publications",
+       "memberContents": "Members' publications",
+       "links": "Follow us",
+       "games": "The group's games"
+      },
+      "explore": {
+       "title": "Discover groups",
+       "entrySub": "The roll of open groups",
+       "searchPlaceholder": "Search for a group…",
+       "empty": "No group matches this search.",
+       "loadMore": "Load more",
+       "live": "Live",
+       "liveNow": "Live now",
+       "nearUnavailable": "Sorting by distance needs your location, which the app can't read yet. The list stays ordered by liveliest.",
+       "order": {
+        "vifs": "Liveliest",
+        "proches": "Nearby",
+        "neufs": "Newest"
+       }
+      }
   },
   "notifications": {
     "title": "Notifications",

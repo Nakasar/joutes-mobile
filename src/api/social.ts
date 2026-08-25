@@ -2,7 +2,6 @@ import { api } from "./client";
 import { endpoints } from "./endpoints";
 import type {
   FriendRequest,
-  PlayGroup,
   PublicUser,
 } from "./types";
 import { withCache } from "../lib/response-cache";
@@ -22,23 +21,5 @@ export function listFriendRequests(): Promise<FriendRequest[]> {
     api
       .get<{ requests: FriendRequest[] }>(endpoints.friends.requests)
       .then((r) => r.requests ?? []),
-  );
-}
-
-/** Groupes de jeu du compte connecté. */
-export function listPlayGroups(): Promise<PlayGroup[]> {
-  return withCache("social:groups", () =>
-    api
-      .get<{ groups: PlayGroup[] }>(endpoints.playGroups.list)
-      .then((r) => r.groups ?? []),
-  );
-}
-
-/** Détail d'un groupe de jeu (membres inclus), pour les membres du groupe uniquement. */
-export function getPlayGroup(playGroupId: string): Promise<PlayGroup> {
-  return withCache(`social:group:${playGroupId}`, () =>
-    api
-      .get<{ group: PlayGroup }>(endpoints.playGroups.detail(playGroupId))
-      .then((r) => r.group),
   );
 }
