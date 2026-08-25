@@ -6,6 +6,10 @@ import { CardDetailScreen } from "./screens/CardDetailScreen";
 import { CollectionGameScreen } from "./screens/CollectionGameScreen";
 import { CollectionScreen } from "./screens/CollectionScreen";
 import { DeckCheckerScreen } from "./screens/DeckCheckerScreen";
+import { DeckDetailScreen } from "./screens/DeckDetailScreen";
+import { DeckEditScreen } from "./screens/DeckEditScreen";
+import { DeckLibraryScreen } from "./screens/DeckLibraryScreen";
+import { DecksScreen } from "./screens/DecksScreen";
 import { EventDetailScreen } from "./screens/EventDetailScreen";
 import { EventsScreen } from "./screens/EventsScreen";
 import { GameCardsScreen } from "./screens/GameCardsScreen";
@@ -130,6 +134,14 @@ function Shell() {
                   path="/collection/:gameSlug/products"
                   element={<GameProductsScreen />}
                 />
+                {/* La librairie se lit sans compte ; « mes decks » pose sa
+                    propre porte de connexion. L'ordre compte : `/decks/library`
+                    doit précéder `/decks/:deckId`, sinon « library » serait lu
+                    comme un identifiant de deck. */}
+                <Route path="/decks" element={<DecksScreen />} />
+                <Route path="/decks/library" element={<DeckLibraryScreen />} />
+                <Route path="/decks/:deckId" element={<DeckDetailScreen />} />
+                <Route path="/decks/:deckId/edit" element={<DeckEditScreen />} />
                 <Route path="/wishlists" element={<WishlistsScreen />} />
                 <Route
                   path="/wishlists/:wishlistId"

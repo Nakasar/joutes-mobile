@@ -108,6 +108,7 @@
     },
     "wishlistsAction": "Mes listes de souhaits",
     "sellListAction": "Ma liste de vente",
+    "decksAction": "Mes decks",
     "tradeAction": "Échanger des cartes",
     "productsTitle": "Figurines et boîtes",
     "productsAction": "Les produits de ce jeu",
@@ -353,6 +354,148 @@
     "recompute": "Recalculer",
     "computing": "Calcul en cours…",
     "error": "Le recalcul a échoué."
+  },
+  "decks":   {
+    "title": "Mes decks",
+    "subtitle": "Vos listes, et celles de la communauté",
+    "gateText": "Connectez-vous pour retrouver vos decks. La librairie publique, elle, se lit sans compte.",
+    "createAction": "Nouveau deck",
+    "loadMore": "Charger plus",
+    "detailTitle": "Deck",
+    "noLegend": "Sans légende",
+    "unknownCard": "Carte inconnue",
+    "noDescription": "Aucune description.",
+    "noGuide": "Aucun guide de jeu.",
+    "noCards": "Ce deck n'a pas encore de cartes.",
+    "legal": "Conforme",
+    "zonesToAdjust_one": "{{count}} zone à ajuster",
+    "zonesToAdjust_other": "{{count}} zones à ajuster",
+    "cardsCount_one": "{{count}} carte",
+    "cardsCount_other": "{{count}} cartes",
+    "costCurve": "Courbe de coûts",
+    "matchups": "Confrontations",
+    "guide": "Guide de jeu",
+    "notes": "Notes privées",
+    "build": "Construire",
+    "copyToMine": "Copier chez moi",
+    "delete": "Supprimer ce deck",
+    "tabs": {
+      "all": "Tous",
+      "drafts": "En cours",
+      "published": "Publiés",
+      "favorites": "Favoris"
+    },
+    "tabs2": {
+      "description": "Description",
+      "guide": "Guide",
+      "cards": "Cartes"
+    },
+    "empty": {
+      "all": "Aucun deck pour l'instant.",
+      "drafts": "Aucun deck en cours.",
+      "published": "Aucun deck publié.",
+      "favorites": "Aucun deck en favori."
+    },
+    "sort": {
+      "popular": "Populaires",
+      "recent": "Récents",
+      "favorites": "Mes favoris"
+    },
+    "matchup": {
+      "favorable": "favorable",
+      "even": "équilibré",
+      "unfavorable": "défavorable"
+    },
+    "favorite": {
+      "add": "Mettre en favori",
+      "remove": "Retirer des favoris"
+    },
+    "share": {
+      "copy": "Copier le lien",
+      "copied": "Lien copié"
+    },
+    "library": {
+      "title": "Librairie",
+      "link": "Parcourir la librairie publique",
+      "searchPlaceholder": "Chercher un deck",
+      "empty": "Aucun deck ne correspond."
+    },
+    "facets": {
+      "game": "Jeu",
+      "allGames": "Tous les jeux",
+      "format": "Format",
+      "allFormats": "Tous les formats",
+      "legend": "Légende",
+      "allLegends": "Toutes les légendes"
+    },
+    "create": {
+      "title": "Nouveau deck",
+      "name": "Nom",
+      "namePlaceholder": "Mon deck",
+      "game": "Jeu",
+      "gamePlaceholder": "Choisir un jeu",
+      "visibility": "Visibilité",
+      "submit": "Créer"
+    },
+    "text": {
+      "edit": "Modifier la liste",
+      "view": "Voir la liste",
+      "hint": "Une carte par ligne, sous l'en-tête de sa zone. Appliquer remplace le contenu du deck.",
+      "readOnlyHint": "Une carte par ligne. Ce deck n'est pas le vôtre : la liste se copie, elle ne s'applique pas.",
+      "placeholder": "Deck principal :\n2 Nom de la carte",
+      "copy": "Copier",
+      "copied": "Copié",
+      "apply": "Appliquer",
+      "applying": "Application…",
+      "failed": "La liste n'a pas pu être lue. Le deck n'a pas été modifié.",
+      "noMatch": "Aucune carte de la liste n'a été reconnue. Le deck n'a pas été modifié.",
+      "unmatched_one": "{{count}} ligne non reconnue",
+      "unmatched_other": "{{count}} lignes non reconnues"
+    },
+    "edit": {
+      "title": "Modifier le deck",
+      "format": "Format",
+      "formatPlaceholder": "Standard",
+      "description": "Description",
+      "contents": "Contenu",
+      "emptyZone": "Cette zone est vide.",
+      "addCard": "Ajouter une carte",
+      "addTo": "Ajouter à « {{zone}} »",
+      "searchPlaceholder": "Chercher une carte",
+      "noCard": "Aucune carte ne correspond.",
+      "decrease": "Retirer un exemplaire",
+      "increase": "Ajouter un exemplaire",
+      "addSection": "Ajouter une section",
+      "sectionTitle": "Titre de la section",
+      "sectionBody": "Que faut-il savoir ?",
+      "addMatchup": "Ajouter une confrontation",
+      "matchupName": "Nom de l'archétype",
+      "notesPlaceholder": "Pour vous seul."
+    },
+    "zones": {
+      "legend": "Légende",
+      "champions": "Champions",
+      "maindeck": "Deck principal",
+      "runes": "Runes",
+      "battlefields": "Champs de bataille",
+      "sideboard": "Réserve",
+      "extra": "Zone extra"
+    },
+    "visibility": {
+      "private": {
+        "label": "Privé",
+        "hint": "Visible uniquement par moi"
+      },
+      "unlisted": {
+        "label": "Non répertorié",
+        "hint": "Accessible par lien, absent de la librairie"
+      },
+      "public": {
+        "label": "Public",
+        "hint": "Visible par tous, listé dans la librairie"
+      },
+      "action": "Qui voit ce deck"
+    }
   },
   "deck": {
     "title": "Vérificateur de deck",

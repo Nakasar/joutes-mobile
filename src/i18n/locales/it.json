@@ -108,6 +108,7 @@
     },
     "wishlistsAction": "Le mie liste dei desideri",
     "sellListAction": "La mia lista di vendita",
+    "decksAction": "I miei mazzi",
     "tradeAction": "Scambia carte",
     "productsTitle": "Miniature e scatole",
     "productsAction": "I prodotti di questo gioco",
@@ -353,6 +354,148 @@
     "recompute": "Ricalcola",
     "computing": "Calcolo in corso…",
     "error": "Il ricalcolo non è riuscito."
+  },
+  "decks":   {
+    "title": "I miei mazzi",
+    "subtitle": "Le tue liste e quelle della comunità",
+    "gateText": "Accedi per ritrovare i tuoi mazzi. La libreria pubblica si legge senza account.",
+    "createAction": "Nuovo mazzo",
+    "loadMore": "Carica altro",
+    "detailTitle": "Mazzo",
+    "noLegend": "Senza leggenda",
+    "unknownCard": "Carta sconosciuta",
+    "noDescription": "Nessuna descrizione.",
+    "noGuide": "Nessuna guida di gioco.",
+    "noCards": "Questo mazzo non ha ancora carte.",
+    "legal": "Conforme",
+    "zonesToAdjust_one": "{{count}} zona da sistemare",
+    "zonesToAdjust_other": "{{count}} zone da sistemare",
+    "cardsCount_one": "{{count}} carta",
+    "cardsCount_other": "{{count}} carte",
+    "costCurve": "Curva dei costi",
+    "matchups": "Confronti",
+    "guide": "Guida di gioco",
+    "notes": "Note private",
+    "build": "Costruisci",
+    "copyToMine": "Copia tra i miei mazzi",
+    "delete": "Elimina questo mazzo",
+    "tabs": {
+      "all": "Tutti",
+      "drafts": "In corso",
+      "published": "Pubblicati",
+      "favorites": "Preferiti"
+    },
+    "tabs2": {
+      "description": "Descrizione",
+      "guide": "Guida",
+      "cards": "Carte"
+    },
+    "empty": {
+      "all": "Ancora nessun mazzo.",
+      "drafts": "Nessun mazzo in corso.",
+      "published": "Nessun mazzo pubblicato.",
+      "favorites": "Nessun mazzo preferito."
+    },
+    "sort": {
+      "popular": "Popolari",
+      "recent": "Recenti",
+      "favorites": "I miei preferiti"
+    },
+    "matchup": {
+      "favorable": "favorevole",
+      "even": "equilibrato",
+      "unfavorable": "sfavorevole"
+    },
+    "favorite": {
+      "add": "Aggiungi ai preferiti",
+      "remove": "Rimuovi dai preferiti"
+    },
+    "share": {
+      "copy": "Copia il link",
+      "copied": "Link copiato"
+    },
+    "library": {
+      "title": "Libreria",
+      "link": "Sfoglia la libreria pubblica",
+      "searchPlaceholder": "Cerca un mazzo",
+      "empty": "Nessun mazzo corrisponde."
+    },
+    "facets": {
+      "game": "Gioco",
+      "allGames": "Tutti i giochi",
+      "format": "Formato",
+      "allFormats": "Tutti i formati",
+      "legend": "Leggenda",
+      "allLegends": "Tutte le leggende"
+    },
+    "create": {
+      "title": "Nuovo mazzo",
+      "name": "Nome",
+      "namePlaceholder": "Il mio mazzo",
+      "game": "Gioco",
+      "gamePlaceholder": "Scegli un gioco",
+      "visibility": "Visibilità",
+      "submit": "Crea"
+    },
+    "text": {
+      "edit": "Modifica la lista",
+      "view": "Vedi la lista",
+      "hint": "Una carta per riga, sotto l'intestazione della sua zona. Applicare sostituisce il contenuto del mazzo.",
+      "readOnlyHint": "Una carta per riga. Questo mazzo non è tuo: la lista si copia, non si applica.",
+      "placeholder": "Mazzo principale:\n2 Nome della carta",
+      "copy": "Copia",
+      "copied": "Copiato",
+      "apply": "Applica",
+      "applying": "Applicazione…",
+      "failed": "Non è stato possibile leggere la lista. Il mazzo non è stato modificato.",
+      "noMatch": "Nessuna carta della lista è stata riconosciuta. Il mazzo non è stato modificato.",
+      "unmatched_one": "{{count}} riga non riconosciuta",
+      "unmatched_other": "{{count}} righe non riconosciute"
+    },
+    "edit": {
+      "title": "Modifica il mazzo",
+      "format": "Formato",
+      "formatPlaceholder": "Standard",
+      "description": "Descrizione",
+      "contents": "Contenuto",
+      "emptyZone": "Questa zona è vuota.",
+      "addCard": "Aggiungi una carta",
+      "addTo": "Aggiungi a « {{zone}} »",
+      "searchPlaceholder": "Cerca una carta",
+      "noCard": "Nessuna carta corrisponde.",
+      "decrease": "Togli una copia",
+      "increase": "Aggiungi una copia",
+      "addSection": "Aggiungi una sezione",
+      "sectionTitle": "Titolo della sezione",
+      "sectionBody": "Cosa bisogna sapere?",
+      "addMatchup": "Aggiungi un confronto",
+      "matchupName": "Nome dell'archetipo",
+      "notesPlaceholder": "Solo per te."
+    },
+    "zones": {
+      "legend": "Leggenda",
+      "champions": "Campioni",
+      "maindeck": "Mazzo principale",
+      "runes": "Rune",
+      "battlefields": "Campi di battaglia",
+      "sideboard": "Riserva",
+      "extra": "Zona extra"
+    },
+    "visibility": {
+      "private": {
+        "label": "Privato",
+        "hint": "Visibile solo a me"
+      },
+      "unlisted": {
+        "label": "Non elencato",
+        "hint": "Raggiungibile tramite link, assente dalla libreria"
+      },
+      "public": {
+        "label": "Pubblico",
+        "hint": "Visibile a tutti, elencato nella libreria"
+      },
+      "action": "Chi vede questo mazzo"
+    }
   },
   "deck": {
     "title": "Verifica deck",
