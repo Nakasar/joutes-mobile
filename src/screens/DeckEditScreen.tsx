@@ -29,25 +29,6 @@ import {
 const MATCHUP_RATINGS: DeckMatchupRating[] = ["favorable", "even", "unfavorable"];
 
 /**
- * L'édition d'un deck sur téléphone.
- *
- * L'éditeur du web tient en trois colonnes — catalogue, zones, panneaux
- * d'analyse — qui ne se transposent pas. Ici : **une zone à la fois**, ses
- * cartes en lignes avec un −/+ par ligne, et la recherche du catalogue ouverte
- * à la demande. C'est le geste d'ajustement, celui d'après-tournoi, qui fait
- * tout l'intérêt d'éditer depuis un téléphone ; construire un deck entier passe
- * par la liste collée, sur la fiche.
- *
- * Le guide et les confrontations s'éditent en dessous, dans le même écran :
- * séparer trois écrans pour trois champs ferait trois allers-retours là où il y
- * a un seul enregistrement.
- *
- * **Concurrence** : l'API n'a pas de contrôle de version optimiste sur les
- * decks — le champ `version` est incrémenté mais jamais vérifié. Éditer le même
- * deck depuis deux appareils écrase donc en silence. C'est une limite connue de
- * l'API, pas de cet écran.
- */
-/**
  * La version du deck qui nous a devancés, lue dans le corps d'un `409`.
  *
  * Le corps d'une `ApiError` est `unknown` : le serveur promet
@@ -62,6 +43,27 @@ function readConflictVersion(body: unknown): number | null {
   return typeof version === "number" ? version : null;
 }
 
+/**
+ * L'édition d'un deck sur téléphone.
+ *
+ * L'éditeur du web tient en trois colonnes — catalogue, zones, panneaux
+ * d'analyse — qui ne se transposent pas. Ici : **une zone à la fois**, ses
+ * cartes en lignes avec un −/+ par ligne, et la recherche du catalogue ouverte
+ * à la demande. C'est le geste d'ajustement, celui d'après-tournoi, qui fait
+ * tout l'intérêt d'éditer depuis un téléphone ; construire un deck entier passe
+ * par la liste collée, sur la fiche.
+ *
+ * Le guide et les confrontations s'éditent en dessous, dans le même écran :
+ * séparer trois écrans pour trois champs ferait trois allers-retours là où il y
+ * a un seul enregistrement.
+ *
+ * **Concurrence** : l'écran renvoie `expectedVersion` — la version lue au
+ * chargement, puis celle que le serveur rend à chaque enregistrement. Un
+ * enregistrement parti d'un état devancé ne s'applique pas : le serveur rend un
+ * `409` portant l'état frais, la saisie reste à l'écran, et la version fraîche
+ * est adoptée pour qu'un second enregistrement impose la sienne — délibérément.
+ * La garde sert à faire remarquer, pas à interdire.
+ */
 export function DeckEditScreen() {
   const { t } = useTranslation();
   const navigate = useNavigate();
