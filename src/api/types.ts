@@ -698,15 +698,219 @@ export interface PlayGroupMember {
   [key: string]: unknown;
 }
 
+/** Un réseau ou un site du groupe. */
+export interface PlayGroupLink {
+  type:
+    | "website"
+    | "twitch"
+    | "youtube"
+    | "discord"
+    | "instagram"
+    | "facebook"
+    | "x"
+    | "other";
+  url: string;
+  label?: string;
+}
+
+/**
+ * Le lieu d'une session.
+ *
+ * Un lieu Joutes hérite de sa fiche — adresse, horaires, itinéraire — et n'a
+ * donc besoin que de son identifiant. Un lieu libre n'est qu'un nom.
+ */
+export interface PlayGroupPlace {
+  kind: "joutes" | "free" | "member";
+  lairId?: string;
+  label?: string;
+  detail?: string;
+}
+
+export interface PlayGroupRhythm {
+  /** Libellé libre — « Tous les jeudis à 19h30 ». */
+  label?: string;
+  defaultPlace?: PlayGroupPlace;
+}
+
+/**
+ * Une annonce du groupe.
+ *
+ * La portée décide de tout : `group` ne sort jamais de l'Établi, `public` est
+ * reprise sur la vitrine.
+ */
+export interface PlayGroupAnnouncement {
+  id: string;
+  title: string;
+  body?: string;
+  scope: "group" | "public";
+  authorId: string;
+  publishedAt: string;
+  updatedAt?: string;
+}
+
+export type PlayGroupContentKind = "video" | "article" | "replay";
+
+export interface PlayGroupContent {
+  id: string;
+  kind: PlayGroupContentKind;
+  title: string;
+  summary?: string;
+  /** Markdown — les articles seulement. */
+  body?: string;
+  url?: string;
+  thumbnail?: string;
+  duration?: string;
+  gameId?: string;
+  authorId: string;
+  publishedAt: string;
+  updatedAt?: string;
+}
+
+/** Le direct d'un membre, tel que la vitrine et le rôle d'armes le servent. */
+export interface PlayGroupLive {
+  id: string;
+  title?: string;
+  streamer: string;
+  gameName?: string | null;
+  viewers?: number | null;
+  startedAt: string;
+  channelUrl: string;
+  platform: "twitch" | "youtube";
+}
+
+export interface PlayGroupOptions {
+  theme?: {
+    logo?: string;
+    banner?: string;
+    accentColor?: string;
+    /** La phrase sous le nom, sur la vitrine. */
+    tagline?: string;
+  };
+  links?: PlayGroupLink[];
+  rhythm?: PlayGroupRhythm;
+  announcements?: PlayGroupAnnouncement[];
+  contents?: PlayGroupContent[];
+  lives?: PlayGroupLive[];
+}
+
 export interface PlayGroup {
   id: string;
   name: string;
   description?: string;
   ownerId?: string;
+  /** Absent vaut `public`. */
+  visibility?: "public" | "private";
   enabledGameIds?: string[] | null;
+  options?: PlayGroupOptions;
+  /** Présents pour un membre seulement. */
   members?: PlayGroupMember[];
+  memberCount?: number;
+  followerCount?: number;
+  isMember?: boolean;
+  role?: "owner" | "admin" | "member";
   createdAt?: string;
   updatedAt?: string;
+}
+
+export type PlayGroupSessionStatus = "poll" | "confirmed" | "cancelled";
+
+export type PlayGroupRsvpAnswer = "yes" | "maybe" | "no";
+
+export interface PlayGroupSessionSlot {
+  id: string;
+  startsAt: string;
+  voterIds: string[];
+}
+
+export interface PlayGroupRsvp {
+  userId: string;
+  answer: PlayGroupRsvpAnswer;
+  respondedAt: string;
+}
+
+/**
+ * Une session, sondage ou date ferme.
+ *
+ * Les deux sont le même objet : un sondage tranché *devient* la session, sans
+ * changer d'identité ni perdre les disponibilités déjà exprimées. `slots` et
+ * `pollClosesAt` n'existent que tant que `status` vaut `poll` ; `startsAt` une
+ * fois confirmée.
+ */
+export interface PlayGroupSession {
+  id: string;
+  playGroupId: string;
+  title: string;
+  gameId?: string;
+  status: PlayGroupSessionStatus;
+  place?: PlayGroupPlace;
+  startsAt?: string;
+  endsAt?: string;
+  slots?: PlayGroupSessionSlot[];
+  pollClosesAt?: string;
+  rsvps: PlayGroupRsvp[];
+  eventId?: string;
+  createdById: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+/** La vitrine publique d'un groupe. */
+export interface PlayGroupShowcase {
+  group: PlayGroup & {
+    theme?: PlayGroupOptions["theme"];
+    links?: PlayGroupLink[];
+    rhythm?: PlayGroupRhythm;
+  };
+  /** Faux pour un groupe privé : sa vitrine s'ouvre, mais ne s'indexe pas. */
+  indexable: boolean;
+  followerCount: number;
+  isFollowing: boolean;
+  isMember: boolean;
+  games: { id: string; name: string; icon?: string }[];
+  /** Portée publique uniquement. */
+  announcements: PlayGroupAnnouncement[];
+  contents: PlayGroupContent[];
+  /** Les publications publiques des membres, à leur nom propre. */
+  memberContents: UserContent[];
+  lives: PlayGroupLive[];
+}
+
+/** Une ligne du rôle d'armes. */
+export interface ExploreGroup {
+  id: string;
+  name: string;
+  initials: string;
+  visibility: "public" | "private";
+  tagline?: string | null;
+  accentColor?: string | null;
+  logo?: string | null;
+  rhythmLabel?: string | null;
+  place?: PlayGroupPlace | null;
+  placeCoordinates?: { longitude: number; latitude: number } | null;
+  gameNames: string[];
+  memberCount: number;
+  followerCount: number;
+  publishedCount: number;
+  lives: PlayGroupLive[];
+  lastDeed?: {
+    kind: "content" | "session" | "announcement";
+    at: string;
+    label?: string | null;
+  } | null;
+  createdAt: string;
+  activityRank: number;
+  isFollowing?: boolean;
+}
+
+export interface ExploreResponse {
+  groups: ExploreGroup[];
+  total: number;
+  hasMore: boolean;
+  count: number;
+  /** L'ordre réellement appliqué : « proches » sans point retombe sur « vifs ». */
+  order: "vifs" | "proches" | "neufs";
+  lives: PlayGroupLive[];
+  posts: PlayGroupContent[];
 }
 
 // ---- Lairs (boutiques / lieux) ----

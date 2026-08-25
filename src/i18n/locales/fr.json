@@ -232,8 +232,87 @@
       "collectionTitle": "Collection du groupe",
       "collectionEmpty": "Ce groupe n'a pas encore de collection.",
       "wishlistsAction": "Listes de souhaits du groupe",
-      "sellListAction": "Liste de vente du groupe"
-    }
+      "sellListAction": "Liste de vente du groupe",
+        "showcaseAction": "Vitrine",
+         "rhythm": "Le rythme du groupe",
+         "manageOnWeb": "Inviter, promouvoir et exclure se font depuis le site.",
+         "views": {
+          "etabli": "Établi",
+          "sessions": "Sessions",
+          "announcements": "Annonces",
+          "lists": "Listes",
+          "members": "Membres"
+         }
+    },
+      "sessions": {
+       "next": "Prochaine session",
+       "noneUpcoming": "Aucune session à venir.",
+       "empty": "Ce groupe n'a proposé aucune session.",
+       "poll": "Sondage",
+       "cancelled": "Annulée",
+       "confirmSlot": "Retenir",
+       "attending_one": "{{count}} présent",
+       "attending_other": "{{count}} présents",
+       "answerHint": "Retoucher la même réponse l'annule.",
+       "answer": {
+        "yes": "Je viens",
+        "maybe": "Peut-être",
+        "no": "Je ne peux pas"
+       },
+       "create": {
+        "action": "Proposer une session",
+        "title": "Nouvelle session",
+        "fixed": "Date fixe",
+        "poll": "Sondage",
+        "name": "Intitulé",
+        "namePlaceholder": "Soirée Riftbound",
+        "when": "Quand",
+        "slots": "Créneaux proposés",
+        "addSlot": "Ajouter un créneau",
+        "place": "Où",
+        "placePlaceholder": "Chez Yann, MJC…",
+        "submit": "Proposer"
+       }
+      },
+      "announcements": {
+       "title": "Annonces",
+       "empty": "Aucune annonce pour le moment.",
+       "publishOnWeb": "Publier une annonce se fait depuis le site.",
+       "scope": {
+        "group": "Interne",
+        "public": "Publique"
+       }
+      },
+      "showcase": {
+       "fallbackTitle": "Vitrine",
+       "follow": "Suivre",
+       "following": "Suivi",
+       "followers_one": "{{count}} abonné",
+       "followers_other": "{{count}} abonnés",
+       "openHub": "Ouvrir l'Établi",
+       "privateNote": "Ce groupe est privé : sa vitrine s'ouvre à qui en a l'adresse, mais il ne paraît pas au rôle d'armes.",
+       "liveNow": "En direct",
+       "news": "Actualités",
+       "contents": "Publications du groupe",
+       "memberContents": "Publications des membres",
+       "links": "Nous suivre",
+       "games": "Jeux du groupe"
+      },
+      "explore": {
+       "title": "Découvrir des groupes",
+       "entrySub": "Le rôle d'armes des groupes ouverts",
+       "searchPlaceholder": "Rechercher un groupe…",
+       "empty": "Aucun groupe ne correspond à cette recherche.",
+       "loadMore": "Charger plus",
+       "live": "En direct",
+       "liveNow": "En lice",
+       "nearUnavailable": "Le tri par proximité demande votre position, que l'application ne sait pas encore lire. L'ordre affiché reste celui des groupes les plus vifs.",
+       "order": {
+        "vifs": "Les plus vifs",
+        "proches": "Proches",
+        "neufs": "Les derniers venus"
+       }
+      }
   },
   "notifications": {
     "title": "Notifications",

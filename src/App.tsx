@@ -26,6 +26,8 @@ import { MySellListScreen } from "./screens/MySellListScreen";
 import { NewsDetailScreen } from "./screens/NewsDetailScreen";
 import { PlayGroupDetailScreen } from "./screens/PlayGroupDetailScreen";
 import { PlayGroupSellListScreen } from "./screens/PlayGroupSellListScreen";
+import { PlayGroupShowcaseScreen } from "./screens/PlayGroupShowcaseScreen";
+import { PlayGroupsExploreScreen } from "./screens/PlayGroupsExploreScreen";
 import { PlayGroupWishlistsScreen } from "./screens/PlayGroupWishlistsScreen";
 import { PlayersScreen } from "./screens/PlayersScreen";
 import { PlayScreen } from "./screens/PlayScreen";
@@ -171,6 +173,16 @@ function Shell() {
                   element={<TournamentFormScreen />}
                 />
                 <Route path="/social" element={<SocialScreen />} />
+                {/* L'ordre compte : `explore` doit précéder `:groupId`,
+                    sinon il serait lu comme un identifiant de groupe. */}
+                <Route
+                  path="/social/groups/explore"
+                  element={<PlayGroupsExploreScreen />}
+                />
+                <Route
+                  path="/social/groups/:groupId/showcase"
+                  element={<PlayGroupShowcaseScreen />}
+                />
                 <Route
                   path="/social/groups/:groupId"
                   element={<PlayGroupDetailScreen />}

@@ -232,8 +232,87 @@
       "collectionTitle": "Collezione del gruppo",
       "collectionEmpty": "Questo gruppo non ha ancora una collezione.",
       "wishlistsAction": "Liste dei desideri del gruppo",
-      "sellListAction": "Lista di vendita del gruppo"
-    }
+      "sellListAction": "Lista di vendita del gruppo",
+        "showcaseAction": "Vetrina",
+         "rhythm": "Il ritmo del gruppo",
+         "manageOnWeb": "Invitare, promuovere ed escludere si fanno dal sito.",
+         "views": {
+          "etabli": "Banco",
+          "sessions": "Sessioni",
+          "announcements": "Novità",
+          "lists": "Liste",
+          "members": "Membri"
+         }
+    },
+      "sessions": {
+       "next": "Prossima sessione",
+       "noneUpcoming": "Nessuna sessione in programma.",
+       "empty": "Questo gruppo non ha proposto alcuna sessione.",
+       "poll": "Sondaggio",
+       "cancelled": "Annullata",
+       "confirmSlot": "Scegli",
+       "attending_one": "{{count}} presente",
+       "attending_other": "{{count}} presenti",
+       "answerHint": "Toccare di nuovo la stessa risposta la annulla.",
+       "answer": {
+        "yes": "Ci sono",
+        "maybe": "Forse",
+        "no": "Non posso"
+       },
+       "create": {
+        "action": "Proponi una sessione",
+        "title": "Nuova sessione",
+        "fixed": "Data fissa",
+        "poll": "Sondaggio",
+        "name": "Titolo",
+        "namePlaceholder": "Serata Riftbound",
+        "when": "Quando",
+        "slots": "Fasce proposte",
+        "addSlot": "Aggiungi una fascia",
+        "place": "Dove",
+        "placePlaceholder": "Da Yann, al club…",
+        "submit": "Proponi"
+       }
+      },
+      "announcements": {
+       "title": "Novità",
+       "empty": "Nessun annuncio per ora.",
+       "publishOnWeb": "Pubblicare un annuncio si fa dal sito.",
+       "scope": {
+        "group": "Interno",
+        "public": "Pubblico"
+       }
+      },
+      "showcase": {
+       "fallbackTitle": "Vetrina",
+       "follow": "Segui",
+       "following": "Seguito",
+       "followers_one": "{{count}} follower",
+       "followers_other": "{{count}} follower",
+       "openHub": "Apri il banco",
+       "privateNote": "Questo gruppo è privato: la sua vetrina si apre a chi ne ha l'indirizzo, ma non compare nell'elenco.",
+       "liveNow": "In diretta",
+       "news": "Novità",
+       "contents": "Pubblicazioni del gruppo",
+       "memberContents": "Pubblicazioni dei membri",
+       "links": "Seguici",
+       "games": "Giochi del gruppo"
+      },
+      "explore": {
+       "title": "Scopri i gruppi",
+       "entrySub": "L'elenco dei gruppi aperti",
+       "searchPlaceholder": "Cerca un gruppo…",
+       "empty": "Nessun gruppo corrisponde a questa ricerca.",
+       "loadMore": "Carica altri",
+       "live": "In diretta",
+       "liveNow": "Ora in diretta",
+       "nearUnavailable": "L'ordine per vicinanza richiede la tua posizione, che l'app non sa ancora leggere. L'elenco resta ordinato per vivacità.",
+       "order": {
+        "vifs": "I più vivaci",
+        "proches": "Vicini",
+        "neufs": "Gli ultimi arrivati"
+       }
+      }
   },
   "notifications": {
     "title": "Notifiche",

@@ -3,14 +3,17 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { listGames } from "../api/games";
 import { listLairs } from "../api/lairs";
-import {
-  listFriendRequests,
-  listFriends,
-  listPlayGroups,
-} from "../api/social";
+import { listPlayGroups } from "../api/play-groups";
+import { listFriendRequests, listFriends } from "../api/social";
 import type { PlayGroup, PublicUser } from "../api/types";
 import { LairCard } from "../components/LairCard";
-import { ChevronIcon, PinIcon, UserPlusIcon, UsersIcon } from "../components/icons";
+import {
+  ChevronIcon,
+  PinIcon,
+  SwordsIcon,
+  UserPlusIcon,
+  UsersIcon,
+} from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
@@ -149,6 +152,21 @@ function GroupsTab() {
   const groups = useApi(() => listPlayGroups());
   return (
     <>
+      {/* L'onglet ne montre que ses propres groupes : le rôle d'armes, où l'on
+          en découvre d'autres, s'ouvre au-dessus. */}
+      <Link to="/social/groups/explore" className="list-row list-row--link">
+        <span className="list-row__icon" style={{ background: "var(--chip)" }}>
+          <SwordsIcon size={18} />
+        </span>
+        <div className="list-row__body">
+          <p className="list-row__title">{t("social.explore.title")}</p>
+          <p className="list-row__sub">{t("social.explore.entrySub")}</p>
+        </div>
+        <span className="chevron">
+          <ChevronIcon size={18} />
+        </span>
+      </Link>
+
       <StatusView
         loading={groups.loading}
         error={groups.error}

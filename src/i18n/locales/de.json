@@ -232,8 +232,87 @@
       "collectionTitle": "Sammlung der Gruppe",
       "collectionEmpty": "Diese Gruppe hat noch keine Sammlung.",
       "wishlistsAction": "Wunschlisten der Gruppe",
-      "sellListAction": "Verkaufsliste der Gruppe"
-    }
+      "sellListAction": "Verkaufsliste der Gruppe",
+        "showcaseAction": "Schaufenster",
+         "rhythm": "Der Rhythmus der Gruppe",
+         "manageOnWeb": "Einladen, befördern und entfernen erfolgen auf der Website.",
+         "views": {
+          "etabli": "Werkbank",
+          "sessions": "Sitzungen",
+          "announcements": "Neuigkeiten",
+          "lists": "Listen",
+          "members": "Mitglieder"
+         }
+    },
+      "sessions": {
+       "next": "Nächste Sitzung",
+       "noneUpcoming": "Keine bevorstehende Sitzung.",
+       "empty": "Diese Gruppe hat noch keine Sitzung vorgeschlagen.",
+       "poll": "Umfrage",
+       "cancelled": "Abgesagt",
+       "confirmSlot": "Festlegen",
+       "attending_one": "{{count}} dabei",
+       "attending_other": "{{count}} dabei",
+       "answerHint": "Dieselbe Antwort erneut zu tippen hebt sie auf.",
+       "answer": {
+        "yes": "Ich komme",
+        "maybe": "Vielleicht",
+        "no": "Ich kann nicht"
+       },
+       "create": {
+        "action": "Sitzung vorschlagen",
+        "title": "Neue Sitzung",
+        "fixed": "Festes Datum",
+        "poll": "Umfrage",
+        "name": "Titel",
+        "namePlaceholder": "Riftbound-Abend",
+        "when": "Wann",
+        "slots": "Vorgeschlagene Zeitfenster",
+        "addSlot": "Zeitfenster hinzufügen",
+        "place": "Wo",
+        "placePlaceholder": "Bei Yann, im Club…",
+        "submit": "Vorschlagen"
+       }
+      },
+      "announcements": {
+       "title": "Neuigkeiten",
+       "empty": "Noch keine Ankündigung.",
+       "publishOnWeb": "Ankündigungen werden auf der Website veröffentlicht.",
+       "scope": {
+        "group": "Intern",
+        "public": "Öffentlich"
+       }
+      },
+      "showcase": {
+       "fallbackTitle": "Schaufenster",
+       "follow": "Folgen",
+       "following": "Folgt",
+       "followers_one": "{{count}} Abonnent",
+       "followers_other": "{{count}} Abonnenten",
+       "openHub": "Werkbank öffnen",
+       "privateNote": "Diese Gruppe ist privat: ihr Schaufenster öffnet sich für jeden mit der Adresse, sie erscheint aber nicht in der Übersicht.",
+       "liveNow": "Live",
+       "news": "Neuigkeiten",
+       "contents": "Beiträge der Gruppe",
+       "memberContents": "Beiträge der Mitglieder",
+       "links": "Folge uns",
+       "games": "Spiele der Gruppe"
+      },
+      "explore": {
+       "title": "Gruppen entdecken",
+       "entrySub": "Die Übersicht offener Gruppen",
+       "searchPlaceholder": "Gruppe suchen…",
+       "empty": "Keine Gruppe entspricht dieser Suche.",
+       "loadMore": "Mehr laden",
+       "live": "Live",
+       "liveNow": "Gerade live",
+       "nearUnavailable": "Die Sortierung nach Nähe braucht deinen Standort, den die App noch nicht lesen kann. Die Liste bleibt nach Lebendigkeit sortiert.",
+       "order": {
+        "vifs": "Am lebendigsten",
+        "proches": "In der Nähe",
+        "neufs": "Neueste"
+       }
+      }
   },
   "notifications": {
     "title": "Benachrichtigungen",
