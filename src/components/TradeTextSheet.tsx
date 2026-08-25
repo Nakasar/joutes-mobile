@@ -79,8 +79,17 @@ export function TradeTextSheet({
     setError(null);
 
     const parsed = parseTradeText(text);
-    // Ce qui dépasse la taille d'une face ne sera pas retenu : autant ne pas le
-    // faire chercher au serveur.
+    // Le découpage précède la résolution parce que le serveur n'accepte pas
+    // plus de `TRADE_MAX_CARDS_PER_SIDE` désignations : au-delà, il rejette la
+    // requête entière plutôt que d'en apparier une partie. Envoyer la liste
+    // complète ferait donc échouer un collage de cinquante et une lignes au
+    // lieu d'en appliquer cinquante.
+    //
+    // Le revers est connu : deux lignes écrites différemment peuvent désigner
+    // la même impression et ne se fondre qu'après appariement, si bien qu'une
+    // liste tout juste trop longue peut voir une ligne écartée alors qu'elle
+    // aurait tenu. Ce sont des cas rares, et les corriger demanderait au
+    // serveur d'accepter plus de désignations qu'une face ne porte de cartes.
     const lines = parsed.lines.slice(0, TRADE_MAX_CARDS_PER_SIDE);
     const overflow = parsed.lines.length - lines.length;
 

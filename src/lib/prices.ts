@@ -97,15 +97,28 @@ export const PRICE_SOURCE_LABELS: Record<CardPriceSource, string> = {
  * `undefined` quand l'adresse ne se construit pas (jeu inconnu de la place de
  * marché, relevé sans produit) : le prix s'affiche alors sans lien plutôt
  * qu'avec un lien mort.
+ *
+ * Une place de marché inconnue n'a pas de lien non plus, et c'est le seul écart
+ * assumé avec `lib/prices/sources.ts` : là-bas un `if` suffit, parce que le web
+ * est déployé avec l'API qui le sert. Ici une application installée reste des
+ * semaines en arrière du serveur, et un troisième fournisseur ajouté d'ici là
+ * doit rester sans lien — un repli sur Cardmarket lui construirait une adresse
+ * à partir d'un identifiant qui appartient au catalogue d'un autre, soit
+ * exactement le lien faux que ce module existe pour empêcher.
  */
 export function marketProductUrl(
   source: CardPriceSource,
   gameSlug: string | undefined,
   productId: number | undefined,
 ): string | undefined {
-  return source === "cardnexus"
-    ? cardnexusProductUrl(gameSlug, productId)
-    : cardmarketProductUrl(gameSlug, productId);
+  switch (source) {
+    case "cardnexus":
+      return cardnexusProductUrl(gameSlug, productId);
+    case "cardmarket":
+      return cardmarketProductUrl(gameSlug, productId);
+    default:
+      return undefined;
+  }
 }
 
 /** Le nom de la place de marché d'où vient un prix. */
