@@ -3,8 +3,14 @@
 > Analyse d'écart et plan de portage, écrits le 25 août 2026 depuis l'état des deux
 > dépôts à cette date (`joutes-mobile` v0.32.0, `joutes-app` à `876e496`).
 >
-> **Convention de chemins** : un chemin en `src/…` ou `scripts/…` désigne ce dépôt ;
-> un chemin en `lib/…`, `app/…` ou `openapi.yaml` désigne **joutes-app**.
+> **Convention de chemins.** Un chemin de fichier en `src/…` ou `scripts/…` désigne
+> ce dépôt ; un chemin en `lib/…`, `app/…` ou `openapi.yaml` désigne **joutes-app**.
+>
+> **Convention d'endpoints.** Une route est toujours écrite sous la forme du *path*
+> d'`openapi.yaml`, sans préfixe : `GET /lairs/{lairId}`. En production elle est
+> servie sous le préfixe `/api` — c'est-à-dire `https://api.joutes.app/api/lairs/…`
+> pour l'application, dont `config.apiBaseUrl` le porte déjà. Un chemin qui contient
+> `app/api/…` ou `src/api/…` est, lui, un fichier, pas une route.
 
 ## Contexte
 
@@ -19,7 +25,7 @@ deux rattrapages courts (prix multi-fournisseurs, échange au format texte).
 
 **La contrainte structurante est l'API.** Trois des quatre gros chantiers n'existent
 côté serveur que comme *server actions* Next.js, inaccessibles à un client tiers ;
-il n'y a même pas de `GET /api/lairs/{lairId}`. Là où l'API existe (decks), la spec
+il n'y a même pas de `GET /lairs/{lairId}`. Là où l'API existe (decks), la spec
 `openapi.yaml` — le contrat que le mobile suit — a divergé du code. Ouvrir et
 remettre à jour l'API fait donc partie du travail, dans les deux dépôts.
 
@@ -163,7 +169,7 @@ fiche complète, copier un deck chez soi.
 Vérité : `app/api/decks/route.ts`, `lib/schemas/deck.schema.ts`, `lib/types/Deck.ts`.
 
 Vérifier au passage si `Game` porte déjà `formats` ; sinon ajouter
-`GET /api/decks/formats?gameId=` sur le modèle exact de `/decks/legends`
+`GET /decks/formats?gameId=` sur le modèle exact de `/decks/legends`
 (agrégation `$group` à côté de `getDeckLegendFacets`).
 
 **joutes-mobile**
@@ -300,7 +306,7 @@ Lire les publications d'un joueur, parcourir le registre à quatre filtres.
 - Entrée depuis `SocialScreen`. i18n : **nouveau namespace `community`** (~40 clés).
 
 **Dégradé** : « proches de moi » repose sur `me.location.city`, que le mobile ne peut
-ni lire ni régler — le filtre `city` reste, alimenté par `GET /api/geo/places?q=`
+ni lire ni régler — le filtre `city` reste, alimenté par `GET /geo/places?q=`
 (public), la section « joueurs de votre commune » n'apparaît pas.
 
 ---
@@ -423,7 +429,7 @@ Découvrir des groupes ouverts, lire leur vitrine et leurs publications, les sui
 - i18n : extension de `social` (~45 clés).
 
 **Dégradé** : le tri « proches » n'est proposé que si une ville a été saisie (résolue
-par `GET /api/geo/places`) — pas de plugin de géolocalisation ajouté pour un tri, et
+par `GET /geo/places`) — pas de plugin de géolocalisation ajouté pour un tri, et
 il faut le dire dans l'interface plutôt que de masquer l'option. Le blason animé du
 rôle d'armes est remplacé par les initiales sur fond d'accent. Les réglages du groupe
 restent web.
@@ -438,7 +444,7 @@ couverts : `lib/decks/contents.test.ts`, `lib/trade/text.test.ts`,
 `lib/play-groups/{access,explore}.test.ts` — ils doivent rester verts, on n'y touche
 pas), `node scripts/check-flex-rows.mjs`, `npm run build`. Après chaque extraction de
 server action, vérifier que la page web rend exactement la même chose. Relire la spec
-via `GET /api/docs`.
+via `GET /docs`.
 
 **joutes-mobile** — `npm run build` (`tsc && vite build`) : c'est tout ce que la CI
 exécute, mais `tsconfig.json` est strict (`noUnusedLocals`, `noUnusedParameters`),
