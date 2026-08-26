@@ -6,7 +6,7 @@ import type { LeaderboardRow, RegistryEntry, RegistrySort } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
 import { PlayerRow } from "../components/PlayerRow";
 import { Tabs } from "../components/Tabs";
-import { CaretIcon, CheckIcon, SearchIcon, TrophyIcon } from "../components/icons";
+import { CaretIcon, SearchIcon, TrophyIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
@@ -185,7 +185,6 @@ function Registry() {
   const [sells, setSells] = useState(false);
   const [live, setLive] = useState(false);
   const [sort, setSort] = useState<RegistrySort>("active");
-  const [sortOpen, setSortOpen] = useState(false);
 
   const [entries, setEntries] = useState<RegistryEntry[]>([]);
   const [total, setTotal] = useState(0);
@@ -342,48 +341,25 @@ function Registry() {
         </div>
       )}
 
-      <div className="result-bar">
-        <p className="section-label">
+      {/* Les ordres du registre, posés sur la ligne du compteur : trois mots
+          soulignés valent un menu déroulant, et se lisent sans l'ouvrir. */}
+      <div className="orders" role="group" aria-label={t("players.sortAction")}>
+        <div className="orders__set">
+          {SORTS.map((key) => (
+            <button
+              key={key}
+              aria-pressed={sort === key}
+              onClick={() => {
+                setSort(key);
+                setCount(REGISTRY_STEP);
+              }}
+            >
+              {t(`players.sort.${key}`)}
+            </button>
+          ))}
+        </div>
+        <span className="orders__count">
           {!loading && !error && entries.length > 0 ? t("players.results", { count: total }) : ""}
-        </p>
-
-        <span className="sort-wrap">
-          <button
-            className="sort-btn"
-            aria-haspopup="listbox"
-            aria-expanded={sortOpen}
-            aria-label={t("players.sortAction")}
-            onClick={() => setSortOpen((open) => !open)}
-          >
-            {t(`players.sort.${sort}`)}
-            <CaretIcon size={13} />
-          </button>
-
-          {sortOpen && (
-            <>
-              {/* Ferme au toucher d'à côté : sans cela, seul un second appui sur
-                  le bouton refermerait le menu. */}
-              <span className="menu-scrim" onClick={() => setSortOpen(false)} />
-              <div className="sort-menu" role="listbox">
-                {SORTS.map((key) => (
-                  <button
-                    key={key}
-                    role="option"
-                    aria-checked={sort === key}
-                    aria-selected={sort === key}
-                    onClick={() => {
-                      setSort(key);
-                      setSortOpen(false);
-                      setCount(REGISTRY_STEP);
-                    }}
-                  >
-                    {t(`players.sort.${key}`)}
-                    {sort === key && <CheckIcon size={15} />}
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
         </span>
       </div>
 

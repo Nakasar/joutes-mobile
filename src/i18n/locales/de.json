@@ -985,7 +985,10 @@
         "5": "Freitag",
         "6": "Samstag",
         "7": "Sonntag"
-      }
+      },
+      "openNow": "Jetzt geöffnet",
+      "shutNow": "Jetzt geschlossen",
+      "unknown": "Öffnungszeiten nicht angegeben"
     },
     "about": {
       "amenities": "Ausstattung",
@@ -1004,7 +1007,9 @@
         "x": "X",
         "other": "Link"
       }
-    }
+    },
+    "count_one": "{{count}} Ort",
+    "count_other": "{{count}} Orte"
   },
   "players": {
     "title": "Spieler",

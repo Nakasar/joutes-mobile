@@ -9,6 +9,7 @@ import { BackHeader } from "../components/BackHeader";
 import { CachedImage } from "../components/CachedImage";
 import { LairHours } from "../components/LairHours";
 import { LairNewsCard } from "../components/LairNewsCard";
+import { Movement } from "../components/Movement";
 import { StatusView } from "../components/StatusView";
 import { UserMarkdown } from "../components/UserMarkdown";
 import {
@@ -21,6 +22,7 @@ import {
 } from "../components/icons";
 import { useApi } from "../hooks/useApi";
 import { currentLocale } from "../i18n";
+import { colorFor, initialsOf, tintStyle } from "../lib/game-visuals";
 import { isSectionEnabled, readLairSections } from "../lib/lair-sections";
 import { readLairAccent } from "../lib/lair-theme";
 import { externalUrl } from "../lib/lair-urls";
@@ -212,8 +214,24 @@ export function LairDetailScreen() {
       )}
 
       <div className="lair-hero">
-        {data.options?.theme?.logo && (
-          <CachedImage src={data.options.theme.logo} alt="" className="lair-hero__logo" />
+        {/* Le carré du lieu, comme dans l'annuaire — c'est la forme qui dit
+            qu'on est chez un lieu et non chez un joueur. Faute de logo, deux
+            lettres sur l'accent du lieu : la forme doit être là même quand la
+            marque manque, sinon l'identité ne tient qu'aux boutiques qui ont
+            pensé à téléverser une image. */}
+        {data.options?.theme?.logo ? (
+          <CachedImage
+            src={data.options.theme.logo}
+            alt=""
+            className="sigil-lair sigil-lair--lg"
+          />
+        ) : (
+          <span
+            className="sigil-lair sigil-lair--lg"
+            style={tintStyle(colorFor(data.id, data.options?.theme?.accentColor))}
+          >
+            {initialsOf(data.name)}
+          </span>
         )}
         <div className="lair-hero__body">
           <h1 className="lair-hero__name">
@@ -294,7 +312,7 @@ export function LairDetailScreen() {
               case "featured":
                 return section.enabled && featured ? (
                   <div key={section.key}>
-                    <p className="section-label">{t("lairs.featured")}</p>
+                    <Movement section title={t("lairs.featured")} />
                     <EventRow event={featured} locale={locale} />
                   </div>
                 ) : null;
@@ -376,7 +394,7 @@ export function LairDetailScreen() {
 
               {(about.amenities?.length ?? 0) > 0 && (
                 <section className="card">
-                  <p className="section-label">{t("lairs.about.amenities")}</p>
+                  <Movement section title={t("lairs.about.amenities")} />
                   <div className="chip-set">
                     {about.amenities?.map((amenity) => (
                       <span key={amenity} className="chip">
@@ -389,7 +407,7 @@ export function LairDetailScreen() {
 
               {(about.rhythm?.length ?? 0) > 0 && (
                 <section>
-                  <p className="section-label">{t("lairs.about.rhythm")}</p>
+                  <Movement section title={t("lairs.about.rhythm")} />
                   {about.rhythm?.map((entry, index) => (
                     <div key={`${entry.label}-${index}`} className="list-row">
                       <div className="list-row__body">
@@ -403,7 +421,7 @@ export function LairDetailScreen() {
 
               {(about.organizers?.length ?? 0) > 0 && (
                 <section>
-                  <p className="section-label">{t("lairs.about.team")}</p>
+                  <Movement section title={t("lairs.about.team")} />
                   {about.organizers?.map((organizer, index) => (
                     <div key={`${organizer.name}-${index}`} className="list-row">
                       {organizer.avatar && (
@@ -420,7 +438,7 @@ export function LairDetailScreen() {
 
               {(about.transit || about.parking) && (
                 <section className="card">
-                  <p className="section-label">{t("lairs.about.access")}</p>
+                  <Movement section title={t("lairs.about.access")} />
                   {about.transit && <p className="list-row__sub">{about.transit}</p>}
                   {about.parking && <p className="list-row__sub">{about.parking}</p>}
                 </section>
@@ -430,7 +448,7 @@ export function LairDetailScreen() {
 
           {(website || links.length > 0 || data.options?.contact?.email) && (
             <section>
-              <p className="section-label">{t("lairs.about.links")}</p>
+              <Movement section title={t("lairs.about.links")} />
               <div className="profile-links">
                 {website && (
                   <a

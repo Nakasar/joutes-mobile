@@ -6,6 +6,7 @@ import type { ExploreGroup, PlayGroupLive } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
 import { GroupEscu } from "../components/GroupEscu";
 import { ClockIcon, EyeOffIcon, PinIcon, RepeatIcon, SearchIcon } from "../components/icons";
+import { Movement } from "../components/Movement";
 import { StatusView } from "../components/StatusView";
 import { EXPLORE_ORDERS, type ExploreOrder } from "../lib/play-group-explore";
 import { readPlayGroupAccent } from "../lib/play-group-theme";
@@ -15,17 +16,6 @@ import { useAuth } from "../store/auth";
 
 const STEP = 20;
 const MAX_COUNT = 100;
-
-/** Le titre d'un mouvement, son filet d'or et sa mention en petite capitale. */
-function Movement({ title, aside }: { title: string; aside?: string }) {
-  return (
-    <div className="movement">
-      <h2 className="movement__title">{title}</h2>
-      <span className="movement__rule" aria-hidden />
-      {aside && <span className="movement__aside">{aside}</span>}
-    </div>
-  );
-}
 
 /** Le filet à losange qui ferme le rôle. */
 function Fleuron() {

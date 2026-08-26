@@ -17,6 +17,19 @@
   --primary-fg: #ffffff;
   --accent: #00a692;
   --gold: #b8912f;
+  /* L'or qui porte du TEXTE. `--gold` seul ne fait que 2,5:1 sur `--bg` : il
+     tient un filet ou une pastille, pas un mot. La nuit lui rend sa valeur
+     pure, n'ayant plus de fond clair à tenir. */
+  --gold-text: color-mix(in oklab, #b8912f 62%, #06131a 38%);
+  /* Le filet d'or d'un mouvement. `.roll` le redéfinit à son propre or, plus
+     chaud ; partout ailleurs il se dérive de l'or de l'application. Sans cette
+     valeur de base, le filet disparaissait hors du rôle d'armes — une variable
+     indéfinie invalide toute la déclaration qui la lit. */
+  --or-line: color-mix(in srgb, var(--gold) 42%, transparent);
+  /* Le liseré d'or des trois sceaux — blason, carré, rond. Une seule valeur :
+     c'est elle qui en fait une famille plutôt que trois vignettes sans
+     rapport. Voir « Trois formes, trois natures » plus bas. */
+  --fillet: 0 0 0 1px color-mix(in srgb, var(--gold) 45%, transparent);
   --danger: #e40014;
   --danger-fg: #ffffff;
   --border: rgba(8, 34, 47, 0.1);
@@ -94,6 +107,7 @@
     --primary-fg: #04121b;
     --accent: #22c9ad;
     --gold: #e0bd63;
+    --gold-text: #e0bd63;
     --danger: #f14d4c;
     --danger-fg: #04121b;
     --border: rgba(255, 255, 255, 0.09);
@@ -791,7 +805,25 @@ textarea:focus {
   display: flex;
 }
 
-/* Pastille avatar (initiale) */
+/*
+ * ---- Trois formes, trois natures ----
+ *
+ * La forme du sceau se lit avant la couleur, et bien avant le nom : elle dit
+ * donc ce qu'on regarde, et rien d'autre.
+ *
+ *   BLASON  un groupe de jeu — `.escu`, l'héraldique du rôle d'armes ;
+ *   CARRÉ   un lieu de jeu — `.sigil-lair`, une enseigne, quelque chose qui a
+ *           pignon sur rue ;
+ *   ROND    un joueur — `.avatar`, une personne.
+ *
+ * Le liseré d'or est commun aux trois : c'est lui qui en fait une famille
+ * plutôt que trois vignettes sans rapport. Sur le rond et le carré il est posé
+ * en ombre portée sans flou (`--fillet`) plutôt qu'en bordure — elle suit le
+ * rayon et ne mange pas la surface, là où un `border` la rognerait.
+ */
+
+/* Le rond du joueur. Le rayon vit ici et non dans les tailles : une variante
+   qui le repose casserait la forme, qui est justement l'identité. */
 .avatar {
   flex-shrink: 0;
   display: flex;
@@ -799,20 +831,24 @@ textarea:focus {
   justify-content: center;
   font-family: var(--font-display);
   font-weight: 800;
-  border-radius: 15px;
+  border-radius: 50%;
   object-fit: cover;
+  box-shadow: var(--fillet);
 }
 
+/* Le jeu n'est ni une personne ni un lieu : il garde son carré arrondi, et
+   n'entre pas dans la famille des sceaux — pas de liseré. */
 .avatar--game {
   width: 56px;
   height: 56px;
+  border-radius: 15px;
   font-size: 22px;
+  box-shadow: none;
 }
 
 .avatar--sm {
   width: 46px;
   height: 46px;
-  border-radius: 14px;
   font-size: 18px;
 }
 
@@ -2519,67 +2555,6 @@ textarea:focus {
   color: var(--muted);
 }
 
-.lair-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  margin-bottom: 12px;
-  box-shadow: var(--shadow-sm);
-}
-
-.lair-card__media {
-  position: relative;
-  height: 92px;
-}
-
-.lair-card__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.lair-card__badge {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: var(--surface-glass);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  border-radius: 999px;
-  padding: 3px 9px;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.lair-card__body {
-  padding: 12px 14px 14px;
-}
-
-.lair-card__name {
-  font-family: var(--font-display);
-  font-size: 16.5px;
-  font-weight: 600;
-  margin: 0 0 4px;
-}
-
-.lair-card__where {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 13px;
-  color: var(--muted);
-  margin: 0 0 6px;
-}
-
-.lair-card__games {
-  font-size: 11.5px;
-  color: var(--muted);
-  margin: 0;
-}
-
 /* ---- Connexion ---- */
 
 .login-screen {
@@ -3523,7 +3498,6 @@ button.card-link {
 .avatar--lg {
   width: 72px;
   height: 72px;
-  border-radius: 20px;
   font-size: 28px;
 }
 
@@ -5408,10 +5382,6 @@ html.qr-scanning #root {
   object-fit: contain;
 }
 
-.achievement-row__points {
-  flex-shrink: 0;
-}
-
 /* Le bouton loge dans l'en-tête, à côté du titre : il ne prend que sa place. */
 .follow-btn {
   flex-shrink: 0;
@@ -5478,21 +5448,6 @@ html.qr-scanning #root {
   --lair-accent-border: color-mix(in srgb, var(--lair-accent, var(--primary)) 32%, transparent);
 }
 
-.lair-card--link {
-  display: block;
-  color: inherit;
-}
-
-.lair-card--link:active {
-  transform: scale(0.99);
-}
-
-.lair-card__name {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
 .lair-hero__banner {
   width: 100%;
   height: 130px;
@@ -5508,28 +5463,16 @@ html.qr-scanning #root {
   gap: 14px;
 }
 
-/* Le logo du lieu est une marque, pas une photo : il se pose en entier plutôt
-   que recadré, sur un fond neutre qui accepte aussi bien un logo clair qu'un
-   logo sombre. */
-.lair-hero__logo {
-  flex-shrink: 0;
-  width: 56px;
-  height: 56px;
-  object-fit: contain;
-  border-radius: 12px;
-  background: var(--surface-2);
-  padding: 6px;
-}
-
 .lair-hero__body {
   flex: 1;
   min-width: 0;
 }
 
 .lair-hero__name {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 700;
+  font-family: var(--font-heraldic);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
   margin: 0;
   display: flex;
   align-items: center;
@@ -6499,96 +6442,18 @@ html.qr-scanning #root {
   min-width: 0;
 }
 
-/* ---- Ligne de résultats et tri ---- */
-
-.result-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin: 10px 0;
-}
-
-.result-bar .section-label {
-  margin: 0;
-}
-
-/* Le menu s'ancre ici et non sur la rangée : un troisième enfant dans un
-   `space-between` déplacerait le bouton de tri vers le centre. */
-.sort-wrap {
-  position: relative;
-  display: flex;
-}
-
-/* Remplissage débordant repris par une marge négative : la cible fait 44 px
-   sans que la rangée grandisse d'un pixel. */
-.sort-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 12px 6px;
-  margin: -12px -6px;
-  border: none;
-  background: none;
-  color: var(--primary);
-  font-family: inherit;
-  font-size: 12.5px;
-  font-weight: 600;
-}
-
-.sort-menu {
-  position: absolute;
-  top: 30px;
-  right: 0;
-  z-index: 5;
-  min-width: 156px;
-  display: flex;
-  flex-direction: column;
-  padding: 5px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
-  box-shadow: var(--shadow);
-  animation: jtIn 0.14s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-
-.sort-menu button {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 9px 11px;
-  border: none;
-  border-radius: 9px;
-  background: none;
-  color: inherit;
-  font-family: inherit;
-  font-size: 14px;
-  text-align: left;
-}
-
-.sort-menu button[aria-checked="true"] {
-  background: var(--chip);
-  color: var(--primary);
-  font-weight: 600;
-}
-
-/* Ferme le menu au toucher d'à côté. Transparent, sous le menu, au-dessus du
-   reste : sans lui, seul un second appui sur le bouton refermerait. */
-.menu-scrim {
-  position: fixed;
-  inset: 0;
-  z-index: 4;
-}
-
-/* ---- Fiche d'un joueur (registre) ----
+/* ---- Une entrée de registre ----
  *
- * Ce qui distingue deux comptes dans une liste : les jeux qu'il suit, et où il
- * joue. Le premier passe en puces — une énumération séparée par des virgules ne
- * se parcourt pas du regard — et la ville rejoint le compteur d'abonnés.
+ * La forme commune au registre des joueurs et à l'annuaire des lieux : un
+ * sceau, un nom en héraldique, un cri, un blasonnement, un chevron. Ce qui
+ * change d'une liste à l'autre est le sceau — rond pour une personne, carré
+ * pour un lieu — et ce que le cri annonce, jamais la structure.
+ *
+ * D'où le nom neutre : `player-row` décrivait le premier usage, pas la forme,
+ * et l'annuaire s'y serait accroché sans que rien ne dise pourquoi.
  */
 
-.player-row {
+.registry-row {
   display: flex;
   align-items: flex-start;
   gap: 12px;
@@ -6602,38 +6467,106 @@ html.qr-scanning #root {
   transition: transform 0.12s;
 }
 
-.player-row:active {
+.registry-row:active {
   transform: scale(0.985);
 }
 
-.player-row__body {
+/* ---- L'entrée d'un lieu : sa devanture, puis son carré ----
+ *
+ * On reconnaît une boutique où l'on est déjà allé à sa photo, bien avant d'en
+ * lire le nom — c'est ce que la fiche perdait en devenant une simple ligne.
+ * La bannière revient donc en tête, et le carré la mord : la forme continue de
+ * dire qu'on regarde un lieu, la photo dit lequel.
+ *
+ * Dix des quatorze lieux de l'annuaire en ont une. Les quatre autres n'ont pas
+ * de bande vide : une carte plus courte se lit, un `shimmer` permanent
+ * annoncerait un chargement qui n'arrivera jamais.
+ */
+.registry-row--lair {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.registry-row__banner {
+  display: block;
+  width: 100%;
+  height: 96px;
+  object-fit: cover;
+  background: var(--surface-2);
+}
+
+.registry-row__main {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+}
+
+/* L'anneau détache le carré de la bannière qu'il mord, comme l'avatar d'un
+   profil se détache de la sienne. Il prend le fond de la carte et non celui de
+   l'écran : c'est sur la carte que le carré est posé. */
+.registry-row__banner + .registry-row__main .sigil-lair {
+  margin-top: -22px;
+  box-shadow:
+    var(--fillet),
+    0 0 0 4px var(--surface);
+}
+
+.registry-row__body {
   flex: 1;
   min-width: 0;
 }
 
-.player-row__name {
+.registry-row__name {
   display: flex;
   align-items: center;
   gap: 7px;
   min-width: 0;
   margin: 0;
-  font-family: var(--font-display);
-  font-size: 15.5px;
+  font-family: var(--font-heraldic);
+  font-size: 17px;
   font-weight: 600;
+  line-height: 1.25;
 }
 
-.player-row__handle {
+.registry-row__handle {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.player-row__tag {
-  color: var(--muted);
-  font-weight: 500;
+/* Deux lignes pour un lieu, pas une coupée.
+ *
+ * L'annuaire porte quatre « Caverne du Gobelin » qui ne se distinguent que par
+ * leur ville — et c'est précisément la ville qu'une coupure sur une ligne
+ * emportait : « Caverne du Gobelin - Thi… », « - Na… », « - Po… ». Quatre
+ * entrées identiques à l'œil, chacune tronquée à l'endroit qui la nommait.
+ *
+ * Un joueur n'en a pas besoin : son discriminant le départage déjà, et il
+ * suivrait le nom à la ligne — un `-webkit-box` empile ses enfants au lieu de
+ * les aligner. */
+.registry-row__handle--wrap {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  white-space: normal;
 }
 
-.player-row__meta {
+/* Le discriminant départage deux homonymes ; il ne les nomme pas. En
+   héraldique pleine taille il pesait autant que le nom — il repasse donc dans
+   la voix des chiffres de l'écran, celle du blasonnement et des ordres. */
+.registry-row__tag {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+.registry-row__meta {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -6645,52 +6578,8 @@ html.qr-scanning #root {
   text-overflow: ellipsis;
 }
 
-.player-row__meta svg {
+.registry-row__meta svg {
   flex-shrink: 0;
-}
-
-.player-row__games {
-  display: flex;
-  gap: 6px;
-  margin-top: 8px;
-  overflow: hidden;
-}
-
-/* Puce de jeu : plus discrète qu'une `.chip`, qui est un accent. Ici il y en a
-   trois par fiche et cinq fiches à l'écran — colorées, elles feraient guirlande. */
-.game-pill {
-  flex-shrink: 0;
-  max-width: 118px;
-  padding: 3px 8px;
-  border: 1px solid var(--border-2);
-  border-radius: 8px;
-  background: var(--surface-2);
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.game-pill--more {
-  border-color: transparent;
-  background: none;
-}
-
-/* Le direct se dit en toutes lettres : la pastille seule oblige à connaître la
-   convention, et c'est justement ce qu'on vient chercher en filtrant dessus. */
-.live-pill {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 2px 8px 2px 6px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--danger) 12%, transparent);
-  color: var(--danger);
-  font-size: 10.5px;
-  font-weight: 700;
 }
 
 /* ---- Classement ---- */
@@ -6956,15 +6845,18 @@ html.qr-scanning #root {
   padding-bottom: 4px;
 }
 
+/* Le nom passe en héraldique, comme au registre et au rôle d'armes : c'est la
+   même personne qu'on lit dans la liste et sur sa vitrine. */
 .profile-id__name {
   display: flex;
   align-items: center;
   gap: 8px;
   min-width: 0;
   margin: 0;
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 700;
+  font-family: var(--font-heraldic);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
 }
 
 /* Le cadenas d'un profil privé reste visible : c'est le pseudonyme qui se
@@ -6976,8 +6868,11 @@ html.qr-scanning #root {
 }
 
 .profile-id__tag {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
   color: var(--muted);
-  font-weight: 500;
 }
 
 /* L'anneau détache l'avatar de la bannière qu'il mord. */
@@ -7519,4 +7414,215 @@ html.qr-scanning #root {
    marge basse : sans cette reprise, les deux s'empileraient au double. */
 .profile-tabs {
   margin-top: 14px;
+}
+
+/* ==========================================================================
+ * Le registre et l'annuaire — l'héraldique, sur le sol de Joutes
+ *
+ * Ce que le rôle d'armes des groupes prête au registre des joueurs et à
+ * l'annuaire des lieux : le Cinzel sur les noms, le filet d'or des
+ * mouvements, le blasonnement en petite capitale, et le cri — ce que la
+ * fiche a fait de plus récent.
+ *
+ * Le sol, lui, ne bouge pas : mêmes cartes, mêmes rayons, mêmes ombres, même
+ * barre d'onglets. L'or ne descend pas dans `:root` au-delà du jeton qui y
+ * était déjà.
+ * ========================================================================== */
+
+/* ---- Le carré du lieu ---- */
+
+/*
+ * Le logo d'un lieu est une marque, pas une photo : il se pose en entier
+ * plutôt que recadré, sur un fond neutre qui accepte aussi bien un logo clair
+ * qu'un logo sombre. Le carré, lui, est ce qui le distingue au premier coup
+ * d'œil du rond d'un joueur.
+ */
+.sigil-lair {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: var(--surface-2);
+  object-fit: contain;
+  padding: 5px;
+  box-shadow: var(--fillet);
+  font-family: var(--font-display);
+  font-weight: 800;
+}
+
+.sigil-lair--sm {
+  width: 44px;
+  height: 44px;
+  font-size: 16px;
+}
+
+.sigil-lair--lg {
+  width: 66px;
+  height: 66px;
+  font-size: 24px;
+}
+
+/* ---- Le mouvement hors du rôle d'armes ----
+ *
+ * `.movement` est déjà défini plus haut, pour le rôle d'armes des groupes ; on
+ * ne le redéfinit pas — deux règles de même nom auraient reteinté le rôle sans
+ * qu'on le demande. Il ne manque ici que deux choses pour qu'il serve ailleurs :
+ * un filet d'or hors du scope `.roll` (voir `--or-line` dans `:root`), et une
+ * taille de titre plus mesurée quand le mouvement n'est qu'une section d'une
+ * fiche et non le titre d'un rôle entier.
+ */
+.movement--section {
+  padding: 20px 0 8px;
+}
+
+.movement--section .movement__title {
+  font-size: 17px;
+  letter-spacing: 0;
+}
+
+/* En tête d'une carte, le mouvement n'a pas à rajouter son air : la carte a
+   déjà le sien. */
+.card > .movement:first-child {
+  padding-top: 0;
+}
+
+.movement__aside--open {
+  color: var(--accent);
+}
+
+/* ---- Le cri : ce que la fiche a fait de plus récent ----
+ *
+ * C'est lui qui donne son sens au classement — le registre range du plus vif
+ * au plus endormi, et chaque ligne dit alors pourquoi elle est là.
+ */
+.cry {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 2px 0 0;
+  font-size: 12.5px;
+  line-height: 1.3;
+  color: var(--gold-text);
+}
+
+.cry svg,
+.cry .live-dot,
+.cry .cry__dot {
+  flex-shrink: 0;
+}
+
+.cry__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.cry--live {
+  color: var(--danger);
+}
+
+.cry--open {
+  color: var(--accent);
+}
+
+.cry--quiet {
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ---- Le blasonnement : ville et jeux d'un trait ----
+ *
+ * Une énumération séparée par des virgules ne se parcourt pas du regard, et
+ * une guirlande de puces colorées fait plus de bruit que de sens. La petite
+ * capitale se lit, et deux lignes valent mieux qu'une coupée : c'est de
+ * l'information, pas du décor.
+ */
+.blazon {
+  margin: 4px 0 0;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  line-height: 1.45;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---- Les ordres : le tri, posé sur la ligne du compteur ---- */
+
+.orders {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  border-bottom: 1px solid var(--border-2);
+}
+
+.orders__set {
+  display: flex;
+  gap: 22px;
+  margin-bottom: -1px;
+}
+
+/* 44 px de haut : c'est le tri de l'écran, il se vise au pouce. Le
+   remplissage porte la cible, la marge négative rend l'encombrement. */
+.orders button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 8px;
+  margin-inline: -8px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.orders button[aria-pressed="true"] {
+  border-bottom-color: var(--gold);
+  color: var(--text);
+}
+
+.orders__count {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ---- Les points d'un succès, comptés en losanges ----
+ *
+ * À ces valeurs-là — un à cinq — on les lit sans les lire, et le losange est
+ * déjà la marque du rôle. Décroché il est plein, à décrocher il n'est qu'un
+ * contour.
+ */
+.lozenges {
+  flex-shrink: 0;
+  display: flex;
+  gap: 4px;
+}
+
+.lozenges i {
+  display: block;
+  width: 7px;
+  height: 7px;
+  rotate: 45deg;
+  background: var(--gold);
+}
+
+.lozenges--empty i {
+  background: none;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gold) 55%, transparent);
 }

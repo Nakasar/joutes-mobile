@@ -985,7 +985,10 @@
         "5": "Vendredi",
         "6": "Samedi",
         "7": "Dimanche"
-      }
+      },
+      "openNow": "Ouverts à cette heure",
+      "shutNow": "Fermés à cette heure",
+      "unknown": "Horaires non renseignés"
     },
     "about": {
       "amenities": "Équipements",
@@ -1004,7 +1007,9 @@
         "x": "X",
         "other": "Lien"
       }
-    }
+    },
+    "count_one": "{{count}} lieu",
+    "count_other": "{{count}} lieux"
   },
   "players": {
     "title": "Joueurs",

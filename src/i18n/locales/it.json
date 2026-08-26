@@ -985,7 +985,10 @@
         "5": "Venerdì",
         "6": "Sabato",
         "7": "Domenica"
-      }
+      },
+      "openNow": "Aperti in questo momento",
+      "shutNow": "Chiusi in questo momento",
+      "unknown": "Orari non indicati"
     },
     "about": {
       "amenities": "Servizi",
@@ -1004,7 +1007,9 @@
         "x": "X",
         "other": "Link"
       }
-    }
+    },
+    "count_one": "{{count}} luogo",
+    "count_other": "{{count}} luoghi"
   },
   "players": {
     "title": "Giocatori",
