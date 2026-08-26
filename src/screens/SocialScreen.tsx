@@ -273,25 +273,26 @@ function GroupsTab() {
 
   return (
     <>
-      {/* L'onglet ne montre que ses propres groupes : le rôle d'armes, où l'on
-          en découvre d'autres, s'ouvre au-dessus. */}
-      <Link to="/social/groups/explore" className="list-row list-row--link">
-        <span className="list-row__icon" style={{ background: "var(--chip)" }}>
-          <SwordsIcon size={18} />
-        </span>
-        <div className="list-row__body">
-          <p className="list-row__title">{t("social.explore.title")}</p>
-          <p className="list-row__sub">{t("social.explore.entrySub")}</p>
-        </div>
-        <span className="chevron">
-          <ChevronIcon size={18} />
-        </span>
-      </Link>
-
       {/* `.roll` porte l'or : `--or`, `--or-text` et `--or-faint` n'existent
           que dans ce scope, et sans lui les filets d'une entrée disparaissent
-          — une variable indéfinie invalide la déclaration qui la lit. */}
+          — une variable indéfinie invalide la déclaration qui la lit. La porte
+          y entre aussi : elle emprunte le même filet. */}
       <div className="roll">
+        {/* L'onglet ne montre que ses propres groupes ; le rôle d'armes, où
+            l'on en découvre d'autres, s'ouvre au-dessus. Sa porte n'est pas
+            une entrée — pas d'écu, pas de comptes — mais elle est du même
+            écran, et prend donc le filet et la petite capitale du rôle. */}
+        <Link to="/social/groups/explore" className="roll-door">
+          <SwordsIcon size={17} />
+          <span className="roll-door__text">
+            <span className="roll-door__title">{t("social.explore.title")}</span>
+            <span className="roll-door__sub">{t("social.explore.entrySub")}</span>
+          </span>
+          <span className="roll-door__go" aria-hidden>
+            <ChevronIcon size={16} />
+          </span>
+        </Link>
+
         <Movement
           section
           title={t("social.myGroups")}

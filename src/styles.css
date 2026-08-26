@@ -6172,9 +6172,16 @@ html.qr-scanning #root {
 }
 
 /* Boutons carrés en petite capitale : le rôle n'a pas les pilules du reste de
-   l'application. */
+   l'application.
+ *
+ * Quarante-quatre pixels de haut, cadre compris. Une petite capitale de dix
+ * pixels ne fait qu'une trentaine de haut, et c'est pourtant la seule action
+ * d'une entrée du rôle : le cadre grandit plutôt que la cible reste courte. */
 .roll-btn {
-  padding: 9px 13px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 13px;
   border: 1px solid var(--or-line);
   background: none;
   color: var(--text);
@@ -6195,20 +6202,61 @@ html.qr-scanning #root {
   font-weight: 500;
 }
 
-/* Sans cadre ni fond, le bouton ne fait que la hauteur de sa petite capitale —
-   trente-cinq pixels, sous la cible de quarante-quatre. Le remplissage porte
-   la cible, la marge négative en rend l'encombrement : la ligne ne bouge pas
-   d'un pixel, le pouce a de quoi viser. Le cadre du bouton bordé, lui, se
-   verrait grandir — il garde sa règle. */
+/* Sans cadre, il ne reste que le mot et sa flèche : pas de remplissage
+   horizontal à réserver, la hauteur commune suffit. */
 .roll-btn--bare {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
   border-color: transparent;
-  padding-block: 0;
   padding-inline: 2px;
-  margin-block: -4.5px;
   color: var(--or-text);
+}
+
+/*
+ * La porte du rôle : ce qui mène ailleurs, et n'est pas une entrée.
+ *
+ * Une carte blanche à coins ronds au-dessus de lignes séparées par un filet
+ * d'or annonçait deux écrans dans un seul. Mais lui donner la forme d'une
+ * entrée mentirait dans l'autre sens : ce n'est pas un groupe, il n'a ni écu
+ * ni comptes. D'où cette forme intermédiaire — le filet et la petite capitale
+ * du rôle, sans rien de ce qui fait une entrée.
+ */
+.roll-door {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--or-faint);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.roll-door > svg,
+.roll-door__go {
+  flex-shrink: 0;
+  color: var(--or-text);
+}
+
+.roll-door__text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.roll-door__title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* La même italique que la devise d'un groupe : c'est la voix des à-côtés. */
+.roll-door__sub {
+  font-size: 12.5px;
+  font-style: italic;
+  line-height: 1.35;
+  color: var(--muted);
 }
 
 /* Le filet double à losange qui ouvre et ferme le rôle. */
