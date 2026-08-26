@@ -134,17 +134,33 @@ export function GameScreen() {
 
   return (
     <div className="screen" style={{ "--game": color } as CSSProperties}>
-      <div className="game-hero">
-        <div className="game-hero__wash" />
-        <button
-          className="glass-btn glass-btn--icon"
-          onClick={() => navigate(-1)}
-          aria-label={t("common.back")}
-        >
-          <BackIcon size={20} />
-        </button>
+      {/*
+       * La bannière du jeu, quand il en a une, sur toute la largeur de l'écran.
+       * Sinon le lavis de sa couleur : la vitrine garde sa forme et son
+       * identité plutôt que de laisser un vide là où d'autres jeux ont une
+       * image. L'icône mord la bannière comme l'avatar d'un profil mord la
+       * sienne — même geste, même repère.
+       */}
+      <div className="hero-bleed">
+        {game?.banner ? (
+          <CachedImage src={game.banner} alt="" className="hero-bleed__media" />
+        ) : (
+          <div className="hero-bleed__media hero-bleed__media--game" />
+        )}
+        <div className="hero-bleed__scrim" />
+        <div className="hero-bleed__float">
+          <button
+            className="glass-btn glass-btn--icon"
+            onClick={() => navigate(-1)}
+            aria-label={t("common.back")}
+          >
+            <BackIcon size={20} />
+          </button>
+        </div>
+      </div>
 
-        {game && (
+      {game && (
+        <>
           <div className="game-hero__id">
             {game.icon ? (
               <CachedImage
@@ -160,17 +176,18 @@ export function GameScreen() {
             )}
             <div className="game-hero__body">
               <h1 className="game-hero__name">{game.name}</h1>
-              {game.type && (
-                <div className="game-hero__chips">
-                  <span className="chip chip--game">
-                    {t(`games.type.${game.type}`, game.type)}
-                  </span>
-                </div>
-              )}
             </div>
           </div>
-        )}
-      </div>
+
+          {game.type && (
+            <div className="chip-row game-hero__chips">
+              <span className="chip chip--game">
+                {t(`games.type.${game.type}`, game.type)}
+              </span>
+            </div>
+          )}
+        </>
+      )}
 
       <StatusView loading={loading} error={error} onRetry={reload} />
 

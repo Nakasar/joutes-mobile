@@ -7236,17 +7236,9 @@ html.qr-scanning #root {
  * posée en ligne sur `--game`. Sans elle, tout retombe sur le bleu de Joutes.
  */
 
-.game-hero {
-  position: relative;
-  margin: calc(-1 * var(--screen-pad-top)) -16px 0;
-  padding: calc(var(--screen-pad-top) - 10px) 16px 12px;
-  overflow: hidden;
-}
-
-.game-hero__wash {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
+/* Faute de bannière, le lavis de la couleur du jeu tient le bandeau : la
+   vitrine garde sa forme et son identité au lieu d'ouvrir sur un vide. */
+.hero-bleed__media--game {
   background:
     radial-gradient(
       90% 120% at 88% 4%,
@@ -7257,29 +7249,18 @@ html.qr-scanning #root {
       168deg,
       color-mix(in srgb, var(--game, var(--primary)) 26%, transparent) 0%,
       transparent 78%
-    );
+    ),
+    var(--bg);
 }
 
-.game-hero__wash::after {
-  content: "";
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    color-mix(in srgb, var(--game, var(--primary)) 45%, transparent),
-    transparent
-  );
-}
-
+/* L'icône mord la bannière comme l'avatar d'un profil mord la sienne. Le nom
+   reste **sous** l'image : posé dessus, il dépendrait de ce qu'elle montre. */
 .game-hero__id {
   position: relative;
   display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-top: 16px;
+  align-items: flex-end;
+  gap: 12px;
+  margin-top: -38px;
 }
 
 .game-hero__icon {
@@ -7289,7 +7270,8 @@ html.qr-scanning #root {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 20px;
+  border: 3px solid var(--bg);
+  border-radius: 22px;
   object-fit: cover;
   background: color-mix(in srgb, var(--game, var(--primary)) 18%, var(--surface));
   box-shadow: var(--shadow-sm);
@@ -7301,6 +7283,7 @@ html.qr-scanning #root {
 
 .game-hero__body {
   min-width: 0;
+  padding-bottom: 4px;
 }
 
 .game-hero__name {
@@ -7316,10 +7299,8 @@ html.qr-scanning #root {
 }
 
 .game-hero__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  margin-top: 7px;
+  margin-top: 10px;
+  margin-bottom: 0;
 }
 
 .chip--game {
