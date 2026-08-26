@@ -6471,6 +6471,50 @@ html.qr-scanning #root {
   transform: scale(0.985);
 }
 
+/* ---- L'entrée d'un lieu : sa devanture, puis son carré ----
+ *
+ * On reconnaît une boutique où l'on est déjà allé à sa photo, bien avant d'en
+ * lire le nom — c'est ce que la fiche perdait en devenant une simple ligne.
+ * La bannière revient donc en tête, et le carré la mord : la forme continue de
+ * dire qu'on regarde un lieu, la photo dit lequel.
+ *
+ * Dix des quatorze lieux de l'annuaire en ont une. Les quatre autres n'ont pas
+ * de bande vide : une carte plus courte se lit, un `shimmer` permanent
+ * annoncerait un chargement qui n'arrivera jamais.
+ */
+.registry-row--lair {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.registry-row__banner {
+  display: block;
+  width: 100%;
+  height: 96px;
+  object-fit: cover;
+  background: var(--surface-2);
+}
+
+.registry-row__main {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+}
+
+/* L'anneau détache le carré de la bannière qu'il mord, comme l'avatar d'un
+   profil se détache de la sienne. Il prend le fond de la carte et non celui de
+   l'écran : c'est sur la carte que le carré est posé. */
+.registry-row__banner + .registry-row__main .sigil-lair {
+  margin-top: -22px;
+  box-shadow:
+    var(--fillet),
+    0 0 0 4px var(--surface);
+}
+
 .registry-row__body {
   flex: 1;
   min-width: 0;
