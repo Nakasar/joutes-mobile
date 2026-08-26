@@ -225,7 +225,6 @@
     "members_other": "{{count}} members",
     "groupGames_one": "{{count}} game",
     "groupGames_other": "{{count}} games",
-    "lairsEmpty": "No stores.",
     "groupDetail": {
       "fallbackTitle": "Group",
       "role": {
@@ -351,7 +350,8 @@
         "published_one": "publication",
         "published_other": "publications"
        }
-      }
+      },
+    "myGroups": "My groups"
   },
   "notifications": {
     "title": "Notifications",
@@ -935,7 +935,6 @@
   "lairs": {
     "title": "Venues",
     "detailTitle": "Venue",
-    "entrySub": "Game stores and play spaces",
     "searchPlaceholder": "Search for a venue…",
     "empty": "No venue matches this search.",
     "loadMore": "Load more",

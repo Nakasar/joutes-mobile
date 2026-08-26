@@ -46,8 +46,19 @@ export function GroupEscu({
   return (
     <span className={`escu escu--${size}`} style={accent.style} aria-hidden>
       <span className="escu__field">
+        {/* Les initiales servent aussi de repli à un logo qui ne vient pas :
+            l'écu les portait déjà quand le groupe n'en avait pas, et une URL
+            morte — un logo remplacé, une image retirée du stockage — laissait
+            à la place l'icône d'image cassée du navigateur, en travers du
+            blason. `fallback` n'existe que sur le `CachedImage` du mobile ; il
+            n'y a donc rien à reporter dans `Escu.tsx` de joutes-app. */}
         {logo ? (
-          <CachedImage src={logo} alt="" className="escu__logo" />
+          <CachedImage
+            src={logo}
+            alt=""
+            className="escu__logo"
+            fallback={<b className="escu__initials">{initials}</b>}
+          />
         ) : (
           <b className="escu__initials">{initials}</b>
         )}

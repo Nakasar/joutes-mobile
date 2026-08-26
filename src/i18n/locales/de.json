@@ -225,7 +225,6 @@
     "members_other": "{{count}} Mitglieder",
     "groupGames_one": "{{count}} Spiel",
     "groupGames_other": "{{count}} Spiele",
-    "lairsEmpty": "Keine Läden.",
     "groupDetail": {
       "fallbackTitle": "Gruppe",
       "role": {
@@ -351,7 +350,8 @@
         "published_one": "Veröffentlichung",
         "published_other": "Veröffentlichungen"
        }
-      }
+      },
+    "myGroups": "Meine Gruppen"
   },
   "notifications": {
     "title": "Benachrichtigungen",
@@ -935,7 +935,6 @@
   "lairs": {
     "title": "Orte",
     "detailTitle": "Ort",
-    "entrySub": "Läden und Spielräume",
     "searchPlaceholder": "Ort suchen…",
     "empty": "Kein Ort entspricht dieser Suche.",
     "loadMore": "Mehr laden",

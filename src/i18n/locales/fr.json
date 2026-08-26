@@ -225,7 +225,6 @@
     "members_other": "{{count}} membres",
     "groupGames_one": "{{count}} jeu",
     "groupGames_other": "{{count}} jeux",
-    "lairsEmpty": "Aucune boutique.",
     "groupDetail": {
       "fallbackTitle": "Groupe",
       "role": {
@@ -351,7 +350,8 @@
         "published_one": "publication",
         "published_other": "publications"
        }
-      }
+      },
+    "myGroups": "Mes groupes"
   },
   "notifications": {
     "title": "Notifications",
@@ -935,7 +935,6 @@
   "lairs": {
     "title": "Lieux",
     "detailTitle": "Lieu",
-    "entrySub": "Boutiques et salles de jeu",
     "searchPlaceholder": "Rechercher un lieu…",
     "empty": "Aucun lieu ne correspond à cette recherche.",
     "loadMore": "Charger plus",
