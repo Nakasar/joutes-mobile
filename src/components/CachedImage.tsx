@@ -24,10 +24,17 @@ export function CachedImage({ src, fallback, onError, ...imgProps }: Props) {
   // rendu ; la lecture async d'IndexedDB la remplace ensuite par l'object URL
   // en cache si disponible (évite un flicker / layout shift).
   const [resolved, setResolved] = useState<string | undefined>(src);
-  const [failed, setFailed] = useState(false);
+  // On retient **quelle** URL a échoué, pas qu'une a échoué.
+  //
+  // Un drapeau booléen restait allumé après coup : le premier rendu montre
+  // l'URL réseau pendant qu'IndexedDB se lit, et si le réseau tombe avant que
+  // la lecture ne réponde — c'est-à-dire hors ligne, précisément le cas pour
+  // lequel ce cache existe — le repli s'affichait puis ne repartait plus, la
+  // copie en cache arrivant sur un échec déjà noté.
+  const [failedUrl, setFailedUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    setFailed(false);
+    setFailedUrl(null);
     if (!src) {
       setResolved(undefined);
       return;
@@ -57,13 +64,19 @@ export function CachedImage({ src, fallback, onError, ...imgProps }: Props) {
     };
   }, [src]);
 
-  if (!resolved || failed) return <>{fallback ?? null}</>;
+  if (!resolved) return <>{fallback ?? null}</>;
+
+  // Sans repli déclaré, on laisse l'`<img>` en place et le navigateur faire ce
+  // qu'il a toujours fait : retirer l'élément changerait la mise en page de
+  // vingt-cinq appels qui n'ont rien demandé — une bannière réglée en hauteur
+  // se replierait au lieu de rester un cadre.
+  if (fallback !== undefined && failedUrl === resolved) return <>{fallback}</>;
 
   return (
     <img
       src={resolved}
       onError={(event) => {
-        setFailed(true);
+        setFailedUrl(resolved);
         onError?.(event);
       }}
       {...imgProps}
