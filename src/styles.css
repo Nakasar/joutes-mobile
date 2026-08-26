@@ -6929,6 +6929,13 @@ html.qr-scanning #root {
   transform: scale(0.94);
 }
 
+/* Même retrait que `.btn:disabled` : le bouton « Suivre » posé sur une bannière
+   se désactive le temps de l'aller-retour, et doit le montrer. */
+.glass-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
 .glass-btn--icon {
   width: 38px;
   padding: 0;

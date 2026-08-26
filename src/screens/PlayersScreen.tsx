@@ -32,8 +32,20 @@ const ALL = "all";
 /** Les trois premiers du classement, montrés ensemble plutôt qu'en rangées. */
 const PODIUM_SIZE = 3;
 
-/** Or, argent, bronze : l'anneau du podium, et rien d'autre. */
+/**
+ * Or, argent, bronze : l'anneau du podium, et rien d'autre.
+ *
+ * L'or est le jeton du thème, pas un hexadécimal : il suit le mode sombre. Il
+ * ne se dilue donc pas par un suffixe alpha collé au bout — `var(--gold)33`
+ * n'est pas une couleur, et la première marche perdait son fond en silence.
+ * `color-mix` accepte les deux formes.
+ */
 const MEDALS = ["var(--gold)", "#9aa9b4", "#b06b3a"];
+
+/** Le fond d'un anneau : la médaille, très diluée. */
+function ringOf(medal: string): string {
+  return `color-mix(in srgb, ${medal} 20%, transparent)`;
+}
 
 type Tab = "registry" | "leaderboard";
 
@@ -109,7 +121,7 @@ function Leaderboard() {
                 to={row.user ? userProfilePath(row.user) : "#"}
                 className={`podium__cell${place === 1 ? " podium__cell--first" : ""}`}
               >
-                <span className="podium__ring" style={{ background: `${medal}33` }}>
+                <span className="podium__ring" style={{ background: ringOf(medal) }}>
                   <BoardAvatar row={row} className="avatar" />
                 </span>
                 <span className="podium__place" style={{ color: medal }}>
