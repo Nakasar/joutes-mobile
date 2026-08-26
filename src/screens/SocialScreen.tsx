@@ -1,22 +1,22 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { listGames } from "../api/games";
-import { listLairs } from "../api/lairs";
 import { listPlayGroups } from "../api/play-groups";
 import { listFriendRequests, listFriends } from "../api/social";
 import type { PlayGroup, PublicUser } from "../api/types";
-import { LairCard } from "../components/LairCard";
+import { GroupEscu } from "../components/GroupEscu";
+import { LairsList } from "../components/LairsList";
+import { Movement } from "../components/Movement";
 import {
   ChevronIcon,
-  PinIcon,
   SwordsIcon,
   UserPlusIcon,
   UsersIcon,
 } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
-import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
+import { colorFor, initialOf, initialsOf, tintStyle } from "../lib/game-visuals";
+import { readPlayGroupAccent } from "../lib/play-group-theme";
 import { userProfilePath } from "../lib/user-tag";
 import { useAuth } from "../store/auth";
 
@@ -167,6 +167,12 @@ function GroupsTab() {
         </span>
       </Link>
 
+      <Movement
+        section
+        title={t("social.myGroups")}
+        aside={groups.data ? String(groups.data.length) : undefined}
+      />
+
       <StatusView
         loading={groups.loading}
         error={groups.error}
@@ -178,17 +184,29 @@ function GroupsTab() {
         }
       />
       {groups.data?.map((group) => {
-        const color = colorFor(group.id);
-        const n = membersCount(group);
+        const accent = readPlayGroupAccent(group);
         return (
-          <Link key={group.id} to={`/social/groups/${group.id}`} className="friend-row">
-            <span className="avatar avatar--sm" style={tintStyle(color)}>
-              {initialOf(group.name)}
-            </span>
+          <Link
+            key={group.id}
+            to={`/social/groups/${group.id}`}
+            className="friend-row play-group-theme"
+            style={accent.style}
+          >
+            {/* Le blason, comme au rôle d'armes : un groupe se reconnaît à son
+                écu avant son nom, et ce doit être le même écu des deux côtés.
+                `GroupEscu` attend des champs aplatis que seule l'exploration
+                sert — ici ils se lisent sous `options.theme`, et les initiales
+                se dérivent du nom. */}
+            <GroupEscu
+              initials={initialsOf(group.name)}
+              logo={group.options?.theme?.logo}
+              accentColor={group.options?.theme?.accentColor}
+              size="md"
+            />
             <div className="friend-row__body">
               <p className="friend-row__name">{group.name}</p>
               <p className="friend-row__sub">
-                {t("social.members", { count: n })}
+                {t("social.members", { count: membersCount(group) })}
                 {group.enabledGameIds && group.enabledGameIds.length > 0
                   ? ` · ${t("social.groupGames", { count: group.enabledGameIds.length })}`
                   : ""}
@@ -204,54 +222,22 @@ function GroupsTab() {
   );
 }
 
+/**
+ * L'annuaire, servi ici même.
+ *
+ * L'onglet ouvrait sur un lien vers `/lairs`, suivi d'une liste amputée : une
+ * trentaine de lieux, sans recherche, sans filtre, sans le partage ouvert /
+ * fermé. On y cherchait une boutique et il fallait d'abord comprendre qu'il
+ * fallait cliquer ailleurs pour chercher. C'est le même écran, il est donc
+ * rendu tel quel.
+ *
+ * Ce qui se perd au passage : `listLairs()` était mis en cache sous
+ * `social:lairs` et rouvrait l'onglet hors ligne, là où `searchLairs()` de
+ * l'annuaire n'a pas de cache. C'est le prix de l'écran unique, et il se
+ * rembourse en donnant un cache à la recherche plutôt qu'en gardant deux vues.
+ */
 function LairsTab() {
-  const { t } = useTranslation();
-  const lairs = useApi(() => listLairs());
-  const games = useApi(() => listGames());
-  const gameName = useMemo(() => {
-    const map = new Map<string, string>();
-    for (const g of games.data ?? []) map.set(g._id, g.name);
-    return map;
-  }, [games.data]);
-
-  return (
-    <>
-      {/* L'onglet n'affiche qu'une trentaine de lieux, sans filtre : l'annuaire
-          complet, avec sa recherche, s'ouvre au-dessus. */}
-      <Link to="/lairs" className="list-row list-row--link">
-        <span className="list-row__icon" style={{ background: "var(--chip)" }}>
-          <PinIcon size={18} />
-        </span>
-        <div className="list-row__body">
-          <p className="list-row__title">{t("lairs.title")}</p>
-          <p className="list-row__sub">{t("lairs.entrySub")}</p>
-        </div>
-        <span className="chevron">
-          <ChevronIcon size={18} />
-        </span>
-      </Link>
-
-      <StatusView
-        loading={lairs.loading}
-        error={lairs.error}
-        onRetry={lairs.reload}
-        empty={
-          lairs.data && lairs.data.lairs.length === 0
-            ? t("social.lairsEmpty")
-            : undefined
-        }
-      />
-      {lairs.data?.lairs.map((lair) => (
-        <LairCard
-          key={lair.id}
-          lair={lair}
-          gameNames={(lair.games ?? [])
-            .map((id) => gameName.get(id))
-            .filter((name): name is string => Boolean(name))}
-        />
-      ))}
-    </>
-  );
+  return <LairsList />;
 }
 
 export function SocialScreen() {

@@ -7397,6 +7397,19 @@ html.qr-scanning #root {
   color: var(--gold);
 }
 
+/* L'emoji porte sa propre couleur : la pastille lui prête son fond, pas sa
+   teinte. Un succès à décrocher garde donc son emoji, simplement pâli avec le
+   reste de la ligne. */
+.achievement-row__emoji {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.achievement-row--locked .achievement-row__emoji {
+  opacity: 0.55;
+  filter: grayscale(0.7);
+}
+
 .achievement-row--locked .achievement-row__medal {
   background: color-mix(in srgb, var(--muted) 14%, transparent);
   color: var(--muted);
@@ -7625,4 +7638,62 @@ html.qr-scanning #root {
 .lozenges--empty i {
   background: none;
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gold) 55%, transparent);
+}
+
+/* ---- Ce qu'un joueur suit ----
+ *
+ * Les jeux en grille, les lieux en fiches d'annuaire. Deux formes plutôt
+ * qu'une liste unique : un jeu se reconnaît à son icône et tient en deux mots,
+ * un lieu a une devanture, une adresse et des heures. Les aligner tous les
+ * deux en lignes grises revenait à ne montrer ni l'un ni l'autre.
+ *
+ * Et l'un comme l'autre ouvre sa page : c'est ce qu'on vient y chercher.
+ */
+.follow-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.follow-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  text-align: center;
+  transition: transform 0.12s;
+}
+
+.follow-tile:active {
+  transform: scale(0.97);
+}
+
+/* Le jeu garde son carré arrondi — il n'est ni une personne ni un lieu, et
+   n'entre donc pas dans la famille des sceaux. */
+.follow-tile__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  font-size: 18px;
+  object-fit: contain;
+  background: var(--surface-2);
+}
+
+/* Deux lignes puis coupe : « Star Wars Unlimited » tient, un nom à rallonge
+   ne pousse pas la tuile hors de la grille. */
+.follow-tile__name {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import type { AchievementWithUnlockInfo } from "../api/types";
 import { currentLocale } from "../i18n";
+import { isUrl } from "../lib/safe-url";
 import { CachedImage } from "./CachedImage";
 import { TrophyIcon } from "./icons";
 
@@ -32,6 +33,7 @@ function formatDate(iso: string): string {
 export function AchievementRow({ achievement }: { achievement: AchievementWithUnlockInfo }) {
   const { t } = useTranslation();
   const unlocked = Boolean(achievement.unlockedAt);
+  const icon = achievement.icon?.trim();
   const date = achievement.unlockedAt ? formatDate(achievement.unlockedAt) : "";
 
   const subtitle = unlocked
@@ -42,9 +44,24 @@ export function AchievementRow({ achievement }: { achievement: AchievementWithUn
 
   return (
     <div className={`list-row achievement-row${unlocked ? "" : " achievement-row--locked"}`}>
+      {/* L'API sert l'icône d'un succès en **emoji** — 🎲, ⚔, 🪲 — et non en
+          image. Passée telle quelle à un `<img>`, elle devient une URL
+          relative que le navigateur demande, rate, et remplace par son icône
+          d'image cassée : c'est ce qu'on voyait sur toute la liste. Le trophée
+          maison ne servait que si le champ était vide.
+
+          Trois cas, donc : une URL fait une image, tout autre texte s'écrit
+          tel quel, et rien du tout laisse le trophée. */}
       <span className="achievement-row__medal">
-        {achievement.icon ? (
-          <CachedImage src={achievement.icon} alt="" className="achievement-row__icon" />
+        {icon && isUrl(icon) ? (
+          <CachedImage
+            src={icon}
+            alt=""
+            className="achievement-row__icon"
+            fallback={<TrophyIcon size={20} />}
+          />
+        ) : icon ? (
+          <span className="achievement-row__emoji">{icon}</span>
         ) : (
           <TrophyIcon size={20} />
         )}

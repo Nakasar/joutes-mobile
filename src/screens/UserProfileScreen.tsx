@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getDeckCards, searchDecks } from "../api/decks";
+import { listLairs } from "../api/lairs";
 import { listSellListItems } from "../api/sell-lists";
 import {
   getUserAchievements,
@@ -10,11 +11,12 @@ import {
   getUserPublicWishlists,
   getUserSellList,
 } from "../api/users";
-import type { Deck, PublicUserProfile, Wishlist } from "../api/types";
+import type { Deck, Lair, PublicUserLair, PublicUserProfile, Wishlist } from "../api/types";
 import { AchievementRow } from "../components/AchievementRow";
 import { CachedImage } from "../components/CachedImage";
 import { DeckCard } from "../components/DeckCard";
 import { FollowButton } from "../components/FollowButton";
+import { LairCard } from "../components/LairCard";
 import { Movement } from "../components/Movement";
 import { Tabs } from "../components/Tabs";
 import {
@@ -23,7 +25,6 @@ import {
   ExternalLinkIcon,
   HeartIcon,
   LockIcon,
-  PinIcon,
   UsersIcon,
 } from "../components/icons";
 import { SellListItemRow } from "../components/SellListItemRow";
@@ -135,6 +136,21 @@ export function UserProfileScreen() {
         : Promise.resolve({ achievements: [], unlocked: 0, total: 0, points: 0 }),
     [user?.id, isPublic, userTag],
   );
+  /**
+   * Le profil ne sert d'un lieu suivi que son id, son nom et son adresse — ni
+   * bannière, ni logo, ni horaires. L'annuaire, lui, les porte : on le charge
+   * une fois (il est déjà en cache pour l'onglet Communauté) et on rapproche
+   * par id. Un lieu absent de cette trentaine garde sa fiche minimale, que
+   * `LairCard` sait afficher — carré d'initiales, pas de bannière, pas de cri.
+   */
+  const directory = useApi(() => (isPublic ? listLairs() : Promise.resolve(null)), [isPublic]);
+  const lairById = useMemo(() => {
+    const map = new Map<string, Lair>();
+    for (const lair of directory.data?.lairs ?? []) map.set(lair.id, lair);
+    return map;
+  }, [directory.data]);
+  const fullLair = (lair: PublicUserLair): Lair => lairById.get(lair.id) ?? lair;
+
   const wishlists = useApi(() => getUserPublicWishlists(userTag), [userTag]);
   const sellList = useApi(() => getUserSellList(userTag), [userTag]);
   const sellListItems = useApi(
@@ -322,36 +338,53 @@ export function UserProfileScreen() {
       case "follows":
         return isPublic && (user?.games.length || user?.lairs.length) ? (
           <section key={key}>
+            {/* Ce qu'on suit se visite : chaque jeu et chaque lieu ouvre sa
+                page. Les lignes mortes d'avant donnaient une liste qu'on
+                lisait sans pouvoir la suivre. */}
             <Movement section title={t("profile.gamesTitle")} />
             {user.games.length === 0 ? (
               <p className="muted">{t("profile.gamesEmpty")}</p>
             ) : (
-              user.games.map((game) => (
-                <div key={game.id} className="list-row">
-                  {game.icon && (
-                    <CachedImage src={game.icon} alt="" className="list-row__thumb" />
-                  )}
-                  <div className="list-row__body">
-                    <p className="list-row__title">{game.name}</p>
-                  </div>
-                </div>
-              ))
+              <div className="follow-grid">
+                {user.games.map((game) => (
+                  <Link
+                    key={game.id}
+                    to={`/games/${game.slug ?? game.id}`}
+                    className="follow-tile"
+                  >
+                    {game.icon ? (
+                      <CachedImage
+                        src={game.icon}
+                        alt=""
+                        className="avatar avatar--game follow-tile__icon"
+                        fallback={
+                          <span
+                            className="avatar avatar--game follow-tile__icon"
+                            style={tintStyle(colorFor(game.id))}
+                          >
+                            {initialOf(game.name)}
+                          </span>
+                        }
+                      />
+                    ) : (
+                      <span
+                        className="avatar avatar--game follow-tile__icon"
+                        style={tintStyle(colorFor(game.id))}
+                      >
+                        {initialOf(game.name)}
+                      </span>
+                    )}
+                    <span className="follow-tile__name">{game.name}</span>
+                  </Link>
+                ))}
+              </div>
             )}
+
             <Movement section title={t("profile.lairsTitle")} />
             {user.lairs.length === 0 ? (
               <p className="muted">{t("profile.lairsEmpty")}</p>
             ) : (
-              user.lairs.map((lair) => (
-                <div key={lair.id} className="list-row">
-                  <span className="list-row__icon" style={{ background: "var(--chip)" }}>
-                    <PinIcon size={18} style={{ color: "var(--primary)" }} />
-                  </span>
-                  <div className="list-row__body">
-                    <p className="list-row__title">{lair.name}</p>
-                    {lair.address && <p className="list-row__sub">{lair.address}</p>}
-                  </div>
-                </div>
-              ))
+              user.lairs.map((lair) => <LairCard key={lair.id} lair={fullLair(lair)} />)
             )}
           </section>
         ) : null;

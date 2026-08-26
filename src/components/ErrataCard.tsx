@@ -8,6 +8,7 @@ import { VoteButtons } from "./VoteButtons";
 import { annotateErrataMarkdown } from "../lib/errata-markdown";
 import { currentLocale } from "../i18n";
 import { useAuth } from "../store/auth";
+import { isUrl } from "../lib/safe-url";
 
 const errataTypeLabelKeys: Record<string, string> = {
   errata: "errata.typeErrata",
@@ -31,10 +32,6 @@ function formatDate(iso?: string): string {
 function errataText(errata: Errata, lang: string): string {
   const match = errata.translations?.find((t) => t.lang === lang);
   return match?.details ?? errata.details;
-}
-
-function isUrl(value: string): boolean {
-  return /^https?:\/\//i.test(value.trim());
 }
 
 /** Carte d'errata / clarification / ruling avec markdown annoté. Partagée entre

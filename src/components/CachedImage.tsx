@@ -1,8 +1,16 @@
-import { useEffect, useState, type ImgHTMLAttributes } from "react";
+import { useEffect, useState, type ImgHTMLAttributes, type ReactNode } from "react";
 import { getCachedImageUrl, prefetchImage } from "../lib/image-cache";
 
 type Props = Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> & {
   src?: string;
+  /**
+   * Ce qu'on montre si l'image ne vient pas. Sans lui, un `src` mort laissait
+   * un cadre vide ou l'icône « image cassée » du navigateur, là où l'appelant
+   * avait déjà écrit un repli — des initiales, un trophée — qu'il ne servait
+   * que lorsque `src` était absent. Une URL morte est pourtant le cas le plus
+   * courant : un lieu qui change de logo, une image retirée du stockage.
+   */
+  fallback?: ReactNode;
 };
 
 /**
@@ -11,13 +19,15 @@ type Props = Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> & {
  * la met en cache en arrière-plan pour les prochaines fois. Utilisé pour les
  * icônes de jeux et les bannières d'actualités.
  */
-export function CachedImage({ src, ...imgProps }: Props) {
+export function CachedImage({ src, fallback, onError, ...imgProps }: Props) {
   // Initialisé avec l'URL réseau pour afficher l'image immédiatement au premier
   // rendu ; la lecture async d'IndexedDB la remplace ensuite par l'object URL
   // en cache si disponible (évite un flicker / layout shift).
   const [resolved, setResolved] = useState<string | undefined>(src);
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
+    setFailed(false);
     if (!src) {
       setResolved(undefined);
       return;
@@ -47,6 +57,16 @@ export function CachedImage({ src, ...imgProps }: Props) {
     };
   }, [src]);
 
-  if (!resolved) return null;
-  return <img src={resolved} {...imgProps} />;
+  if (!resolved || failed) return <>{fallback ?? null}</>;
+
+  return (
+    <img
+      src={resolved}
+      onError={(event) => {
+        setFailed(true);
+        onError?.(event);
+      }}
+      {...imgProps}
+    />
+  );
 }

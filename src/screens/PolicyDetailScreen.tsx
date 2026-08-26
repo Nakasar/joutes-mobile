@@ -11,6 +11,7 @@ import { VoteButtons } from "../components/VoteButtons";
 import { useApi } from "../hooks/useApi";
 import { currentLocale } from "../i18n";
 import { useAuth } from "../store/auth";
+import { isUrl } from "../lib/safe-url";
 
 function formatDate(iso?: string): string {
   if (!iso) return "";
@@ -19,10 +20,6 @@ function formatDate(iso?: string): string {
     month: "long",
     year: "numeric",
   });
-}
-
-function isUrl(value: string): boolean {
-  return /^https?:\/\//i.test(value.trim());
 }
 
 /** Titre/contenu dans la langue de l'app si une traduction existe, sinon l'original. */
