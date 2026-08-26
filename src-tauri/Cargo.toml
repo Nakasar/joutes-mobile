@@ -1,6 +1,6 @@
 [package]
 name = "joutes-mobile"
-version = "0.45.0"
+version = "0.46.0"
 description = "Application mobile Joutes (client de l'API joutes.app)"
 authors = ["Joutes"]
 edition = "2021"
