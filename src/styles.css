@@ -6195,9 +6195,19 @@ html.qr-scanning #root {
   font-weight: 500;
 }
 
+/* Sans cadre ni fond, le bouton ne fait que la hauteur de sa petite capitale —
+   trente-cinq pixels, sous la cible de quarante-quatre. Le remplissage porte
+   la cible, la marge négative en rend l'encombrement : la ligne ne bouge pas
+   d'un pixel, le pouce a de quoi viser. Le cadre du bouton bordé, lui, se
+   verrait grandir — il garde sa règle. */
 .roll-btn--bare {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   border-color: transparent;
+  padding-block: 0;
   padding-inline: 2px;
+  margin-block: -4.5px;
   color: var(--or-text);
 }
 
