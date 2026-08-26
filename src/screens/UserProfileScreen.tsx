@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { searchDecks } from "../api/decks";
+import { getDeckCards, searchDecks } from "../api/decks";
 import { listSellListItems } from "../api/sell-lists";
 import {
   getUserAchievements,
@@ -10,13 +10,14 @@ import {
   getUserPublicWishlists,
   getUserSellList,
 } from "../api/users";
-import type { PublicUserProfile, Wishlist } from "../api/types";
+import type { Deck, PublicUserProfile, Wishlist } from "../api/types";
 import { AchievementRow } from "../components/AchievementRow";
-import { BackHeader } from "../components/BackHeader";
 import { CachedImage } from "../components/CachedImage";
-import { DeckRow } from "../components/DeckRow";
+import { DeckCard } from "../components/DeckCard";
 import { FollowButton } from "../components/FollowButton";
+import { Tabs } from "../components/Tabs";
 import {
+  BackIcon,
   ChevronIcon,
   ExternalLinkIcon,
   HeartIcon,
@@ -85,6 +86,7 @@ function WishlistRow({ wishlist }: { wishlist: Wishlist }) {
 export function UserProfileScreen() {
   const { t } = useTranslation();
   const { user: me } = useAuth();
+  const navigate = useNavigate();
   const { userTag = "" } = useParams();
 
   const [tab, setTab] = useState<string>("showcase");
@@ -108,13 +110,17 @@ export function UserProfileScreen() {
 
   // Les blocs d'un profil privé n'ont rien à charger : demander ses decks ou
   // ses publications reviendrait à payer trois requêtes pour trois listes vides.
+  // La bande de chiffres annonce **tous** les decks publics, la liste n'en
+  // montre que les premiers : compter les fiches chargées afficherait « 6 » à
+  // qui en a publié vingt.
   const decks = useApi(
     () =>
       user && isPublic
-        ? searchDecks({ playerId: user.id, visibility: ["public"], limit: 6 }).then(
-            (r) => r.decks,
-          )
-        : Promise.resolve([]),
+        ? searchDecks({ playerId: user.id, visibility: ["public"], limit: 6 }).then((r) => ({
+            list: r.decks,
+            total: r.total,
+          }))
+        : Promise.resolve({ list: [], total: 0 }),
     [user?.id, isPublic],
   );
   const contents = useApi(
@@ -134,6 +140,54 @@ export function UserProfileScreen() {
     () => (sellList.data ? listSellListItems(sellList.data.id) : Promise.resolve(null)),
     [sellList.data?.id],
   );
+
+  /**
+   * L'illustration de légende de chaque deck.
+   *
+   * Le web l'obtient en interprétant la liste de cartes en texte libre ; ici
+   * `legendCardId` la désigne directement. Les identifiants sont **groupés par
+   * jeu** : `getDeckCards` en accepte cinq cents d'un coup, donc six decks du
+   * même jeu coûtent une requête, pas six. Un jeu injoignable rend une liste
+   * vide plutôt que de faire échouer les autres — un deck sans illustration
+   * garde sa fiche.
+   */
+  const legendArt = useApi(async () => {
+    const byGame = new Map<string, string[]>();
+    for (const deck of decks.data?.list ?? []) {
+      if (!deck.gameId || !deck.legendCardId) continue;
+      const ids = byGame.get(deck.gameId) ?? [];
+      ids.push(deck.legendCardId);
+      byGame.set(deck.gameId, ids);
+    }
+    if (byGame.size === 0) return {} as Record<string, string>;
+
+    const perGame = await Promise.all(
+      Array.from(byGame, ([gameId, ids]) => getDeckCards(gameId, ids).catch(() => [])),
+    );
+
+    const art: Record<string, string> = {};
+    for (const card of perGame.flat()) {
+      if (card.image) art[card.id] = card.image;
+    }
+    return art;
+  }, [decks.data?.list]);
+
+  /** Le nom d'un jeu se lit sur le profil : pas de requête de plus pour ça. */
+  const gameNames = useMemo(
+    () => new Map((user?.games ?? []).map((game) => [game.id, game.name])),
+    [user?.games],
+  );
+
+  function deckCard(deck: Deck) {
+    return (
+      <DeckCard
+        key={deck.id}
+        deck={deck}
+        legendImage={deck.legendCardId ? legendArt.data?.[deck.legendCardId] : undefined}
+        gameName={deck.gameId ? gameNames.get(deck.gameId) : undefined}
+      />
+    );
+  }
 
   const sections = useMemo(
     () => (user ? readUserShowcaseSections(user) : []),
@@ -155,7 +209,7 @@ export function UserProfileScreen() {
       visibleProfileTabs(sections, {
         live: Boolean(user?.live),
         about: Boolean(user?.description) || (user?.showcase?.playStyles?.length ?? 0) > 0,
-        decks: (decks.data?.length ?? 0) > 0,
+        decks: (decks.data?.list.length ?? 0) > 0,
         publications: (contents.data?.length ?? 0) > 0,
         achievements: unlocked.length > 0,
         follows: true,
@@ -168,6 +222,11 @@ export function UserProfileScreen() {
   const shown = sectionsForTab(sections, current);
 
   const label = user ? userLabel(user, t("profile.fallbackTitle")) : "";
+  // `userLabel` rend « Pseudo#1234 » : le discriminant passe en retrait, il sert
+  // à départager deux homonymes, pas à les nommer.
+  const hash = label.lastIndexOf("#");
+  const name = hash > 0 ? label.slice(0, hash) : label;
+  const tag = hash > 0 ? label.slice(hash) : "";
   const links = user
     ? [user.website, ...user.socialLinks].filter((l): l is string => !!l && isSafeUrl(l))
     : [];
@@ -211,12 +270,15 @@ export function UserProfileScreen() {
         ) : null;
 
       case "decks":
-        return (decks.data?.length ?? 0) > 0 ? (
+        return (decks.data?.list.length ?? 0) > 0 ? (
           <section key={key}>
             <p className="section-label">{t("profile.decksTitle")}</p>
-            {decks.data?.map((deck) => (
-              <DeckRow key={deck.id} deck={deck} />
-            ))}
+            {/* La vitrine met un deck en avant — celui-là occupe déjà la
+                hauteur d'une illustration ; l'onglet dédié les montre tous. */}
+            {(current === "decks"
+              ? decks.data?.list ?? []
+              : (decks.data?.list ?? []).slice(0, 1)
+            ).map(deckCard)}
           </section>
         ) : null;
 
@@ -321,29 +383,46 @@ export function UserProfileScreen() {
 
   return (
     <div className="screen">
-      <BackHeader
-        title={label || t("profile.fallbackTitle")}
-        action={
-          user && !isMe ? (
-            <FollowButton
-              userTagOrId={userTag}
-              userId={user.id}
-              following={following}
-              followersCount={followersCount}
-              onChange={setFollow}
-            />
-          ) : undefined
-        }
-      />
       <StatusView loading={profile.loading} error={profile.error} onRetry={profile.reload} />
 
       {user && (
         <>
-          {user.banner && (
-            <CachedImage src={user.banner} alt="" className="profile-hero__banner" />
-          )}
+          {/*
+           * La bannière touche les bords de l'écran, zone de sécurité comprise,
+           * et porte le retour et le bouton « Suivre » en verre. C'est ce qui
+           * permet de n'écrire le pseudonyme **qu'une fois** : l'en-tête de
+           * retour le répétait au-dessus d'une bannière qui, elle, flottait
+           * dans la gouttière.
+           */}
+          <div className="hero-bleed">
+            {user.banner ? (
+              <CachedImage src={user.banner} alt="" className="hero-bleed__media" />
+            ) : (
+              <div className="hero-bleed__media" />
+            )}
+            <div className="hero-bleed__scrim" />
+            <div className="hero-bleed__float">
+              <button
+                className="glass-btn glass-btn--icon"
+                onClick={() => navigate(-1)}
+                aria-label={t("common.back")}
+              >
+                <BackIcon size={20} />
+              </button>
+              {!isMe && (
+                <FollowButton
+                  variant="glass"
+                  userTagOrId={userTag}
+                  userId={user.id}
+                  following={following}
+                  followersCount={followersCount}
+                  onChange={setFollow}
+                />
+              )}
+            </div>
+          </div>
 
-          <div className="profile-header">
+          <div className="profile-id">
             {user.avatar ? (
               <CachedImage src={user.avatar} alt="" className="avatar avatar--lg" />
             ) : (
@@ -351,56 +430,88 @@ export function UserProfileScreen() {
                 {initialOf(label || "?")}
               </span>
             )}
-            <div className="profile-header__body">
-              <h1 className="profile-header__name">
-                {label}
+            <div className="profile-id__body">
+              <h1 className="profile-id__name">
+                <span className="profile-id__handle">
+                  {name}
+                  {tag && <span className="profile-id__tag">{tag}</span>}
+                </span>
                 {!isPublic && <LockIcon size={16} />}
               </h1>
-              <div className="chip-row profile-badges">
-                <span className="chip">
-                  <UsersIcon size={13} />
-                  {t("profile.followers", { count: followersCount })}
-                </span>
-                {user.badges?.statuses?.map((status) => (
-                  <span key={status.id} className="chip chip--accent">
-                    {status.name}
-                  </span>
-                ))}
-              </div>
-              {links.length > 0 && (
-                <div className="profile-links">
-                  {links.map((link, index) => (
-                    <a
-                      key={index}
-                      href={link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="header-link"
-                    >
-                      <ExternalLinkIcon size={13} />
-                      {hostnameOf(link)}
-                    </a>
-                  ))}
-                </div>
-              )}
             </div>
           </div>
 
-          {/* Cinq onglets ne tiennent pas côte à côte sur un téléphone étroit :
-              la barre défile, comme celle de l'Établi d'un groupe. Sans cela le
-              dernier — « Échanges » — sort de l'écran. */}
-          {tabs.length > 0 && (
-            <div className="segmented segmented--scroll" style={{ margin: "12px 0" }}>
-              {tabs.map((key) => (
-                <button
-                  key={key}
-                  className={`segmented__item${current === key ? " segmented__item--active" : ""}`}
-                  onClick={() => setTab(key)}
-                >
-                  {t(`profile.tabs.${key}`)}
-                </button>
+          {(user.badges?.statuses?.length ?? 0) > 0 && (
+            <div className="chip-row profile-badges">
+              {user.badges?.statuses?.map((status) => (
+                <span key={status.id} className="chip chip--accent">
+                  {status.name}
+                </span>
               ))}
             </div>
+          )}
+
+          {/*
+           * Trois chiffres que le profil possède déjà, à la place de la seule
+           * pastille « n abonnés » : c'est ce qu'on vient vérifier chez
+           * quelqu'un. Un profil privé n'a ni succès ni decks publics — la
+           * bande n'aurait qu'une case, et une case ne fait pas un tableau :
+           * le compteur d'abonnés y reprend sa pastille.
+           */}
+          {isPublic ? (
+            <div className="profile-stats">
+              <div className="profile-stats__cell">
+                <span className="profile-stats__value">{followersCount}</span>
+                <span className="profile-stats__label">{t("profile.stats.followers")}</span>
+              </div>
+              <div className="profile-stats__cell">
+                <span className="profile-stats__value">
+                  {achievements.data?.unlocked ?? 0}
+                  <span className="profile-stats__of"> / {achievements.data?.total ?? 0}</span>
+                </span>
+                <span className="profile-stats__label">{t("profile.stats.achievements")}</span>
+              </div>
+              <div className="profile-stats__cell">
+                <span className="profile-stats__value">{decks.data?.total ?? 0}</span>
+                <span className="profile-stats__label">{t("profile.stats.decks")}</span>
+              </div>
+            </div>
+          ) : (
+            <div className="chip-row profile-badges">
+              <span className="chip">
+                <UsersIcon size={13} />
+                {t("profile.followers", { count: followersCount })}
+              </span>
+            </div>
+          )}
+
+          {links.length > 0 && (
+            <div className="profile-links">
+              {links.map((link, index) => (
+                <a
+                  key={index}
+                  href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="header-link"
+                >
+                  <ExternalLinkIcon size={13} />
+                  {hostnameOf(link)}
+                </a>
+              ))}
+            </div>
+          )}
+
+          {/* Cinq onglets ne tiennent pas côte à côte sur un téléphone étroit :
+              la barre défile. Sans cela le dernier — « Échanges » — sort de
+              l'écran. */}
+          {tabs.length > 0 && (
+            <Tabs
+              className="profile-tabs"
+              current={current}
+              onSelect={setTab}
+              items={tabs.map((key) => ({ key, label: t(`profile.tabs.${key}`) }))}
+            />
           )}
 
           {shown.map((key) => block(key))}
