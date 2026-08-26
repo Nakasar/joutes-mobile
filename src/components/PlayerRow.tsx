@@ -42,7 +42,7 @@ export function PlayerRow({ entry }: { entry: RegistryEntry }) {
     .join(" · ");
 
   return (
-    <Link to={userProfilePath(user)} className="player-row">
+    <Link to={userProfilePath(user)} className="registry-row">
       {user.avatar ? (
         <CachedImage src={user.avatar} alt="" className="avatar avatar--sm" />
       ) : (
@@ -51,15 +51,15 @@ export function PlayerRow({ entry }: { entry: RegistryEntry }) {
         </span>
       )}
 
-      <div className="player-row__body">
-        <p className="player-row__name">
-          <span className="player-row__handle">
+      <div className="registry-row__body">
+        <p className="registry-row__name">
+          <span className="registry-row__handle">
             {name}
-            {tag && <span className="player-row__tag">{tag}</span>}
+            {tag && <span className="registry-row__tag">{tag}</span>}
           </span>
         </p>
 
-        <p className="player-row__meta">
+        <p className="registry-row__meta">
           {t("players.followersCount", { count: entry.followers })}
         </p>
 

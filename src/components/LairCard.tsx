@@ -40,7 +40,7 @@ export function LairCard({
   const blazon = [lair.address, ...(gameNames ?? [])].filter(Boolean).join(" · ");
 
   return (
-    <Link to={`/lairs/${lair.id}`} className="player-row">
+    <Link to={`/lairs/${lair.id}`} className="registry-row">
       {logo ? (
         <CachedImage src={logo} alt="" className="sigil-lair sigil-lair--sm" loading="lazy" />
       ) : (
@@ -49,9 +49,12 @@ export function LairCard({
         </span>
       )}
 
-      <div className="player-row__body">
-        <p className="player-row__name">
-          <span className="player-row__handle">{lair.name}</span>
+      <div className="registry-row__body">
+        <p className="registry-row__name">
+          {/* Quatre « Caverne du Gobelin » ne se distinguent que par leur
+              ville : le nom d'un lieu s'enroule sur deux lignes plutôt que de
+              se couper juste avant ce qui le nomme. */}
+          <span className="registry-row__handle registry-row__handle--wrap">{lair.name}</span>
           {/* Un lieu privé n'apparaît ici que pour qui y a accès : le cadenas
               dit pourquoi il ne le trouvera pas en le partageant. */}
           {lair.isPrivate && <LockIcon size={14} />}

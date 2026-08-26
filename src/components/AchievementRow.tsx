@@ -62,12 +62,16 @@ export function AchievementRow({ achievement }: { achievement: AchievementWithUn
           qu'un « 0 » qui le ferait passer pour un succès sans valeur — il en a
           une autre, et elle se porte à côté du pseudonyme. */}
       {achievement.points ? (
+        // `role="img"` fait des losanges une seule image portant son texte de
+        // remplacement. Sans lui, un lecteur d'écran peut encore descendre
+        // dans les `<i>` vides et annoncer cinq « blanc » avant les points.
         <span
           className={`lozenges${unlocked ? "" : " lozenges--empty"}`}
+          role="img"
           aria-label={t("profile.achievements.points", { count: achievement.points })}
         >
           {Array.from({ length: achievement.points }, (_, index) => (
-            <i key={index} />
+            <i key={index} aria-hidden="true" />
           ))}
         </span>
       ) : null}

@@ -987,7 +987,8 @@
         "7": "Sonntag"
       },
       "openNow": "Jetzt geöffnet",
-      "shutNow": "Jetzt geschlossen"
+      "shutNow": "Jetzt geschlossen",
+      "unknown": "Öffnungszeiten nicht angegeben"
     },
     "about": {
       "amenities": "Ausstattung",

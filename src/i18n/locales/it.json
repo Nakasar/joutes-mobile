@@ -987,7 +987,8 @@
         "7": "Domenica"
       },
       "openNow": "Aperti in questo momento",
-      "shutNow": "Chiusi in questo momento"
+      "shutNow": "Chiusi in questo momento",
+      "unknown": "Orari non indicati"
     },
     "about": {
       "amenities": "Servizi",

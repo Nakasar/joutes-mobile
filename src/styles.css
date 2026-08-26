@@ -6442,14 +6442,18 @@ html.qr-scanning #root {
   min-width: 0;
 }
 
-/* ---- Fiche d'un joueur (registre) ----
+/* ---- Une entrée de registre ----
  *
- * Ce qui distingue deux comptes dans une liste : les jeux qu'il suit, et où il
- * joue. Le premier passe en puces — une énumération séparée par des virgules ne
- * se parcourt pas du regard — et la ville rejoint le compteur d'abonnés.
+ * La forme commune au registre des joueurs et à l'annuaire des lieux : un
+ * sceau, un nom en héraldique, un cri, un blasonnement, un chevron. Ce qui
+ * change d'une liste à l'autre est le sceau — rond pour une personne, carré
+ * pour un lieu — et ce que le cri annonce, jamais la structure.
+ *
+ * D'où le nom neutre : `player-row` décrivait le premier usage, pas la forme,
+ * et l'annuaire s'y serait accroché sans que rien ne dise pourquoi.
  */
 
-.player-row {
+.registry-row {
   display: flex;
   align-items: flex-start;
   gap: 12px;
@@ -6463,16 +6467,16 @@ html.qr-scanning #root {
   transition: transform 0.12s;
 }
 
-.player-row:active {
+.registry-row:active {
   transform: scale(0.985);
 }
 
-.player-row__body {
+.registry-row__body {
   flex: 1;
   min-width: 0;
 }
 
-.player-row__name {
+.registry-row__name {
   display: flex;
   align-items: center;
   gap: 7px;
@@ -6484,16 +6488,33 @@ html.qr-scanning #root {
   line-height: 1.25;
 }
 
-.player-row__handle {
+.registry-row__handle {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+/* Deux lignes pour un lieu, pas une coupée.
+ *
+ * L'annuaire porte quatre « Caverne du Gobelin » qui ne se distinguent que par
+ * leur ville — et c'est précisément la ville qu'une coupure sur une ligne
+ * emportait : « Caverne du Gobelin - Thi… », « - Na… », « - Po… ». Quatre
+ * entrées identiques à l'œil, chacune tronquée à l'endroit qui la nommait.
+ *
+ * Un joueur n'en a pas besoin : son discriminant le départage déjà, et il
+ * suivrait le nom à la ligne — un `-webkit-box` empile ses enfants au lieu de
+ * les aligner. */
+.registry-row__handle--wrap {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+}
+
 /* Le discriminant départage deux homonymes ; il ne les nomme pas. En
    héraldique pleine taille il pesait autant que le nom — il repasse donc dans
    la voix des chiffres de l'écran, celle du blasonnement et des ordres. */
-.player-row__tag {
+.registry-row__tag {
   font-family: var(--font-mono);
   font-size: 11.5px;
   font-weight: 400;
@@ -6501,7 +6522,7 @@ html.qr-scanning #root {
   color: var(--muted);
 }
 
-.player-row__meta {
+.registry-row__meta {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -6513,7 +6534,7 @@ html.qr-scanning #root {
   text-overflow: ellipsis;
 }
 
-.player-row__meta svg {
+.registry-row__meta svg {
   flex-shrink: 0;
 }
 

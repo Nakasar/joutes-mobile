@@ -86,14 +86,19 @@ export function LairsScreen() {
 
   const selectedGame = (games.data ?? []).find((game) => game._id === gameId);
 
-  // Le partage ouvert / fermé ne vaut que si la liste sert réellement les
-  // horaires : sans eux, `readOpeningState` rend `null` pour tout le monde et
-  // la section « fermés » avalerait l'annuaire entier.
-  const split = lairs.some((lair) => (lair.options?.openingHours?.length ?? 0) > 0);
-  const isOpen = (lair: Lair) =>
-    readOpeningState(lair.options?.openingHours, currentLocale()).isOpen === true;
-  const openNow = split ? lairs.filter(isOpen) : [];
-  const shutNow = split ? lairs.filter((lair) => !isOpen(lair)) : [];
+  // Trois états, pas deux : ouvert, fermé, et **on ne sait pas**. Un lieu dont
+  // la liste ne sert pas les horaires n'est pas un lieu fermé — le ranger sous
+  // « fermés » annoncerait une fermeture qu'on ignore, et l'annuaire porte
+  // aujourd'hui treize lieux sans horaires pour un qui en a.
+  const stateOf = (lair: Lair) =>
+    readOpeningState(lair.options?.openingHours, currentLocale()).isOpen;
+  const openNow = lairs.filter((lair) => stateOf(lair) === true);
+  const shutNow = lairs.filter((lair) => stateOf(lair) === false);
+  const unknown = lairs.filter((lair) => stateOf(lair) === null);
+
+  // Sans un seul horaire connu, il n'y a rien à partager : la liste reste d'un
+  // seul tenant plutôt que de se donner un titre qui ne trie rien.
+  const split = openNow.length + shutNow.length > 0;
 
   const card = (lair: Lair) => (
     <LairCard
@@ -150,9 +155,9 @@ export function LairsScreen() {
 
       {/* L'annuaire s'ouvre sur ce qui est ouvert : dans une liste de
           boutiques c'est la première question qu'on se pose, et elle se répond
-          sans filtre. Le partage n'a lieu que si les horaires sont servis —
-          sinon la liste reste d'un seul tenant plutôt que de ranger tout le
-          monde du côté « fermé ». */}
+          sans filtre. Les lieux dont on ignore les horaires ferment la marche
+          sous leur propre titre — ils ne sont ni ouverts ni fermés, et les
+          ranger d'un côté ou de l'autre serait leur prêter une heure. */}
       {split ? (
         <>
           {openNow.length > 0 && (
@@ -174,6 +179,16 @@ export function LairsScreen() {
                 aside={t("lairs.count", { count: shutNow.length })}
               />
               {shutNow.map(card)}
+            </>
+          )}
+          {unknown.length > 0 && (
+            <>
+              <Movement
+                section
+                title={t("lairs.hours.unknown")}
+                aside={t("lairs.count", { count: unknown.length })}
+              />
+              {unknown.map(card)}
             </>
           )}
         </>

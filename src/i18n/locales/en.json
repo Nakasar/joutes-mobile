@@ -987,7 +987,8 @@
         "7": "Sunday"
       },
       "openNow": "Open right now",
-      "shutNow": "Closed right now"
+      "shutNow": "Closed right now",
+      "unknown": "Opening hours not listed"
     },
     "about": {
       "amenities": "Amenities",

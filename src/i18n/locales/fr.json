@@ -987,7 +987,8 @@
         "7": "Dimanche"
       },
       "openNow": "Ouverts à cette heure",
-      "shutNow": "Fermés à cette heure"
+      "shutNow": "Fermés à cette heure",
+      "unknown": "Horaires non renseignés"
     },
     "about": {
       "amenities": "Équipements",
