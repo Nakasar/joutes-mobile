@@ -452,3 +452,12 @@ export function ClockIcon(p: IconProps) {
     </Icon>
   );
 }
+
+/** Un chevron vers le bas : une puce qui ouvre un choix, une section à déplier. */
+export function CaretIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="m6 9 6 6 6-6" />
+    </Icon>
+  );
+}

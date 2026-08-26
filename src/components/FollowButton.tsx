@@ -20,12 +20,15 @@ export function FollowButton({
   following,
   followersCount,
   onChange,
+  variant = "default",
 }: {
   userTagOrId: string;
   userId?: string;
   following: boolean;
   followersCount: number;
   onChange: (state: { following: boolean; followersCount: number }) => void;
+  /** `glass` : posé sur une bannière, en pastille de verre plutôt qu'en bouton. */
+  variant?: "default" | "glass";
 }) {
   const { t } = useTranslation();
   const [busy, setBusy] = useState(false);
@@ -50,9 +53,14 @@ export function FollowButton({
     }
   }
 
+  const className =
+    variant === "glass"
+      ? `glass-btn${following ? "" : " glass-btn--primary"}`
+      : `btn ${following ? "btn--outline" : "btn--grad"} follow-btn`;
+
   return (
     <button
-      className={`btn ${following ? "btn--outline" : "btn--grad"} follow-btn`}
+      className={className}
       disabled={busy}
       onClick={toggle}
     >

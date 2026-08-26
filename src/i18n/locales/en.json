@@ -63,7 +63,11 @@
     "policies": "Policies",
     "quizzes": "Quizzes",
     "empty": "No features available for this game.",
-    "products": "Products"
+    "products": "Products",
+    "explore": "Explore this game",
+    "cardsSub": "Catalogue and search",
+    "readMore": "Read more",
+    "readLess": "Show less"
   },
   "events": {
     "title": "Events",
@@ -921,6 +925,11 @@
     "live": {
       "title": "Live",
       "watch": "Watch the stream"
+    },
+    "stats": {
+      "followers": "Followers",
+      "achievements": "Achievements",
+      "decks": "Decks"
     }
   },
   "lairs": {
@@ -1020,14 +1029,22 @@
       "city": "City",
       "cityPlaceholder": "All cities",
       "live": "Live",
-      "sells": "Sells cards"
+      "sells": "Sells cards",
+      "clear": "Clear"
     },
     "leaderboard": {
       "empty": "The leaderboard is empty for now.",
-      "yourRank": "Your rank: {{rank}} / {{total}}",
       "score_one": "{{points}} pts · {{count}} achievement",
-      "score_other": "{{points}} pts · {{count}} achievements"
-    }
+      "score_other": "{{points}} pts · {{count}} achievements",
+      "yourRankLabel": "Your rank",
+      "points_one": "{{count}} pt",
+      "points_other": "{{count}} pts",
+      "unlocked_one": "{{count}} achievement",
+      "unlocked_other": "{{count}} achievements"
+    },
+    "followersCount_one": "{{count}} follower",
+    "followersCount_other": "{{count}} followers",
+    "sortAction": "Sort"
   },
   "play": {
     "title": "Play",

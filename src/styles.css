@@ -295,12 +295,15 @@ code {
 /* Le bandeau occupe déjà la zone de sécurité haute : l'écran n'a plus à la
    réserver, sinon un large vide se creuse sous le bandeau. */
 .app-shell--banner .screen {
-  padding-top: 18px;
+  --screen-pad-top: 18px;
 }
 
 .screen {
-  padding: calc(var(--safe-top) + 18px) 16px
-    calc(var(--safe-bottom) + 20px);
+  /* La marge haute est nommée : une bannière pleine largeur — celle d'un profil,
+     d'un jeu — doit la remonter pour toucher le bord de l'écran, et elle ne peut
+     pas le faire contre une valeur qu'elle ne connaît pas (cf. `.hero-bleed`). */
+  --screen-pad-top: calc(var(--safe-top) + 18px);
+  padding: var(--screen-pad-top) 16px calc(var(--safe-bottom) + 20px);
   min-height: 100%;
   animation: jtIn 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
@@ -1177,71 +1180,6 @@ textarea:focus {
 }
 
 /* ---- Jeux / cartes de liste ---- */
-
-.game-row {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 14px;
-  margin-bottom: 12px;
-  box-shadow: var(--shadow-sm);
-  color: var(--text);
-  overflow: hidden;
-  transition: transform 0.12s;
-}
-
-.game-row:active {
-  transform: scale(0.985);
-}
-
-/* Jeu non téléchargé, hors ligne : grisé. Déjà rendu en <div> (pas un <Link>),
-   donc non cliquable sans neutraliser tous les événements de survol. */
-.game-row--offline {
-  opacity: 0.45;
-  filter: saturate(0.6);
-  cursor: default;
-}
-
-/* Barre de couleur latérale : réservée à l'en-tête d'un jeu (écran de détail).
-   Les listes de jeux s'en passent, la pastille d'icône portant déjà la
-   couleur. */
-.game-row--barred {
-  padding-left: 18px;
-}
-
-.game-row__bar {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 5px;
-  background: var(--primary);
-}
-
-.game-row__body {
-  flex: 1;
-  min-width: 0;
-}
-
-.game-row__name {
-  font-family: var(--font-display);
-  font-size: 17px;
-  font-weight: 600;
-  margin: 0 0 2px;
-}
-
-.game-row__desc {
-  font-size: 13px;
-  color: var(--muted);
-  margin: 0 0 7px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 
 /* ---- Cartes imprimées dans le sens de la largeur ----
  *
@@ -3589,35 +3527,6 @@ button.card-link {
   font-size: 28px;
 }
 
-.profile-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  margin-bottom: 20px;
-}
-
-.profile-header__body {
-  flex: 1;
-  min-width: 0;
-}
-
-.profile-header__name {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 700;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.profile-header__bio {
-  margin: 8px 0 0;
-  color: var(--muted);
-  font-size: 0.9rem;
-  white-space: pre-wrap;
-}
-
 .profile-links {
   display: flex;
   flex-direction: column;
@@ -5447,15 +5356,6 @@ html.qr-scanning #root {
 
 /* La bannière précède l'en-tête et n'est qu'un décor : elle se recadre plutôt
    que de pousser l'avatar et le pseudonyme sous la ligne de flottaison. */
-.profile-hero__banner {
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
-  border-radius: var(--radius);
-  margin-bottom: 12px;
-  background: var(--surface-2);
-}
-
 .profile-badges {
   margin-top: 8px;
   margin-bottom: 0;
@@ -5560,38 +5460,6 @@ html.qr-scanning #root {
 .content-detail__summary {
   margin: 12px 0 0;
   font-size: 0.95rem;
-}
-
-.registry-filters {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
-.registry-filters__toggles {
-  margin-bottom: 14px;
-}
-
-.leaderboard__rank {
-  margin-bottom: 14px;
-}
-
-.leaderboard__rank-title {
-  margin: 0 0 4px;
-  font-weight: 600;
-}
-
-/* Le rang tient la même largeur d'une ligne à l'autre, faute de quoi les
-   avatars du podium ne s'alignent plus dès qu'on passe à deux chiffres. */
-.leaderboard__place {
-  flex-shrink: 0;
-  width: 22px;
-  text-align: center;
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--muted);
 }
 
 /* ---- Vitrine d'un lieu ---- */
@@ -6501,4 +6369,1166 @@ html.qr-scanning #root {
 .roll-orders button[aria-pressed="true"] {
   border-bottom-color: var(--or);
   color: var(--or-text);
+}
+
+/* ==========================================================================
+ * Registre, profils, jeux — refonte
+ *
+ * Quatre écrans repris ensemble : le registre de la communauté, le profil d'un
+ * joueur, la liste des jeux et la vitrine d'un jeu. Les jetons ne bougent pas ;
+ * ce sont les gabarits qui changent — la place que prennent les filtres, ce
+ * qu'une fiche montre, et la façon dont on navigue à l'intérieur d'un écran.
+ * ========================================================================== */
+
+/* ---- Onglets d'écran ----
+ *
+ * Distincts du `segmented`, qui reste le choix d'une option — une visibilité,
+ * un mode d'affichage. Un onglet, lui, change ce qu'on regarde : c'est de la
+ * navigation, et elle se dessine en souligné plutôt qu'en pastilles épaisses.
+ * Douze pixels de moins en hauteur, et la barre défile quand cinq onglets ne
+ * tiennent pas côte à côte.
+ */
+
+.tabs {
+  display: flex;
+  gap: 22px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+/* 44 px de haut : c'est la navigation principale de l'écran, elle doit se viser
+   au pouce. C'est le remplissage qui porte la cible, pas la taille du texte. */
+.tabs__item {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 11px 0;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.tabs__item--active {
+  color: var(--text);
+}
+
+.tabs__item--active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2.5px;
+  border-radius: 2px;
+  background: var(--grad);
+}
+
+/* ---- Rangée de filtres ----
+ *
+ * Une rangée sans barre de défilement ne dit pas qu'elle continue : le voile de
+ * droite s'en charge. Il se pose sur le conteneur, pas sur la rangée, sinon il
+ * défilerait avec les puces.
+ */
+
+.filter-wrap {
+  position: relative;
+  margin-bottom: 4px;
+}
+
+.filter-wrap::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 6px;
+  right: 0;
+  width: 26px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--bg) 78%);
+}
+
+/* Puce qui ouvre un choix : la même que `.chip-filter`, avec son chevron. Non
+   réglée, elle porte le nom de sa dimension — « Jeu », « Ville » — et non la
+   valeur « tout » : c'est deux fois plus court, et c'est à ce prix que quatre
+   filtres tiennent dans la largeur d'un téléphone. */
+.chip-filter--select {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chip-filter--select svg {
+  opacity: 0.75;
+}
+
+/* Le `select` natif, invisible, posé sur la puce : le sélecteur du système
+   s'ouvre au toucher, sans liste déroulante à redessiner. */
+.chip-filter__native {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  opacity: 0;
+  background: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Le champ que déplie la puce « Ville » : pleine largeur, parce qu'on y tape. */
+.filter-panel {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.filter-panel input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ---- Ligne de résultats et tri ---- */
+
+.result-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 10px 0;
+}
+
+.result-bar .section-label {
+  margin: 0;
+}
+
+/* Le menu s'ancre ici et non sur la rangée : un troisième enfant dans un
+   `space-between` déplacerait le bouton de tri vers le centre. */
+.sort-wrap {
+  position: relative;
+  display: flex;
+}
+
+/* Remplissage débordant repris par une marge négative : la cible fait 44 px
+   sans que la rangée grandisse d'un pixel. */
+.sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 12px 6px;
+  margin: -12px -6px;
+  border: none;
+  background: none;
+  color: var(--primary);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.sort-menu {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  z-index: 5;
+  min-width: 156px;
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  animation: jtIn 0.14s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.sort-menu button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 11px;
+  border: none;
+  border-radius: 9px;
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: 14px;
+  text-align: left;
+}
+
+.sort-menu button[aria-checked="true"] {
+  background: var(--chip);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Ferme le menu au toucher d'à côté. Transparent, sous le menu, au-dessus du
+   reste : sans lui, seul un second appui sur le bouton refermerait. */
+.menu-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+}
+
+/* ---- Fiche d'un joueur (registre) ----
+ *
+ * Ce qui distingue deux comptes dans une liste : les jeux qu'il suit, et où il
+ * joue. Le premier passe en puces — une énumération séparée par des virgules ne
+ * se parcourt pas du regard — et la ville rejoint le compteur d'abonnés.
+ */
+
+.player-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  transition: transform 0.12s;
+}
+
+.player-row:active {
+  transform: scale(0.985);
+}
+
+.player-row__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.player-row__name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 15.5px;
+  font-weight: 600;
+}
+
+.player-row__handle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-row__tag {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.player-row__meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 2px 0 0;
+  font-size: 12.5px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-row__meta svg {
+  flex-shrink: 0;
+}
+
+.player-row__games {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+/* Puce de jeu : plus discrète qu'une `.chip`, qui est un accent. Ici il y en a
+   trois par fiche et cinq fiches à l'écran — colorées, elles feraient guirlande. */
+.game-pill {
+  flex-shrink: 0;
+  max-width: 118px;
+  padding: 3px 8px;
+  border: 1px solid var(--border-2);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.game-pill--more {
+  border-color: transparent;
+  background: none;
+}
+
+/* Le direct se dit en toutes lettres : la pastille seule oblige à connaître la
+   convention, et c'est justement ce qu'on vient chercher en filtrant dessus. */
+.live-pill {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px 2px 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--danger) 12%, transparent);
+  color: var(--danger);
+  font-size: 10.5px;
+  font-weight: 700;
+}
+
+/* ---- Classement ---- */
+
+.rank-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius);
+  background: var(--grad-soft);
+}
+
+.rank-card__place {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--primary);
+}
+
+.rank-card__of {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.rank-card__score {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* Le podium ne trie pas : il montre. Les trois premiers valent d'être vus d'un
+   coup, le reste se lit en liste. */
+.podium {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.podium__cell {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  text-align: center;
+}
+
+.podium__cell--first {
+  padding-top: 20px;
+  padding-bottom: 16px;
+}
+
+.podium__ring {
+  display: flex;
+  padding: 3px;
+  border-radius: 18px;
+}
+
+.podium__cell .avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 15px;
+  font-size: 17px;
+}
+
+.podium__cell--first .avatar {
+  width: 52px;
+  height: 52px;
+  font-size: 20px;
+}
+
+.podium__place {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.podium__name {
+  max-width: 100%;
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.podium__pts {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.board-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+}
+
+.board-row .avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  font-size: 15px;
+}
+
+/* Le rang tient la même largeur d'une ligne à l'autre, faute de quoi les
+   avatars ne s'alignent plus dès qu'on passe à deux chiffres. */
+.board-row__place {
+  flex-shrink: 0;
+  width: 22px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.board-row__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.board-row__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 14.5px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.board-row__sub {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.board-row__pts {
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+/* ---- Bannière pleine largeur ----
+ *
+ * Remonte jusqu'au bord de l'écran, zone de sécurité comprise : c'est ce qui
+ * distingue une bannière d'une image posée dans la gouttière. Les commandes se
+ * posent dessus en verre, ce qui évite d'écrire le nom une fois dans l'en-tête
+ * de retour et une seconde fois sous l'image.
+ */
+
+.hero-bleed {
+  position: relative;
+  margin: calc(-1 * var(--screen-pad-top)) -16px 0;
+  overflow: hidden;
+}
+
+.hero-bleed__media {
+  display: block;
+  width: 100%;
+  height: 172px;
+  object-fit: cover;
+  background: var(--grad-soft);
+}
+
+.hero-bleed__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.24) 0%,
+    transparent 38%,
+    rgba(0, 0, 0, 0.12) 100%
+  );
+}
+
+.hero-bleed__float {
+  position: absolute;
+  /* Se cale sur la marge haute de l'écran : quand le bandeau « hors ligne »
+     occupe déjà la zone de sécurité, celle-ci tombe à 18 px et la commande
+     remonte avec elle plutôt que de flotter au milieu de la bannière. */
+  top: calc(var(--screen-pad-top) - 10px);
+  left: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.glass-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 13px;
+  border: none;
+  border-radius: 999px;
+  background: var(--surface-glass);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  transition: transform 0.12s;
+}
+
+.glass-btn:active {
+  transform: scale(0.94);
+}
+
+.glass-btn--icon {
+  width: 38px;
+  padding: 0;
+}
+
+/* ---- Identité d'un profil ---- */
+
+.profile-id {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin-top: -38px;
+  position: relative;
+}
+
+.profile-id__body {
+  min-width: 0;
+  padding-bottom: 4px;
+}
+
+.profile-id__name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* Le cadenas d'un profil privé reste visible : c'est le pseudonyme qui se
+   coupe, pas lui. Sans ce découpage, un pseudonyme long emportait les deux. */
+.profile-id__handle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-id__tag {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* L'anneau détache l'avatar de la bannière qu'il mord. */
+.profile-id .avatar--lg {
+  border: 3px solid var(--bg);
+}
+
+/* Trois chiffres que le profil possède déjà, à la place de la seule pastille
+   « n abonnés » : c'est ce qu'on vient vérifier sur un profil. */
+.profile-stats {
+  display: flex;
+  margin: 14px 0 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.profile-stats__cell {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 11px 4px;
+}
+
+.profile-stats__cell + .profile-stats__cell {
+  border-left: 1px solid var(--border-2);
+}
+
+.profile-stats__value {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.profile-stats__of {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.profile-stats__label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---- Fiche d'un deck ----
+ *
+ * L'illustration de la légende distingue deux decks bien avant leur nom. Même
+ * cadrage que le web : l'image est recadrée par le haut, là où se trouve le
+ * personnage.
+ */
+
+.deck-card {
+  display: block;
+  overflow: hidden;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  transition: transform 0.12s;
+}
+
+.deck-card:active {
+  transform: scale(0.99);
+}
+
+.deck-card__art {
+  position: relative;
+  display: block;
+  height: 108px;
+  background: var(--surface-2);
+}
+
+.deck-card__art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+/* Le bas de l'illustration se fond dans la carte : la coupure nette au ras du
+   texte fait vignette collée. */
+.deck-card__fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 44px;
+  pointer-events: none;
+  background: linear-gradient(
+    transparent,
+    color-mix(in srgb, var(--surface) 92%, transparent)
+  );
+}
+
+.deck-card__body {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 13px 13px;
+}
+
+.deck-card__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.deck-card__game {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.deck-card__name {
+  margin: 1px 0 0;
+  font-family: var(--font-display);
+  font-size: 15.5px;
+  font-weight: 600;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.deck-card__sub {
+  margin: 2px 0 0;
+  font-size: 12.5px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- Grille de jeux ----
+ *
+ * L'icône est le seul repère visuel d'un jeu : en liste, elle se noyait dans le
+ * texte. En grille, elle tient le haut de la tuile sur un lavis de la couleur
+ * du jeu, et il en tient deux par rangée.
+ */
+
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.game-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 140px;
+  padding: 13px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  transition: transform 0.12s;
+}
+
+.game-tile:active {
+  transform: scale(0.98);
+}
+
+.game-tile--offline {
+  opacity: 0.45;
+  filter: saturate(0.6);
+  cursor: default;
+}
+
+.game-tile__wash {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 78px;
+  pointer-events: none;
+}
+
+.game-tile__head {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.game-tile__icon {
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  object-fit: cover;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 19px;
+}
+
+/* Jeu suivi : la coche dit ce que « Mes jeux » filtre, sans quitter la liste. */
+.game-tile__followed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--surface-glass);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  box-shadow: var(--shadow-sm);
+  color: var(--primary);
+}
+
+.game-tile__name {
+  position: relative;
+  margin: 9px 0 0;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.game-tile__desc {
+  position: relative;
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.game-tile__note {
+  position: relative;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+/* ---- Vitrine d'un jeu ----
+ *
+ * Le bandeau prend la couleur du jeu (`game.color`, sinon `colorFor(slug)`),
+ * posée en ligne sur `--game`. Sans elle, tout retombe sur le bleu de Joutes.
+ */
+
+.game-hero {
+  position: relative;
+  margin: calc(-1 * var(--screen-pad-top)) -16px 0;
+  padding: calc(var(--screen-pad-top) - 10px) 16px 12px;
+  overflow: hidden;
+}
+
+.game-hero__wash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      90% 120% at 88% 4%,
+      color-mix(in srgb, var(--game, var(--primary)) 34%, transparent),
+      transparent 62%
+    ),
+    linear-gradient(
+      168deg,
+      color-mix(in srgb, var(--game, var(--primary)) 26%, transparent) 0%,
+      transparent 78%
+    );
+}
+
+.game-hero__wash::after {
+  content: "";
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--game, var(--primary)) 45%, transparent),
+    transparent
+  );
+}
+
+.game-hero__id {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.game-hero__icon {
+  flex-shrink: 0;
+  width: 66px;
+  height: 66px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  object-fit: cover;
+  background: color-mix(in srgb, var(--game, var(--primary)) 18%, var(--surface));
+  box-shadow: var(--shadow-sm);
+  color: var(--game, var(--primary));
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 27px;
+}
+
+.game-hero__body {
+  min-width: 0;
+}
+
+.game-hero__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.game-hero__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 7px;
+}
+
+.chip--game {
+  background: color-mix(in srgb, var(--game, var(--primary)) 16%, transparent);
+  color: var(--game, var(--primary));
+}
+
+/* Description dépliable : en liste elle est coupée à une ligne, ici elle a la
+   place de se lire en entier. */
+.game-about {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.game-about--clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.game-about__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: -4px -6px -12px;
+  padding: 12px 6px;
+  border: none;
+  background: none;
+  color: var(--primary);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ---- Fonctionnalités d'un jeu ----
+ *
+ * Sept lignes identiques ne disaient pas par où commencer. Les cartes sont
+ * l'entrée du catalogue, elles prennent la largeur ; le reste passe en grille.
+ */
+
+.feature-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border: 1px solid color-mix(in srgb, var(--game, var(--primary)) 26%, transparent);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(
+      120deg,
+      color-mix(in srgb, var(--game, var(--primary)) 15%, transparent),
+      color-mix(in srgb, var(--game, var(--primary)) 4%, transparent)
+    ),
+    var(--surface);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  transition: transform 0.12s;
+}
+
+.feature-main:active,
+.feature-tile:active {
+  transform: scale(0.985);
+}
+
+.feature-main__icon {
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  background: color-mix(in srgb, var(--game, var(--primary)) 20%, var(--surface));
+  color: var(--game, var(--primary));
+}
+
+.feature-main__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.feature-main__label {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 16.5px;
+  font-weight: 700;
+}
+
+.feature-main__sub {
+  margin: 1px 0 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.feature-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 86px;
+  padding: 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  transition: transform 0.12s;
+}
+
+.feature-tile__icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--game, var(--primary)) 13%, transparent);
+  color: var(--game, var(--primary));
+}
+
+.feature-tile__label {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+/* ---- Succès ----
+ *
+ * Un succès décroché porte sa date, un succès à décrocher porte sa description :
+ * c'est elle qui dit comment l'obtenir. Afficher les deux à la fois donnait
+ * trois lignes dont une inutile.
+ */
+
+.ach-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 15px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius);
+  background: var(--grad-soft);
+}
+
+.ach-head__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.ach-head__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.ach-head .progress {
+  margin-top: 7px;
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+}
+
+.ach-head .progress__bar {
+  background: var(--gold);
+}
+
+.ach-head__points {
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--gold);
+}
+
+.achievement-row__medal {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--gold) 15%, transparent);
+  color: var(--gold);
+}
+
+.achievement-row--locked .achievement-row__medal {
+  background: color-mix(in srgb, var(--muted) 14%, transparent);
+  color: var(--muted);
+}
+
+/* Le bouton « Suivre » posé sur une bannière : tant qu'on ne suit pas, c'est
+   l'action de l'écran et elle prend le dégradé ; une fois suivi, elle rentre
+   dans le rang du verre. */
+.glass-btn--primary {
+  background: var(--grad);
+  color: #fff;
+}
+
+/* Les onglets d'un profil viennent après la bande de chiffres, qui a déjà sa
+   marge basse : sans cette reprise, les deux s'empileraient au double. */
+.profile-tabs {
+  margin-top: 14px;
 }

@@ -5,8 +5,9 @@ import { listGames } from "../api/games";
 import { getMyFollowedGameIds } from "../api/users";
 import type { GameSummary } from "../api/types";
 import { CachedImage } from "../components/CachedImage";
-import { ChevronIcon, SearchIcon } from "../components/icons";
+import { CheckIcon, SearchIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
+import { Tabs } from "../components/Tabs";
 import { useApi } from "../hooks/useApi";
 import { useOnline } from "../hooks/useOnline";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
@@ -14,42 +15,59 @@ import { GAME_TYPE_ORDER, gameTypeOrderIndex, isKnownGameType } from "../lib/gam
 import { listMeta } from "../lib/offline-store";
 import { useAuth } from "../store/auth";
 
-function GameRow({
+/**
+ * Une tuile de jeu.
+ *
+ * L'icône est le seul repère visuel qu'un jeu possède : en rangée pleine
+ * largeur elle se noyait dans le texte, et neuf lignes se ressemblaient toutes.
+ * Ici elle tient le haut de la tuile, posée sur un lavis de la couleur du jeu,
+ * et il en tient deux par rangée — on reconnaît sa ligne avant de la lire.
+ */
+function GameTile({
   game,
   browsable,
+  followed,
 }: {
   game: GameSummary;
   browsable: boolean;
+  followed: boolean;
 }) {
   const { t } = useTranslation();
   const color = colorFor(game.slug, (game as { color?: string }).color);
 
   const inner = (
     <>
-      {game.icon ? (
-        <CachedImage
-          src={game.icon}
-          alt=""
-          className="avatar avatar--game"
-          loading="lazy"
-        />
-      ) : (
-        <span className="avatar avatar--game" style={tintStyle(color)}>
-          {initialOf(game.name)}
-        </span>
-      )}
-      <div className="game-row__body">
-        <h2 className="game-row__name">{game.name}</h2>
-        {game.description && <p className="game-row__desc">{game.description}</p>}
-        {browsable ? (
-          game.type && <span className="chip">{t(`games.type.${game.type}`, game.type)}</span>
+      <span
+        className="game-tile__wash"
+        style={{ background: `linear-gradient(180deg, ${color}24, transparent)` }}
+      />
+      <span className="game-tile__head">
+        {game.icon ? (
+          <CachedImage
+            src={game.icon}
+            alt=""
+            className="game-tile__icon"
+            loading="lazy"
+          />
         ) : (
-          <span className="chip">{t("games.unavailableOffline")}</span>
+          <span className="game-tile__icon" style={tintStyle(color)}>
+            {initialOf(game.name)}
+          </span>
         )}
-      </div>
-      {browsable && (
-        <span className="chevron">
-          <ChevronIcon size={20} />
+        {/* La coche dit ce que « Mes jeux » filtre, sans quitter la liste. */}
+        {followed && (
+          <span className="game-tile__followed" aria-label={t("games.scopeMine")}>
+            <CheckIcon size={13} />
+          </span>
+        )}
+      </span>
+
+      <h2 className="game-tile__name">{game.name}</h2>
+      {game.description && <p className="game-tile__desc">{game.description}</p>}
+
+      {!browsable && (
+        <span className="game-tile__note">
+          <span className="chip">{t("games.unavailableOffline")}</span>
         </span>
       )}
     </>
@@ -59,7 +77,7 @@ function GameRow({
     // Jeu non téléchargé et appareil hors ligne : grisé et non cliquable.
     return (
       <div
-        className="game-row game-row--offline"
+        className="game-tile game-tile--offline"
         aria-disabled="true"
         title={t("games.offlineHint")}
       >
@@ -69,7 +87,7 @@ function GameRow({
   }
 
   return (
-    <Link to={`/games/${game.slug}`} className="game-row">
+    <Link to={`/games/${game.slug}`} className="game-tile">
       {inner}
     </Link>
   );
@@ -141,24 +159,20 @@ export function GamesScreen() {
         </div>
       </div>
 
+      {/* Deux listes, pas deux réglages : c'est de la navigation, elle prend
+          les onglets — et rend au passage la hauteur d'une pastille. */}
       {showMineToggle && (
-        <div className="segmented" style={{ marginBottom: 14 }}>
-          <button
-            className={`segmented__item${scope === "mine" ? " segmented__item--active" : ""}`}
-            onClick={() => setScope("mine")}
-          >
-            {t("games.scopeMine")}
-          </button>
-          <button
-            className={`segmented__item${scope === "all" ? " segmented__item--active" : ""}`}
-            onClick={() => setScope("all")}
-          >
-            {t("games.scopeAll")}
-          </button>
-        </div>
+        <Tabs<Scope>
+          current={scope}
+          onSelect={setScope}
+          items={[
+            { key: "mine", label: t("games.scopeMine") },
+            { key: "all", label: t("games.scopeAll") },
+          ]}
+        />
       )}
 
-      <div className="search-field" style={{ marginBottom: 14 }}>
+      <div className="search-field" style={{ marginBottom: 10 }}>
         <SearchIcon size={18} className="search-field__icon" />
         <input
           type="search"
@@ -169,22 +183,24 @@ export function GamesScreen() {
       </div>
 
       {types.length > 0 && (
-        <div className="chip-row">
-          <button
-            className={`chip-filter${typeFilter === null ? " chip-filter--active" : ""}`}
-            onClick={() => setTypeFilter(null)}
-          >
-            {t("games.typeAll")}
-          </button>
-          {types.map((type) => (
+        <div className="filter-wrap" style={{ marginBottom: 12 }}>
+          <div className="chip-row" style={{ marginBottom: 0 }}>
             <button
-              key={type}
-              className={`chip-filter${typeFilter === type ? " chip-filter--active" : ""}`}
-              onClick={() => setTypeFilter(type)}
+              className={`chip-filter${typeFilter === null ? " chip-filter--active" : ""}`}
+              onClick={() => setTypeFilter(null)}
             >
-              {t(`games.type.${type}`, type)}
+              {t("games.typeAll")}
             </button>
-          ))}
+            {types.map((type) => (
+              <button
+                key={type}
+                className={`chip-filter${typeFilter === type ? " chip-filter--active" : ""}`}
+                onClick={() => setTypeFilter(type)}
+              >
+                {t(`games.type.${type}`, type)}
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
@@ -204,13 +220,18 @@ export function GamesScreen() {
         }
       />
 
-      {filtered.map((game) => (
-        <GameRow
-          key={game._id}
-          game={game}
-          browsable={online || downloaded.has(game.slug)}
-        />
-      ))}
+      <div className="game-grid">
+        {filtered.map((game) => (
+          <GameTile
+            key={game._id}
+            game={game}
+            browsable={online || downloaded.has(game.slug)}
+            // Dans « Mes jeux », tout est suivi : la coche n'y distinguerait
+            // rien. Elle ne sert que dans le catalogue entier.
+            followed={scope === "all" && myGameIds.has(game._id)}
+          />
+        ))}
+      </div>
     </div>
   );
 }
