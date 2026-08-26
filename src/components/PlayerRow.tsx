@@ -4,25 +4,27 @@ import type { RegistryEntry } from "../api/types";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
 import { userLabel, userProfilePath } from "../lib/user-tag";
 import { CachedImage } from "./CachedImage";
-import { ChevronIcon, PinIcon } from "./icons";
-
-/** Au-delà, les puces sortiraient de la fiche : le reste se compte. */
-const GAMES_SHOWN = 2;
+import { ChevronIcon } from "./icons";
 
 /**
  * Une fiche du registre : de quoi reconnaître un joueur et décider de l'ouvrir.
  *
- * Les jeux qu'il suit sont la seule chose qui distingue vraiment deux comptes
- * dans une liste — d'où leur place, en puces plutôt qu'en énumération séparée
- * par des virgules : une liste de noms collés ne se parcourt pas du regard, et
- * celle d'un joueur qui suit six jeux poussait la ville hors de la fiche.
+ * **Le rond dit qu'on regarde une personne** — un lieu porte un carré, un
+ * groupe un blason. La forme se lit avant la couleur et bien avant le nom.
  *
- * La ville rejoint le compteur d'abonnés sur la même ligne : c'est le second
- * critère du registre — on cherche qui joue à quoi, et où.
+ * Le nom passe en héraldique, comme au rôle d'armes des groupes : c'est ce qui
+ * rattache le registre au reste de l'héraldique de Joutes sans lui donner un
+ * fond à part.
  *
- * Le direct s'écrit en toutes lettres. La pastille rouge seule oblige à
- * connaître la convention, et c'est précisément ce qu'on vient chercher quand
- * on filtre dessus.
+ * Le **blasonnement** — ville et jeux dits d'un trait, en petite capitale —
+ * remplace l'énumération séparée par des virgules : une liste de noms collés ne
+ * se parcourt pas du regard, et une guirlande de puces colorées fait plus de
+ * bruit que de sens. Deux lignes valent mieux qu'une coupée, c'est de
+ * l'information.
+ *
+ * Le **cri** ne dit aujourd'hui que le direct : c'est la seule chose périssable
+ * que le registre serve. Le dernier fait d'armes — un succès décroché, un deck
+ * publié — demanderait que la recherche le rende, ce qu'elle ne fait pas.
  */
 export function PlayerRow({ entry }: { entry: RegistryEntry }) {
   const { t } = useTranslation();
@@ -35,13 +37,7 @@ export function PlayerRow({ entry }: { entry: RegistryEntry }) {
   const name = hash > 0 ? label.slice(0, hash) : label;
   const tag = hash > 0 ? label.slice(hash) : "";
 
-  const shown = entry.games.slice(0, GAMES_SHOWN);
-  const rest = entry.games.length - shown.length;
-
-  const meta = [
-    user.city,
-    t("players.followersCount", { count: entry.followers }),
-  ]
+  const blazon = [user.city, ...entry.games.map((game) => game.name)]
     .filter(Boolean)
     .join(" · ");
 
@@ -61,29 +57,20 @@ export function PlayerRow({ entry }: { entry: RegistryEntry }) {
             {name}
             {tag && <span className="player-row__tag">{tag}</span>}
           </span>
-          {entry.isLive && (
-            <span className="live-pill">
-              <span className="live-dot" />
-              {t("players.live")}
-            </span>
-          )}
         </p>
 
         <p className="player-row__meta">
-          {user.city && <PinIcon size={13} />}
-          {meta}
+          {t("players.followersCount", { count: entry.followers })}
         </p>
 
-        {entry.games.length > 0 && (
-          <div className="player-row__games">
-            {shown.map((game) => (
-              <span key={game._id} className="game-pill">
-                {game.name}
-              </span>
-            ))}
-            {rest > 0 && <span className="game-pill game-pill--more">+{rest}</span>}
-          </div>
+        {entry.isLive && (
+          <p className="cry cry--live">
+            <span className="live-dot" />
+            {t("players.live")}
+          </p>
         )}
+
+        {blazon && <p className="blazon">{blazon}</p>}
       </div>
 
       <span className="chevron">

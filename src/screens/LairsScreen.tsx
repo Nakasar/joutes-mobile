@@ -5,9 +5,12 @@ import { searchLairs } from "../api/lairs";
 import type { Lair } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
 import { LairCard } from "../components/LairCard";
-import { SearchIcon } from "../components/icons";
+import { Movement } from "../components/Movement";
+import { CaretIcon, SearchIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
+import { currentLocale } from "../i18n";
+import { readOpeningState } from "../lib/lair-hours";
 
 const PAGE_SIZE = 20;
 
@@ -81,12 +84,33 @@ export function LairsScreen() {
       });
   }, [search, gameId, page, retry, t]);
 
+  const selectedGame = (games.data ?? []).find((game) => game._id === gameId);
+
+  // Le partage ouvert / fermé ne vaut que si la liste sert réellement les
+  // horaires : sans eux, `readOpeningState` rend `null` pour tout le monde et
+  // la section « fermés » avalerait l'annuaire entier.
+  const split = lairs.some((lair) => (lair.options?.openingHours?.length ?? 0) > 0);
+  const isOpen = (lair: Lair) =>
+    readOpeningState(lair.options?.openingHours, currentLocale()).isOpen === true;
+  const openNow = split ? lairs.filter(isOpen) : [];
+  const shutNow = split ? lairs.filter((lair) => !isOpen(lair)) : [];
+
+  const card = (lair: Lair) => (
+    <LairCard
+      key={lair.id}
+      lair={lair}
+      gameNames={(lair.games ?? [])
+        .map((id) => gameName.get(id))
+        .filter((name): name is string => Boolean(name))}
+    />
+  );
+
   return (
     <div className="screen">
       <BackHeader title={t("lairs.title")} />
 
       <div className="search-field" style={{ marginBottom: 12 }}>
-        <SearchIcon size={18} />
+        <SearchIcon size={18} className="search-field__icon" />
         <input
           type="search"
           value={searchInput}
@@ -95,33 +119,67 @@ export function LairsScreen() {
         />
       </div>
 
-      <label className="field" style={{ marginBottom: 14 }}>
-        <span className="field__label">{t("lairs.filters.game")}</span>
-        <select
-          value={gameId}
-          onChange={(e) => {
-            setGameId(e.currentTarget.value);
-            setPage(1);
-          }}
-        >
-          <option value={ALL}>{t("lairs.filters.allGames")}</option>
-          {(games.data ?? []).map((game) => (
-            <option key={game._id} value={game._id}>
-              {game.name}
-            </option>
-          ))}
-        </select>
-      </label>
+      <div className="filter-wrap">
+        <div className="chip-row" style={{ marginBottom: 0 }}>
+          {/* Le sélecteur natif, invisible, posé sur la puce : le choix passe
+              par celui du système plutôt que par une liste à redessiner. */}
+          <span
+            className={`chip-filter chip-filter--select${gameId !== ALL ? " chip-filter--active" : ""}`}
+          >
+            {selectedGame?.name ?? t("lairs.filters.game")}
+            <CaretIcon size={13} />
+            <select
+              className="chip-filter__native"
+              value={gameId}
+              aria-label={t("lairs.filters.game")}
+              onChange={(e) => {
+                setGameId(e.currentTarget.value);
+                setPage(1);
+              }}
+            >
+              <option value={ALL}>{t("lairs.filters.allGames")}</option>
+              {(games.data ?? []).map((game) => (
+                <option key={game._id} value={game._id}>
+                  {game.name}
+                </option>
+              ))}
+            </select>
+          </span>
+        </div>
+      </div>
 
-      {lairs.map((lair) => (
-        <LairCard
-          key={lair.id}
-          lair={lair}
-          gameNames={(lair.games ?? [])
-            .map((id) => gameName.get(id))
-            .filter((name): name is string => Boolean(name))}
-        />
-      ))}
+      {/* L'annuaire s'ouvre sur ce qui est ouvert : dans une liste de
+          boutiques c'est la première question qu'on se pose, et elle se répond
+          sans filtre. Le partage n'a lieu que si les horaires sont servis —
+          sinon la liste reste d'un seul tenant plutôt que de ranger tout le
+          monde du côté « fermé ». */}
+      {split ? (
+        <>
+          {openNow.length > 0 && (
+            <>
+              <Movement
+                section
+                title={t("lairs.hours.openNow")}
+                aside={t("lairs.count", { count: openNow.length })}
+                asideTone="open"
+              />
+              {openNow.map(card)}
+            </>
+          )}
+          {shutNow.length > 0 && (
+            <>
+              <Movement
+                section
+                title={t("lairs.hours.shutNow")}
+                aside={t("lairs.count", { count: shutNow.length })}
+              />
+              {shutNow.map(card)}
+            </>
+          )}
+        </>
+      ) : (
+        lairs.map(card)
+      )}
 
       <StatusView
         loading={loading}

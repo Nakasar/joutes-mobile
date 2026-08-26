@@ -985,7 +985,9 @@
         "5": "Friday",
         "6": "Saturday",
         "7": "Sunday"
-      }
+      },
+      "openNow": "Open right now",
+      "shutNow": "Closed right now"
     },
     "about": {
       "amenities": "Amenities",
@@ -1004,7 +1006,9 @@
         "x": "X",
         "other": "Link"
       }
-    }
+    },
+    "count_one": "{{count}} place",
+    "count_other": "{{count}} places"
   },
   "players": {
     "title": "Players",

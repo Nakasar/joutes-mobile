@@ -53,12 +53,22 @@ export function AchievementRow({ achievement }: { achievement: AchievementWithUn
         <p className="list-row__title">{achievement.name}</p>
         <p className="list-row__sub">{subtitle}</p>
       </div>
-      {/* Un succès-statut vaut zéro point : afficher « 0 » le ferait passer pour
-          un succès sans valeur, alors qu'il en a une autre — il se porte à côté
-          du pseudonyme. */}
-      {unlocked && achievement.points ? (
-        <span className="chip achievement-row__points">
-          {t("profile.achievements.points", { count: achievement.points })}
+      {/* Les points se comptent en losanges plutôt qu'en chiffres : à ces
+          valeurs-là — un à cinq — on les lit sans les lire, et le losange est
+          déjà la marque de l'héraldique de Joutes. Décroché il est plein, à
+          décrocher il n'est qu'un contour.
+
+          Un succès-statut vaut zéro point : il n'a alors aucun losange, plutôt
+          qu'un « 0 » qui le ferait passer pour un succès sans valeur — il en a
+          une autre, et elle se porte à côté du pseudonyme. */}
+      {achievement.points ? (
+        <span
+          className={`lozenges${unlocked ? "" : " lozenges--empty"}`}
+          aria-label={t("profile.achievements.points", { count: achievement.points })}
+        >
+          {Array.from({ length: achievement.points }, (_, index) => (
+            <i key={index} />
+          ))}
         </span>
       ) : null}
     </div>

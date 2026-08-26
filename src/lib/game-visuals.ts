@@ -14,6 +14,26 @@ export function initialOf(name: string): string {
   return (name.trim()[0] ?? "?").toUpperCase();
 }
 
+/**
+ * Deux lettres pour un carré : « L'Antre-Temps » donne AT.
+ *
+ * Le carré d'un lieu est plus large qu'un rond de joueur et tient deux lettres
+ * sans se serrer — et deux lettres distinguent deux boutiques d'une même rue là
+ * où une seule initiale les confondrait. Un nom d'un seul mot retombe sur son
+ * initiale plutôt que d'aller chercher sa deuxième lettre, qui ne dit rien.
+ */
+export function initialsOf(name: string): string {
+  const words = name
+    .replace(/[^\p{L}\p{N}\s'-]/gu, " ")
+    .split(/[\s'-]+/)
+    .filter(Boolean);
+
+  if (words.length >= 2) {
+    return (initialOf(words[0]) + initialOf(words[1])).toUpperCase();
+  }
+  return initialOf(name);
+}
+
 /** Style de pastille avatar teintée (fond = couleur à faible opacité, texte = couleur). */
 export function tintStyle(color: string): { background: string; color: string } {
   return { background: `${color}1f`, color };

@@ -15,6 +15,7 @@ import { AchievementRow } from "../components/AchievementRow";
 import { CachedImage } from "../components/CachedImage";
 import { DeckCard } from "../components/DeckCard";
 import { FollowButton } from "../components/FollowButton";
+import { Movement } from "../components/Movement";
 import { Tabs } from "../components/Tabs";
 import {
   BackIcon,
@@ -272,7 +273,7 @@ export function UserProfileScreen() {
       case "decks":
         return (decks.data?.list.length ?? 0) > 0 ? (
           <section key={key}>
-            <p className="section-label">{t("profile.decksTitle")}</p>
+            <Movement section title={t("profile.decksTitle")} />
             {/* La vitrine met un deck en avant — celui-là occupe déjà la
                 hauteur d'une illustration ; l'onglet dédié les montre tous. */}
             {(current === "decks"
@@ -285,7 +286,7 @@ export function UserProfileScreen() {
       case "publications":
         return (contents.data?.length ?? 0) > 0 ? (
           <section key={key}>
-            <p className="section-label">{t("profile.publications.title")}</p>
+            <Movement section title={t("profile.publications.title")} />
             {contents.data?.map((content) => (
               <UserContentCard key={content.id} content={content} userTag={userTag} />
             ))}
@@ -295,15 +296,18 @@ export function UserProfileScreen() {
       case "achievements":
         return unlocked.length > 0 ? (
           <section key={key}>
-            <p className="section-label">
-              {t("profile.achievements.title")}
-              {achievements.data
-                ? ` · ${t("profile.achievements.progress", {
-                    unlocked: achievements.data.unlocked,
-                    total: achievements.data.total,
-                  })}`
-                : ""}
-            </p>
+            <Movement
+              section
+              title={t("profile.achievements.title")}
+              aside={
+                achievements.data
+                  ? t("profile.achievements.progress", {
+                      unlocked: achievements.data.unlocked,
+                      total: achievements.data.total,
+                    })
+                  : undefined
+              }
+            />
             {/* L'onglet dédié montre le catalogue entier, celui qui reste à
                 atteindre compris ; la vitrine s'en tient aux trois derniers. */}
             {(current === "achievements"
@@ -318,7 +322,7 @@ export function UserProfileScreen() {
       case "follows":
         return isPublic && (user?.games.length || user?.lairs.length) ? (
           <section key={key}>
-            <p className="section-label">{t("profile.gamesTitle")}</p>
+            <Movement section title={t("profile.gamesTitle")} />
             {user.games.length === 0 ? (
               <p className="muted">{t("profile.gamesEmpty")}</p>
             ) : (
@@ -333,7 +337,7 @@ export function UserProfileScreen() {
                 </div>
               ))
             )}
-            <p className="section-label">{t("profile.lairsTitle")}</p>
+            <Movement section title={t("profile.lairsTitle")} />
             {user.lairs.length === 0 ? (
               <p className="muted">{t("profile.lairsEmpty")}</p>
             ) : (
@@ -357,7 +361,7 @@ export function UserProfileScreen() {
           <section key={key}>
             {(wishlists.data?.length ?? 0) > 0 && (
               <>
-                <p className="section-label">{t("profile.wishlistsTitle")}</p>
+                <Movement section title={t("profile.wishlistsTitle")} />
                 {wishlists.data?.map((wishlist) => (
                   <WishlistRow key={wishlist.id} wishlist={wishlist} />
                 ))}
@@ -365,7 +369,7 @@ export function UserProfileScreen() {
             )}
             {(sellListItems.data?.items?.length ?? 0) > 0 && (
               <>
-                <p className="section-label">{t("profile.sellListTitle")}</p>
+                <Movement section title={t("profile.sellListTitle")} />
                 {sellListItems.data?.items.map((item) => (
                   <SellListItemRow
                     key={item.id}
