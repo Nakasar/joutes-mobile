@@ -1,0 +1,217 @@
+<style>
+.tabs {
+  display: flex; gap: 20px; margin: 14px -16px 0; padding: 0 16px;
+  border-top: 1px solid var(--or-faint); border-bottom: 1px solid var(--or-faint); overflow-x: auto;
+}
+.tabs::-webkit-scrollbar { height: 0; }
+.tab { position: relative; flex: none; min-height: 46px; color: var(--muted); }
+.tab--on { color: var(--or-text); font-weight: 600; }
+.tab--on::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--or); }
+
+.legal {
+  display: flex; align-items: center; gap: 9px; margin-top: 14px; padding: 11px 13px;
+  border: 1px solid var(--or); border-radius: 2px;
+  background: linear-gradient(90deg, color-mix(in oklab, var(--or) 14%, transparent), transparent);
+}
+
+.line { display: grid; grid-template-columns: 34px minmax(0, 1fr) 26px 54px; align-items: center; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--or-faint); }
+.line__n { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: 13px; color: var(--or-text); font-variant-numeric: tabular-nums; }
+.line__name { font-family: Cinzel, Georgia, serif; font-size: 15px; font-weight: 600; line-height: 1.2; }
+.line__cost {
+  width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; box-shadow: 0 0 0 1px var(--or-line);
+  font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: 11px; color: var(--or-text);
+}
+.line__price { text-align: right; font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: 12px; color: var(--muted); }
+
+/*
+ * La courbe de coûts, en colonnes — même anatomie que `DeckCostCurve` dans
+ * l'app : le compte au-dessus (rien quand la colonne est vide), la barre en
+ * part du plus haut pilier, l'étiquette dessous. Une courbe se lit à sa forme,
+ * pas à ses nombres : la barre garde donc un plancher visible pour qu'une
+ * colonne vide reste distincte d'une colonne absente.
+ */
+.curve { display: flex; align-items: flex-end; gap: 6px; height: 168px; padding-top: 6px; }
+.curve__col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; height: 100%; justify-content: flex-end; }
+.curve__count { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: 10px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.curve__bar { width: 100%; min-height: 2px; background: var(--or); border-radius: 4px 4px 0 0; }
+.curve__label { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: 10px; color: var(--muted); padding-top: 3px; border-top: 1px solid var(--or-faint); width: 100%; text-align: center; }
+
+.tally { display: flex; gap: 24px; padding: 16px 0; border-bottom: 1px solid var(--or-faint); }
+.tally b { display: block; font-family: Cinzel, Georgia, serif; font-size: 23px; font-weight: 700; color: var(--or-text); }
+
+.footbar {
+  flex: none; display: flex; gap: 8px; padding: 10px 16px 16px;
+  border-top: 1px solid var(--or-line); background: var(--bg-2);
+}
+.footbar .cta { margin-top: 0; }
+</style>
+<div class="app" data-theme="{{theme}}">
+  <div class="scroll">
+    <div class="head">
+      <div style="display: flex; align-items: flex-start; gap: 12px; min-width: 0">
+        <button class="iconbtn" aria-label="Retour">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5-7 7 7 7"></path></svg>
+        </button>
+        <div style="min-width: 0">
+          <p class="eyebrow mono" style="margin: 0">Riftbound · Constructé</p>
+          <h1 class="title" style="font-size: 23px">Gardiens de la Faille</h1>
+        </div>
+      </div>
+      <div class="head-actions">
+        <button class="iconbtn" aria-label="Modifier">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"></path></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="legal">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--or)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex: none" aria-hidden="true"><path d="m4 12 5 5L20 6"></path></svg>
+      <span style="font-size: 13px">Deck légal en Constructé · 40 cartes, 3 légendes</span>
+    </div>
+
+    <nav class="tabs">
+      <sc-for list="{{tabs}}" as="tab" hint-placeholder-count="3">
+        <button class="{{tab.cls}}" onClick="{{tab.pick}}"><span class="mono">{{tab.label}}</span></button>
+      </sc-for>
+    </nav>
+
+    <sc-if value="{{isList}}" hint-placeholder-val="{{ true }}">
+      <div class="movement">
+        <h2>Unités</h2>
+        <span class="rule"></span>
+        <span class="aside mono">22 cartes</span>
+      </div>
+
+      <div class="line"><span class="line__n">×4</span><span class="line__name">Garde de la Faille</span><span class="line__cost">3</span><span class="line__price">1,80 €</span></div>
+      <div class="line"><span class="line__n">×4</span><span class="line__name">Éclaireuse de Piltover</span><span class="line__cost">2</span><span class="line__price">0,45 €</span></div>
+      <div class="line"><span class="line__n">×3</span><span class="line__name">Veilleur du Rempart</span><span class="line__cost">4</span><span class="line__price">2,10 €</span></div>
+      <div class="line"><span class="line__n">×2</span><span class="line__name">Sentinelle du Vide</span><span class="line__cost">6</span><span class="line__price">28,90 €</span></div>
+
+      <div class="movement">
+        <h2>Sorts</h2>
+        <span class="rule"></span>
+        <span class="aside mono">12 cartes</span>
+      </div>
+
+      <div class="line"><span class="line__n">×4</span><span class="line__name">Serment du Guet</span><span class="line__cost">1</span><span class="line__price">0,15 €</span></div>
+      <div class="line"><span class="line__n">×4</span><span class="line__name">Volée de Carreaux</span><span class="line__cost">2</span><span class="line__price">0,10 €</span></div>
+      <div class="line"><span class="line__n">×4</span><span class="line__name">Rappel de la Faille</span><span class="line__cost">3</span><span class="line__price">0,80 €</span></div>
+
+      <div class="movement">
+        <h2>Terrains</h2>
+        <span class="rule"></span>
+        <span class="aside mono">6 cartes</span>
+      </div>
+
+      <div class="line"><span class="line__n">×3</span><span class="line__name">Brèche d&#39;Ionia</span><span class="line__cost">5</span><span class="line__price">12,40 €</span></div>
+      <div class="line"><span class="line__n">×3</span><span class="line__name">Passage de Zaun</span><span class="line__cost">4</span><span class="line__price">3,20 €</span></div>
+    </sc-if>
+
+    <sc-if value="{{isCurve}}" hint-placeholder-val="{{ false }}">
+      <div class="movement">
+        <h2>Courbe de coûts</h2>
+        <span class="rule"></span>
+        <span class="aside mono">40 cartes</span>
+      </div>
+
+      <div class="curve">
+        <sc-for list="{{buckets}}" as="b" hint-placeholder-count="8">
+          <span class="curve__col">
+            <span class="curve__count">{{b.count}}</span>
+            <span class="curve__bar" style="height: {{b.height}}"></span>
+            <span class="curve__label">{{b.label}}</span>
+          </span>
+        </sc-for>
+      </div>
+
+      <div class="tally">
+        <span class="mono" style="color: var(--muted)"><b>2,8</b>coût moyen</span>
+        <span class="mono" style="color: var(--muted)"><b>40</b>cartes</span>
+        <span class="mono" style="color: var(--muted)"><b>92 €</b>valeur</span>
+      </div>
+
+      <div class="movement">
+        <h2>Répartition</h2>
+        <span class="rule"></span>
+      </div>
+
+      <div class="line" style="grid-template-columns: minmax(0, 1fr) auto"><span class="line__name">Unités</span><span class="line__price">22 · 55 %</span></div>
+      <div class="line" style="grid-template-columns: minmax(0, 1fr) auto"><span class="line__name">Sorts</span><span class="line__price">12 · 30 %</span></div>
+      <div class="line" style="grid-template-columns: minmax(0, 1fr) auto"><span class="line__name">Terrains</span><span class="line__price">6 · 15 %</span></div>
+    </sc-if>
+
+    <sc-if value="{{isNotes}}" hint-placeholder-val="{{ false }}">
+      <div class="movement">
+        <h2>Notes</h2>
+        <span class="rule"></span>
+        <span class="aside mono">Privées</span>
+      </div>
+
+      <p style="margin: 0; font-size: 13.5px; line-height: 1.65; text-wrap: pretty; color: var(--muted)">
+        Contre les decks rapides, garder Serment du Guet en ouverture plutôt que Volée de Carreaux : c&#39;est la seule réponse au tour 1 qui ne coûte pas le développement.
+      </p>
+      <p style="margin: 14px 0 0; font-size: 13.5px; line-height: 1.65; text-wrap: pretty; color: var(--muted)">
+        La troisième Sentinelle du Vide reste en réserve — trop chère à six pour une courbe qui vise le tour 4.
+      </p>
+
+      <div class="movement">
+        <h2>Réserve</h2>
+        <span class="rule"></span>
+        <span class="aside mono">5 cartes</span>
+      </div>
+
+      <div class="line"><span class="line__n">×2</span><span class="line__name">Bannière de Demacia</span><span class="line__cost">3</span><span class="line__price">4,60 €</span></div>
+      <div class="line"><span class="line__n">×3</span><span class="line__name">Contre-Ordre</span><span class="line__cost">2</span><span class="line__price">1,05 €</span></div>
+    </sc-if>
+  </div>
+
+  <div class="footbar">
+    <button class="cta">
+      <span class="mono" style="letter-spacing: .16em; font-weight: 600">Vérifier la légalité</span>
+    </button>
+    <button class="cta cta--ghost" style="flex: none; width: 56px" aria-label="Exporter en texte">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"></path></svg>
+    </button>
+  </div>
+</div>
+
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["Sombre","Clair"],"default":"Sombre"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tab: "list" };
+  }
+
+  renderVals() {
+    const tabs = [
+      { key: "list", label: "La liste" },
+      { key: "curve", label: "Courbe" },
+      { key: "notes", label: "Notes" },
+    ].map((tab) => ({
+      label: tab.label,
+      cls: this.state.tab === tab.key ? "tab tab--on" : "tab",
+      pick: () => this.setState({ tab: tab.key }),
+    }));
+
+    // La hauteur est une part du plus haut pilier, pas un nombre absolu : une
+    // courbe se lit à sa forme. Le compte disparaît quand la colonne est vide.
+    const counts = [0, 4, 8, 11, 7, 5, 3, 2];
+    const tallest = Math.max(...counts);
+    const buckets = counts.map((count, cost) => ({
+      label: cost === 7 ? "7+" : String(cost),
+      count: count === 0 ? "" : String(count),
+      height: `${Math.round((count / tallest) * 100)}%`,
+    }));
+
+    return {
+      theme: (this.props.theme ?? "Sombre").toLowerCase(),
+      tabs,
+      buckets,
+      isList: this.state.tab === "list",
+      isCurve: this.state.tab === "curve",
+      isNotes: this.state.tab === "notes",
+    };
+  }
+}
+</script>
