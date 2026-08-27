@@ -1,0 +1,539 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    a { color: #2bb7dc; text-decoration: none; }
+    a:hover { color: #e0bd63; }
+    button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+
+    .app {
+      --or: #e0bd63;
+      --or-text: #e0bd63;
+      --or-line: rgba(224, 189, 99, .34);
+      --or-faint: rgba(224, 189, 99, .16);
+      --bg: #06121a;
+      --bg-2: #081a24;
+      --surface: #0c1f2b;
+      --surface-2: #102836;
+      --text: #e8f3f7;
+      --muted: #7fa0ae;
+      --primary: #2bb7dc;
+      --accent: #22c9ad;
+      --danger: #f14d4c;
+      --border: rgba(255, 255, 255, .09);
+      width: 390px;
+      height: 844px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app[data-theme="clair"] {
+      --or: #e8b969;
+      --or-text: #93712f;
+      --or-line: rgba(232, 185, 105, .48);
+      --or-faint: rgba(232, 185, 105, .26);
+      --bg: #f3f6f8;
+      --bg-2: #eaeff2;
+      --surface: #ffffff;
+      --surface-2: #f7fafb;
+      --text: #08222f;
+      --muted: #587483;
+      --primary: #0079b6;
+      --accent: #00a692;
+      --danger: #e40014;
+      --border: rgba(8, 34, 47, .10);
+    }
+
+    .scroll { flex: 1; overflow-y: auto; padding: 16px 16px 24px; }
+    .scroll::-webkit-scrollbar { width: 0; }
+
+    .mono {
+      font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+      font-size: 10px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow { display: flex; align-items: center; gap: 8px; color: var(--or-text); }
+    .mark {
+      width: 26px; height: 26px; flex: none; border-radius: 2px;
+      box-shadow: 0 0 0 1px var(--or-line);
+      background: linear-gradient(160deg, #2bb7dc, #12525f);
+      display: flex; align-items: center; justify-content: center;
+      font-family: Cinzel, Georgia, serif; font-weight: 700; font-size: 13px; color: #04121b;
+    }
+
+    .title {
+      margin: 6px 0 0;
+      font-family: Cinzel, Georgia, "Times New Roman", serif;
+      font-weight: 700; font-size: 27px; line-height: 1.12; letter-spacing: .012em;
+    }
+
+    .head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .head-actions { display: flex; gap: 8px; flex: none; }
+    .iconbtn {
+      width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+      border: 1px solid var(--or-faint); border-radius: 2px; color: var(--text);
+    }
+    .iconbtn:hover { border-color: var(--or-line); color: var(--or-text); }
+
+    .movement { display: flex; align-items: center; gap: 10px; padding: 22px 0 10px; }
+    .movement h2 {
+      margin: 0; white-space: nowrap;
+      font-family: Cinzel, Georgia, serif; font-weight: 600; font-size: 19px; letter-spacing: .02em;
+    }
+    .rule { flex: 1; height: 1px; background: linear-gradient(90deg, var(--or-line), transparent); }
+    .aside { color: var(--muted); white-space: nowrap; }
+
+    .chiprow { display: flex; gap: 8px; overflow-x: auto; padding-top: 14px; }
+    .chiprow::-webkit-scrollbar { height: 0; }
+    .chip {
+      flex: none; min-height: 34px; display: inline-flex; align-items: center;
+      padding: 0 12px; border: 1px solid var(--or-faint); border-radius: 2px;
+      color: var(--muted); white-space: nowrap;
+    }
+    .chip--on { border-color: var(--or); background: var(--or); color: #17130c; font-weight: 600; }
+
+    .seme {
+      background-color: var(--surface-2);
+      background-image:
+        radial-gradient(circle at 25% 30%, color-mix(in oklab, var(--primary) 40%, transparent) 0 5px, transparent 6px),
+        radial-gradient(circle at 75% 80%, color-mix(in oklab, var(--primary) 40%, transparent) 0 5px, transparent 6px),
+        linear-gradient(148deg, color-mix(in oklab, var(--primary) 34%, transparent), transparent 62%);
+      background-size: 54px 54px, 54px 54px, 100% 100%;
+    }
+
+    .corner { position: absolute; width: 14px; height: 14px; border: 1px solid var(--or); opacity: .55; }
+
+    .plate {
+      position: relative; display: block; overflow: hidden;
+      height: 196px; margin-top: 16px; border: 1px solid var(--or-faint); border-radius: 2px;
+    }
+    .plate__wash {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(3, 12, 18, .95) 14%, rgba(3, 12, 18, .35) 58%, rgba(3, 12, 18, .05));
+    }
+    .plate__body { position: absolute; inset: auto 0 0 0; padding: 0 14px 14px; }
+    .plate__title {
+      margin: 8px 0 5px; color: #fff;
+      font-family: Cinzel, Georgia, serif; font-weight: 600; font-size: 21px; line-height: 1.16;
+      text-wrap: pretty;
+    }
+    .plate__meta { margin: 0; color: rgba(255, 255, 255, .72); }
+
+    .filet { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--or-faint); }
+    .filet__body { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 4px; }
+    .filet__title {
+      margin: 0; font-family: Cinzel, Georgia, serif; font-weight: 600; font-size: 16px; line-height: 1.2;
+      text-wrap: pretty;
+    }
+    .filet__meta { margin: 0; color: var(--muted); font-size: 12.5px; }
+    .filet__num {
+      flex: none; align-self: center; text-align: right;
+      font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: 15px; color: var(--or-text);
+    }
+
+    .sigil {
+      flex: none; width: 62px; height: 62px; border-radius: 2px; overflow: hidden;
+      box-shadow: 0 0 0 1px var(--or-line);
+      display: flex; align-items: center; justify-content: center;
+      font-family: Cinzel, Georgia, serif; font-weight: 700; font-size: 20px; color: #04121b;
+    }
+
+    .bar { display: block; height: 3px; background: var(--or-faint); border-radius: 0; overflow: hidden; }
+    .bar > i { display: block; height: 100%; background: var(--or); }
+
+    .value {
+      margin-top: 14px; padding: 16px 14px; border: 1px solid var(--or-line); border-radius: 2px;
+      background: linear-gradient(90deg, color-mix(in oklab, var(--or) 10%, transparent), transparent);
+    }
+    .value__n { font-family: Cinzel, Georgia, serif; font-size: 32px; font-weight: 700; letter-spacing: .01em; }
+
+    .cta {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; min-height: 50px; margin-top: 16px;
+      border: 1px solid var(--or); background: var(--or); color: #17130c;
+      border-radius: 2px; font-weight: 600;
+    }
+    .cta--ghost { background: none; color: var(--or-text); border-color: var(--or-line); }
+
+    .livedot { width: 6px; height: 6px; border-radius: 50%; background: var(--danger); flex: none; }
+
+    .tabbar {
+      display: flex; flex: none;
+      border-top: 1px solid var(--or-line); background: var(--bg-2);
+      padding: 0 4px 14px;
+    }
+    .tabitem {
+      position: relative; flex: 1; min-height: 58px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+      padding-top: 8px; color: var(--muted);
+    }
+    .tabitem--on { color: var(--or-text); }
+    .tabitem--on::before {
+      content: ""; position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+      width: 26px; height: 2px; background: var(--or);
+    }
+    .tabitem b { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 400; letter-spacing: .1em; text-transform: uppercase; }
+    .tabitem--on b { font-weight: 600; }
+
+    /*
+     * ---- Trois sceaux, trois natures ----
+     *
+     * La forme se lit avant la couleur, et bien avant le nom : elle dit donc ce
+     * qu'on regarde, et rien d'autre.
+     *
+     *   BLASON  un groupe de jeu — `.escu`, l'héraldique du rôle d'armes ;
+     *   CARRÉ   un lieu, un jeu — `.sigil`, une enseigne, quelque chose qui a
+     *           pignon sur rue ;
+     *   ROND    un joueur — `.avatar`, une personne.
+     *
+     * Le liseré d'or est commun aux trois : c'est lui qui en fait une famille
+     * plutôt que trois vignettes sans rapport.
+     */
+    .avatar {
+      flex: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 0 0 1px var(--or-line);
+      font-family: Cinzel, Georgia, serif;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .bleed { margin: -16px -16px 0; }
+    .banner { position: relative; height: 190px; overflow: hidden; }
+    .banner__wash {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(3, 12, 18, .95) 12%, rgba(3, 12, 18, .40) 58%, rgba(3, 12, 18, .12));
+    }
+    .banner__back {
+      position: absolute; top: 14px; left: 14px; z-index: 2;
+      width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+      border: 1px solid var(--or-line); border-radius: 2px; background: rgba(0, 0, 0, .5); color: #fff;
+    }
+    .banner__body { position: absolute; inset: auto 0 0 0; display: flex; align-items: flex-end; gap: 13px; padding: 0 16px 14px; }
+    .banner__name {
+      margin: 0; color: #fff;
+      font-family: Cinzel, Georgia, serif; font-weight: 700; font-size: 24px; line-height: 1.12;
+    }
+
+    /* L'écu du groupe : une forme découpée, pas une image — juste à toutes les
+       tailles, et teintée par l'accent du groupe. Le liseré d'or est un second écu
+       d'un pixel plus grand posé dessous ; un `border` suivrait le rectangle. */
+    .escu { display: block; position: relative; flex: none; width: 62px; height: 73px; }
+    .escu::before,
+    .escu__field { clip-path: polygon(0 0, 100% 0, 100% 58%, 50% 100%, 0 58%); }
+    .escu::before { content: ""; position: absolute; inset: -1px; background: var(--or); }
+    .escu__field {
+      position: absolute; inset: 0; overflow: hidden;
+      display: flex; align-items: flex-start; justify-content: center; padding-top: 22%;
+      background: linear-gradient(165deg, color-mix(in oklab, var(--primary) 88%, white 12%), color-mix(in oklab, var(--primary) 60%, black 40%));
+      font-family: Cinzel, Georgia, serif; font-weight: 700; font-size: 18px; letter-spacing: .04em; color: rgba(0, 0, 0, .8);
+    }
+    .escu__live {
+      position: absolute; left: -6px; right: -6px; top: 47%; z-index: 1; padding: 3px 0;
+      background: var(--danger); color: #fff; text-align: center;
+      font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+      font-size: 9px; font-weight: 600; line-height: 1; letter-spacing: .14em; text-transform: uppercase;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, .45);
+    }
+    .escu--sm { width: 30px; height: 35px; }
+    .escu--sm .escu__field { font-size: 10px; }
+
+    .actions { display: flex; gap: 8px; padding: 12px 0 0; }
+    .act {
+      flex: 1; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+      border: 1px solid var(--or-line); border-radius: 2px; color: var(--or-text);
+    }
+    .act--on { background: var(--or); border-color: var(--or); color: #17130c; font-weight: 600; }
+    .tabs {
+      display: flex; gap: 18px; margin: 14px -16px 0; padding: 0 16px;
+      border-top: 1px solid var(--or-faint); border-bottom: 1px solid var(--or-faint); overflow-x: auto;
+    }
+    .tabs::-webkit-scrollbar { height: 0; }
+    .tab { position: relative; flex: none; min-height: 46px; color: var(--muted); }
+    .tab--on { color: var(--or-text); font-weight: 600; }
+    .tab--on::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--or); }
+
+    .screen-live { position: relative; display: block; margin-top: 16px; aspect-ratio: 16 / 9; border: 1px solid var(--or-faint); overflow: hidden; }
+    .screen-live__play {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 52px; height: 52px; border-radius: 50%; border: 1px solid var(--or);
+      background: rgba(0, 0, 0, .45); color: var(--or);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .oriflamme {
+      position: absolute; top: 10px; left: 10px; display: inline-flex; align-items: center; gap: 7px;
+      padding: 4px 9px; background: var(--danger); color: #fff;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+    }
+    .stats { display: flex; gap: 26px; padding: 14px 0; border-bottom: 1px solid var(--or-faint); }
+    .stats b { display: block; font-family: Cinzel, Georgia, serif; font-size: 21px; font-weight: 700; }
+    .palmares { display: flex; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--or-faint); align-items: center; }
+    .rank {
+      flex: none; width: 34px; height: 40px; display: flex; align-items: flex-start; justify-content: center; padding-top: 5px;
+      clip-path: polygon(0 0, 100% 0, 100% 58%, 50% 100%, 0 58%);
+      background: var(--or-faint); color: var(--or-text);
+      font-family: Cinzel, Georgia, serif; font-weight: 700; font-size: 15px;
+    }
+  </style>
+</helmet>
+
+<div class="app" data-theme="{{theme}}" style="--primary: {{accent}}">
+  <div class="scroll">
+    <div class="bleed">
+      <div class="banner seme">
+        <span class="banner__wash"></span>
+        <button class="banner__back" aria-label="Retour">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5-7 7 7 7"></path></svg>
+        </button>
+        <span class="corner" style="top: 8px; right: 8px; border-left: 0; border-bottom: 0"></span>
+        <span class="corner" style="bottom: 8px; right: 8px; border-left: 0; border-top: 0"></span>
+
+        <div class="banner__body">
+          <span class="escu">
+            <span class="escu__field">LB</span>
+            <span class="escu__live">Direct</span>
+          </span>
+          <div style="min-width: 0; flex: 1">
+            <h1 class="banner__name">Les Bannerets</h1>
+            <p style="margin: 6px 0 0; color: rgba(255, 255, 255, .8); font-size: 13px; font-style: italic; text-wrap: pretty">
+              On drafte le mardi, on commande le vendredi.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="{{followCls}}" onClick="{{toggleFollow}}">
+        <span class="mono" style="font-weight: inherit">{{followLabel}}</span>
+      </button>
+      <button class="act">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v12H7l-3 3z"></path></svg>
+        <span class="mono">Discord</span>
+      </button>
+    </div>
+
+    <nav class="tabs">
+      <sc-for list="{{tabs}}" as="tab" hint-placeholder-count="4">
+        <button class="{{tab.cls}}" onClick="{{tab.pick}}"><span class="mono">{{tab.label}}</span></button>
+      </sc-for>
+    </nav>
+
+    <sc-if value="{{isVitrine}}" hint-placeholder-val="{{ true }}">
+      <div class="stats">
+        <span class="mono" style="color: var(--muted)"><b style="color: var(--text)">14</b> membres</span>
+        <span class="mono" style="color: var(--muted)"><b style="color: var(--text)">212</b> abonnés</span>
+        <span class="mono" style="color: var(--muted)"><b style="color: var(--text)">38</b> publications</span>
+      </div>
+
+      <div class="movement">
+        <h2>En lice</h2>
+        <span class="rule"></span>
+        <span class="aside mono">1 direct</span>
+      </div>
+
+      <a class="screen-live seme" href="#">
+        <span class="oriflamme mono" style="font-weight: 600">
+          <i class="livedot" style="background: #fff"></i> En direct
+        </span>
+        <span class="screen-live__play">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"></path></svg>
+        </span>
+        <span style="position: absolute; inset: auto 0 0 0; padding: 26px 12px 11px; background: linear-gradient(to top, rgba(0, 0, 0, .92), transparent)">
+          <span style="display: block; color: #fff; font-family: Cinzel, Georgia, serif; font-size: 15px; font-weight: 600">Marion — draft Origins à quatre</span>
+          <span class="mono" style="display: block; margin-top: 4px; color: rgba(255, 255, 255, .7)">Twitch · Riftbound · depuis 1 h</span>
+        </span>
+      </a>
+
+      <div class="movement">
+        <h2>Le rythme</h2>
+        <span class="rule"></span>
+      </div>
+
+      <p style="display: flex; align-items: center; gap: 10px; margin: 0; font-size: 13.5px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--or)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>
+        Tous les mardis, 19 h 30
+      </p>
+      <p style="display: flex; align-items: center; gap: 10px; margin: 9px 0 0; font-size: 13.5px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--or)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        Le Repaire du Dragon, Nantes
+      </p>
+
+      <div class="movement">
+        <h2>Les jeux</h2>
+        <span class="rule"></span>
+        <span class="aside mono">3 jeux</span>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 8px">
+        <span class="chip mono">Riftbound</span>
+        <span class="chip mono">Magic</span>
+        <span class="chip mono">Lorcana</span>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isPublications}}" hint-placeholder-val="{{ false }}">
+      <div class="movement">
+        <h2>Les hérauts</h2>
+        <span class="rule"></span>
+        <span class="aside mono">38 pièces</span>
+      </div>
+
+      <a class="filet" href="#">
+        <span class="sigil seme" style="width: 74px; height: 56px"></span>
+        <span class="filet__body">
+          <span class="mono" style="color: var(--or-text)">Article</span>
+          <span class="filet__title">Comment nous draftons Origins</span>
+          <span class="filet__meta">Marion · il y a 3 jours</span>
+        </span>
+      </a>
+
+      <a class="filet" href="#">
+        <span class="sigil seme" style="width: 74px; height: 56px"></span>
+        <span class="filet__body">
+          <span class="mono" style="color: var(--or-text)">Replay · 42 min</span>
+          <span class="filet__title">Finale de la ligue d&#39;été, tour par tour</span>
+          <span class="filet__meta">Sam · il y a 1 semaine</span>
+        </span>
+      </a>
+
+      <a class="filet" href="#">
+        <span class="sigil seme" style="width: 74px; height: 56px"></span>
+        <span class="filet__body">
+          <span class="mono" style="color: var(--or-text)">Vidéo · 8 min</span>
+          <span class="filet__title">Trois erreurs de séquençage qu&#39;on fait tous</span>
+          <span class="filet__meta">Théo · il y a 2 semaines</span>
+        </span>
+      </a>
+    </sc-if>
+
+    <sc-if value="{{isPalmares}}" hint-placeholder-val="{{ false }}">
+      <div class="movement">
+        <h2>Palmarès</h2>
+        <span class="rule"></span>
+        <span class="aside mono">Saison 2026</span>
+      </div>
+
+      <div class="palmares">
+        <span class="rank">I</span>
+        <span class="filet__body">
+          <span class="filet__title" style="font-size: 15px">Marion Delcourt</span>
+          <span class="filet__meta">Régionale Riftbound · Nantes</span>
+        </span>
+        <span class="filet__num">1<sup>re</sup></span>
+      </div>
+
+      <div class="palmares">
+        <span class="rank">II</span>
+        <span class="filet__body">
+          <span class="filet__title" style="font-size: 15px">Sam Ferreira</span>
+          <span class="filet__meta">Ligue d&#39;été du Repaire</span>
+        </span>
+        <span class="filet__num">2<sup>e</sup></span>
+      </div>
+
+      <div class="palmares">
+        <span class="rank">III</span>
+        <span class="filet__body">
+          <span class="filet__title" style="font-size: 15px">Kévin Thizy</span>
+          <span class="filet__meta">Modern hebdomadaire</span>
+        </span>
+        <span class="filet__num">3<sup>e</sup></span>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isMembres}}" hint-placeholder-val="{{ false }}">
+      <div class="movement">
+        <h2>Les membres</h2>
+        <span class="rule"></span>
+        <span class="aside mono">14 inscrits</span>
+      </div>
+
+      <a class="filet" href="#" style="align-items: center">
+        <span class="avatar" style="width: 46px; height: 46px; background: linear-gradient(160deg, #2bb7dc, #123f52); color: #04121b">MD</span>
+        <span class="filet__body">
+          <span class="filet__title" style="font-size: 15px">Marion Delcourt</span>
+          <span class="mono" style="color: var(--or-text)">Propriétaire</span>
+        </span>
+        <span class="livedot"></span>
+      </a>
+
+      <a class="filet" href="#" style="align-items: center">
+        <span class="avatar" style="width: 46px; height: 46px; background: linear-gradient(160deg, #c88b3a, #5c3a12); color: #17130c">SF</span>
+        <span class="filet__body">
+          <span class="filet__title" style="font-size: 15px">Sam Ferreira</span>
+          <span class="mono" style="color: var(--muted)">Responsable</span>
+        </span>
+      </a>
+
+      <a class="filet" href="#" style="align-items: center">
+        <span class="avatar" style="width: 46px; height: 46px; background: linear-gradient(160deg, #8b6bd4, #2c1c52); color: #fff">KT</span>
+        <span class="filet__body">
+          <span class="filet__title" style="font-size: 15px">Kévin Thizy</span>
+          <span class="mono" style="color: var(--muted)">Membre</span>
+        </span>
+      </a>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["Sombre","Clair"],"default":"Sombre"},"accent":{"editor":"color","options":["#7a4fd0","#c0432f","#2bb7dc","#2f9e6b"],"default":"#7a4fd0"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tab: "vitrine", following: true };
+  }
+
+  renderVals() {
+    const tabs = [
+      { key: "vitrine", label: "Vitrine" },
+      { key: "publications", label: "Publications" },
+      { key: "palmares", label: "Palmarès" },
+      { key: "membres", label: "Membres" },
+    ].map((tab) => ({
+      label: tab.label,
+      cls: this.state.tab === tab.key ? "tab tab--on" : "tab",
+      pick: () => this.setState({ tab: tab.key }),
+    }));
+
+    return {
+      theme: (this.props.theme ?? "Sombre").toLowerCase(),
+      accent: this.props.accent ?? "#7a4fd0",
+      tabs,
+      isVitrine: this.state.tab === "vitrine",
+      isPublications: this.state.tab === "publications",
+      isPalmares: this.state.tab === "palmares",
+      isMembres: this.state.tab === "membres",
+      followCls: this.state.following ? "act act--on" : "act",
+      followLabel: this.state.following ? "Suivi" : "Suivre le groupe",
+      toggleFollow: () => this.setState({ following: !this.state.following }),
+    };
+  }
+}
+</script>
+</body>
+</html>
