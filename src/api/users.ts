@@ -44,11 +44,35 @@ export function getUserSellList(
   );
 }
 
-/** Jeux suivis par l'utilisateur connecté (session requise). */
+/** Ce que `GET /users/me/games` rend : les suivis, de quoi les afficher, les favoris. */
+export interface MyGames {
+  gameIds: string[];
+  games: { id: string; name: string; slug: string | null; icon?: string }[];
+  favoriteGameIds: string[];
+}
+
+/**
+ * Les jeux suivis par le compte connecté (session requise).
+ *
+ * `withCache` sous une clé fixe : la liste ne change que par le bouton
+ * « Suivre », qui la purge. Chaque écran qui pose la question — l'accueil, les
+ * événements, la fiche d'un lieu — la relirait sinon à chaque ouverture.
+ */
+export const MY_GAMES_CACHE_KEY = "users:me:games";
+
+export function getMyGames(): Promise<MyGames> {
+  return withCache(MY_GAMES_CACHE_KEY, () =>
+    api.get<MyGames>(endpoints.users.myGames).then((r) => ({
+      gameIds: r.gameIds ?? [],
+      games: r.games ?? [],
+      favoriteGameIds: r.favoriteGameIds ?? [],
+    })),
+  );
+}
+
+/** Les identifiants seuls, pour qui n'a besoin que d'eux. */
 export function getMyFollowedGameIds(): Promise<string[]> {
-  return api
-    .get<{ gameIds: string[] }>(endpoints.users.myGames)
-    .then((r) => r.gameIds ?? []);
+  return getMyGames().then((r) => r.gameIds);
 }
 
 /** Permissions effectives du compte connecté (session requise). */

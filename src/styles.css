@@ -7800,3 +7800,59 @@ html.qr-scanning #root {
   width: 36px;
   height: 50px;
 }
+
+/* ---- « Où êtes-vous ? » ---- */
+
+.place-pill {
+  gap: 5px;
+}
+
+.place-results {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.place-results__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 12px;
+  border: 0;
+  border-bottom: 1px solid var(--border-2);
+  background: var(--surface);
+  color: var(--text);
+  text-align: left;
+  font-size: 14px;
+}
+
+.place-results li:last-child .place-results__item {
+  border-bottom: 0;
+}
+
+.place-results__item--active {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.place-selected {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--chip);
+  color: var(--primary);
+  font-size: 14px;
+}
+
+.events-empty-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}

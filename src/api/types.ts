@@ -37,6 +37,18 @@ export interface Session {
   };
 }
 
+// ---- Géographie ----
+
+/** Une localité rendue par `GET /geo/places`. */
+export interface Place {
+  id: string;
+  label: string;
+  city: string | null;
+  postalCode: string | null;
+  latitude: number;
+  longitude: number;
+}
+
 // ---- Recherche globale ----
 
 export type SearchResultKind = "game" | "card" | "lair" | "event" | "policy" | "rule";

@@ -12,6 +12,15 @@ export interface ListEventsParams {
   /** Borne de date ISO, indépendante du calendrier mois/année. */
   afterDate?: string;
   beforeDate?: string;
+  /**
+   * « Autour de moi » : les trois vont ensemble. Sans session, c'est la seule
+   * façon d'obtenir des événements ; avec, la proximité remplace les lieux
+   * suivis.
+   */
+  userLat?: number;
+  userLon?: number;
+  /** Rayon en kilomètres. */
+  maxDistance?: number;
 }
 
 export function listEvents(
@@ -26,6 +35,9 @@ export function listEvents(
     params.lairId,
     params.afterDate,
     params.beforeDate,
+    params.userLat,
+    params.userLon,
+    params.maxDistance,
   ].join("|");
   return withCache(`events:list:${key}`, async () => {
     const response = await api.get<EventsListResponse>(endpoints.events.list, {

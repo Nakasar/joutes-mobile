@@ -71,7 +71,7 @@
   },
   "events": {
     "title": "Events",
-    "empty": "No events this month.",
+    "empty": "No upcoming event.",
     "statusSoldOut": "Sold out",
     "statusCancelled": "Cancelled",
     "statusOpen": "Open",
@@ -83,7 +83,21 @@
     "favorite": "Add to favorites",
     "unfavorite": "Remove from favorites",
     "detailFallbackTitle": "Event",
-    "externalLink": "View event page"
+    "externalLink": "View event page",
+    "emptyMine": "Nothing upcoming in your venues and games.",
+    "emptyNear": "Nothing within {{radius}} km of {{place}}.",
+    "widen": "Widen to {{radius}} km",
+    "findLairs": "Find venues to follow",
+    "allMyGames": "All my games",
+    "mode": {
+      "mine": "My venues",
+      "near": "Near me"
+    },
+    "place": {
+      "inviteTitle": "Tell us where you play",
+      "inviteText": "Pick a town to see the events around you.",
+      "orSignIn": "Or sign in to follow your venues"
+    }
   },
   "collection": {
     "title": "Collection",
@@ -1329,5 +1343,14 @@
       "events": "Events",
       "rules": "Rules and policies"
     }
+  },
+  "place": {
+    "title": "Where are you?",
+    "hint": "A town or a postcode: the app does not read the phone's location.",
+    "searchPlaceholder": "Town or postcode…",
+    "noResult": "No place found.",
+    "radius": "Radius",
+    "choose": "Choose a town",
+    "forget": "Forget this town"
   }
 }

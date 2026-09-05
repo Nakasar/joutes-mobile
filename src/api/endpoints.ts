@@ -51,6 +51,10 @@ export const endpoints = {
     detail: (newsId: string) => `/news/${newsId}`,
     like: (newsId: string) => `/news/${newsId}/like`,
   },
+  geo: {
+    /** Villes et codes postaux, pour dire où l'on est sans GPS. */
+    places: "/geo/places",
+  },
   events: {
     list: "/events",
     detail: (eventId: string) => `/events/${eventId}`,

@@ -71,7 +71,7 @@
   },
   "events": {
     "title": "Événements",
-    "empty": "Aucun événement ce mois-ci.",
+    "empty": "Aucun événement à venir.",
     "statusSoldOut": "Complet",
     "statusCancelled": "Annulé",
     "statusOpen": "Ouvert",
@@ -83,7 +83,21 @@
     "favorite": "Mettre en favori",
     "unfavorite": "Retirer des favoris",
     "detailFallbackTitle": "Événement",
-    "externalLink": "Voir la page de l'événement"
+    "externalLink": "Voir la page de l'événement",
+    "emptyMine": "Rien à venir dans vos lieux et vos jeux.",
+    "emptyNear": "Rien à moins de {{radius}} km de {{place}}.",
+    "widen": "Élargir à {{radius}} km",
+    "findLairs": "Trouver des lieux à suivre",
+    "allMyGames": "Tous mes jeux",
+    "mode": {
+      "mine": "Mes lieux",
+      "near": "Autour de moi"
+    },
+    "place": {
+      "inviteTitle": "Dites-nous où vous jouez",
+      "inviteText": "Choisissez une ville pour voir les événements autour de vous.",
+      "orSignIn": "Ou se connecter pour suivre ses lieux"
+    }
   },
   "collection": {
     "title": "Collection",
@@ -1329,5 +1343,14 @@
       "events": "Événements",
       "rules": "Règles et politiques"
     }
+  },
+  "place": {
+    "title": "Où êtes-vous ?",
+    "hint": "Une ville ou un code postal : l'application ne lit pas la position du téléphone.",
+    "searchPlaceholder": "Ville ou code postal…",
+    "noResult": "Aucune localité trouvée.",
+    "radius": "Rayon",
+    "choose": "Choisir une ville",
+    "forget": "Oublier cette ville"
   }
 }

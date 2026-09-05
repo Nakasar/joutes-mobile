@@ -71,7 +71,7 @@
   },
   "events": {
     "title": "Events",
-    "empty": "Keine Events in diesem Monat.",
+    "empty": "Keine anstehende Veranstaltung.",
     "statusSoldOut": "Ausverkauft",
     "statusCancelled": "Abgesagt",
     "statusOpen": "Offen",
@@ -83,7 +83,21 @@
     "favorite": "Zu Favoriten hinzufügen",
     "unfavorite": "Aus Favoriten entfernen",
     "detailFallbackTitle": "Veranstaltung",
-    "externalLink": "Veranstaltungsseite ansehen"
+    "externalLink": "Veranstaltungsseite ansehen",
+    "emptyMine": "Nichts Anstehendes in deinen Orten und Spielen.",
+    "emptyNear": "Nichts im Umkreis von {{radius}} km um {{place}}.",
+    "widen": "Auf {{radius}} km erweitern",
+    "findLairs": "Orte zum Folgen finden",
+    "allMyGames": "Alle meine Spiele",
+    "mode": {
+      "mine": "Meine Orte",
+      "near": "In meiner Nähe"
+    },
+    "place": {
+      "inviteTitle": "Sag uns, wo du spielst",
+      "inviteText": "Wähle einen Ort, um die Veranstaltungen in deiner Nähe zu sehen.",
+      "orSignIn": "Oder anmelden, um deinen Orten zu folgen"
+    }
   },
   "collection": {
     "title": "Sammlung",
@@ -1329,5 +1343,14 @@
       "events": "Veranstaltungen",
       "rules": "Regeln und Richtlinien"
     }
+  },
+  "place": {
+    "title": "Wo bist du?",
+    "hint": "Ein Ort oder eine Postleitzahl: die App liest den Standort des Telefons nicht.",
+    "searchPlaceholder": "Ort oder PLZ…",
+    "noResult": "Kein Ort gefunden.",
+    "radius": "Umkreis",
+    "choose": "Ort wählen",
+    "forget": "Diesen Ort vergessen"
   }
 }
