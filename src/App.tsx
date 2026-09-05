@@ -25,6 +25,7 @@ import { LairsScreen } from "./screens/LairsScreen";
 import { LoginScreen } from "./screens/LoginScreen";
 import { MySellListScreen } from "./screens/MySellListScreen";
 import { NewsDetailScreen } from "./screens/NewsDetailScreen";
+import { NewsScreen } from "./screens/NewsScreen";
 import { PlayGroupDetailScreen } from "./screens/PlayGroupDetailScreen";
 import { PlayGroupSellListScreen } from "./screens/PlayGroupSellListScreen";
 import { PlayGroupShowcaseScreen } from "./screens/PlayGroupShowcaseScreen";
@@ -88,6 +89,7 @@ function Shell() {
             <main className="app-shell__content">
               <Routes>
                 <Route path="/" element={<HomeScreen />} />
+                <Route path="/news" element={<NewsScreen />} />
                 <Route path="/news/:newsId" element={<NewsDetailScreen />} />
                 <Route path="/games" element={<GamesScreen />} />
                 <Route path="/games/:gameSlug" element={<GameScreen />} />

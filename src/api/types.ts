@@ -57,6 +57,78 @@ export interface Place {
   longitude: number;
 }
 
+// ---- Accueil (GET /feed) ----
+
+export type FeedEntryType = "news" | "content" | "deck" | "social";
+
+interface FeedEntryBase {
+  id: string;
+  title: string;
+  /** Qui publie : l'auteur d'une actualité, le compte d'un réseau, le créateur d'un deck. */
+  source: string;
+  gameId?: string;
+  publishedAt: string;
+  thumbnail?: string;
+}
+
+export interface FeedNewsEntry extends FeedEntryBase {
+  type: "news";
+}
+
+export interface FeedContentEntry extends FeedEntryBase {
+  type: "content";
+  kind: "video" | "article" | "replay";
+  authorId: string;
+  summary?: string;
+  /** La vidéo ou le replay ; un article n'en a pas, il se lit sur Joutes. */
+  url?: string;
+  duration?: string;
+}
+
+export interface FeedDeckEntry extends FeedEntryBase {
+  type: "deck";
+  framing: "top" | "center";
+}
+
+export interface FeedSocialEntry extends FeedEntryBase {
+  type: "social";
+  url: string;
+  platform: SocialPlatform;
+  kind: SocialPostKind;
+  accountUrl: string;
+  avatar?: string;
+  duration?: string;
+}
+
+export type FeedEntry = FeedNewsEntry | FeedContentEntry | FeedDeckEntry | FeedSocialEntry;
+
+export interface HomeLive {
+  key: string;
+  kind: "game" | "lair";
+  id: string;
+  title: string;
+  source: string;
+  url: string;
+  thumbnail?: string;
+  viewers?: number;
+}
+
+export interface HomeGames {
+  source: "favorites" | "followed" | "defaults";
+  games: { id: string; name: string; slug: string | null; icon?: string }[];
+}
+
+export interface HomeFeed {
+  games: HomeGames;
+  game: { id: string; name: string; slug: string | null } | null;
+  position: { latitude: number; longitude: number; radiusKm: number; name?: string } | null;
+  lives: HomeLive[];
+  agenda: JoutesEvent[];
+  feed: FeedEntry[];
+  lairs: { source: "followed" | "nearby" | "none"; lairs: Lair[] };
+  decks: { source: "mine" | "featured"; decks: Deck[] };
+}
+
 // ---- Recherche globale ----
 
 export type SearchResultKind = "game" | "card" | "lair" | "event" | "policy" | "rule";

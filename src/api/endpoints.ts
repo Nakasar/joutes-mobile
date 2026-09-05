@@ -50,6 +50,8 @@ export const endpoints = {
   },
   /** La recherche globale : cinq listes courtes pour une seule question. */
   search: "/search",
+  /** L'accueil en une requête : jeux, directs, agenda, fil, lieux, decks. */
+  feed: "/feed",
   news: {
     list: "/news",
     detail: (newsId: string) => `/news/${newsId}`,

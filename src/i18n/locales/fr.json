@@ -24,16 +24,71 @@
   },
   "home": {
     "eyebrow": "Joutes",
-    "title": "Actualités",
+    "title": "Accueil",
     "filterAll": "Tous",
     "empty": "Aucune actualité.",
     "featuredBadge": "À LA UNE",
     "detailTitle": "Actualité",
-    "socialAction": "Social"
+    "socialAction": "Social",
+    "greeting": "Bonjour, {{name}}",
+    "summary": {
+      "events_one": "{{count}} événement cette semaine",
+      "events_other": "{{count}} événements cette semaine",
+      "lives_one": "{{count}} direct",
+      "lives_other": "{{count}} directs"
+    },
+    "games": {
+      "all": "Tous",
+      "allMine": "Tous les miens"
+    },
+    "lives": {
+      "game": "Direct de l'éditeur",
+      "lair": "En direct",
+      "watch": "Regarder",
+      "viewers_one": "{{count}} spectateur",
+      "viewers_other": "{{count}} spectateurs"
+    },
+    "agenda": {
+      "title": "Cette semaine",
+      "window": "{{days}} jours",
+      "empty": "Rien de prévu ces sept prochains jours.",
+      "all": "Tout l'agenda"
+    },
+    "feed": {
+      "title": "Le fil",
+      "empty": "Rien de nouveau sur ces jeux pour le moment.",
+      "allNews": "Toutes les actualités",
+      "types": {
+        "all": "Tout",
+        "actu": "Actus",
+        "video": "Vidéos",
+        "deck": "Decks",
+        "social": "Réseaux"
+      }
+    },
+    "lairs": {
+      "followed": "Mes lieux",
+      "nearby": "Autour de vous",
+      "emptyFollowed": "Vous ne suivez aucun lieu pour l'instant.",
+      "emptyNearby": "Dites-nous où vous jouez pour voir les lieux autour de vous.",
+      "all": "Tous les lieux"
+    },
+    "decks": {
+      "mine": "Mes decks",
+      "featured": "Decks en vedette",
+      "empty": "Aucun deck à montrer.",
+      "all": "Tous les decks"
+    },
+    "proposition": {
+      "subtitle": "Les jeux, les lieux et les joueurs près de chez vous.",
+      "text": "Suivez vos jeux et vos lieux pour retrouver ici ce qui bouge — actualités, événements, decks et directs.",
+      "signUp": "Créer un compte"
+    }
   },
   "news": {
     "detailTitle": "Actualité",
-    "sourcePrefix": "Article publié à l'origine sur"
+    "sourcePrefix": "Article publié à l'origine sur",
+    "title": "Actualités"
   },
   "games": {
     "title": "Jeux",

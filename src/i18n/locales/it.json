@@ -24,16 +24,71 @@
   },
   "home": {
     "eyebrow": "Joutes",
-    "title": "Novità",
+    "title": "Home",
     "filterAll": "Tutte",
     "empty": "Nessuna novità.",
     "featuredBadge": "IN EVIDENZA",
     "detailTitle": "Novità",
-    "socialAction": "Social"
+    "socialAction": "Social",
+    "greeting": "Ciao, {{name}}",
+    "summary": {
+      "events_one": "{{count}} evento questa settimana",
+      "events_other": "{{count}} eventi questa settimana",
+      "lives_one": "{{count}} diretta",
+      "lives_other": "{{count}} dirette"
+    },
+    "games": {
+      "all": "Tutti",
+      "allMine": "Tutti i miei"
+    },
+    "lives": {
+      "game": "Diretta dell'editore",
+      "lair": "In diretta",
+      "watch": "Guarda",
+      "viewers_one": "{{count}} spettatore",
+      "viewers_other": "{{count}} spettatori"
+    },
+    "agenda": {
+      "title": "Questa settimana",
+      "window": "{{days}} giorni",
+      "empty": "Niente in programma nei prossimi sette giorni.",
+      "all": "Tutta l'agenda"
+    },
+    "feed": {
+      "title": "Il feed",
+      "empty": "Niente di nuovo su questi giochi per ora.",
+      "allNews": "Tutte le notizie",
+      "types": {
+        "all": "Tutto",
+        "actu": "Notizie",
+        "video": "Video",
+        "deck": "Mazzi",
+        "social": "Social"
+      }
+    },
+    "lairs": {
+      "followed": "I miei luoghi",
+      "nearby": "Vicino a te",
+      "emptyFollowed": "Non segui ancora nessun luogo.",
+      "emptyNearby": "Dicci dove giochi per vedere i luoghi vicino a te.",
+      "all": "Tutti i luoghi"
+    },
+    "decks": {
+      "mine": "I miei mazzi",
+      "featured": "Mazzi in evidenza",
+      "empty": "Nessun mazzo da mostrare.",
+      "all": "Tutti i mazzi"
+    },
+    "proposition": {
+      "subtitle": "Giochi, luoghi e giocatori vicino a te.",
+      "text": "Segui i tuoi giochi e i tuoi luoghi per ritrovare qui ciò che si muove — notizie, eventi, mazzi e dirette.",
+      "signUp": "Crea un account"
+    }
   },
   "news": {
     "detailTitle": "Novità",
-    "sourcePrefix": "Pubblicato originariamente su"
+    "sourcePrefix": "Pubblicato originariamente su",
+    "title": "Notizie"
   },
   "games": {
     "title": "Giochi",

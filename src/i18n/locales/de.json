@@ -24,16 +24,71 @@
   },
   "home": {
     "eyebrow": "Joutes",
-    "title": "Neuigkeiten",
+    "title": "Start",
     "filterAll": "Alle",
     "empty": "Noch keine Neuigkeiten.",
     "featuredBadge": "EMPFOHLEN",
     "detailTitle": "Neuigkeit",
-    "socialAction": "Social"
+    "socialAction": "Social",
+    "greeting": "Hallo, {{name}}",
+    "summary": {
+      "events_one": "{{count}} Veranstaltung diese Woche",
+      "events_other": "{{count}} Veranstaltungen diese Woche",
+      "lives_one": "{{count}} Live",
+      "lives_other": "{{count}} Lives"
+    },
+    "games": {
+      "all": "Alle",
+      "allMine": "Alle meine"
+    },
+    "lives": {
+      "game": "Live vom Verlag",
+      "lair": "Live",
+      "watch": "Ansehen",
+      "viewers_one": "{{count}} Zuschauer",
+      "viewers_other": "{{count}} Zuschauer"
+    },
+    "agenda": {
+      "title": "Diese Woche",
+      "window": "{{days}} Tage",
+      "empty": "In den nächsten sieben Tagen ist nichts geplant.",
+      "all": "Ganzer Kalender"
+    },
+    "feed": {
+      "title": "Der Feed",
+      "empty": "Derzeit nichts Neues zu diesen Spielen.",
+      "allNews": "Alle Neuigkeiten",
+      "types": {
+        "all": "Alles",
+        "actu": "News",
+        "video": "Videos",
+        "deck": "Decks",
+        "social": "Netzwerke"
+      }
+    },
+    "lairs": {
+      "followed": "Meine Orte",
+      "nearby": "In deiner Nähe",
+      "emptyFollowed": "Du folgst noch keinem Ort.",
+      "emptyNearby": "Sag uns, wo du spielst, um die Orte in deiner Nähe zu sehen.",
+      "all": "Alle Orte"
+    },
+    "decks": {
+      "mine": "Meine Decks",
+      "featured": "Empfohlene Decks",
+      "empty": "Kein Deck zu zeigen.",
+      "all": "Alle Decks"
+    },
+    "proposition": {
+      "subtitle": "Spiele, Orte und Spieler in deiner Nähe.",
+      "text": "Folge deinen Spielen und Orten, um hier zu finden, was sich tut — News, Veranstaltungen, Decks und Lives.",
+      "signUp": "Konto erstellen"
+    }
   },
   "news": {
     "detailTitle": "Neuigkeit",
-    "sourcePrefix": "Ursprünglich veröffentlicht auf"
+    "sourcePrefix": "Ursprünglich veröffentlicht auf",
+    "title": "Neuigkeiten"
   },
   "games": {
     "title": "Spiele",

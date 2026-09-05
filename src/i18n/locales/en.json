@@ -24,16 +24,71 @@
   },
   "home": {
     "eyebrow": "Joutes",
-    "title": "News",
+    "title": "Home",
     "filterAll": "All",
     "empty": "No news yet.",
     "featuredBadge": "FEATURED",
     "detailTitle": "News article",
-    "socialAction": "Social"
+    "socialAction": "Social",
+    "greeting": "Hello, {{name}}",
+    "summary": {
+      "events_one": "{{count}} event this week",
+      "events_other": "{{count}} events this week",
+      "lives_one": "{{count}} live",
+      "lives_other": "{{count}} lives"
+    },
+    "games": {
+      "all": "All",
+      "allMine": "All mine"
+    },
+    "lives": {
+      "game": "Publisher live",
+      "lair": "Live",
+      "watch": "Watch",
+      "viewers_one": "{{count}} viewer",
+      "viewers_other": "{{count}} viewers"
+    },
+    "agenda": {
+      "title": "This week",
+      "window": "{{days}} days",
+      "empty": "Nothing planned in the next seven days.",
+      "all": "Full agenda"
+    },
+    "feed": {
+      "title": "The feed",
+      "empty": "Nothing new on these games for now.",
+      "allNews": "All the news",
+      "types": {
+        "all": "All",
+        "actu": "News",
+        "video": "Videos",
+        "deck": "Decks",
+        "social": "Networks"
+      }
+    },
+    "lairs": {
+      "followed": "My venues",
+      "nearby": "Around you",
+      "emptyFollowed": "You do not follow any venue yet.",
+      "emptyNearby": "Tell us where you play to see the venues around you.",
+      "all": "All venues"
+    },
+    "decks": {
+      "mine": "My decks",
+      "featured": "Featured decks",
+      "empty": "No deck to show.",
+      "all": "All decks"
+    },
+    "proposition": {
+      "subtitle": "Games, venues and players near you.",
+      "text": "Follow your games and venues to find here what moves — news, events, decks and lives.",
+      "signUp": "Create an account"
+    }
   },
   "news": {
     "detailTitle": "News article",
-    "sourcePrefix": "Originally published on"
+    "sourcePrefix": "Originally published on",
+    "title": "News"
   },
   "games": {
     "title": "Games",
