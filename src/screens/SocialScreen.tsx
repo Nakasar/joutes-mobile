@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { listGames } from "../api/games";
@@ -18,12 +18,14 @@ import {
 } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
+import { useSearchParamState } from "../hooks/useSearchParamState";
 import { colorFor, initialOf, initialsOf, tintStyle } from "../lib/game-visuals";
 import { readPlayGroupAccent } from "../lib/play-group-theme";
 import { userProfilePath } from "../lib/user-tag";
 import { useAuth } from "../store/auth";
 
-type Tab = "amis" | "groups" | "lairs";
+const TABS = ["amis", "groups", "lairs"] as const;
+type Tab = (typeof TABS)[number];
 
 function friendName(u: PublicUser, fallback: string): string {
   return u.displayName || u.username || fallback;
@@ -345,7 +347,7 @@ function LairsTab() {
 export function SocialScreen() {
   const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
-  const [tab, setTab] = useState<Tab>("amis");
+  const [tab, setTab] = useSearchParamState<Tab>("tab", TABS, "amis");
 
   return (
     <div className="screen">

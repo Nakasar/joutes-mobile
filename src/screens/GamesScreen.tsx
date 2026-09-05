@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { listGames } from "../api/games";
@@ -10,6 +10,7 @@ import { StatusView } from "../components/StatusView";
 import { Tabs } from "../components/Tabs";
 import { useApi } from "../hooks/useApi";
 import { useOnline } from "../hooks/useOnline";
+import { useSearchParamState } from "../hooks/useSearchParamState";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
 import { GAME_TYPE_ORDER, gameTypeOrderIndex, isKnownGameType } from "../lib/game-types";
 import { listMeta } from "../lib/offline-store";
@@ -93,7 +94,8 @@ function GameTile({
   );
 }
 
-type Scope = "mine" | "all";
+const SCOPES = ["mine", "all"] as const;
+type Scope = (typeof SCOPES)[number];
 
 export function GamesScreen() {
   const { t } = useTranslation();
@@ -106,16 +108,16 @@ export function GamesScreen() {
     [isAuthenticated],
   );
 
-  const [scope, setScope] = useState<Scope>(() => (isAuthenticated ? "mine" : "all"));
+  // L'onglet vit dans l'URL pour survivre au retour arrière ; hors session il
+  // n'y a qu'une liste, quoi que l'URL demande.
+  const [requestedScope, setScope] = useSearchParamState<Scope>(
+    "scope",
+    SCOPES,
+    isAuthenticated ? "mine" : "all",
+  );
+  const scope: Scope = isAuthenticated ? requestedScope : "all";
   const [typeFilter, setTypeFilter] = useState<string | null>(null);
   const [search, setSearch] = useState("");
-
-  // Le bascule "Mes jeux" disparaît à la déconnexion : si l'utilisateur se
-  // déconnecte pendant qu'il consulte cet écran, on repasse sur "Tous les
-  // jeux" pour ne pas rester bloqué sur une liste vide sans moyen d'en sortir.
-  useEffect(() => {
-    if (!isAuthenticated) setScope("all");
-  }, [isAuthenticated]);
 
   const downloaded = useMemo(
     () => new Set((offline.data ?? []).map((m) => m.slug)),

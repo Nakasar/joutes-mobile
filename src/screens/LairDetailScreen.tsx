@@ -21,6 +21,7 @@ import {
   UsersIcon,
 } from "../components/icons";
 import { useApi } from "../hooks/useApi";
+import { useSearchParamState } from "../hooks/useSearchParamState";
 import { currentLocale } from "../i18n";
 import { colorFor, initialsOf, tintStyle } from "../lib/game-visuals";
 import { isSectionEnabled, readLairSections } from "../lib/lair-sections";
@@ -103,7 +104,7 @@ export function LairDetailScreen() {
   const { isAuthenticated } = useAuth();
   const locale = currentLocale();
 
-  const [tab, setTab] = useState<Tab>("news");
+  const [tab, setTab] = useSearchParamState<Tab>("tab", TABS, "news");
   const [follow, setFollow] = useState<{
     following: boolean;
     followersCount: number;
@@ -111,10 +112,10 @@ export function LairDetailScreen() {
   const [busy, setBusy] = useState(false);
 
   // Changer de lieu garde le composant monté : sans remise à zéro, le suivant
-  // hériterait du « je le suis » et du compteur du précédent.
+  // hériterait du « je le suis » et du compteur du précédent. L'onglet, lui,
+  // vit dans l'URL : un autre lieu est une autre URL.
   useEffect(() => {
     setFollow(null);
-    setTab("news");
   }, [lairId]);
 
   const lair = useApi(() => getLair(lairId), [lairId]);

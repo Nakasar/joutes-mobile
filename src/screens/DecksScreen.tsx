@@ -8,6 +8,7 @@ import { DeckRow } from "../components/DeckRow";
 import { LockIcon, PlusIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useAuth } from "../store/auth";
+import { useSearchParamState } from "../hooks/useSearchParamState";
 
 const PAGE_SIZE = 20;
 
@@ -37,7 +38,7 @@ function paramsFor(tab: Tab): SearchDecksParams {
 
 function DecksContent() {
   const { t } = useTranslation();
-  const [tab, setTab] = useState<Tab>("all");
+  const [tab, setTab] = useSearchParamState<Tab>("tab", TABS, "all");
   const [decks, setDecks] = useState<Deck[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);

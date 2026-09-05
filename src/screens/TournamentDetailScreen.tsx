@@ -33,6 +33,7 @@ import { TournamentReportSheet } from "../components/TournamentReportSheet";
 import { useApi } from "../hooks/useApi";
 import { useMyTournamentPlayer } from "../hooks/useMyTournamentPlayer";
 import { useTournamentLive } from "../hooks/useTournamentLive";
+import { useSearchParamState } from "../hooks/useSearchParamState";
 import { currentLocale } from "../i18n";
 import { playerTag } from "../lib/tournament-player";
 import { removeSyncKey } from "../lib/tournament-sync-storage";
@@ -52,7 +53,8 @@ import {
 } from "../lib/tournament-deadline";
 import { presetStats, type MatchStatDefinition } from "../lib/tournament-presets";
 
-type Tab = "match" | "standings" | "info";
+const TABS = ["match", "standings", "info"] as const;
+type Tab = (typeof TABS)[number];
 
 /** Une ronde replacée dans sa phase, l'historique étant lu à plat un peu partout. */
 interface FlatRound {
@@ -1083,7 +1085,7 @@ export function TournamentDetailScreen() {
   const navigate = useNavigate();
   const { tournamentId = "" } = useParams();
 
-  const [tab, setTab] = useState<Tab>("match");
+  const [tab, setTab] = useSearchParamState<Tab>("tab", TABS, "match");
   const [dropping, setDropping] = useState(false);
   const [dropError, setDropError] = useState<string | null>(null);
 

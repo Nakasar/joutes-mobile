@@ -32,6 +32,7 @@ import { StatusView } from "../components/StatusView";
 import { UserContentCard } from "../components/UserContentCard";
 import { UserMarkdown } from "../components/UserMarkdown";
 import { useApi } from "../hooks/useApi";
+import { useSearchParam } from "../hooks/useSearchParamState";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
 import { isSafeUrl } from "../lib/safe-url";
 import {
@@ -91,7 +92,10 @@ export function UserProfileScreen() {
   const navigate = useNavigate();
   const { userTag = "" } = useParams();
 
-  const [tab, setTab] = useState<string>("showcase");
+  // L'onglet vit dans l'URL : un autre profil est une autre URL, et le retour
+  // arrière retrouve celui qu'on lisait.
+  const [rawTab, setTab] = useSearchParam("tab");
+  const tab = rawTab ?? "showcase";
   const [follow, setFollow] = useState<{ following: boolean; followersCount: number } | null>(
     null,
   );
@@ -102,7 +106,6 @@ export function UserProfileScreen() {
   // et les garderait, puisque rien ne les recalcule ensuite.
   useEffect(() => {
     setFollow(null);
-    setTab("showcase");
   }, [userTag]);
 
   const profile = useApi(() => getUserProfile(userTag), [userTag]);

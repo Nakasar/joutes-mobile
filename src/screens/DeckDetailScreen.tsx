@@ -20,6 +20,7 @@ import { DeckZoneCards } from "../components/DeckZoneCards";
 import { StarIcon, TextListIcon, TrashIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
+import { useSearchParamState } from "../hooks/useSearchParamState";
 import { deckCardIds, type DeckCardInfo } from "../lib/deck-contents";
 import { getDeckZones } from "../lib/deck-zones";
 import { useAuth } from "../store/auth";
@@ -45,7 +46,7 @@ export function DeckDetailScreen() {
   const { user } = useAuth();
   const { deckId = "" } = useParams();
 
-  const [tab, setTab] = useState<Tab>("description");
+  const [tab, setTab] = useSearchParamState<Tab>("tab", TABS, "description");
   const [deck, setDeck] = useState<Deck | null>(null);
   const [busy, setBusy] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
