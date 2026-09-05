@@ -91,7 +91,16 @@
    le bouton retour d'une bannière, ou le titre d'un écran, ne passent dessous.
    La classe est posée au démarrage (`src/main.tsx`). */
 :root.is-android {
-  --safe-top: max(env(safe-area-inset-top, 0px), var(--android-status-bar));
+  --safe-top: max(
+    env(safe-area-inset-top, 0px),
+    var(--android-status-bar),
+    var(--android-inset-top, 0px)
+  );
+  /* Android 15 dessine aussi sous la barre de navigation (48 px à trois
+     boutons, une vingtaine en gestuel) sans le déclarer : la valeur vient du
+     natif (`watchSystemInsets`, `src/lib/platform.ts`), et vaut zéro tant
+     qu'elle n'est pas arrivée. */
+  --safe-bottom: max(env(safe-area-inset-bottom, 0px), var(--android-inset-bottom, 0px));
 }
 
 @media (prefers-color-scheme: dark) {
