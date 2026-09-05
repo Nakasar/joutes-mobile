@@ -1,4 +1,4 @@
-import { useMemo, useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getGame, getGameLive, listGameSocialPosts } from "../api/games";
@@ -63,20 +63,34 @@ export function GameScreen() {
 
   const color = colorFor(gameSlug, game?.color);
 
+  // Passer d'un jeu à l'autre garde le composant monté, et `useApi` garde la
+  // fiche précédente le temps de charger la suivante. Tout ce qui se dérive
+  // du jeu — le direct, les publications, le suivi — ne lit donc que la fiche
+  // qui répond au slug de l'adresse, jamais celle d'avant : sonder les
+  // publications de l'ancien jeu sur le nouveau rendrait un 404, et un
+  // direct affiché sous le mauvais nom serait pire encore.
+  const current = game && (game.slug === gameSlug || game._id === gameSlug) ? game : null;
+
   // Le suivi : ce que le compte dit, puis ce que le bouton vient de faire.
   const myGames = useApi(
     () => (isAuthenticated ? getMyGames() : Promise.resolve(null)),
     [isAuthenticated],
   );
   const [followOverride, setFollowOverride] = useState<boolean | null>(null);
+  useEffect(() => {
+    setFollowOverride(null);
+  }, [gameSlug]);
   const following =
-    followOverride ?? (game ? (myGames.data?.gameIds ?? []).includes(game._id) : false);
+    followOverride ?? (current ? (myGames.data?.gameIds ?? []).includes(current._id) : false);
 
   // Le direct est périssable, la fiche ne l'est pas : deux lectures, la
   // seconde sans cache. Les publications ne se demandent qu'aux jeux dont
   // l'éditeur est suivi — les autres répondraient 404.
-  const live = useApi(() => (game ? getGameLive(gameSlug) : Promise.resolve(null)), [game?._id]);
-  const socialEnabled = Boolean(game?.features?.socialFeed);
+  const live = useApi(
+    () => (current ? getGameLive(gameSlug) : Promise.resolve(null)),
+    [current?._id],
+  );
+  const socialEnabled = Boolean(current?.features?.socialFeed);
   const posts = useApi(
     () => (socialEnabled ? listGameSocialPosts(gameSlug, 12) : Promise.resolve([])),
     [socialEnabled, gameSlug],
@@ -182,9 +196,9 @@ export function GameScreen() {
           >
             <BackIcon size={20} />
           </button>
-          {game && (
+          {current && (
             <FollowGameButton
-              gameIdOrSlug={game.slug ?? game._id}
+              gameIdOrSlug={current.slug ?? current._id}
               following={following}
               onChange={setFollowOverride}
               variant="glass"
@@ -222,7 +236,7 @@ export function GameScreen() {
           )}
 
           <GameLinks links={game.links} />
-          <GameLiveCard live={live.data ?? null} gameName={game.name} />
+          {current && <GameLiveCard live={live.data ?? null} gameName={current.name} />}
         </>
       )}
 

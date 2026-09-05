@@ -79,13 +79,24 @@ export function watchSystemInsets(
 ): void {
   if (!isAndroid(userAgent)) return;
 
+  // Une rotation lâche plusieurs événements de suite : une lecture en cours
+  // ne les jette pas, elle en retient un et relit une fois rendue — sinon les
+  // marges appliquées seraient celles d'un état intermédiaire.
   let pending = false;
+  let again = false;
   const refresh = () => {
-    if (pending) return;
+    if (pending) {
+      again = true;
+      return;
+    }
     pending = true;
     void readSystemInsets().then((insets) => {
       pending = false;
       if (insets) applySystemInsets(insets, root);
+      if (again) {
+        again = false;
+        refresh();
+      }
     });
   };
 

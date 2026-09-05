@@ -92,8 +92,10 @@ export function HomeScreen() {
   const { user, isAuthenticated } = useAuth();
   const { place, save, clear } = useSavedPlace();
 
-  const [gameParam, setGameParam] = useSearchParam("jeu");
-  const [genre, setGenre] = useSearchParamState<GenreFilter>("fil", GENRES, "all");
+  // Les mêmes clés que les autres écrans (`game` sur /news et /events) : une
+  // URL se partage et se lit, elle ne doit pas changer de vocabulaire.
+  const [gameParam, setGameParam] = useSearchParam("game");
+  const [genre, setGenre] = useSearchParamState<GenreFilter>("feed", GENRES, "all");
   const [sheetOpen, setSheetOpen] = useState(false);
 
   const lang = i18n.resolvedLanguage ?? i18n.language;
