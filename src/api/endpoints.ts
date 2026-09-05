@@ -44,6 +44,8 @@ export const endpoints = {
     detail: (quizId: string) => `/quizzes/${quizId}`,
     scores: (quizId: string) => `/quizzes/${quizId}/scores`,
   },
+  /** La recherche globale : cinq listes courtes pour une seule question. */
+  search: "/search",
   news: {
     list: "/news",
     detail: (newsId: string) => `/news/${newsId}`,

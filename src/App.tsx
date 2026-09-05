@@ -35,6 +35,7 @@ import { PoliciesListScreen } from "./screens/PoliciesListScreen";
 import { PolicyDetailScreen } from "./screens/PolicyDetailScreen";
 import { QuizScreen } from "./screens/QuizScreen";
 import { RulesScreen } from "./screens/RulesScreen";
+import { SearchScreen } from "./screens/SearchScreen";
 import { SettingsScreen } from "./screens/SettingsScreen";
 import { SocialScreen } from "./screens/SocialScreen";
 import { TournamentDetailScreen } from "./screens/TournamentDetailScreen";
@@ -207,6 +208,7 @@ function Shell() {
                   path="/users/:userTag/contents/:contentId"
                   element={<UserContentScreen />}
                 />
+                <Route path="/search" element={<SearchScreen />} />
                 <Route path="/notifications" element={<NotificationsScreen />} />
                 <Route path="/settings" element={<SettingsScreen />} />
                 <Route path="*" element={<Navigate to="/" replace />} />

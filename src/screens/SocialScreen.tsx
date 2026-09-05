@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { listGames } from "../api/games";
 import { listPlayGroups } from "../api/play-groups";
@@ -346,6 +346,7 @@ function LairsTab() {
 
 export function SocialScreen() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const [tab, setTab] = useSearchParamState<Tab>("tab", TABS, "amis");
 
@@ -359,6 +360,7 @@ export function SocialScreen() {
           <button
             className="icon-button icon-button--primary"
             aria-label={t("social.addFriend")}
+            onClick={() => navigate("/players")}
           >
             <UserPlusIcon size={20} />
           </button>

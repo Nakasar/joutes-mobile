@@ -236,33 +236,33 @@
       "collectionEmpty": "This group doesn't have a collection yet.",
       "wishlistsAction": "Group wishlists",
       "sellListAction": "Group sale list",
-        "showcaseAction": "Showcase",
-         "rhythm": "The group's rhythm",
-         "manageOnWeb": "Inviting, promoting and removing members are done on the website.",
-         "views": {
-          "etabli": "Workbench",
-          "sessions": "Sessions",
-          "announcements": "News",
-          "lists": "Lists",
-          "members": "Members"
-         }
+      "showcaseAction": "Showcase",
+      "rhythm": "The group's rhythm",
+      "manageOnWeb": "Inviting, promoting and removing members are done on the website.",
+      "views": {
+        "etabli": "Workbench",
+        "sessions": "Sessions",
+        "announcements": "News",
+        "lists": "Lists",
+        "members": "Members"
+      }
     },
-      "sessions": {
-       "next": "Next session",
-       "noneUpcoming": "No upcoming session.",
-       "empty": "This group hasn't proposed any session.",
-       "poll": "Poll",
-       "cancelled": "Cancelled",
-       "confirmSlot": "Pick",
-       "attending_one": "{{count}} attending",
-       "attending_other": "{{count}} attending",
-       "answerHint": "Tapping the same answer again cancels it.",
-       "answer": {
+    "sessions": {
+      "next": "Next session",
+      "noneUpcoming": "No upcoming session.",
+      "empty": "This group hasn't proposed any session.",
+      "poll": "Poll",
+      "cancelled": "Cancelled",
+      "confirmSlot": "Pick",
+      "attending_one": "{{count}} attending",
+      "attending_other": "{{count}} attending",
+      "answerHint": "Tapping the same answer again cancels it.",
+      "answer": {
         "yes": "I'm in",
         "maybe": "Maybe",
         "no": "Can't make it"
-       },
-       "create": {
+      },
+      "create": {
         "action": "Propose a session",
         "title": "New session",
         "fixed": "Fixed date",
@@ -275,70 +275,70 @@
         "place": "Where",
         "placePlaceholder": "Yann's place, the club…",
         "submit": "Propose"
-       }
-      },
-      "announcements": {
-       "title": "News",
-       "empty": "No announcement yet.",
-       "publishOnWeb": "Publishing an announcement is done on the website.",
-       "scope": {
+      }
+    },
+    "announcements": {
+      "title": "News",
+      "empty": "No announcement yet.",
+      "publishOnWeb": "Publishing an announcement is done on the website.",
+      "scope": {
         "group": "Internal",
         "public": "Public"
-       }
-      },
-      "showcase": {
-       "fallbackTitle": "Showcase",
-       "follow": "Follow",
-       "following": "Following",
-       "followers_one": "{{count}} follower",
-       "followers_other": "{{count}} followers",
-       "openHub": "Open the workbench",
-       "privateNote": "This group is private: its showcase opens for anyone with the address, but it doesn't appear on the roll.",
-       "liveNow": "Live",
-       "news": "News",
-       "contents": "The group's publications",
-       "memberContents": "Members' publications",
-       "links": "Follow us",
-       "games": "The group's games"
-      },
-      "explore": {
-       "title": "Discover groups",
-       "entrySub": "The roll of open groups",
-       "searchPlaceholder": "A name, a town, a game, a day…",
-       "empty": "No group of that name on the roll.",
-       "loadMore": "Load more",
-       "live": "Live",
-       "liveNow": "In the lists",
-       "private": "Private",
-       "liveCount_one": "{{count}} group is streaming",
-       "liveCount_other": "{{count}} groups are streaming",
-       "nearUnavailable": "Sorting by distance needs your location, which the app can't read yet. The list stays ordered by liveliest.",
-       "order": {
+      }
+    },
+    "showcase": {
+      "fallbackTitle": "Showcase",
+      "follow": "Follow",
+      "following": "Following",
+      "followers_one": "{{count}} follower",
+      "followers_other": "{{count}} followers",
+      "openHub": "Open the workbench",
+      "privateNote": "This group is private: its showcase opens for anyone with the address, but it doesn't appear on the roll.",
+      "liveNow": "Live",
+      "news": "News",
+      "contents": "The group's publications",
+      "memberContents": "Members' publications",
+      "links": "Follow us",
+      "games": "The group's games"
+    },
+    "explore": {
+      "title": "Discover groups",
+      "entrySub": "The roll of open groups",
+      "searchPlaceholder": "A name, a town, a game, a day…",
+      "empty": "No group of that name on the roll.",
+      "loadMore": "Load more",
+      "live": "Live",
+      "liveNow": "In the lists",
+      "private": "Private",
+      "liveCount_one": "{{count}} group is streaming",
+      "liveCount_other": "{{count}} groups are streaming",
+      "nearUnavailable": "Sorting by distance needs your location, which the app can't read yet. The list stays ordered by liveliest.",
+      "order": {
         "vifs": "Liveliest",
         "proches": "Nearby",
         "neufs": "Newcomers"
-       },
-       "notice": {
+      },
+      "notice": {
         "vifs": "live › publication › upcoming session",
         "proches": "distance from your location",
         "neufs": "date the group was created"
-       },
-       "roll": {
+      },
+      "roll": {
         "title": "The roll",
         "results": "Results",
         "count_one": "{{count}} group on the roll",
         "count_other": "{{count}} groups on the roll",
         "reset": "Reopen the roll"
-       },
-       "entry": {
+      },
+      "entry": {
         "liveCry_one": "{{streamer}} is streaming · {{count}} viewer",
         "liveCry_other": "{{streamer}} is streaming · {{count}} viewers",
         "liveCryPlain": "{{streamer}} is streaming right now",
         "quiet": "No news for a while",
         "deeds": {
-         "content": "{{title}} — {{at}}",
-         "announcement": "{{title}} — {{at}}",
-         "session": "Next session {{at}}"
+          "content": "{{title}} — {{at}}",
+          "announcement": "{{title}} — {{at}}",
+          "session": "Next session {{at}}"
         },
         "follow": "Follow",
         "following": "Following",
@@ -349,8 +349,8 @@
         "followers_other": "followers",
         "published_one": "publication",
         "published_other": "publications"
-       }
-      },
+      }
+    },
     "myGroups": "My groups"
   },
   "notifications": {
@@ -473,7 +473,7 @@
     "computing": "Computing…",
     "error": "The computation failed."
   },
-  "decks":   {
+  "decks": {
     "title": "My decks",
     "subtitle": "Your lists, and the community's",
     "gateText": "Sign in to find your decks. The public library reads without an account.",
@@ -1118,41 +1118,41 @@
     "saveError": "The table could not be saved."
   },
   "tournaments": {
-                   "stopwatchElapsed": "elapsed",
-                   "stopwatchPaused": "stopwatch paused",
-                   "stopwatchNotStarted": "Stopwatch not started",
-                   "standingsTime": "Time",
-                   "puzzleLabel": "Puzzle",
-                   "puzzleElapsed": "Elapsed time",
-                   "puzzleYourTime": "Your time",
-                   "puzzleRunningHint": "Let us know as soon as you are done.",
-                   "puzzleDoneHint": "Time recorded. Ask the organizers to correct it.",
-                   "puzzleDeclareFinished": "I finished the puzzle",
-                   "puzzleOrganizerOnlyHint": "The organizers will record your time once you are done.",
-                   "puzzleFinishedCount": "{{count}} player(s) finished",
-                   "deadlineLabel": "deadline",
-                   "playBefore": "Play before",
-                   "scenario": "Scenario",
-                   "matchStatAria": "{{stat}} for {{name}} in game {{number}}",
-                   "matchStatsOptional": "Recorded after each game: {{stats}}.",
-                   "matchStatsRequired": "Required after each game: {{stats}}.",
-                   "matchStatsMissing": "Fill in every statistic for each player in the games you report.",
-                   "matchStats": {
-                     "struggles": "Struggle cards claimed",
-                     "strugglesShort": "Struggle",
-                     "wounds": "Wounds inflicted",
-                     "woundsShort": "Wounds",
-                     "victoryPoints": "Victory points",
-                     "victoryPointsShort": "VP",
-                     "touchdowns": "Touchdowns",
-                     "touchdownsShort": "TD",
-                     "casualties": "Casualties inflicted",
-                     "casualtiesShort": "Cas.",
-                     "battlePoints": "Battle points",
-                     "battlePointsShort": "Battle",
-                     "pointsDestroyed": "Points destroyed",
-                     "pointsDestroyedShort": "Destroyed"
-                   },
+    "stopwatchElapsed": "elapsed",
+    "stopwatchPaused": "stopwatch paused",
+    "stopwatchNotStarted": "Stopwatch not started",
+    "standingsTime": "Time",
+    "puzzleLabel": "Puzzle",
+    "puzzleElapsed": "Elapsed time",
+    "puzzleYourTime": "Your time",
+    "puzzleRunningHint": "Let us know as soon as you are done.",
+    "puzzleDoneHint": "Time recorded. Ask the organizers to correct it.",
+    "puzzleDeclareFinished": "I finished the puzzle",
+    "puzzleOrganizerOnlyHint": "The organizers will record your time once you are done.",
+    "puzzleFinishedCount": "{{count}} player(s) finished",
+    "deadlineLabel": "deadline",
+    "playBefore": "Play before",
+    "scenario": "Scenario",
+    "matchStatAria": "{{stat}} for {{name}} in game {{number}}",
+    "matchStatsOptional": "Recorded after each game: {{stats}}.",
+    "matchStatsRequired": "Required after each game: {{stats}}.",
+    "matchStatsMissing": "Fill in every statistic for each player in the games you report.",
+    "matchStats": {
+      "struggles": "Struggle cards claimed",
+      "strugglesShort": "Struggle",
+      "wounds": "Wounds inflicted",
+      "woundsShort": "Wounds",
+      "victoryPoints": "Victory points",
+      "victoryPointsShort": "VP",
+      "touchdowns": "Touchdowns",
+      "touchdownsShort": "TD",
+      "casualties": "Casualties inflicted",
+      "casualtiesShort": "Cas.",
+      "battlePoints": "Battle points",
+      "battlePointsShort": "Battle",
+      "pointsDestroyed": "Points destroyed",
+      "pointsDestroyedShort": "Destroyed"
+    },
     "joinAction": "Join a tournament",
     "filterCurrent": "Current",
     "filterPast": "Past",
@@ -1312,6 +1312,22 @@
       "runes": "Runes",
       "battlefields": "Battlefields",
       "sideboard": "Sideboard"
+    }
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Game, card, venue, event, rule…",
+    "recent": "Recent searches",
+    "clearRecent": "Clear",
+    "quickLinks": "Quick links",
+    "minChars": "Type at least two characters.",
+    "empty": "Nothing for “{{query}}”.",
+    "groups": {
+      "games": "Games",
+      "cards": "Cards",
+      "lairs": "Venues",
+      "events": "Events",
+      "rules": "Rules and policies"
     }
   }
 }

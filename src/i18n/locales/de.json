@@ -236,33 +236,33 @@
       "collectionEmpty": "Diese Gruppe hat noch keine Sammlung.",
       "wishlistsAction": "Wunschlisten der Gruppe",
       "sellListAction": "Verkaufsliste der Gruppe",
-        "showcaseAction": "Schaufenster",
-         "rhythm": "Der Rhythmus der Gruppe",
-         "manageOnWeb": "Einladen, befördern und entfernen erfolgen auf der Website.",
-         "views": {
-          "etabli": "Werkbank",
-          "sessions": "Sitzungen",
-          "announcements": "Neuigkeiten",
-          "lists": "Listen",
-          "members": "Mitglieder"
-         }
+      "showcaseAction": "Schaufenster",
+      "rhythm": "Der Rhythmus der Gruppe",
+      "manageOnWeb": "Einladen, befördern und entfernen erfolgen auf der Website.",
+      "views": {
+        "etabli": "Werkbank",
+        "sessions": "Sitzungen",
+        "announcements": "Neuigkeiten",
+        "lists": "Listen",
+        "members": "Mitglieder"
+      }
     },
-      "sessions": {
-       "next": "Nächste Sitzung",
-       "noneUpcoming": "Keine bevorstehende Sitzung.",
-       "empty": "Diese Gruppe hat noch keine Sitzung vorgeschlagen.",
-       "poll": "Umfrage",
-       "cancelled": "Abgesagt",
-       "confirmSlot": "Festlegen",
-       "attending_one": "{{count}} dabei",
-       "attending_other": "{{count}} dabei",
-       "answerHint": "Dieselbe Antwort erneut zu tippen hebt sie auf.",
-       "answer": {
+    "sessions": {
+      "next": "Nächste Sitzung",
+      "noneUpcoming": "Keine bevorstehende Sitzung.",
+      "empty": "Diese Gruppe hat noch keine Sitzung vorgeschlagen.",
+      "poll": "Umfrage",
+      "cancelled": "Abgesagt",
+      "confirmSlot": "Festlegen",
+      "attending_one": "{{count}} dabei",
+      "attending_other": "{{count}} dabei",
+      "answerHint": "Dieselbe Antwort erneut zu tippen hebt sie auf.",
+      "answer": {
         "yes": "Ich komme",
         "maybe": "Vielleicht",
         "no": "Ich kann nicht"
-       },
-       "create": {
+      },
+      "create": {
         "action": "Sitzung vorschlagen",
         "title": "Neue Sitzung",
         "fixed": "Festes Datum",
@@ -275,70 +275,70 @@
         "place": "Wo",
         "placePlaceholder": "Bei Yann, im Club…",
         "submit": "Vorschlagen"
-       }
-      },
-      "announcements": {
-       "title": "Neuigkeiten",
-       "empty": "Noch keine Ankündigung.",
-       "publishOnWeb": "Ankündigungen werden auf der Website veröffentlicht.",
-       "scope": {
+      }
+    },
+    "announcements": {
+      "title": "Neuigkeiten",
+      "empty": "Noch keine Ankündigung.",
+      "publishOnWeb": "Ankündigungen werden auf der Website veröffentlicht.",
+      "scope": {
         "group": "Intern",
         "public": "Öffentlich"
-       }
-      },
-      "showcase": {
-       "fallbackTitle": "Schaufenster",
-       "follow": "Folgen",
-       "following": "Folgt",
-       "followers_one": "{{count}} Abonnent",
-       "followers_other": "{{count}} Abonnenten",
-       "openHub": "Werkbank öffnen",
-       "privateNote": "Diese Gruppe ist privat: ihr Schaufenster öffnet sich für jeden mit der Adresse, sie erscheint aber nicht in der Übersicht.",
-       "liveNow": "Live",
-       "news": "Neuigkeiten",
-       "contents": "Beiträge der Gruppe",
-       "memberContents": "Beiträge der Mitglieder",
-       "links": "Folge uns",
-       "games": "Spiele der Gruppe"
-      },
-      "explore": {
-       "title": "Gruppen entdecken",
-       "entrySub": "Die Übersicht offener Gruppen",
-       "searchPlaceholder": "Ein Name, eine Stadt, ein Spiel, ein Tag…",
-       "empty": "Keine Gruppe dieses Namens auf der Rolle.",
-       "loadMore": "Mehr laden",
-       "live": "Live",
-       "liveNow": "In den Schranken",
-       "private": "Privat",
-       "liveCount_one": "{{count}} Gruppe streamt",
-       "liveCount_other": "{{count}} Gruppen streamen",
-       "nearUnavailable": "Die Sortierung nach Nähe braucht deinen Standort, den die App noch nicht lesen kann. Die Liste bleibt nach Lebendigkeit sortiert.",
-       "order": {
+      }
+    },
+    "showcase": {
+      "fallbackTitle": "Schaufenster",
+      "follow": "Folgen",
+      "following": "Folgt",
+      "followers_one": "{{count}} Abonnent",
+      "followers_other": "{{count}} Abonnenten",
+      "openHub": "Werkbank öffnen",
+      "privateNote": "Diese Gruppe ist privat: ihr Schaufenster öffnet sich für jeden mit der Adresse, sie erscheint aber nicht in der Übersicht.",
+      "liveNow": "Live",
+      "news": "Neuigkeiten",
+      "contents": "Beiträge der Gruppe",
+      "memberContents": "Beiträge der Mitglieder",
+      "links": "Folge uns",
+      "games": "Spiele der Gruppe"
+    },
+    "explore": {
+      "title": "Gruppen entdecken",
+      "entrySub": "Die Übersicht offener Gruppen",
+      "searchPlaceholder": "Ein Name, eine Stadt, ein Spiel, ein Tag…",
+      "empty": "Keine Gruppe dieses Namens auf der Rolle.",
+      "loadMore": "Mehr laden",
+      "live": "Live",
+      "liveNow": "In den Schranken",
+      "private": "Privat",
+      "liveCount_one": "{{count}} Gruppe streamt",
+      "liveCount_other": "{{count}} Gruppen streamen",
+      "nearUnavailable": "Die Sortierung nach Nähe braucht deinen Standort, den die App noch nicht lesen kann. Die Liste bleibt nach Lebendigkeit sortiert.",
+      "order": {
         "vifs": "Am lebendigsten",
         "proches": "In der Nähe",
         "neufs": "Neuzugänge"
-       },
-       "notice": {
+      },
+      "notice": {
         "vifs": "Live › Veröffentlichung › kommende Sitzung",
         "proches": "Entfernung von deinem Standort",
         "neufs": "Gründungsdatum der Gruppe"
-       },
-       "roll": {
+      },
+      "roll": {
         "title": "Die Rolle",
         "results": "Ergebnisse",
         "count_one": "{{count}} Gruppe auf der Rolle",
         "count_other": "{{count}} Gruppen auf der Rolle",
         "reset": "Rolle wieder öffnen"
-       },
-       "entry": {
+      },
+      "entry": {
         "liveCry_one": "{{streamer}} streamt · {{count}} Zuschauer",
         "liveCry_other": "{{streamer}} streamt · {{count}} Zuschauer",
         "liveCryPlain": "{{streamer}} streamt gerade",
         "quiet": "Seit einer Weile nichts Neues",
         "deeds": {
-         "content": "{{title}} — {{at}}",
-         "announcement": "{{title}} — {{at}}",
-         "session": "Nächste Sitzung {{at}}"
+          "content": "{{title}} — {{at}}",
+          "announcement": "{{title}} — {{at}}",
+          "session": "Nächste Sitzung {{at}}"
         },
         "follow": "Folgen",
         "following": "Folge ich",
@@ -349,8 +349,8 @@
         "followers_other": "Abonnenten",
         "published_one": "Veröffentlichung",
         "published_other": "Veröffentlichungen"
-       }
-      },
+      }
+    },
     "myGroups": "Meine Gruppen"
   },
   "notifications": {
@@ -473,7 +473,7 @@
     "computing": "Wird berechnet…",
     "error": "Die Berechnung ist fehlgeschlagen."
   },
-  "decks":   {
+  "decks": {
     "title": "Meine Decks",
     "subtitle": "Deine Listen und die der Community",
     "gateText": "Melde dich an, um deine Decks zu finden. Die öffentliche Bibliothek liest sich ohne Konto.",
@@ -1118,41 +1118,41 @@
     "saveError": "Der Tisch konnte nicht gespeichert werden."
   },
   "tournaments": {
-                   "stopwatchElapsed": "vergangen",
-                   "stopwatchPaused": "Stoppuhr pausiert",
-                   "stopwatchNotStarted": "Stoppuhr nicht gestartet",
-                   "standingsTime": "Zeit",
-                   "puzzleLabel": "Puzzle",
-                   "puzzleElapsed": "Vergangene Zeit",
-                   "puzzleYourTime": "Ihre Zeit",
-                   "puzzleRunningHint": "Melden Sie sich, sobald Sie fertig sind.",
-                   "puzzleDoneHint": "Zeit erfasst. Für eine Korrektur wenden Sie sich an die Organisation.",
-                   "puzzleDeclareFinished": "Ich habe das Puzzle gelöst",
-                   "puzzleOrganizerOnlyHint": "Die Organisation erfasst Ihre Zeit, sobald Sie fertig sind.",
-                   "puzzleFinishedCount": "{{count}} Spieler fertig",
-                   "deadlineLabel": "Frist",
-                   "playBefore": "Zu spielen bis",
-                   "scenario": "Szenario",
-                   "matchStatAria": "{{stat}} von {{name}} für Partie {{number}}",
-                   "matchStatsOptional": "Nach jeder Partie erfasst: {{stats}}.",
-                   "matchStatsRequired": "Nach jeder Partie zwingend zu erfassen: {{stats}}.",
-                   "matchStatsMissing": "Erfasse alle Statistiken jedes Spielers für die gespielten Partien.",
-                   "matchStats": {
-                     "struggles": "Beanspruchte Kampfkarten",
-                     "strugglesShort": "Kampf",
-                     "wounds": "Zugefügte Wunden",
-                     "woundsShort": "Wunden",
-                     "victoryPoints": "Siegpunkte",
-                     "victoryPointsShort": "SP",
-                     "touchdowns": "Touchdowns",
-                     "touchdownsShort": "TD",
-                     "casualties": "Zugefügte Ausfälle",
-                     "casualtiesShort": "Ausf.",
-                     "battlePoints": "Kampfpunkte",
-                     "battlePointsShort": "Kampf",
-                     "pointsDestroyed": "Zerstörte Punkte",
-                     "pointsDestroyedShort": "Zerstört"
-                   },
+    "stopwatchElapsed": "vergangen",
+    "stopwatchPaused": "Stoppuhr pausiert",
+    "stopwatchNotStarted": "Stoppuhr nicht gestartet",
+    "standingsTime": "Zeit",
+    "puzzleLabel": "Puzzle",
+    "puzzleElapsed": "Vergangene Zeit",
+    "puzzleYourTime": "Ihre Zeit",
+    "puzzleRunningHint": "Melden Sie sich, sobald Sie fertig sind.",
+    "puzzleDoneHint": "Zeit erfasst. Für eine Korrektur wenden Sie sich an die Organisation.",
+    "puzzleDeclareFinished": "Ich habe das Puzzle gelöst",
+    "puzzleOrganizerOnlyHint": "Die Organisation erfasst Ihre Zeit, sobald Sie fertig sind.",
+    "puzzleFinishedCount": "{{count}} Spieler fertig",
+    "deadlineLabel": "Frist",
+    "playBefore": "Zu spielen bis",
+    "scenario": "Szenario",
+    "matchStatAria": "{{stat}} von {{name}} für Partie {{number}}",
+    "matchStatsOptional": "Nach jeder Partie erfasst: {{stats}}.",
+    "matchStatsRequired": "Nach jeder Partie zwingend zu erfassen: {{stats}}.",
+    "matchStatsMissing": "Erfasse alle Statistiken jedes Spielers für die gespielten Partien.",
+    "matchStats": {
+      "struggles": "Beanspruchte Kampfkarten",
+      "strugglesShort": "Kampf",
+      "wounds": "Zugefügte Wunden",
+      "woundsShort": "Wunden",
+      "victoryPoints": "Siegpunkte",
+      "victoryPointsShort": "SP",
+      "touchdowns": "Touchdowns",
+      "touchdownsShort": "TD",
+      "casualties": "Zugefügte Ausfälle",
+      "casualtiesShort": "Ausf.",
+      "battlePoints": "Kampfpunkte",
+      "battlePointsShort": "Kampf",
+      "pointsDestroyed": "Zerstörte Punkte",
+      "pointsDestroyedShort": "Zerstört"
+    },
     "joinAction": "Turnier beitreten",
     "filterCurrent": "Aktuell",
     "filterPast": "Vergangen",
@@ -1312,6 +1312,22 @@
       "runes": "Runen",
       "battlefields": "Schlachtfelder",
       "sideboard": "Sideboard"
+    }
+  },
+  "search": {
+    "title": "Suchen",
+    "placeholder": "Spiel, Karte, Ort, Veranstaltung, Regel…",
+    "recent": "Letzte Suchen",
+    "clearRecent": "Löschen",
+    "quickLinks": "Schnellzugriff",
+    "minChars": "Mindestens zwei Zeichen eingeben.",
+    "empty": "Nichts zu „{{query}}“.",
+    "groups": {
+      "games": "Spiele",
+      "cards": "Karten",
+      "lairs": "Orte",
+      "events": "Veranstaltungen",
+      "rules": "Regeln und Richtlinien"
     }
   }
 }

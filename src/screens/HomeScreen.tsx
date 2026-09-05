@@ -121,7 +121,11 @@ export function HomeScreen() {
           <h1 className="screen-title">{t("home.title")}</h1>
         </div>
         <div className="head-actions">
-          <button className="icon-button" aria-label={t("common.search")}>
+          <button
+            className="icon-button"
+            aria-label={t("common.search")}
+            onClick={() => navigate("/search")}
+          >
             <SearchIcon size={20} />
           </button>
           <button

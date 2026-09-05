@@ -37,6 +37,30 @@ export interface Session {
   };
 }
 
+// ---- Recherche globale ----
+
+export type SearchResultKind = "game" | "card" | "lair" | "event" | "policy" | "rule";
+
+/** Un résultat de `GET /search` : `href` est celui du site, `kind`/`id` sont pour nous. */
+export interface SearchResult {
+  label: string;
+  sublabel?: string;
+  href: string;
+  image?: string;
+  kind: SearchResultKind;
+  id: string;
+  gameSlug?: string;
+  doc?: "CR" | "TR";
+}
+
+export interface SearchResponse {
+  games: SearchResult[];
+  cards: SearchResult[];
+  lairs: SearchResult[];
+  events: SearchResult[];
+  rules: SearchResult[];
+}
+
 // ---- Jeux ----
 
 /** Clé de type de jeu (`lib/constants/game-types.ts` côté joutes-app). */
