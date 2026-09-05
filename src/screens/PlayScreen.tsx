@@ -22,6 +22,7 @@ import { JoinPlaySheet } from "../components/JoinPlaySheet";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { useTournamentLive } from "../hooks/useTournamentLive";
+import { useSearchParamState } from "../hooks/useSearchParamState";
 import { currentLocale } from "../i18n";
 import { getSyncKeys } from "../lib/tournament-sync-storage";
 import { formatDuration, timerIsPaused, timerRemainingSeconds } from "../lib/tournament-timer";
@@ -29,8 +30,10 @@ import { useAuth } from "../store/auth";
 
 const PAGE_SIZE = 20;
 
-type Filter = "current" | "past";
-type Section = "tournaments" | "matches";
+const FILTERS = ["current", "past"] as const;
+type Filter = (typeof FILTERS)[number];
+const SECTIONS = ["tournaments", "matches"] as const;
+type Section = (typeof SECTIONS)[number];
 
 interface TournamentSummary {
   id: string;
@@ -223,7 +226,7 @@ function TournamentsPane({
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
-  const [filter, setFilter] = useState<Filter>("current");
+  const [filter, setFilter] = useSearchParamState<Filter>("filter", FILTERS, "current");
   /** La recherche n'a pas de champ tant qu'on ne l'a pas demandée. */
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
@@ -598,7 +601,7 @@ function GameMatchesPane({
  */
 export function PlayScreen() {
   const { t } = useTranslation();
-  const [section, setSection] = useState<Section>("tournaments");
+  const [section, setSection] = useSearchParamState<Section>("section", SECTIONS, "tournaments");
   const [filters, setFilters] = useState<CommonFilters>(NO_FILTERS);
 
   const { data: catalog } = useApi(() => listGames(), []);

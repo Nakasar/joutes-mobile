@@ -24,16 +24,71 @@
   },
   "home": {
     "eyebrow": "Joutes",
-    "title": "Actualités",
+    "title": "Accueil",
     "filterAll": "Tous",
     "empty": "Aucune actualité.",
     "featuredBadge": "À LA UNE",
     "detailTitle": "Actualité",
-    "socialAction": "Social"
+    "socialAction": "Social",
+    "greeting": "Bonjour, {{name}}",
+    "summary": {
+      "events_one": "{{count}} événement cette semaine",
+      "events_other": "{{count}} événements cette semaine",
+      "lives_one": "{{count}} direct",
+      "lives_other": "{{count}} directs"
+    },
+    "games": {
+      "all": "Tous",
+      "allMine": "Tous les miens"
+    },
+    "lives": {
+      "game": "Direct de l'éditeur",
+      "lair": "En direct",
+      "watch": "Regarder",
+      "viewers_one": "{{count}} spectateur",
+      "viewers_other": "{{count}} spectateurs"
+    },
+    "agenda": {
+      "title": "Cette semaine",
+      "window": "{{days}} jours",
+      "empty": "Rien de prévu ces sept prochains jours.",
+      "all": "Tout l'agenda"
+    },
+    "feed": {
+      "title": "Le fil",
+      "empty": "Rien de nouveau sur ces jeux pour le moment.",
+      "allNews": "Toutes les actualités",
+      "types": {
+        "all": "Tout",
+        "actu": "Actus",
+        "video": "Vidéos",
+        "deck": "Decks",
+        "social": "Réseaux"
+      }
+    },
+    "lairs": {
+      "followed": "Mes lieux",
+      "nearby": "Autour de vous",
+      "emptyFollowed": "Vous ne suivez aucun lieu pour l'instant.",
+      "emptyNearby": "Dites-nous où vous jouez pour voir les lieux autour de vous.",
+      "all": "Tous les lieux"
+    },
+    "decks": {
+      "mine": "Mes decks",
+      "featured": "Decks en vedette",
+      "empty": "Aucun deck à montrer.",
+      "all": "Tous les decks"
+    },
+    "proposition": {
+      "subtitle": "Les jeux, les lieux et les joueurs près de chez vous.",
+      "text": "Suivez vos jeux et vos lieux pour retrouver ici ce qui bouge — actualités, événements, decks et directs.",
+      "signUp": "Créer un compte"
+    }
   },
   "news": {
     "detailTitle": "Actualité",
-    "sourcePrefix": "Article publié à l'origine sur"
+    "sourcePrefix": "Article publié à l'origine sur",
+    "title": "Actualités"
   },
   "games": {
     "title": "Jeux",
@@ -52,7 +107,10 @@
       "VideoGame": "Jeu vidéo",
       "Miniatures": "Figurines",
       "Other": "Autre"
-    }
+    },
+    "follow": "Suivre",
+    "following": "Suivi",
+    "unfollow": "Ne plus suivre"
   },
   "gameHub": {
     "fallbackTitle": "Jeu",
@@ -67,11 +125,22 @@
     "explore": "Explorer ce jeu",
     "cardsSub": "Catalogue et recherche",
     "readMore": "Lire la suite",
-    "readLess": "Réduire"
+    "readLess": "Réduire",
+    "live": {
+      "badge": "En direct",
+      "watch": "Regarder sur YouTube",
+      "since": "depuis {{when}}"
+    },
+    "social": {
+      "title": "Sur les réseaux",
+      "viewAll": "Voir tout",
+      "empty": "Aucune publication pour le moment.",
+      "openOn": "Ouvrir sur {{platform}}"
+    }
   },
   "events": {
     "title": "Événements",
-    "empty": "Aucun événement ce mois-ci.",
+    "empty": "Aucun événement à venir.",
     "statusSoldOut": "Complet",
     "statusCancelled": "Annulé",
     "statusOpen": "Ouvert",
@@ -83,7 +152,21 @@
     "favorite": "Mettre en favori",
     "unfavorite": "Retirer des favoris",
     "detailFallbackTitle": "Événement",
-    "externalLink": "Voir la page de l'événement"
+    "externalLink": "Voir la page de l'événement",
+    "emptyMine": "Rien à venir dans vos lieux et vos jeux.",
+    "emptyNear": "Rien à moins de {{radius}} km de {{place}}.",
+    "widen": "Élargir à {{radius}} km",
+    "findLairs": "Trouver des lieux à suivre",
+    "allMyGames": "Tous mes jeux",
+    "mode": {
+      "mine": "Mes lieux",
+      "near": "Autour de moi"
+    },
+    "place": {
+      "inviteTitle": "Dites-nous où vous jouez",
+      "inviteText": "Choisissez une ville pour voir les événements autour de vous.",
+      "orSignIn": "Ou se connecter pour suivre ses lieux"
+    }
   },
   "collection": {
     "title": "Collection",
@@ -236,33 +319,33 @@
       "collectionEmpty": "Ce groupe n'a pas encore de collection.",
       "wishlistsAction": "Listes de souhaits du groupe",
       "sellListAction": "Liste de vente du groupe",
-        "showcaseAction": "Vitrine",
-         "rhythm": "Le rythme du groupe",
-         "manageOnWeb": "Inviter, promouvoir et exclure se font depuis le site.",
-         "views": {
-          "etabli": "Établi",
-          "sessions": "Sessions",
-          "announcements": "Annonces",
-          "lists": "Listes",
-          "members": "Membres"
-         }
+      "showcaseAction": "Vitrine",
+      "rhythm": "Le rythme du groupe",
+      "manageOnWeb": "Inviter, promouvoir et exclure se font depuis le site.",
+      "views": {
+        "etabli": "Établi",
+        "sessions": "Sessions",
+        "announcements": "Annonces",
+        "lists": "Listes",
+        "members": "Membres"
+      }
     },
-      "sessions": {
-       "next": "Prochaine session",
-       "noneUpcoming": "Aucune session à venir.",
-       "empty": "Ce groupe n'a proposé aucune session.",
-       "poll": "Sondage",
-       "cancelled": "Annulée",
-       "confirmSlot": "Retenir",
-       "attending_one": "{{count}} présent",
-       "attending_other": "{{count}} présents",
-       "answerHint": "Retoucher la même réponse l'annule.",
-       "answer": {
+    "sessions": {
+      "next": "Prochaine session",
+      "noneUpcoming": "Aucune session à venir.",
+      "empty": "Ce groupe n'a proposé aucune session.",
+      "poll": "Sondage",
+      "cancelled": "Annulée",
+      "confirmSlot": "Retenir",
+      "attending_one": "{{count}} présent",
+      "attending_other": "{{count}} présents",
+      "answerHint": "Retoucher la même réponse l'annule.",
+      "answer": {
         "yes": "Je viens",
         "maybe": "Peut-être",
         "no": "Je ne peux pas"
-       },
-       "create": {
+      },
+      "create": {
         "action": "Proposer une session",
         "title": "Nouvelle session",
         "fixed": "Date fixe",
@@ -275,70 +358,70 @@
         "place": "Où",
         "placePlaceholder": "Chez Yann, MJC…",
         "submit": "Proposer"
-       }
-      },
-      "announcements": {
-       "title": "Annonces",
-       "empty": "Aucune annonce pour le moment.",
-       "publishOnWeb": "Publier une annonce se fait depuis le site.",
-       "scope": {
+      }
+    },
+    "announcements": {
+      "title": "Annonces",
+      "empty": "Aucune annonce pour le moment.",
+      "publishOnWeb": "Publier une annonce se fait depuis le site.",
+      "scope": {
         "group": "Interne",
         "public": "Publique"
-       }
-      },
-      "showcase": {
-       "fallbackTitle": "Vitrine",
-       "follow": "Suivre",
-       "following": "Suivi",
-       "followers_one": "{{count}} abonné",
-       "followers_other": "{{count}} abonnés",
-       "openHub": "Ouvrir l'Établi",
-       "privateNote": "Ce groupe est privé : sa vitrine s'ouvre à qui en a l'adresse, mais il ne paraît pas au rôle d'armes.",
-       "liveNow": "En direct",
-       "news": "Actualités",
-       "contents": "Publications du groupe",
-       "memberContents": "Publications des membres",
-       "links": "Nous suivre",
-       "games": "Jeux du groupe"
-      },
-      "explore": {
-       "title": "Découvrir des groupes",
-       "entrySub": "Le rôle d'armes des groupes ouverts",
-       "searchPlaceholder": "Un nom, une ville, un jeu, un jour…",
-       "empty": "Nul groupe de ce nom au rôle.",
-       "loadMore": "Charger plus",
-       "live": "En direct",
-       "liveNow": "En lice",
-       "private": "Privé",
-       "liveCount_one": "{{count}} groupe diffuse",
-       "liveCount_other": "{{count}} groupes diffusent",
-       "nearUnavailable": "Le tri par proximité demande votre position, que l'application ne sait pas encore lire. L'ordre affiché reste celui des groupes les plus vifs.",
-       "order": {
+      }
+    },
+    "showcase": {
+      "fallbackTitle": "Vitrine",
+      "follow": "Suivre",
+      "following": "Suivi",
+      "followers_one": "{{count}} abonné",
+      "followers_other": "{{count}} abonnés",
+      "openHub": "Ouvrir l'Établi",
+      "privateNote": "Ce groupe est privé : sa vitrine s'ouvre à qui en a l'adresse, mais il ne paraît pas au rôle d'armes.",
+      "liveNow": "En direct",
+      "news": "Actualités",
+      "contents": "Publications du groupe",
+      "memberContents": "Publications des membres",
+      "links": "Nous suivre",
+      "games": "Jeux du groupe"
+    },
+    "explore": {
+      "title": "Découvrir des groupes",
+      "entrySub": "Le rôle d'armes des groupes ouverts",
+      "searchPlaceholder": "Un nom, une ville, un jeu, un jour…",
+      "empty": "Nul groupe de ce nom au rôle.",
+      "loadMore": "Charger plus",
+      "live": "En direct",
+      "liveNow": "En lice",
+      "private": "Privé",
+      "liveCount_one": "{{count}} groupe diffuse",
+      "liveCount_other": "{{count}} groupes diffusent",
+      "nearUnavailable": "Le tri par proximité demande votre position, que l'application ne sait pas encore lire. L'ordre affiché reste celui des groupes les plus vifs.",
+      "order": {
         "vifs": "Les plus vifs",
         "proches": "Proches",
         "neufs": "Les derniers venus"
-       },
-       "notice": {
+      },
+      "notice": {
         "vifs": "direct › publication › session à venir",
         "proches": "distance depuis votre position",
         "neufs": "date de création du groupe"
-       },
-       "roll": {
+      },
+      "roll": {
         "title": "Le rôle",
         "results": "Résultats",
         "count_one": "{{count}} groupe au rôle",
         "count_other": "{{count}} groupes au rôle",
         "reset": "Rouvrir le rôle"
-       },
-       "entry": {
+      },
+      "entry": {
         "liveCry_one": "{{streamer}} diffuse · {{count}} spectateur",
         "liveCry_other": "{{streamer}} diffuse · {{count}} spectateurs",
         "liveCryPlain": "{{streamer}} diffuse en ce moment",
         "quiet": "Pas de nouvelle depuis un moment",
         "deeds": {
-         "content": "{{title}} — {{at}}",
-         "announcement": "{{title}} — {{at}}",
-         "session": "Prochaine session {{at}}"
+          "content": "{{title}} — {{at}}",
+          "announcement": "{{title}} — {{at}}",
+          "session": "Prochaine session {{at}}"
         },
         "follow": "Suivre",
         "following": "Suivi",
@@ -349,8 +432,8 @@
         "followers_other": "abonnés",
         "published_one": "publication",
         "published_other": "publications"
-       }
-      },
+      }
+    },
     "myGroups": "Mes groupes"
   },
   "notifications": {
@@ -378,7 +461,12 @@
     "apiLabel": "API : {{url}}",
     "socialTitle": "Communauté",
     "socialText": "Retrouvez vos amis, vos groupes de jeu et les repaires suivis.",
-    "socialAction": "Voir la section Social"
+    "socialAction": "Voir la section Social",
+    "plan": {
+      "supporter": "Supporter",
+      "expert": "Joutes Expert",
+      "pro": "Joutes Pro"
+    }
   },
   "network": {
     "offlineBanner": "Hors connexion",
@@ -473,7 +561,7 @@
     "computing": "Calcul en cours…",
     "error": "Le recalcul a échoué."
   },
-  "decks":   {
+  "decks": {
     "title": "Mes decks",
     "subtitle": "Vos listes, et celles de la communauté",
     "gateText": "Connectez-vous pour retrouver vos decks. La librairie publique, elle, se lit sans compte.",
@@ -614,6 +702,14 @@
         "hint": "Visible par tous, listé dans la librairie"
       },
       "action": "Qui voit ce deck"
+    },
+    "cover": {
+      "title": "Couverture",
+      "upload": "Image déposée par l'auteur sur le site.",
+      "card": "Illustrée par {{name}}.",
+      "legend": "La légende illustre le deck. Choisissez une autre carte ci-dessous.",
+      "none": "Choisissez une carte du deck pour l'illustrer.",
+      "remove": "Retirer le choix"
     }
   },
   "deck": {
@@ -1008,7 +1104,45 @@
       }
     },
     "count_one": "{{count}} lieu",
-    "count_other": "{{count}} lieux"
+    "count_other": "{{count}} lieux",
+    "portal": {
+      "upcoming": {
+        "title": "Prochains événements",
+        "count_one": "{{count}} à venir",
+        "count_other": "{{count}} à venir",
+        "scopeMine": "Mes jeux",
+        "scopeAll": "Tous les jeux",
+        "hidden_one": "{{count}} autre événement à venir sur les autres jeux du lieu.",
+        "hidden_other": "{{count}} autres événements à venir sur les autres jeux du lieu.",
+        "seeAgenda": "Voir l'agenda complet"
+      },
+      "practical": {
+        "title": "Infos pratiques",
+        "today": "Aujourd'hui : {{ranges}}",
+        "closedToday": "Fermé aujourd'hui",
+        "directions": "Itinéraire",
+        "call": "Appeler"
+      },
+      "agenda": {
+        "registrations": "Mes inscriptions",
+        "previous": "Mois précédent",
+        "next": "Mois suivant",
+        "emptyMonth": "Aucun événement ce mois-ci."
+      },
+      "games": {
+        "count_one": "{{count}} jeu joué ici",
+        "count_other": "{{count}} jeux joués ici",
+        "upcoming_zero": "Aucun événement à venir",
+        "upcoming_one": "{{count}} événement à venir",
+        "upcoming_other": "{{count}} événements à venir"
+      },
+      "about": {
+        "photos": "Photos",
+        "transit": "Transports :",
+        "parking": "Parking :",
+        "followHint": "Suivre ce lieu, c'est retrouver ses événements dans votre agenda et être prévenu de ses annonces."
+      }
+    }
   },
   "players": {
     "title": "Joueurs",
@@ -1118,41 +1252,41 @@
     "saveError": "L'enregistrement de la table a échoué."
   },
   "tournaments": {
-                   "stopwatchElapsed": "écoulé",
-                   "stopwatchPaused": "chrono en pause",
-                   "stopwatchNotStarted": "Chronomètre non lancé",
-                   "standingsTime": "Temps",
-                   "puzzleLabel": "Puzzle",
-                   "puzzleElapsed": "Temps écoulé",
-                   "puzzleYourTime": "Votre temps",
-                   "puzzleRunningHint": "Prévenez dès que vous avez terminé.",
-                   "puzzleDoneHint": "Temps enregistré. Voyez l'organisation pour le corriger.",
-                   "puzzleDeclareFinished": "J'ai terminé le puzzle",
-                   "puzzleOrganizerOnlyHint": "L'organisation enregistrera votre temps quand vous aurez terminé.",
-                   "puzzleFinishedCount": "{{count}} joueur(s) ont terminé",
-                   "deadlineLabel": "échéance",
-                   "playBefore": "À jouer avant le",
-                   "scenario": "Scénario",
-                   "matchStatAria": "{{stat}} de {{name}} pour la partie {{number}}",
-                   "matchStatsOptional": "Relevé après chaque partie : {{stats}}.",
-                   "matchStatsRequired": "À relever obligatoirement après chaque partie : {{stats}}.",
-                   "matchStatsMissing": "Renseignez toutes les statistiques de chaque joueur pour les parties jouées.",
-                   "matchStats": {
-                     "struggles": "Cartes de lutte revendiquées",
-                     "strugglesShort": "Lutte",
-                     "wounds": "Blessures infligées",
-                     "woundsShort": "Bless.",
-                     "victoryPoints": "Points de victoire",
-                     "victoryPointsShort": "PV",
-                     "touchdowns": "Touchdowns",
-                     "touchdownsShort": "TD",
-                     "casualties": "Sorties adverses",
-                     "casualtiesShort": "Sorties",
-                     "battlePoints": "Score de bataille",
-                     "battlePointsShort": "Bataille",
-                     "pointsDestroyed": "Score de destruction",
-                     "pointsDestroyedShort": "Détruits"
-                   },
+    "stopwatchElapsed": "écoulé",
+    "stopwatchPaused": "chrono en pause",
+    "stopwatchNotStarted": "Chronomètre non lancé",
+    "standingsTime": "Temps",
+    "puzzleLabel": "Puzzle",
+    "puzzleElapsed": "Temps écoulé",
+    "puzzleYourTime": "Votre temps",
+    "puzzleRunningHint": "Prévenez dès que vous avez terminé.",
+    "puzzleDoneHint": "Temps enregistré. Voyez l'organisation pour le corriger.",
+    "puzzleDeclareFinished": "J'ai terminé le puzzle",
+    "puzzleOrganizerOnlyHint": "L'organisation enregistrera votre temps quand vous aurez terminé.",
+    "puzzleFinishedCount": "{{count}} joueur(s) ont terminé",
+    "deadlineLabel": "échéance",
+    "playBefore": "À jouer avant le",
+    "scenario": "Scénario",
+    "matchStatAria": "{{stat}} de {{name}} pour la partie {{number}}",
+    "matchStatsOptional": "Relevé après chaque partie : {{stats}}.",
+    "matchStatsRequired": "À relever obligatoirement après chaque partie : {{stats}}.",
+    "matchStatsMissing": "Renseignez toutes les statistiques de chaque joueur pour les parties jouées.",
+    "matchStats": {
+      "struggles": "Cartes de lutte revendiquées",
+      "strugglesShort": "Lutte",
+      "wounds": "Blessures infligées",
+      "woundsShort": "Bless.",
+      "victoryPoints": "Points de victoire",
+      "victoryPointsShort": "PV",
+      "touchdowns": "Touchdowns",
+      "touchdownsShort": "TD",
+      "casualties": "Sorties adverses",
+      "casualtiesShort": "Sorties",
+      "battlePoints": "Score de bataille",
+      "battlePointsShort": "Bataille",
+      "pointsDestroyed": "Score de destruction",
+      "pointsDestroyedShort": "Détruits"
+    },
     "joinAction": "Rejoindre un tournoi",
     "filterCurrent": "En cours",
     "filterPast": "Terminés",
@@ -1313,5 +1447,30 @@
       "battlefields": "Champs de bataille",
       "sideboard": "Réserve"
     }
+  },
+  "search": {
+    "title": "Rechercher",
+    "placeholder": "Jeu, carte, lieu, événement, règle…",
+    "recent": "Recherches récentes",
+    "clearRecent": "Effacer",
+    "quickLinks": "Accès rapides",
+    "minChars": "Tapez au moins deux caractères.",
+    "empty": "Rien pour « {{query}} ».",
+    "groups": {
+      "games": "Jeux",
+      "cards": "Cartes",
+      "lairs": "Lieux",
+      "events": "Événements",
+      "rules": "Règles et politiques"
+    }
+  },
+  "place": {
+    "title": "Où êtes-vous ?",
+    "hint": "Une ville ou un code postal : l'application ne lit pas la position du téléphone.",
+    "searchPlaceholder": "Ville ou code postal…",
+    "noResult": "Aucune localité trouvée.",
+    "radius": "Rayon",
+    "choose": "Choisir une ville",
+    "forget": "Oublier cette ville"
   }
 }

@@ -1,6 +1,8 @@
 import { api } from "./client";
 import { endpoints } from "./endpoints";
 import type {
+  GameFavoriteState,
+  GameFollowState,
   LeaderboardResponse,
   MyPermissions,
   PublicUserProfile,
@@ -11,7 +13,7 @@ import type {
   UserContent,
   Wishlist,
 } from "./types";
-import { cacheDelete, withCache } from "../lib/response-cache";
+import { cacheDelete, cacheDeleteByPrefix, withCache } from "../lib/response-cache";
 
 /** Profil public d'un utilisateur (soi-même ou un autre). */
 export function getUserProfile(
@@ -44,11 +46,69 @@ export function getUserSellList(
   );
 }
 
-/** Jeux suivis par l'utilisateur connecté (session requise). */
+/** Ce que `GET /users/me/games` rend : les suivis, de quoi les afficher, les favoris. */
+export interface MyGames {
+  gameIds: string[];
+  games: { id: string; name: string; slug: string | null; icon?: string }[];
+  favoriteGameIds: string[];
+}
+
+/**
+ * Les jeux suivis par le compte connecté (session requise).
+ *
+ * `withCache` sous une clé fixe : la liste ne change que par le bouton
+ * « Suivre », qui la purge. Chaque écran qui pose la question — l'accueil, les
+ * événements, la fiche d'un lieu — la relirait sinon à chaque ouverture.
+ */
+export const MY_GAMES_CACHE_KEY = "users:me:games";
+
+export function getMyGames(): Promise<MyGames> {
+  return withCache(MY_GAMES_CACHE_KEY, () =>
+    api.get<MyGames>(endpoints.users.myGames).then((r) => ({
+      gameIds: r.gameIds ?? [],
+      games: r.games ?? [],
+      favoriteGameIds: r.favoriteGameIds ?? [],
+    })),
+  );
+}
+
+/** Les identifiants seuls, pour qui n'a besoin que d'eux. */
 export function getMyFollowedGameIds(): Promise<string[]> {
-  return api
-    .get<{ gameIds: string[] }>(endpoints.users.myGames)
-    .then((r) => r.gameIds ?? []);
+  return getMyGames().then((r) => r.gameIds);
+}
+
+/** Ce que le suivi d'un jeu périme : la liste des suivis, et l'accueil bâti dessus. */
+async function forgetMyGames(): Promise<void> {
+  await Promise.all([cacheDelete(MY_GAMES_CACHE_KEY), cacheDeleteByPrefix("home:feed:")]);
+}
+
+/**
+ * Suivre un jeu, ou cesser de le suivre — `PUT`/`DELETE /users/me/games/{id}`.
+ * Deux verbes idempotents : un double toucher ne renverse rien.
+ */
+export async function setFollowingGame(
+  idOrSlug: string,
+  following: boolean,
+): Promise<GameFollowState> {
+  const path = endpoints.users.myGame(idOrSlug);
+  const state = following
+    ? await api.put<GameFollowState>(path, {})
+    : await api.delete<GameFollowState>(path);
+  await forgetMyGames();
+  return state;
+}
+
+/** Mettre un jeu suivi en favori, ou l'en retirer. Répond 409 si le jeu n'est pas suivi. */
+export async function setFavoriteGame(
+  idOrSlug: string,
+  favorite: boolean,
+): Promise<GameFavoriteState> {
+  const path = endpoints.users.myGameFavorite(idOrSlug);
+  const state = favorite
+    ? await api.put<GameFavoriteState>(path, {})
+    : await api.delete<GameFavoriteState>(path);
+  await forgetMyGames();
+  return state;
 }
 
 /** Permissions effectives du compte connecté (session requise). */

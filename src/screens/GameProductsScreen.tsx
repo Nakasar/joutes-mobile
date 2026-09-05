@@ -12,13 +12,16 @@ import { BoxIcon, BrushIcon, MiniatureIcon, SearchIcon } from "../components/ico
 import { ProductSheet } from "../components/ProductSheet";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
+import { useSearchParamState } from "../hooks/useSearchParamState";
 import { PRODUCT_KIND_KEYS, suggestsRedundantPurchase } from "../lib/products";
 import { useAuth } from "../store/auth";
 
 const PAGE_SIZE = 24;
 
-type Ownership = "all" | "owned" | "unowned";
-type Shape = "all" | "containers" | "units";
+const OWNERSHIPS = ["all", "owned", "unowned"] as const;
+type Ownership = (typeof OWNERSHIPS)[number];
+const SHAPES = ["all", "containers", "units"] as const;
+type Shape = (typeof SHAPES)[number];
 
 /** Une des trois jauges de complétion d'une gamme. */
 function CompletionBar({
@@ -73,8 +76,8 @@ export function GameProductsScreen() {
   // C'est le seul filtre dont la valeur par défaut n'est pas « tout ».
   const [edition, setEdition] = useState("");
   const [kind, setKind] = useState("");
-  const [ownership, setOwnership] = useState<Ownership>("all");
-  const [shape, setShape] = useState<Shape>("all");
+  const [ownership, setOwnership] = useSearchParamState<Ownership>("ownership", OWNERSHIPS, "all");
+  const [shape, setShape] = useSearchParamState<Shape>("shape", SHAPES, "all");
 
   const [items, setItems] = useState<ProductCollectionItem[]>([]);
   const [stats, setStats] = useState<ProductCollectionStats | null>(null);

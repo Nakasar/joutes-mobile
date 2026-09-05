@@ -24,6 +24,7 @@ import {
 } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
+import { useSearchParamState } from "../hooks/useSearchParamState";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
 import { canManagePlayGroup, readMemberRole } from "../lib/play-group-access";
 import { readPlayGroupAccent } from "../lib/play-group-theme";
@@ -44,7 +45,7 @@ function nextSession(sessions: PlayGroupSession[]): PlayGroupSession | undefined
 function PlayGroupDetailContent({ groupId }: { groupId: string }) {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const [view, setView] = useState<View>("etabli");
+  const [view, setView] = useSearchParamState<View>("view", VIEWS, "etabli");
   const [creating, setCreating] = useState(false);
 
   const group = useApi(() => getPlayGroup(groupId), [groupId]);

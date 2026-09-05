@@ -9,6 +9,7 @@ import { Tabs } from "../components/Tabs";
 import { CaretIcon, SearchIcon, TrophyIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
+import { useSearchParamState } from "../hooks/useSearchParamState";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
 import { userLabel, userProfilePath } from "../lib/user-tag";
 import { CachedImage } from "../components/CachedImage";
@@ -47,7 +48,8 @@ function ringOf(medal: string): string {
   return `color-mix(in srgb, ${medal} 20%, transparent)`;
 }
 
-type Tab = "registry" | "leaderboard";
+const TABS = ["registry", "leaderboard"] as const;
+type Tab = (typeof TABS)[number];
 
 function BoardAvatar({ row, className }: { row: LeaderboardRow; className: string }) {
   const user = row.user;
@@ -395,7 +397,7 @@ function Registry() {
  */
 export function PlayersScreen() {
   const { t } = useTranslation();
-  const [tab, setTab] = useState<Tab>("registry");
+  const [tab, setTab] = useSearchParamState<Tab>("tab", TABS, "registry");
 
   return (
     <div className="screen">

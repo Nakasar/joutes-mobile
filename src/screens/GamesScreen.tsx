@@ -1,15 +1,17 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { listGames } from "../api/games";
 import { getMyFollowedGameIds } from "../api/users";
 import type { GameSummary } from "../api/types";
 import { CachedImage } from "../components/CachedImage";
-import { CheckIcon, SearchIcon } from "../components/icons";
+import { FollowGameButton } from "../components/FollowGameButton";
+import { SearchIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { Tabs } from "../components/Tabs";
 import { useApi } from "../hooks/useApi";
 import { useOnline } from "../hooks/useOnline";
+import { useSearchParamState } from "../hooks/useSearchParamState";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
 import { GAME_TYPE_ORDER, gameTypeOrderIndex, isKnownGameType } from "../lib/game-types";
 import { listMeta } from "../lib/offline-store";
@@ -27,10 +29,12 @@ function GameTile({
   game,
   browsable,
   followed,
+  onFollowChange,
 }: {
   game: GameSummary;
   browsable: boolean;
   followed: boolean;
+  onFollowChange: (gameId: string, following: boolean) => void;
 }) {
   const { t } = useTranslation();
   const color = colorFor(game.slug, (game as { color?: string }).color);
@@ -54,12 +58,14 @@ function GameTile({
             {initialOf(game.name)}
           </span>
         )}
-        {/* La coche dit ce que « Mes jeux » filtre, sans quitter la liste. */}
-        {followed && (
-          <span className="game-tile__followed" aria-label={t("games.scopeMine")}>
-            <CheckIcon size={13} />
-          </span>
-        )}
+        {/* La pastille dit ce que « Mes jeux » filtre — et le change, sans
+            quitter la liste. Un visiteur ne la voit pas. */}
+        <FollowGameButton
+          gameIdOrSlug={game.slug ?? game._id}
+          following={followed}
+          onChange={(next) => onFollowChange(game._id, next)}
+          variant="tile"
+        />
       </span>
 
       <h2 className="game-tile__name">{game.name}</h2>
@@ -93,7 +99,8 @@ function GameTile({
   );
 }
 
-type Scope = "mine" | "all";
+const SCOPES = ["mine", "all"] as const;
+type Scope = (typeof SCOPES)[number];
 
 export function GamesScreen() {
   const { t } = useTranslation();
@@ -106,22 +113,32 @@ export function GamesScreen() {
     [isAuthenticated],
   );
 
-  const [scope, setScope] = useState<Scope>(() => (isAuthenticated ? "mine" : "all"));
+  // L'onglet vit dans l'URL pour survivre au retour arrière ; hors session il
+  // n'y a qu'une liste, quoi que l'URL demande.
+  const [requestedScope, setScope] = useSearchParamState<Scope>(
+    "scope",
+    SCOPES,
+    isAuthenticated ? "mine" : "all",
+  );
+  const scope: Scope = isAuthenticated ? requestedScope : "all";
   const [typeFilter, setTypeFilter] = useState<string | null>(null);
   const [search, setSearch] = useState("");
-
-  // Le bascule "Mes jeux" disparaît à la déconnexion : si l'utilisateur se
-  // déconnecte pendant qu'il consulte cet écran, on repasse sur "Tous les
-  // jeux" pour ne pas rester bloqué sur une liste vide sans moyen d'en sortir.
-  useEffect(() => {
-    if (!isAuthenticated) setScope("all");
-  }, [isAuthenticated]);
 
   const downloaded = useMemo(
     () => new Set((offline.data ?? []).map((m) => m.slug)),
     [offline.data],
   );
-  const myGameIds = useMemo(() => new Set(myGames.data ?? []), [myGames.data]);
+  // Ce que le bouton d'une tuile vient de changer, avant que le serveur ne
+  // le confirme : une bascule optimiste par jeu.
+  const [followOverrides, setFollowOverrides] = useState<Record<string, boolean>>({});
+  const myGameIds = useMemo(() => {
+    const ids = new Set(myGames.data ?? []);
+    for (const [id, following] of Object.entries(followOverrides)) {
+      if (following) ids.add(id);
+      else ids.delete(id);
+    }
+    return ids;
+  }, [myGames.data, followOverrides]);
 
   const types = useMemo(() => {
     const present = new Set(
@@ -226,9 +243,10 @@ export function GamesScreen() {
             key={game._id}
             game={game}
             browsable={online || downloaded.has(game.slug)}
-            // Dans « Mes jeux », tout est suivi : la coche n'y distinguerait
-            // rien. Elle ne sert que dans le catalogue entier.
-            followed={scope === "all" && myGameIds.has(game._id)}
+            followed={myGameIds.has(game._id)}
+            onFollowChange={(id, following) =>
+              setFollowOverrides((current) => ({ ...current, [id]: following }))
+            }
           />
         ))}
       </div>

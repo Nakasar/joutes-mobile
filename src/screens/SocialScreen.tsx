@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { listGames } from "../api/games";
 import { listPlayGroups } from "../api/play-groups";
@@ -18,12 +18,14 @@ import {
 } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
+import { useSearchParamState } from "../hooks/useSearchParamState";
 import { colorFor, initialOf, initialsOf, tintStyle } from "../lib/game-visuals";
 import { readPlayGroupAccent } from "../lib/play-group-theme";
 import { userProfilePath } from "../lib/user-tag";
 import { useAuth } from "../store/auth";
 
-type Tab = "amis" | "groups" | "lairs";
+const TABS = ["amis", "groups", "lairs"] as const;
+type Tab = (typeof TABS)[number];
 
 function friendName(u: PublicUser, fallback: string): string {
   return u.displayName || u.username || fallback;
@@ -344,8 +346,9 @@ function LairsTab() {
 
 export function SocialScreen() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
-  const [tab, setTab] = useState<Tab>("amis");
+  const [tab, setTab] = useSearchParamState<Tab>("tab", TABS, "amis");
 
   return (
     <div className="screen">
@@ -357,6 +360,7 @@ export function SocialScreen() {
           <button
             className="icon-button icon-button--primary"
             aria-label={t("social.addFriend")}
+            onClick={() => navigate("/players")}
           >
             <UserPlusIcon size={20} />
           </button>

@@ -17,6 +17,7 @@ import { GameProductsScreen } from "./screens/GameProductsScreen";
 import { GameQuizzesScreen } from "./screens/GameQuizzesScreen";
 import { GameMatchDetailScreen } from "./screens/GameMatchDetailScreen";
 import { GameScreen } from "./screens/GameScreen";
+import { GameSocialScreen } from "./screens/GameSocialScreen";
 import { GamesScreen } from "./screens/GamesScreen";
 import { HomeScreen } from "./screens/HomeScreen";
 import { LairDetailScreen } from "./screens/LairDetailScreen";
@@ -24,6 +25,7 @@ import { LairsScreen } from "./screens/LairsScreen";
 import { LoginScreen } from "./screens/LoginScreen";
 import { MySellListScreen } from "./screens/MySellListScreen";
 import { NewsDetailScreen } from "./screens/NewsDetailScreen";
+import { NewsScreen } from "./screens/NewsScreen";
 import { PlayGroupDetailScreen } from "./screens/PlayGroupDetailScreen";
 import { PlayGroupSellListScreen } from "./screens/PlayGroupSellListScreen";
 import { PlayGroupShowcaseScreen } from "./screens/PlayGroupShowcaseScreen";
@@ -35,6 +37,7 @@ import { PoliciesListScreen } from "./screens/PoliciesListScreen";
 import { PolicyDetailScreen } from "./screens/PolicyDetailScreen";
 import { QuizScreen } from "./screens/QuizScreen";
 import { RulesScreen } from "./screens/RulesScreen";
+import { SearchScreen } from "./screens/SearchScreen";
 import { SettingsScreen } from "./screens/SettingsScreen";
 import { SocialScreen } from "./screens/SocialScreen";
 import { TournamentDetailScreen } from "./screens/TournamentDetailScreen";
@@ -86,6 +89,7 @@ function Shell() {
             <main className="app-shell__content">
               <Routes>
                 <Route path="/" element={<HomeScreen />} />
+                <Route path="/news" element={<NewsScreen />} />
                 <Route path="/news/:newsId" element={<NewsDetailScreen />} />
                 <Route path="/games" element={<GamesScreen />} />
                 <Route path="/games/:gameSlug" element={<GameScreen />} />
@@ -121,6 +125,7 @@ function Shell() {
                   path="/games/:gameSlug/quizzes"
                   element={<GameQuizzesScreen />}
                 />
+                <Route path="/games/:gameSlug/social" element={<GameSocialScreen />} />
                 <Route
                   path="/games/:gameSlug/quizzes/:quizId"
                   element={<QuizScreen />}
@@ -207,6 +212,7 @@ function Shell() {
                   path="/users/:userTag/contents/:contentId"
                   element={<UserContentScreen />}
                 />
+                <Route path="/search" element={<SearchScreen />} />
                 <Route path="/notifications" element={<NotificationsScreen />} />
                 <Route path="/settings" element={<SettingsScreen />} />
                 <Route path="*" element={<Navigate to="/" replace />} />

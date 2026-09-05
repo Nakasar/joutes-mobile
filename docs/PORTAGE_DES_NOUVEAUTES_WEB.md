@@ -481,3 +481,33 @@ Trois écarts connus entre la spec et la production, à revalider à chaque lot 
   se documente explicitement dans `openapi.yaml`.
 - **Réglage de la préférence de fournisseur de prix** depuis le mobile : écarté au
   lot 1, à rouvrir si le réglage web se révèle introuvable.
+
+## Addendum du 5 septembre 2026 (v0.47.0, `joutes-app` 0.3.0)
+
+Les dix lots ci-dessus sont livrés (v0.46.0). Cette passe porte les nouveautés
+du web arrivées entre le 26 août et le 5 septembre, et corrige six défauts de
+l'application. Côté API, tout est documenté dans `openapi.yaml` :
+
+| Sujet | API (`joutes-app`) | Mobile |
+|---|---|---|
+| Barre de navigation Android sous les onglets | — | commande Tauri `android_system_insets` (JNI), `--safe-bottom` planché |
+| Onglet perdu au retour arrière | — | `useSearchParamState` : l'onglet vit dans l'URL |
+| Recherche globale | `GET /search` documenté, résultats enrichis de `kind`/`id`/`gameSlug`/`doc` | `/search` |
+| Événements autour d'une ville | branche anonyme géolocalisée de `GET /events` : `afterDate`/`beforeDate`/`gameId` honorés ; `Event.lair.location` documenté | modes « Mes lieux » / « Autour de moi », `GET /geo/places`, ville mémorisée sur l'appareil |
+| Vitrine d'un lieu | — | refonte sur le modèle du site |
+| Accueil | `GET /feed` (lectures partagées `lib/home/`), `GET /news` multi-`gameId` | refonte, `/news` reprend l'ancien fil |
+| Réseaux, direct, publications d'un jeu | `GET /games/{id}/live`, `GET /games/{id}/social-posts` ; `Game.links` et `Game.features` complétés | fiche du jeu, `/games/:slug/social` |
+| Suivre un jeu | `PUT`/`DELETE /users/me/games/{id}` et `/favorite` | bouton Suivre (fiche, tuiles) |
+| Couvertures de decks et quizz | (déjà spécifiées) | `src/lib/deck-cover.ts`, `quiz-cover.ts`, `blob-image-url.ts` |
+| Avatar et badges | `/auth/get-session` documenté | Réglages, accueil |
+
+Copies pures ajoutées (à tenir synchrones) : `src/lib/feed-mix.ts`
+(`lib/content/feed-mix.ts`), `src/lib/deck-cover.ts` (`lib/decks/cover.ts`),
+`src/lib/quiz-cover.ts` (`lib/quizzes/cover.ts`), `src/lib/blob-image-url.ts`
+(`lib/media/blob-image-url.ts`), la table de `src/lib/game-links.ts`
+(`lib/constants/game-links.ts`).
+
+Écartés, à dessein : le GPS (une ville suffit, et la permission native n'est pas
+déclarée) ; le dépôt d'une image de couverture depuis le mobile (le choix d'une
+carte seulement) ; une carte tuilée sur la fiche d'un lieu (la politique d'usage
+des tuiles OpenStreetMap n'admet pas une application distribuée).

@@ -31,6 +31,10 @@ export const endpoints = {
     errataVote: (idOrSlug: string, errataId: string) =>
       `/games/${idOrSlug}/erratas/${errataId}/vote`,
     quizzes: (idOrSlug: string) => `/games/${idOrSlug}/quizzes`,
+    /** Le direct de l'éditeur, s'il diffuse : à part du catalogue, qui se garde longtemps. */
+    live: (idOrSlug: string) => `/games/${idOrSlug}/live`,
+    /** Les publications de l'éditeur sur ses réseaux (404 sans `features.socialFeed`). */
+    socialPosts: (idOrSlug: string) => `/games/${idOrSlug}/social-posts`,
     /** Catalogue public des produits (boîtes, figurines…) — sans possession. */
     products: (idOrSlug: string) => `/games/${idOrSlug}/products`,
     /**
@@ -44,10 +48,18 @@ export const endpoints = {
     detail: (quizId: string) => `/quizzes/${quizId}`,
     scores: (quizId: string) => `/quizzes/${quizId}/scores`,
   },
+  /** La recherche globale : cinq listes courtes pour une seule question. */
+  search: "/search",
+  /** L'accueil en une requête : jeux, directs, agenda, fil, lieux, decks. */
+  feed: "/feed",
   news: {
     list: "/news",
     detail: (newsId: string) => `/news/${newsId}`,
     like: (newsId: string) => `/news/${newsId}/like`,
+  },
+  geo: {
+    /** Villes et codes postaux, pour dire où l'on est sans GPS. */
+    places: "/geo/places",
   },
   events: {
     list: "/events",
@@ -179,6 +191,9 @@ export const endpoints = {
   },
   users: {
     myGames: "/users/me/games",
+    /** Suivre / ne plus suivre un jeu : `PUT` et `DELETE` sur le même chemin. */
+    myGame: (idOrSlug: string) => `/users/me/games/${idOrSlug}`,
+    myGameFavorite: (idOrSlug: string) => `/users/me/games/${idOrSlug}/favorite`,
     /** Permissions effectives du compte connecté (publication de policies…). */
     myPermissions: "/users/me/permissions",
     /** Le registre de la communauté : les comptes qui ont ouvert leur vitrine. */

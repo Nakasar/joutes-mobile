@@ -23,7 +23,15 @@ export interface SessionUser {
   username?: string;
   displayName?: string;
   discriminator?: string;
+  /** Le champ de Better Auth : pas celui à afficher. */
   image?: string;
+  /**
+   * L'image à montrer pour le compte — celle déposée sur le profil, sinon
+   * celle du fournisseur d'identité. Dérivée à chaque lecture par le serveur.
+   */
+  avatar?: string;
+  /** Le palier d'abonnement et les statuts, dérivés eux aussi. */
+  badges?: UserBadges;
   [key: string]: unknown;
 }
 
@@ -35,6 +43,114 @@ export interface Session {
     expiresAt: string;
     [key: string]: unknown;
   };
+}
+
+// ---- Géographie ----
+
+/** Une localité rendue par `GET /geo/places`. */
+export interface Place {
+  id: string;
+  label: string;
+  city: string | null;
+  postalCode: string | null;
+  latitude: number;
+  longitude: number;
+}
+
+// ---- Accueil (GET /feed) ----
+
+export type FeedEntryType = "news" | "content" | "deck" | "social";
+
+interface FeedEntryBase {
+  id: string;
+  title: string;
+  /** Qui publie : l'auteur d'une actualité, le compte d'un réseau, le créateur d'un deck. */
+  source: string;
+  gameId?: string;
+  publishedAt: string;
+  thumbnail?: string;
+}
+
+export interface FeedNewsEntry extends FeedEntryBase {
+  type: "news";
+}
+
+export interface FeedContentEntry extends FeedEntryBase {
+  type: "content";
+  kind: "video" | "article" | "replay";
+  authorId: string;
+  summary?: string;
+  /** La vidéo ou le replay ; un article n'en a pas, il se lit sur Joutes. */
+  url?: string;
+  duration?: string;
+}
+
+export interface FeedDeckEntry extends FeedEntryBase {
+  type: "deck";
+  framing: "top" | "center";
+}
+
+export interface FeedSocialEntry extends FeedEntryBase {
+  type: "social";
+  url: string;
+  platform: SocialPlatform;
+  kind: SocialPostKind;
+  accountUrl: string;
+  avatar?: string;
+  duration?: string;
+}
+
+export type FeedEntry = FeedNewsEntry | FeedContentEntry | FeedDeckEntry | FeedSocialEntry;
+
+export interface HomeLive {
+  key: string;
+  kind: "game" | "lair";
+  id: string;
+  title: string;
+  source: string;
+  url: string;
+  thumbnail?: string;
+  viewers?: number;
+}
+
+export interface HomeGames {
+  source: "favorites" | "followed" | "defaults";
+  games: { id: string; name: string; slug: string | null; icon?: string }[];
+}
+
+export interface HomeFeed {
+  games: HomeGames;
+  game: { id: string; name: string; slug: string | null } | null;
+  position: { latitude: number; longitude: number; radiusKm: number; name?: string } | null;
+  lives: HomeLive[];
+  agenda: JoutesEvent[];
+  feed: FeedEntry[];
+  lairs: { source: "followed" | "nearby" | "none"; lairs: Lair[] };
+  decks: { source: "mine" | "featured"; decks: Deck[] };
+}
+
+// ---- Recherche globale ----
+
+export type SearchResultKind = "game" | "card" | "lair" | "event" | "policy" | "rule";
+
+/** Un résultat de `GET /search` : `href` est celui du site, `kind`/`id` sont pour nous. */
+export interface SearchResult {
+  label: string;
+  sublabel?: string;
+  href: string;
+  image?: string;
+  kind: SearchResultKind;
+  id: string;
+  gameSlug?: string;
+  doc?: "CR" | "TR";
+}
+
+export interface SearchResponse {
+  games: SearchResult[];
+  cards: SearchResult[];
+  lairs: SearchResult[];
+  events: SearchResult[];
+  rules: SearchResult[];
 }
 
 // ---- Jeux ----
@@ -84,8 +200,62 @@ export interface Game extends GameSummary {
     policies?: boolean;
     tournaments?: boolean;
     deckChecker?: boolean;
+    decks?: boolean;
+    news?: boolean;
+    quizz?: boolean;
+    /** Les publications de l'éditeur sont collectées : `GET /games/{id}/social-posts` répond. */
+    socialFeed?: boolean;
   };
   [key: string]: unknown;
+}
+
+/** Le direct de l'éditeur, quand il diffuse (`GET /games/{id}/live`). */
+export interface GameLive {
+  platform: "youtube";
+  url: string;
+  title?: string;
+  startedAt: string;
+  videoId: string;
+  channelTitle?: string;
+  channelUrl?: string;
+  thumbnail?: string;
+}
+
+export type SocialPlatform = "bluesky" | "youtube" | "x" | "instagram";
+export type SocialPostKind = "post" | "video" | "short";
+
+export interface SocialAccount {
+  handle: string;
+  displayName?: string;
+  avatar?: string;
+  url: string;
+}
+
+/** Une publication rapatriée d'un réseau de l'éditeur (`GET /games/{id}/social-posts`). */
+export interface GameSocialPost {
+  id: string;
+  gameId: string;
+  platform: SocialPlatform;
+  kind: SocialPostKind;
+  url: string;
+  account: SocialAccount;
+  /** Texte brut, tronqué à la collecte. Jamais du HTML. */
+  text?: string;
+  thumbnail?: string;
+  publishedAt: string;
+  durationSeconds?: number;
+}
+
+export interface GameFollowState {
+  gameId: string;
+  following: boolean;
+  gameIds: string[];
+}
+
+export interface GameFavoriteState {
+  gameId: string;
+  favorite: boolean;
+  favoriteGameIds: string[];
 }
 
 // ---- Cartes ----
@@ -340,6 +510,12 @@ export interface Quiz {
   title: string;
   gameId?: string;
   game?: { id?: string; name?: string; slug?: string; icon?: string };
+  /** Une carte du jeu choisie pour illustrer le quizz. */
+  coverCardId?: string;
+  /** Une image déposée par l'auteur ; prime sur la carte. */
+  coverImageUrl?: string;
+  /** L'adresse effectivement affichée — dérivée, ce que les listes lisent. */
+  coverImage?: string;
   blocks: QuizBlock[];
   /** Langue dans laquelle le quizz a été écrit : sa « VO ». */
   originalLang: string;
@@ -979,8 +1155,10 @@ export interface LairAbout {
   rhythm?: { label: string; value: string }[];
 }
 
+export type LairCalendarMode = "CALENDAR" | "AGENDA" | "CONFERENCE";
+
 export interface LairOptions {
-  calendar?: { mode?: "CALENDAR" | "AGENDA" | "CONFERENCE" };
+  calendar?: { mode?: LairCalendarMode };
   theme?: { logo?: string; accentColor?: string; tintSurfaces?: boolean };
   sections?: LairSectionState[];
   live?: LairLiveStream | null;
@@ -1073,6 +1251,12 @@ export interface Deck {
   legendCardId?: string;
   /** Son nom au moment de l'enregistrement, pour l'afficher sans relire le catalogue. */
   legendName?: string;
+  /** Une carte du deck choisie pour l'illustrer ; la légende n'est que le repli. */
+  coverCardId?: string;
+  /** Une image déposée par l'auteur ; prime sur `coverCardId`. */
+  coverImageUrl?: string;
+  /** L'adresse effectivement affichée — dérivée, réécrite à chaque enregistrement. */
+  coverImage?: string;
   /** Domaines couverts par les cartes du deck. Valeur dérivée, recalculée par le serveur. */
   domains?: string[];
   visibility?: DeckVisibility;
@@ -1113,6 +1297,8 @@ export interface DeckInput {
   notes?: string;
   format?: string;
   legendCardId?: string;
+  /** La carte qui illustre le deck ; `""` retire le choix. */
+  coverCardId?: string;
   visibility?: DeckVisibility;
   /**
    * La `version` que le client croyait à jour, sur un `PATCH`.

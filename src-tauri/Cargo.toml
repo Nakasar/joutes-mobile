@@ -1,6 +1,6 @@
 [package]
 name = "joutes-mobile"
-version = "0.46.0"
+version = "0.47.0"
 description = "Application mobile Joutes (client de l'API joutes.app)"
 authors = ["Joutes"]
 edition = "2021"
@@ -32,3 +32,8 @@ tauri-plugin-barcode-scanner = "2"
 tauri-plugin-notifications = { version = "0.4", features = ["push-notifications"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+
+# Lecture des marges des barres système (`android_system_insets` dans
+# `src/lib.rs`) : le WebView Android ne les déclare pas au CSS.
+[target.'cfg(target_os = "android")'.dependencies]
+jni = "0.21"

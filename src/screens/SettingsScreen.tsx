@@ -2,13 +2,15 @@ import { Link } from "react-router-dom";
 import { Trans, useTranslation } from "react-i18next";
 import { config } from "../config";
 import { BackHeader } from "../components/BackHeader";
+import { CachedImage } from "../components/CachedImage";
 import { OfflineSection } from "../components/OfflineSection";
 import {
   LANGUAGE_LABELS,
   SUPPORTED_LANGUAGES,
   type Language,
 } from "../i18n";
-import { userProfilePath } from "../lib/user-tag";
+import { colorFor, tintStyle } from "../lib/game-visuals";
+import { userLabel, userProfilePath } from "../lib/user-tag";
 import { useAuth } from "../store/auth";
 
 function LanguageSection() {
@@ -45,14 +47,36 @@ export function SettingsScreen() {
         <h2 className="card__title">{t("settings.account")}</h2>
         {isAuthenticated ? (
           <>
-            <p>
-              {user?.displayName ??
-                user?.name ??
-                user?.username ??
-                t("settings.connected")}
-              {user?.discriminator ? `#${user.discriminator}` : ""}
-            </p>
-            {user?.email && <p className="muted">{user.email}</p>}
+            <div className="settings-head">
+              {user?.avatar ? (
+                <CachedImage src={user.avatar} alt="" className="avatar avatar--lg" />
+              ) : (
+                <span className="avatar avatar--lg" style={tintStyle(colorFor(user?.id ?? ""))}>
+                  {(user?.displayName ?? user?.name ?? user?.username ?? "?").slice(0, 1).toUpperCase()}
+                </span>
+              )}
+              <div className="settings-head__body">
+                <p className="settings-head__name">
+                  {user ? userLabel(user) : t("settings.connected")}
+                </p>
+                {user?.email && <p className="muted">{user.email}</p>}
+                {(user?.badges?.plan || (user?.badges?.statuses?.length ?? 0) > 0) && (
+                  <div className="chip-set settings-head__badges">
+                    {user?.badges?.plan && (
+                      <span className="chip chip--grad">
+                        {t(`settings.plan.${user.badges.plan}`, user.badges.plan)}
+                      </span>
+                    )}
+                    {user?.badges?.statuses?.map((status) => (
+                      <span key={status.id} className="chip">
+                        {status.icon ? `${status.icon} ` : ""}
+                        {status.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
             {user && (
               <Link
                 to={userProfilePath(user)}

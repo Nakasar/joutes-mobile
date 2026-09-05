@@ -8,6 +8,7 @@ import { DeckRow } from "../components/DeckRow";
 import { SearchIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
+import { useSearchParamState } from "../hooks/useSearchParamState";
 
 const PAGE_SIZE = 20;
 
@@ -46,7 +47,7 @@ export function DeckLibraryScreen() {
   const [gameId, setGameId] = useState(ALL);
   const [format, setFormat] = useState(ALL);
   const [legendCardId, setLegendCardId] = useState("");
-  const [sort, setSort] = useState<Sort>("popular");
+  const [sort, setSort] = useSearchParamState<Sort>("sort", SORTS, "popular");
 
   const [decks, setDecks] = useState<Deck[]>([]);
   const [totalPages, setTotalPages] = useState(1);

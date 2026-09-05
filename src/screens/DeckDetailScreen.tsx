@@ -12,6 +12,7 @@ import { getGame } from "../api/games";
 import type { Deck } from "../api/types";
 import { UserMarkdown } from "../components/UserMarkdown";
 import { BackHeader } from "../components/BackHeader";
+import { CachedImage } from "../components/CachedImage";
 import { DeckCostCurve } from "../components/DeckCostCurve";
 import { DeckLegalityBadge, DeckSizeLabel, DeckVisibilityBadge } from "../components/DeckBadges";
 import { DeckTextSheet } from "../components/DeckTextSheet";
@@ -20,6 +21,8 @@ import { DeckZoneCards } from "../components/DeckZoneCards";
 import { StarIcon, TextListIcon, TrashIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
+import { deckCoverPosition, resolveDeckCover } from "../lib/deck-cover";
+import { useSearchParamState } from "../hooks/useSearchParamState";
 import { deckCardIds, type DeckCardInfo } from "../lib/deck-contents";
 import { getDeckZones } from "../lib/deck-zones";
 import { useAuth } from "../store/auth";
@@ -45,7 +48,7 @@ export function DeckDetailScreen() {
   const { user } = useAuth();
   const { deckId = "" } = useParams();
 
-  const [tab, setTab] = useState<Tab>("description");
+  const [tab, setTab] = useSearchParamState<Tab>("tab", TABS, "description");
   const [deck, setDeck] = useState<Deck | null>(null);
   const [busy, setBusy] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -78,6 +81,11 @@ export function DeckDetailScreen() {
     () => new Map((catalog.data ?? []).map((card) => [card.id, card])),
     [catalog.data],
   );
+
+  // La couverture se résout avec le catalogue sous la main : la fiche montre
+  // donc toujours l'illustration à jour, là où une liste lit `coverImage`.
+  const cover = resolveDeckCover(deck ?? {}, cardsById);
+  const coverImage = cover.image;
 
   const isAuthor = Boolean(deck?.playerId && user?.id && deck.playerId === user.id);
   const isFavorite = Boolean(user?.id && deck?.favoritedBy?.includes(user.id));
@@ -136,6 +144,14 @@ export function DeckDetailScreen() {
       {deck && (
         <>
           <div className="deck-hero">
+            {coverImage && (
+              <CachedImage
+                src={coverImage}
+                alt=""
+                className="deck-hero__cover"
+                style={{ objectPosition: deckCoverPosition(cover.source) }}
+              />
+            )}
             <div className="chip-row" style={{ marginBottom: 6 }}>
               <DeckSizeLabel cards={deck.cards} zones={zones} />
               <DeckLegalityBadge cards={deck.cards} zones={zones} />

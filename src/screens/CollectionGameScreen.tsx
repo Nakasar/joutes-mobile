@@ -23,11 +23,13 @@ import {
 } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
+import { useSearchParamState } from "../hooks/useSearchParamState";
 import { resolvePrinting, type PrintingChoice } from "../lib/printings";
 import { useAuth } from "../store/auth";
 
 const PAGE_SIZE = 30;
-type Ownership = "all" | "owned" | "unowned";
+const OWNERSHIPS = ["all", "owned", "unowned"] as const;
+type Ownership = (typeof OWNERSHIPS)[number];
 
 function CollectionGameContent({
   gameSlug,
@@ -47,7 +49,7 @@ function CollectionGameContent({
   const [searchQuery, setSearchQuery] = useState("");
   const [setCode, setSetCode] = useState("");
   const [type, setType] = useState("");
-  const [ownership, setOwnership] = useState<Ownership>("all");
+  const [ownership, setOwnership] = useSearchParamState<Ownership>("ownership", OWNERSHIPS, "all");
 
   const [gameName, setGameName] = useState("");
   const [items, setItems] = useState<CollectionItem[]>([]);

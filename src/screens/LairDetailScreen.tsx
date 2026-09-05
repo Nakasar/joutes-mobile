@@ -4,25 +4,34 @@ import { useTranslation } from "react-i18next";
 import { listEvents } from "../api/events";
 import { getLair, setFollowingLair } from "../api/lairs";
 import { listGames } from "../api/games";
+import { getMyFollowedGameIds } from "../api/users";
 import type { JoutesEvent, LairNewsItem } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
 import { CachedImage } from "../components/CachedImage";
+import { LairAgenda } from "../components/LairAgenda";
+import { LairFeaturedEvent } from "../components/LairFeaturedEvent";
 import { LairHours } from "../components/LairHours";
 import { LairNewsCard } from "../components/LairNewsCard";
+import { LairPracticalInfo, directionsUrl } from "../components/LairPracticalInfo";
+import { LairUpcomingEvents } from "../components/LairUpcomingEvents";
 import { Movement } from "../components/Movement";
 import { StatusView } from "../components/StatusView";
+import { Tabs } from "../components/Tabs";
 import { UserMarkdown } from "../components/UserMarkdown";
 import {
+  CalendarIcon,
   CheckIcon,
-  ChevronIcon,
   ExternalLinkIcon,
   LockIcon,
   PinIcon,
   UsersIcon,
 } from "../components/icons";
 import { useApi } from "../hooks/useApi";
+import { useSavedPlace } from "../hooks/useSavedPlace";
+import { useSearchParamState } from "../hooks/useSearchParamState";
 import { currentLocale } from "../i18n";
 import { colorFor, initialsOf, tintStyle } from "../lib/game-visuals";
+import { readOpeningState } from "../lib/lair-hours";
 import { isSectionEnabled, readLairSections } from "../lib/lair-sections";
 import { readLairAccent } from "../lib/lair-theme";
 import { externalUrl } from "../lib/lair-urls";
@@ -30,31 +39,6 @@ import { useAuth } from "../store/auth";
 
 const TABS = ["news", "agenda", "games", "about"] as const;
 type Tab = (typeof TABS)[number];
-
-/**
- * L'adresse d'un itinéraire, sur la carte du système.
- *
- * `maps.apple.com` sur iOS, `google.com/maps` ailleurs : un lien plutôt qu'un
- * plan intégré — le mobile n'embarque pas de carte, et celle du système sait
- * faire ce qu'on lui demande ici, guider quelqu'un jusqu'à la porte.
- */
-function directionsUrl(address: string): string {
-  const query = encodeURIComponent(address);
-  return /iPad|iPhone|iPod/.test(navigator.userAgent)
-    ? `https://maps.apple.com/?q=${query}`
-    : `https://www.google.com/maps/search/?api=1&query=${query}`;
-}
-
-function formatDate(iso: string, locale: string): string {
-  const date = new Date(iso);
-  return Number.isNaN(date.getTime())
-    ? ""
-    : date.toLocaleDateString(locale, {
-        weekday: "short",
-        day: "numeric",
-        month: "short",
-      });
-}
 
 /** Les annonces, l'épinglée en tête puis les autres de la plus récente. */
 function orderedNews(news: LairNewsItem[] | undefined): LairNewsItem[] {
@@ -64,30 +48,24 @@ function orderedNews(news: LairNewsItem[] | undefined): LairNewsItem[] {
   });
 }
 
-function EventRow({ event, locale }: { event: JoutesEvent; locale: string }) {
-  return (
-    <Link to={`/events/${event.id}`} className="list-row list-row--link">
-      <div className="list-row__body">
-        <p className="list-row__title">{event.name}</p>
-        <p className="list-row__sub">
-          {[formatDate(event.startDateTime, locale), event.game?.name ?? event.gameName]
-            .filter(Boolean)
-            .join(" · ")}
-        </p>
-      </div>
-      <span className="chevron">
-        <ChevronIcon size={18} />
-      </span>
-    </Link>
-  );
+/** Les événements encore à venir, du plus proche au plus lointain. */
+function upcomingOf(events: JoutesEvent[]): JoutesEvent[] {
+  const now = new Date();
+  return events
+    .filter((event) => new Date(event.endDateTime || event.startDateTime) >= now)
+    .filter((event) => event.status !== "cancelled")
+    .sort((a, b) => a.startDateTime.localeCompare(b.startDateTime));
 }
 
 /**
- * La vitrine d'un lieu.
+ * La vitrine d'un lieu, sur le modèle de celle du site.
  *
- * Quatre onglets, et les blocs de l'onglet « Actualités » dans l'ordre que le
- * lieu a réglé sur le web (`readLairSections`). Une section éteinte n'est pas
- * rendue ; le calendrier ne peut pas l'être, c'est ce qu'on vient chercher ici.
+ * Le hero dit l'identité et l'état du moment — ouvert, fermé, jusqu'à quand.
+ * Puis quatre onglets : **actualités** (le direct d'abord, puis les blocs dans
+ * l'ordre réglé par le lieu, les prochains événements, les informations
+ * pratiques), **agenda** (mes inscriptions, puis le calendrier dans le mode
+ * du lieu, puis son rythme), **jeux** (les vignettes, avec le nombre
+ * d'événements à venir sur chacun) et **à propos**.
  *
  * **Un lieu privé hors de portée rend 404**, et l'écran affiche l'erreur telle
  * quelle : il ne peut pas dire « ce lieu est privé » sans confirmer qu'il
@@ -100,10 +78,11 @@ function EventRow({ event, locale }: { event: JoutesEvent; locale: string }) {
 export function LairDetailScreen() {
   const { t } = useTranslation();
   const { lairId = "" } = useParams();
-  const { isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth();
+  const { place } = useSavedPlace();
   const locale = currentLocale();
 
-  const [tab, setTab] = useState<Tab>("news");
+  const [tab, setTab] = useSearchParamState<Tab>("tab", TABS, "news");
   const [follow, setFollow] = useState<{
     following: boolean;
     followersCount: number;
@@ -111,23 +90,34 @@ export function LairDetailScreen() {
   const [busy, setBusy] = useState(false);
 
   // Changer de lieu garde le composant monté : sans remise à zéro, le suivant
-  // hériterait du « je le suis » et du compteur du précédent.
+  // hériterait du « je le suis » et du compteur du précédent. L'onglet, lui,
+  // vit dans l'URL : un autre lieu est une autre URL.
   useEffect(() => {
     setFollow(null);
-    setTab("news");
   }, [lairId]);
 
   const lair = useApi(() => getLair(lairId), [lairId]);
   const data = lair.data ?? null;
 
   const games = useApi(() => listGames(), []);
+  const myGameIds = useApi(
+    () => (isAuthenticated ? getMyFollowedGameIds() : Promise.resolve([])),
+    [isAuthenticated],
+  );
   const events = useApi(
-    () => (data ? listEvents({ lairId, year: new Date().getFullYear() }) : Promise.resolve([])),
+    () =>
+      data
+        ? listEvents({ lairId, year: new Date().getFullYear(), gameId: "all" })
+        : Promise.resolve([]),
     [data?.id, lairId],
   );
 
   const sections = useMemo(() => (data ? readLairSections(data) : []), [data]);
   const accent = useMemo(() => (data ? readLairAccent(data) : { color: null, style: {} }), [data]);
+  const opening = useMemo(
+    () => readOpeningState(data?.options?.openingHours, locale),
+    [data?.options?.openingHours, locale],
+  );
 
   const following = follow?.following ?? data?.isFollowing ?? false;
   const followersCount = follow?.followersCount ?? data?.followersCount ?? 0;
@@ -144,23 +134,33 @@ export function LairDetailScreen() {
     return url ? [{ ...link, url }] : [];
   });
 
-  const upcoming = useMemo(
-    () =>
-      (events.data ?? [])
-        .filter((event) => new Date(event.endDateTime || event.startDateTime) >= new Date())
-        .filter((event) => event.status !== "cancelled")
-        .sort((a, b) => a.startDateTime.localeCompare(b.startDateTime)),
-    [events.data],
-  );
-
+  const upcoming = useMemo(() => upcomingOf(events.data ?? []), [events.data]);
   const featured = data?.options?.featuredEventId
     ? upcoming.find((event) => event.id === data.options?.featuredEventId)
     : undefined;
 
-  const gameNames = (data?.games ?? []).flatMap((id) => {
+  /** Les jeux du lieu, dans l'ordre déclaré, les inconnus retirés. */
+  const lairGames = (data?.games ?? []).flatMap((id) => {
     const game = (games.data ?? []).find((entry) => entry._id === id);
     return game ? [game] : [];
   });
+  /** Les jeux du lieu que le visiteur suit — par nom, la clé des événements. */
+  const followedGameNames = lairGames
+    .filter((game) => (myGameIds.data ?? []).includes(game._id))
+    .map((game) => game.name);
+  /** Combien d'événements à venir portent chaque jeu, par nom. */
+  const upcomingByGame = useMemo(
+    () =>
+      upcoming.reduce<Record<string, number>>((counts, event) => {
+        const name = event.gameName ?? event.game?.name;
+        if (name) counts[name] = (counts[name] ?? 0) + 1;
+        return counts;
+      }, {}),
+    [upcoming],
+  );
+  const registrations = user?.id
+    ? upcoming.filter((event) => event.participants?.includes(user.id))
+    : [];
 
   async function toggleFollow() {
     if (!data) return;
@@ -189,25 +189,27 @@ export function LairDetailScreen() {
     );
   }
 
+  const followButton = isAuthenticated ? (
+    <button
+      className={`btn ${following ? "btn--outline" : "btn--grad"} follow-btn`}
+      disabled={busy}
+      onClick={toggleFollow}
+    >
+      {following ? <CheckIcon size={16} /> : <PinIcon size={16} />}
+      {following ? t("lairs.follow.following") : t("lairs.follow.action")}
+    </button>
+  ) : (
+    <Link to="/login" className="btn btn--grad follow-btn">
+      <PinIcon size={16} />
+      {t("lairs.follow.action")}
+    </Link>
+  );
+
+  const directions = directionsUrl(data);
+
   return (
     <div className="screen lair-theme" style={accent.style}>
-      <BackHeader
-        title={data.name}
-        action={
-          // Suivre demande une session : sans compte, le bouton ne pourrait que
-          // rendre 401, et un bouton qui échoue toujours vaut moins qu'aucun.
-          isAuthenticated ? (
-            <button
-              className={`btn ${following ? "btn--outline" : "btn--grad"} follow-btn`}
-              disabled={busy}
-              onClick={toggleFollow}
-            >
-              {following ? <CheckIcon size={16} /> : <PinIcon size={16} />}
-              {following ? t("lairs.follow.following") : t("lairs.follow.action")}
-            </button>
-          ) : undefined
-        }
-      />
+      <BackHeader title={data.name} action={followButton} />
 
       {data.banner && (
         <CachedImage src={data.banner} alt="" className="lair-hero__banner" />
@@ -246,14 +248,23 @@ export function LairDetailScreen() {
             {data.options?.about?.category && (
               <span className="chip">{data.options.about.category}</span>
             )}
+            {opening.isOpen !== null && (
+              <span className={`chip${opening.isOpen ? " chip--accent" : ""}`}>
+                {opening.isOpen
+                  ? opening.closesAt
+                    ? t("lairs.hours.openUntil", { time: opening.closesAt })
+                    : t("lairs.hours.open")
+                  : t("lairs.hours.closed")}
+              </span>
+            )}
             <span className="chip">
               <UsersIcon size={13} />
               {t("lairs.followers", { count: followersCount })}
             </span>
           </div>
-          {data.address && (
+          {data.address && directions && (
             <a
-              href={directionsUrl(data.address)}
+              href={directions}
               target="_blank"
               rel="noopener noreferrer"
               className="header-link"
@@ -265,17 +276,12 @@ export function LairDetailScreen() {
         </div>
       </div>
 
-      <div className="segmented" style={{ margin: "12px 0" }}>
-        {TABS.map((key) => (
-          <button
-            key={key}
-            className={`segmented__item${tab === key ? " segmented__item--active" : ""}`}
-            onClick={() => setTab(key)}
-          >
-            {t(`lairs.tabs.${key}`)}
-          </button>
-        ))}
-      </div>
+      <Tabs<Tab>
+        className="lair-tabs"
+        current={tab}
+        onSelect={setTab}
+        items={TABS.map((key) => ({ key, label: t(`lairs.tabs.${key}`) }))}
+      />
 
       {tab === "news" && (
         <>
@@ -311,22 +317,36 @@ export function LairDetailScreen() {
 
               case "featured":
                 return section.enabled && featured ? (
-                  <div key={section.key}>
-                    <Movement section title={t("lairs.featured")} />
-                    <EventRow event={featured} locale={locale} />
-                  </div>
+                  <LairFeaturedEvent key={section.key} event={featured} />
                 ) : null;
 
+              case "calendar":
+                // Le calendrier est toujours allumé : c'est ce qu'on vient
+                // chercher ici. Ses cinq premières lignes, le reste à l'onglet.
+                return (
+                  <div key={section.key}>
+                    <StatusView loading={events.loading && !events.data} error={events.error} onRetry={events.reload} />
+                    {events.data && (
+                      <LairUpcomingEvents
+                        events={upcoming}
+                        followedGameNames={followedGameNames}
+                        myUserId={user?.id}
+                        onChanged={events.reload}
+                        onSeeAgenda={() => setTab("agenda")}
+                      />
+                    )}
+                  </div>
+                );
+
               default:
-                // Le calendrier, les médias et l'à-propos ont leur onglet : les
-                // empiler ici en ferait une page à faire défiler deux fois.
+                // Les médias et l'à-propos ont leur onglet.
                 return null;
             }
           })}
 
-          <LairHours hours={data.options?.openingHours} />
+          <LairPracticalInfo lair={data} place={place} />
 
-          {news.length === 0 && !live && (
+          {news.length === 0 && !live && upcoming.length === 0 && events.data && (
             <StatusView empty={t("lairs.news.empty")} />
           )}
         </>
@@ -334,44 +354,100 @@ export function LairDetailScreen() {
 
       {tab === "agenda" && (
         <>
-          <StatusView
-            loading={events.loading}
-            error={events.error}
-            onRetry={events.reload}
-            empty={
-              !events.loading && !events.error && upcoming.length === 0
-                ? t("lairs.agenda.empty")
-                : undefined
-            }
-          />
-          {upcoming.map((event) => (
-            <EventRow key={event.id} event={event} locale={locale} />
-          ))}
+          {registrations.length > 0 && (
+            <section className="card lair-registrations">
+              <Movement
+                section
+                title={t("lairs.portal.agenda.registrations")}
+                aside={String(registrations.length)}
+              />
+              <ul className="lair-registrations__list">
+                {registrations.slice(0, 5).map((event) => (
+                  <li key={event.id}>
+                    <Link to={`/events/${event.id}`} className="lair-registrations__item">
+                      <span className="lair-registrations__date">
+                        {new Date(event.startDateTime).toLocaleDateString(locale, {
+                          weekday: "short",
+                          day: "numeric",
+                        })}
+                      </span>
+                      <span className="lair-registrations__name">{event.name}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          <StatusView loading={events.loading && !events.data} error={events.error} onRetry={events.reload} />
+          {events.data && (
+            <LairAgenda
+              lairId={lairId}
+              mode={data.options?.calendar?.mode ?? "CALENDAR"}
+              yearEvents={events.data}
+              myUserId={user?.id}
+              onChanged={events.reload}
+            />
+          )}
+
+          {(about?.rhythm?.length ?? 0) > 0 && (
+            <section>
+              <Movement section title={t("lairs.about.rhythm")} />
+              {about?.rhythm?.map((entry, index) => (
+                <div key={`${entry.label}-${index}`} className="list-row">
+                  <div className="list-row__body">
+                    <p className="list-row__title">{entry.label}</p>
+                    <p className="list-row__sub">{entry.value}</p>
+                  </div>
+                </div>
+              ))}
+            </section>
+          )}
         </>
       )}
 
       {tab === "games" && (
         <>
-          {gameNames.length === 0 ? (
-            <StatusView empty={t("lairs.games.empty")} />
+          {lairGames.length === 0 ? (
+            <StatusView loading={games.loading} empty={games.data ? t("lairs.games.empty") : undefined} />
           ) : (
-            gameNames.map((game) => (
-              <Link
-                key={game._id}
-                to={`/games/${game.slug ?? game._id}`}
-                className="list-row list-row--link"
-              >
-                {game.icon && (
-                  <CachedImage src={game.icon} alt="" className="list-row__thumb" />
-                )}
-                <div className="list-row__body">
-                  <p className="list-row__title">{game.name}</p>
-                </div>
-                <span className="chevron">
-                  <ChevronIcon size={18} />
-                </span>
-              </Link>
-            ))
+            <>
+              <p className="muted lair-games__count">
+                {t("lairs.portal.games.count", { count: lairGames.length })}
+              </p>
+              <div className="game-grid">
+                {lairGames.map((game) => {
+                  const color = colorFor(game._id);
+                  const count = upcomingByGame[game.name] ?? 0;
+                  return (
+                    <Link
+                      key={game._id}
+                      to={`/games/${game.slug ?? game._id}`}
+                      className="game-tile"
+                    >
+                      <span
+                        className="game-tile__wash"
+                        style={{ background: `linear-gradient(180deg, ${color}24, transparent)` }}
+                      />
+                      <span className="game-tile__head">
+                        {game.icon ? (
+                          <CachedImage src={game.icon} alt="" className="game-tile__icon" />
+                        ) : (
+                          <span className="game-tile__icon" style={tintStyle(color)}>
+                            {initialsOf(game.name)}
+                          </span>
+                        )}
+                      </span>
+                      <h2 className="game-tile__name">{game.name}</h2>
+                      <p className={`game-tile__desc lair-game-tile__events${count > 0 ? " lair-game-tile__events--some" : ""}`}>
+                        <CalendarIcon size={12} />
+                        {t("lairs.portal.games.upcoming", { count })}
+                      </p>
+                    </Link>
+                  );
+                })}
+              </div>
+            </>
           )}
         </>
       )}
@@ -380,7 +456,7 @@ export function LairDetailScreen() {
         <>
           {/* La section « à propos » de la vitrine, si le lieu l'a laissée
               allumée. Ce qu'elle couvre, c'est exactement `options.about` —
-              présentation, équipements, rythme, équipe, accès. Les liens, le
+              présentation, équipements, photos, équipe, accès. Les liens, le
               contact et les horaires vivent ailleurs dans `options` et restent
               affichés : ce sont des informations pratiques, pas la page que le
               lieu a choisi d'écrire sur lui-même. */}
@@ -389,6 +465,17 @@ export function LairDetailScreen() {
               {about.description && (
                 <section className="card">
                   <UserMarkdown>{about.description}</UserMarkdown>
+                </section>
+              )}
+
+              {(about.photos?.length ?? 0) > 0 && (
+                <section>
+                  <Movement section title={t("lairs.portal.about.photos")} />
+                  <div className="lair-photos">
+                    {about.photos?.map((photo, index) => (
+                      <CachedImage key={`${photo}-${index}`} src={photo} alt="" className="lair-photos__item" />
+                    ))}
+                  </div>
                 </section>
               )}
 
@@ -402,20 +489,6 @@ export function LairDetailScreen() {
                       </span>
                     ))}
                   </div>
-                </section>
-              )}
-
-              {(about.rhythm?.length ?? 0) > 0 && (
-                <section>
-                  <Movement section title={t("lairs.about.rhythm")} />
-                  {about.rhythm?.map((entry, index) => (
-                    <div key={`${entry.label}-${index}`} className="list-row">
-                      <div className="list-row__body">
-                        <p className="list-row__title">{entry.label}</p>
-                        <p className="list-row__sub">{entry.value}</p>
-                      </div>
-                    </div>
-                  ))}
                 </section>
               )}
 
@@ -439,14 +512,22 @@ export function LairDetailScreen() {
               {(about.transit || about.parking) && (
                 <section className="card">
                   <Movement section title={t("lairs.about.access")} />
-                  {about.transit && <p className="list-row__sub">{about.transit}</p>}
-                  {about.parking && <p className="list-row__sub">{about.parking}</p>}
+                  {about.transit && (
+                    <p className="lair-about__line">
+                      <strong>{t("lairs.portal.about.transit")}</strong> {about.transit}
+                    </p>
+                  )}
+                  {about.parking && (
+                    <p className="lair-about__line">
+                      <strong>{t("lairs.portal.about.parking")}</strong> {about.parking}
+                    </p>
+                  )}
                 </section>
               )}
             </>
           )}
 
-          {(website || links.length > 0 || data.options?.contact?.email) && (
+          {(website || links.length > 0) && (
             <section>
               <Movement section title={t("lairs.about.links")} />
               <div className="profile-links">
@@ -473,23 +554,21 @@ export function LairDetailScreen() {
                     {link.label || t(`lairs.about.network.${link.type}`)}
                   </a>
                 ))}
-                {/* Le téléphone est volontairement absent : `tel:` n'ouvre rien
-                    dans la vue web d'une application de bureau, et un lien qui
-                    ne fait rien vaut moins qu'un numéro qu'on lit. */}
-                {data.options?.contact?.email && (
-                  <a href={`mailto:${data.options.contact.email}`} className="header-link">
-                    <ExternalLinkIcon size={13} />
-                    {data.options.contact.email}
-                  </a>
-                )}
               </div>
-              {data.options?.contact?.phone && (
-                <p className="list-row__sub">{data.options.contact.phone}</p>
-              )}
             </section>
           )}
 
+          <LairPracticalInfo lair={data} place={place} />
           <LairHours hours={data.options?.openingHours} />
+
+          <section className="card lair-follow-card">
+            <p className="lair-follow-card__count">
+              <UsersIcon size={16} />
+              {t("lairs.followers", { count: followersCount })}
+            </p>
+            <p className="muted">{t("lairs.portal.about.followHint")}</p>
+            {followButton}
+          </section>
         </>
       )}
     </div>

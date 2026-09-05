@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import type { Deck } from "../api/types";
+import { deckCoverPosition, resolveDeckCover } from "../lib/deck-cover";
 import { colorFor } from "../lib/game-visuals";
 import { CachedImage } from "./CachedImage";
 import { StarIcon } from "./icons";
@@ -34,6 +35,14 @@ export function DeckCard({
   const { t } = useTranslation();
   const color = colorFor(deck.id);
 
+  // La couverture choisie par l'auteur passe avant la légende que l'appelant a
+  // résolue : c'est l'ordre de `resolveDeckCover`, le même que sur le site.
+  const cover = resolveDeckCover(deck);
+  const image = cover.source === "upload" || cover.source === "card"
+    ? (cover.image ?? legendImage)
+    : (legendImage ?? cover.image);
+  const position = image === legendImage ? "top" : deckCoverPosition(cover.source);
+
   const subtitle = [deck.legendName, deck.format].filter(Boolean).join(" · ");
 
   return (
@@ -41,12 +50,14 @@ export function DeckCard({
       <span
         className="deck-card__art"
         style={
-          legendImage
+          image
             ? undefined
             : { background: `linear-gradient(150deg, ${color}3d, ${color}14)` }
         }
       >
-        {legendImage && <CachedImage src={legendImage} alt="" loading="lazy" />}
+        {image && (
+          <CachedImage src={image} alt="" loading="lazy" style={{ objectPosition: position }} />
+        )}
         <span className="deck-card__fade" />
       </span>
 

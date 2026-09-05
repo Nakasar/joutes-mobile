@@ -3,9 +3,11 @@ import { useTranslation } from "react-i18next";
 import { getGame } from "../api/games";
 import { listGameQuizzes } from "../api/quizzes";
 import { BackHeader } from "../components/BackHeader";
+import { CachedImage } from "../components/CachedImage";
 import { ChevronIcon, QuizIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
+import { quizCoverPosition, resolveQuizCover } from "../lib/quiz-cover";
 import { currentLocale } from "../i18n";
 
 const PAGE_SIZE = 50;
@@ -52,9 +54,18 @@ export function GameQuizzesScreen() {
           to={`/games/${gameSlug}/quizzes/${quiz.id}`}
           className="list-row list-row--link"
         >
-          <span className="list-row__icon" style={{ background: "var(--chip)" }}>
-            <QuizIcon size={18} />
-          </span>
+          {resolveQuizCover(quiz).image ? (
+            <CachedImage
+              src={resolveQuizCover(quiz).image}
+              alt=""
+              className="list-row__thumb"
+              style={{ objectPosition: quizCoverPosition(resolveQuizCover(quiz).source) }}
+            />
+          ) : (
+            <span className="list-row__icon" style={{ background: "var(--chip)" }}>
+              <QuizIcon size={18} />
+            </span>
+          )}
           <div className="list-row__body">
             <p className="list-row__title">{quiz.title}</p>
             <p className="list-row__sub">
