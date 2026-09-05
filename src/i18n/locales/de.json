@@ -1022,7 +1022,45 @@
       }
     },
     "count_one": "{{count}} Ort",
-    "count_other": "{{count}} Orte"
+    "count_other": "{{count}} Orte",
+    "portal": {
+      "upcoming": {
+        "title": "Nächste Veranstaltungen",
+        "count_one": "{{count}} anstehend",
+        "count_other": "{{count}} anstehend",
+        "scopeMine": "Meine Spiele",
+        "scopeAll": "Alle Spiele",
+        "hidden_one": "{{count}} weitere anstehende Veranstaltung zu anderen Spielen des Orts.",
+        "hidden_other": "{{count}} weitere anstehende Veranstaltungen zu anderen Spielen des Orts.",
+        "seeAgenda": "Ganzen Kalender ansehen"
+      },
+      "practical": {
+        "title": "Praktische Infos",
+        "today": "Heute: {{ranges}}",
+        "closedToday": "Heute geschlossen",
+        "directions": "Route",
+        "call": "Anrufen"
+      },
+      "agenda": {
+        "registrations": "Meine Anmeldungen",
+        "previous": "Vorheriger Monat",
+        "next": "Nächster Monat",
+        "emptyMonth": "Keine Veranstaltung in diesem Monat."
+      },
+      "games": {
+        "count_one": "{{count}} Spiel wird hier gespielt",
+        "count_other": "{{count}} Spiele werden hier gespielt",
+        "upcoming_zero": "Keine anstehende Veranstaltung",
+        "upcoming_one": "{{count}} anstehende Veranstaltung",
+        "upcoming_other": "{{count}} anstehende Veranstaltungen"
+      },
+      "about": {
+        "photos": "Fotos",
+        "transit": "Anfahrt:",
+        "parking": "Parken:",
+        "followHint": "Folge diesem Ort, um seine Veranstaltungen in deinem Kalender zu finden und von seinen Ankündigungen zu erfahren."
+      }
+    }
   },
   "players": {
     "title": "Spieler",

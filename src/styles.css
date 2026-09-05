@@ -7856,3 +7856,232 @@ html.qr-scanning #root {
   gap: 8px;
   margin-bottom: 12px;
 }
+
+/* ---- Vitrine d'un lieu : refonte ---- */
+
+.lair-tabs {
+  margin: 10px 0 14px;
+}
+
+.lair-featured {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding: 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--lair-accent, var(--primary));
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.lair-featured__banner {
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  background: var(--surface-2);
+}
+
+.lair-featured__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.lair-featured__name {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  margin: 8px 0 4px;
+}
+
+.lair-featured__when {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  font-size: 13px;
+  color: var(--lair-accent, var(--primary));
+  font-weight: 600;
+}
+
+.lair-featured__meta {
+  margin: 3px 0 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.lair-upcoming {
+  margin-bottom: 14px;
+}
+
+.lair-upcoming__note {
+  font-size: 12.5px;
+  margin: 0 0 10px;
+}
+
+.lair-practical .movement {
+  margin-top: 0;
+}
+
+.lair-practical__today {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.lair-practical__address {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 0 8px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.lair-practical__address svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--muted);
+}
+
+.lair-practical__contact {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13.5px;
+  margin-bottom: 12px;
+}
+
+.lair-practical__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.lair-practical__actions .btn {
+  flex: 1;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.month-nav__title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.lair-agenda-day .movement {
+  margin-top: 6px;
+}
+
+.lair-registrations__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lair-registrations__item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.lair-registrations__date {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lair-accent, var(--primary));
+  white-space: nowrap;
+}
+
+.lair-registrations__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lair-games__count {
+  margin: 0 0 12px;
+  font-size: 13px;
+}
+
+.lair-game-tile__events {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.lair-game-tile__events--some {
+  color: var(--lair-accent, var(--primary));
+  font-weight: 600;
+}
+
+.lair-photos {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+  scrollbar-width: none;
+}
+
+.lair-photos::-webkit-scrollbar {
+  display: none;
+}
+
+.lair-photos__item {
+  flex-shrink: 0;
+  width: 200px;
+  height: 140px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  background: var(--surface-2);
+}
+
+.lair-about__line {
+  margin: 0 0 6px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.lair-follow-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.lair-follow-card__count {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.lair-follow-card .follow-btn {
+  align-self: stretch;
+  justify-content: center;
+  text-decoration: none;
+}

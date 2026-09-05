@@ -1022,7 +1022,45 @@
       }
     },
     "count_one": "{{count}} place",
-    "count_other": "{{count}} places"
+    "count_other": "{{count}} places",
+    "portal": {
+      "upcoming": {
+        "title": "Upcoming events",
+        "count_one": "{{count}} upcoming",
+        "count_other": "{{count}} upcoming",
+        "scopeMine": "My games",
+        "scopeAll": "All games",
+        "hidden_one": "{{count}} other upcoming event on the venue's other games.",
+        "hidden_other": "{{count}} other upcoming events on the venue's other games.",
+        "seeAgenda": "See the full agenda"
+      },
+      "practical": {
+        "title": "Practical info",
+        "today": "Today: {{ranges}}",
+        "closedToday": "Closed today",
+        "directions": "Directions",
+        "call": "Call"
+      },
+      "agenda": {
+        "registrations": "My registrations",
+        "previous": "Previous month",
+        "next": "Next month",
+        "emptyMonth": "No event this month."
+      },
+      "games": {
+        "count_one": "{{count}} game played here",
+        "count_other": "{{count}} games played here",
+        "upcoming_zero": "No upcoming event",
+        "upcoming_one": "{{count}} upcoming event",
+        "upcoming_other": "{{count}} upcoming events"
+      },
+      "about": {
+        "photos": "Photos",
+        "transit": "Transit:",
+        "parking": "Parking:",
+        "followHint": "Follow this venue to find its events in your agenda and hear about its announcements."
+      }
+    }
   },
   "players": {
     "title": "Players",

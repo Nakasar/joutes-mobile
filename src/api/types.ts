@@ -1015,8 +1015,10 @@ export interface LairAbout {
   rhythm?: { label: string; value: string }[];
 }
 
+export type LairCalendarMode = "CALENDAR" | "AGENDA" | "CONFERENCE";
+
 export interface LairOptions {
-  calendar?: { mode?: "CALENDAR" | "AGENDA" | "CONFERENCE" };
+  calendar?: { mode?: LairCalendarMode };
   theme?: { logo?: string; accentColor?: string; tintSurfaces?: boolean };
   sections?: LairSectionState[];
   live?: LairLiveStream | null;

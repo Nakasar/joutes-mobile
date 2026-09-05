@@ -1022,7 +1022,45 @@
       }
     },
     "count_one": "{{count}} lieu",
-    "count_other": "{{count}} lieux"
+    "count_other": "{{count}} lieux",
+    "portal": {
+      "upcoming": {
+        "title": "Prochains événements",
+        "count_one": "{{count}} à venir",
+        "count_other": "{{count}} à venir",
+        "scopeMine": "Mes jeux",
+        "scopeAll": "Tous les jeux",
+        "hidden_one": "{{count}} autre événement à venir sur les autres jeux du lieu.",
+        "hidden_other": "{{count}} autres événements à venir sur les autres jeux du lieu.",
+        "seeAgenda": "Voir l'agenda complet"
+      },
+      "practical": {
+        "title": "Infos pratiques",
+        "today": "Aujourd'hui : {{ranges}}",
+        "closedToday": "Fermé aujourd'hui",
+        "directions": "Itinéraire",
+        "call": "Appeler"
+      },
+      "agenda": {
+        "registrations": "Mes inscriptions",
+        "previous": "Mois précédent",
+        "next": "Mois suivant",
+        "emptyMonth": "Aucun événement ce mois-ci."
+      },
+      "games": {
+        "count_one": "{{count}} jeu joué ici",
+        "count_other": "{{count}} jeux joués ici",
+        "upcoming_zero": "Aucun événement à venir",
+        "upcoming_one": "{{count}} événement à venir",
+        "upcoming_other": "{{count}} événements à venir"
+      },
+      "about": {
+        "photos": "Photos",
+        "transit": "Transports :",
+        "parking": "Parking :",
+        "followHint": "Suivre ce lieu, c'est retrouver ses événements dans votre agenda et être prévenu de ses annonces."
+      }
+    }
   },
   "players": {
     "title": "Joueurs",
