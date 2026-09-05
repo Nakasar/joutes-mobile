@@ -52,7 +52,10 @@
       "VideoGame": "Videogioco",
       "Miniatures": "Miniature",
       "Other": "Altro"
-    }
+    },
+    "follow": "Segui",
+    "following": "Seguito",
+    "unfollow": "Non seguire più"
   },
   "gameHub": {
     "fallbackTitle": "Gioco",
@@ -67,7 +70,18 @@
     "explore": "Esplora questo gioco",
     "cardsSub": "Catalogo e ricerca",
     "readMore": "Leggi tutto",
-    "readLess": "Mostra meno"
+    "readLess": "Mostra meno",
+    "live": {
+      "badge": "In diretta",
+      "watch": "Guarda su YouTube",
+      "since": "da {{when}}"
+    },
+    "social": {
+      "title": "Sui social",
+      "viewAll": "Vedi tutto",
+      "empty": "Nessuna pubblicazione per ora.",
+      "openOn": "Apri su {{platform}}"
+    }
   },
   "events": {
     "title": "Eventi",
@@ -392,7 +406,12 @@
     "apiLabel": "API: {{url}}",
     "socialTitle": "Community",
     "socialText": "Trova i tuoi amici, i gruppi di gioco e i negozi seguiti.",
-    "socialAction": "Vai alla sezione Social"
+    "socialAction": "Vai alla sezione Social",
+    "plan": {
+      "supporter": "Supporter",
+      "expert": "Joutes Expert",
+      "pro": "Joutes Pro"
+    }
   },
   "network": {
     "offlineBanner": "Offline",
@@ -628,6 +647,14 @@
         "hint": "Visibile a tutti, elencato nella libreria"
       },
       "action": "Chi vede questo mazzo"
+    },
+    "cover": {
+      "title": "Copertina",
+      "upload": "Immagine caricata dall'autore sul sito.",
+      "card": "Illustrato da {{name}}.",
+      "legend": "La leggenda illustra il mazzo. Scegli un'altra carta qui sotto.",
+      "none": "Scegli una carta del mazzo per illustrarlo.",
+      "remove": "Rimuovi la scelta"
     }
   },
   "deck": {

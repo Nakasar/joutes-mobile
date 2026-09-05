@@ -52,7 +52,10 @@
       "VideoGame": "Video game",
       "Miniatures": "Miniatures",
       "Other": "Other"
-    }
+    },
+    "follow": "Follow",
+    "following": "Following",
+    "unfollow": "Unfollow"
   },
   "gameHub": {
     "fallbackTitle": "Game",
@@ -67,7 +70,18 @@
     "explore": "Explore this game",
     "cardsSub": "Catalogue and search",
     "readMore": "Read more",
-    "readLess": "Show less"
+    "readLess": "Show less",
+    "live": {
+      "badge": "Live",
+      "watch": "Watch on YouTube",
+      "since": "for {{when}}"
+    },
+    "social": {
+      "title": "On the networks",
+      "viewAll": "See all",
+      "empty": "No post yet.",
+      "openOn": "Open on {{platform}}"
+    }
   },
   "events": {
     "title": "Events",
@@ -392,7 +406,12 @@
     "apiLabel": "API: {{url}}",
     "socialTitle": "Community",
     "socialText": "Find your friends, play groups and followed game stores.",
-    "socialAction": "View the Social section"
+    "socialAction": "View the Social section",
+    "plan": {
+      "supporter": "Supporter",
+      "expert": "Joutes Expert",
+      "pro": "Joutes Pro"
+    }
   },
   "network": {
     "offlineBanner": "Offline",
@@ -628,6 +647,14 @@
         "hint": "Visible to everyone, listed in the library"
       },
       "action": "Who sees this deck"
+    },
+    "cover": {
+      "title": "Cover",
+      "upload": "Image uploaded by the author on the site.",
+      "card": "Illustrated by {{name}}.",
+      "legend": "The legend illustrates the deck. Pick another card below.",
+      "none": "Pick a card of the deck to illustrate it.",
+      "remove": "Clear the choice"
     }
   },
   "deck": {

@@ -17,6 +17,7 @@ import { GameProductsScreen } from "./screens/GameProductsScreen";
 import { GameQuizzesScreen } from "./screens/GameQuizzesScreen";
 import { GameMatchDetailScreen } from "./screens/GameMatchDetailScreen";
 import { GameScreen } from "./screens/GameScreen";
+import { GameSocialScreen } from "./screens/GameSocialScreen";
 import { GamesScreen } from "./screens/GamesScreen";
 import { HomeScreen } from "./screens/HomeScreen";
 import { LairDetailScreen } from "./screens/LairDetailScreen";
@@ -122,6 +123,7 @@ function Shell() {
                   path="/games/:gameSlug/quizzes"
                   element={<GameQuizzesScreen />}
                 />
+                <Route path="/games/:gameSlug/social" element={<GameSocialScreen />} />
                 <Route
                   path="/games/:gameSlug/quizzes/:quizId"
                   element={<QuizScreen />}

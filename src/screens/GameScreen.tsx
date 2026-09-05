@@ -1,8 +1,13 @@
 import { useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { getGame } from "../api/games";
+import { getGame, getGameLive, listGameSocialPosts } from "../api/games";
+import { getMyGames } from "../api/users";
 import { CachedImage } from "../components/CachedImage";
+import { FollowGameButton } from "../components/FollowGameButton";
+import { GameLinks } from "../components/GameLinks";
+import { GameLiveCard } from "../components/GameLiveCard";
+import { SocialPostCard } from "../components/SocialPostCard";
 import {
   BackIcon,
   BookIcon,
@@ -18,6 +23,7 @@ import {
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
+import { useAuth } from "../store/auth";
 
 interface FeatureLink {
   key: string;
@@ -53,8 +59,28 @@ export function GameScreen() {
   );
 
   const [aboutOpen, setAboutOpen] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   const color = colorFor(gameSlug, game?.color);
+
+  // Le suivi : ce que le compte dit, puis ce que le bouton vient de faire.
+  const myGames = useApi(
+    () => (isAuthenticated ? getMyGames() : Promise.resolve(null)),
+    [isAuthenticated],
+  );
+  const [followOverride, setFollowOverride] = useState<boolean | null>(null);
+  const following =
+    followOverride ?? (game ? (myGames.data?.gameIds ?? []).includes(game._id) : false);
+
+  // Le direct est périssable, la fiche ne l'est pas : deux lectures, la
+  // seconde sans cache. Les publications ne se demandent qu'aux jeux dont
+  // l'éditeur est suivi — les autres répondraient 404.
+  const live = useApi(() => (game ? getGameLive(gameSlug) : Promise.resolve(null)), [game?._id]);
+  const socialEnabled = Boolean(game?.features?.socialFeed);
+  const posts = useApi(
+    () => (socialEnabled ? listGameSocialPosts(gameSlug, 12) : Promise.resolve([])),
+    [socialEnabled, gameSlug],
+  );
 
   const features = useMemo<FeatureLink[]>(() => {
     // Le jeu n'est pas encore chargé : rien à proposer. Une fois chargé, les
@@ -156,6 +182,14 @@ export function GameScreen() {
           >
             <BackIcon size={20} />
           </button>
+          {game && (
+            <FollowGameButton
+              gameIdOrSlug={game.slug ?? game._id}
+              following={following}
+              onChange={setFollowOverride}
+              variant="glass"
+            />
+          )}
         </div>
       </div>
 
@@ -186,6 +220,9 @@ export function GameScreen() {
               </span>
             </div>
           )}
+
+          <GameLinks links={game.links} />
+          <GameLiveCard live={live.data ?? null} gameName={game.name} />
         </>
       )}
 
@@ -241,6 +278,23 @@ export function GameScreen() {
 
       {game && features.length === 0 && (
         <p className="status muted">{t("gameHub.empty")}</p>
+      )}
+
+      {/* « Sur les réseaux » : rien quand il n'y a rien — le cas courant. */}
+      {socialEnabled && (posts.data?.length ?? 0) > 0 && (
+        <section className="game-social">
+          <div className="game-social__head">
+            <p className="section-label">{t("gameHub.social.title")}</p>
+            <Link to={`/games/${gameSlug}/social`} className="link-button">
+              {t("gameHub.social.viewAll")}
+            </Link>
+          </div>
+          <div className="social-grid">
+            {posts.data?.slice(0, 6).map((post) => (
+              <SocialPostCard key={post.id} post={post} />
+            ))}
+          </div>
+        </section>
       )}
     </div>
   );

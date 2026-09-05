@@ -23,7 +23,15 @@ export interface SessionUser {
   username?: string;
   displayName?: string;
   discriminator?: string;
+  /** Le champ de Better Auth : pas celui à afficher. */
   image?: string;
+  /**
+   * L'image à montrer pour le compte — celle déposée sur le profil, sinon
+   * celle du fournisseur d'identité. Dérivée à chaque lecture par le serveur.
+   */
+  avatar?: string;
+  /** Le palier d'abonnement et les statuts, dérivés eux aussi. */
+  badges?: UserBadges;
   [key: string]: unknown;
 }
 
@@ -120,8 +128,62 @@ export interface Game extends GameSummary {
     policies?: boolean;
     tournaments?: boolean;
     deckChecker?: boolean;
+    decks?: boolean;
+    news?: boolean;
+    quizz?: boolean;
+    /** Les publications de l'éditeur sont collectées : `GET /games/{id}/social-posts` répond. */
+    socialFeed?: boolean;
   };
   [key: string]: unknown;
+}
+
+/** Le direct de l'éditeur, quand il diffuse (`GET /games/{id}/live`). */
+export interface GameLive {
+  platform: "youtube";
+  url: string;
+  title?: string;
+  startedAt: string;
+  videoId: string;
+  channelTitle?: string;
+  channelUrl?: string;
+  thumbnail?: string;
+}
+
+export type SocialPlatform = "bluesky" | "youtube" | "x" | "instagram";
+export type SocialPostKind = "post" | "video" | "short";
+
+export interface SocialAccount {
+  handle: string;
+  displayName?: string;
+  avatar?: string;
+  url: string;
+}
+
+/** Une publication rapatriée d'un réseau de l'éditeur (`GET /games/{id}/social-posts`). */
+export interface GameSocialPost {
+  id: string;
+  gameId: string;
+  platform: SocialPlatform;
+  kind: SocialPostKind;
+  url: string;
+  account: SocialAccount;
+  /** Texte brut, tronqué à la collecte. Jamais du HTML. */
+  text?: string;
+  thumbnail?: string;
+  publishedAt: string;
+  durationSeconds?: number;
+}
+
+export interface GameFollowState {
+  gameId: string;
+  following: boolean;
+  gameIds: string[];
+}
+
+export interface GameFavoriteState {
+  gameId: string;
+  favorite: boolean;
+  favoriteGameIds: string[];
 }
 
 // ---- Cartes ----
@@ -376,6 +438,12 @@ export interface Quiz {
   title: string;
   gameId?: string;
   game?: { id?: string; name?: string; slug?: string; icon?: string };
+  /** Une carte du jeu choisie pour illustrer le quizz. */
+  coverCardId?: string;
+  /** Une image déposée par l'auteur ; prime sur la carte. */
+  coverImageUrl?: string;
+  /** L'adresse effectivement affichée — dérivée, ce que les listes lisent. */
+  coverImage?: string;
   blocks: QuizBlock[];
   /** Langue dans laquelle le quizz a été écrit : sa « VO ». */
   originalLang: string;
@@ -1111,6 +1179,12 @@ export interface Deck {
   legendCardId?: string;
   /** Son nom au moment de l'enregistrement, pour l'afficher sans relire le catalogue. */
   legendName?: string;
+  /** Une carte du deck choisie pour l'illustrer ; la légende n'est que le repli. */
+  coverCardId?: string;
+  /** Une image déposée par l'auteur ; prime sur `coverCardId`. */
+  coverImageUrl?: string;
+  /** L'adresse effectivement affichée — dérivée, réécrite à chaque enregistrement. */
+  coverImage?: string;
   /** Domaines couverts par les cartes du deck. Valeur dérivée, recalculée par le serveur. */
   domains?: string[];
   visibility?: DeckVisibility;
@@ -1151,6 +1225,8 @@ export interface DeckInput {
   notes?: string;
   format?: string;
   legendCardId?: string;
+  /** La carte qui illustre le deck ; `""` retire le choix. */
+  coverCardId?: string;
   visibility?: DeckVisibility;
   /**
    * La `version` que le client croyait à jour, sur un `PATCH`.

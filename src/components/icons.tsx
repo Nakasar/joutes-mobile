@@ -461,3 +461,107 @@ export function CaretIcon(p: IconProps) {
     </Icon>
   );
 }
+
+/* ---- Marques : les réseaux d'un éditeur ---- */
+
+export function GlobeIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18" />
+      <path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18" />
+    </Icon>
+  );
+}
+
+export function YoutubeIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M2.5 12c0-2.6.3-4.2.6-5a2.5 2.5 0 0 1 1.8-1.7C6.5 5 9 5 12 5s5.5 0 7.1.3a2.5 2.5 0 0 1 1.8 1.7c.3.8.6 2.4.6 5s-.3 4.2-.6 5a2.5 2.5 0 0 1-1.8 1.7C17.5 19 15 19 12 19s-5.5 0-7.1-.3a2.5 2.5 0 0 1-1.8-1.7c-.3-.8-.6-2.4-.6-5Z" />
+      <path d="M10 9.2v5.6l4.8-2.8L10 9.2Z" fill="currentColor" stroke="none" />
+    </Icon>
+  );
+}
+
+export function TwitchIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M4.5 3h15v10.5l-4 4h-3.5l-2.5 2.5H8v-2.5H4.5V3Z" />
+      <path d="M10 8v4M14.5 8v4" />
+    </Icon>
+  );
+}
+
+export function XIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M4 4l16 16M20 4L4 20" />
+    </Icon>
+  );
+}
+
+export function InstagramIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <rect x="3.5" y="3.5" width="17" height="17" rx="4.5" />
+      <circle cx="12" cy="12" r="3.8" />
+      <circle cx="17.2" cy="6.8" r="0.9" fill="currentColor" stroke="none" />
+    </Icon>
+  );
+}
+
+export function TiktokIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M13.5 3v11.2a3.3 3.3 0 1 1-3.3-3.3" />
+      <path d="M13.5 3c.4 2.6 2.1 4.2 4.7 4.5" />
+    </Icon>
+  );
+}
+
+export function BlueskyIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M12 10.5C10.8 7.8 8.5 4.6 6 3.6 4.4 3 3.5 4 3.5 5.6c0 2.6 1 6.3 4.5 7.2-2 .3-3.3 1.5-2.6 3.3.8 2 4 2.5 6.6-1.3 2.6 3.8 5.8 3.3 6.6 1.3.7-1.8-.6-3-2.6-3.3 3.5-.9 4.5-4.6 4.5-7.2 0-1.6-.9-2.6-2.5-2C15.5 4.6 13.2 7.8 12 10.5Z" />
+    </Icon>
+  );
+}
+
+export function FacebookIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M14.5 21v-7h2.5l.5-3h-3V9.2c0-.9.3-1.5 1.6-1.5H17.5V5.1A19 19 0 0 0 15.3 5c-2.3 0-3.8 1.4-3.8 3.9V11H9v3h2.5v7" />
+    </Icon>
+  );
+}
+
+export function DiscordIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M8.5 5.5C6.6 5.8 5.5 6.3 5 6.6 3.4 9.3 2.8 12.2 3 15.3c1.8 1.4 3.5 2.1 5 2.3l1-1.7c-.9-.3-1.7-.7-2.4-1.2 2.9 1.3 7.9 1.3 10.8 0-.7.5-1.5.9-2.4 1.2l1 1.7c1.5-.2 3.2-.9 5-2.3.2-3.1-.4-6-2-8.7-.5-.3-1.6-.8-3.5-1.1l-.5 1a13 13 0 0 0-6 0l-.5-1Z" />
+      <circle cx="9.2" cy="12.5" r="1" fill="currentColor" stroke="none" />
+      <circle cx="14.8" cy="12.5" r="1" fill="currentColor" stroke="none" />
+    </Icon>
+  );
+}
+
+export function RedditIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <ellipse cx="12" cy="14" rx="7.5" ry="5" />
+      <circle cx="18.5" cy="8.5" r="1.5" />
+      <path d="M12 9c0-2.5 1.5-4 3.5-4 1 0 1.5.5 2 1" />
+      <circle cx="9.3" cy="13.3" r="0.9" fill="currentColor" stroke="none" />
+      <circle cx="14.7" cy="13.3" r="0.9" fill="currentColor" stroke="none" />
+      <path d="M9.5 16c1.5 1 3.5 1 5 0" />
+    </Icon>
+  );
+}
+
+export function PlayIcon(p: IconProps) {
+  return (
+    <Icon {...p}>
+      <path d="M7 5v14l11-7-7-4.5L7 5Z" />
+    </Icon>
+  );
+}

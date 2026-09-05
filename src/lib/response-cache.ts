@@ -98,6 +98,30 @@ export async function cacheDelete(key: string): Promise<void> {
   }
 }
 
+/**
+ * Oublie toutes les entrées dont la clé commence ainsi — le fil de l'accueil
+ * après un suivi, par exemple, qui vit sous autant de clés que de jeux choisis.
+ */
+export async function cacheDeleteByPrefix(prefix: string): Promise<void> {
+  try {
+    const db = await openDb();
+    await new Promise<void>((resolve, reject) => {
+      const tx = db.transaction(STORE, "readwrite");
+      const store = tx.objectStore(STORE);
+      const request = store.getAllKeys();
+      request.onsuccess = () => {
+        for (const key of request.result) {
+          if (typeof key === "string" && key.startsWith(prefix)) store.delete(key);
+        }
+      };
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  } catch {
+    // Best-effort : un cache qu'on ne sait pas purger se périme tout seul.
+  }
+}
+
 export async function cacheSet<T>(key: string, value: T): Promise<void> {
   try {
     const db = await openDb();

@@ -5,6 +5,7 @@ import { getDeck, getDeckCards, updateDeck } from "../api/decks";
 import { getGame } from "../api/games";
 import type { Card, Deck, DeckGuideSection, DeckMatchup, DeckMatchupRating } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
+import { CachedImage } from "../components/CachedImage";
 import { DeckCardPickerSheet } from "../components/DeckCardPickerSheet";
 import { DeckLegalityBadge, DeckSizeLabel } from "../components/DeckBadges";
 import { MinusIcon, PlusIcon, TrashIcon } from "../components/icons";
@@ -25,6 +26,7 @@ import {
   zoneCounterLabel,
   type DeckZoneKey,
 } from "../lib/deck-zones";
+import { deckCoverCandidates, deckCoverPosition, resolveDeckCover } from "../lib/deck-cover";
 
 const MATCHUP_RATINGS: DeckMatchupRating[] = ["favorable", "even", "unfavorable"];
 
@@ -78,6 +80,8 @@ export function DeckEditScreen() {
   const [cards, setCards] = useState<DeckCards>({});
   const [guide, setGuide] = useState<DeckGuideSection[]>([]);
   const [matchups, setMatchups] = useState<DeckMatchup[]>([]);
+  /** La carte désignée pour la couverture ; `null` = aucune (la légende prend le relais). */
+  const [coverCardId, setCoverCardId] = useState<string | null>(null);
 
   const [zone, setZone] = useState<DeckZoneKey | null>(null);
   const [picking, setPicking] = useState(false);
@@ -101,6 +105,7 @@ export function DeckEditScreen() {
     setCards(deck.cards ?? {});
     setGuide(deck.guide ?? []);
     setMatchups(deck.matchups ?? []);
+    setCoverCardId(deck.coverCardId ?? null);
     versionRef.current = deck.version ?? 1;
     setHydratedFor(deck.id);
   }, [loaded.data, hydratedFor]);
@@ -164,6 +169,8 @@ export function DeckEditScreen() {
         // l'enregistrement plutôt que refusée par le serveur.
         guide: guide.filter((section) => section.title.trim()),
         matchups: matchups.filter((matchup) => matchup.name.trim()),
+        // Une chaîne vide retire le choix : le serveur retombe sur la légende.
+        coverCardId: coverCardId ?? "",
         expectedVersion: versionRef.current,
       });
       versionRef.current = saved.version ?? versionRef.current;
@@ -187,6 +194,19 @@ export function DeckEditScreen() {
   }
 
   const entries = currentZone ? zoneEntries(cards, currentZone.key) : [];
+
+  // Les cartes parmi lesquelles choisir une couverture : celles du deck, dans
+  // l'ordre des zones — la légende et les champions d'abord.
+  const coverCandidates = useMemo(() => deckCoverCandidates(cards, zones), [cards, zones]);
+  const cover = resolveDeckCover(
+    {
+      coverCardId: coverCardId ?? undefined,
+      legendCardId: loaded.data?.legendCardId,
+      coverImageUrl: loaded.data?.coverImageUrl,
+      coverImage: loaded.data?.coverImage,
+    },
+    cardsById,
+  );
 
   return (
     <div className="screen">
@@ -226,6 +246,57 @@ export function DeckEditScreen() {
               onChange={(e) => setDescription(e.currentTarget.value)}
             />
           </label>
+
+          <p className="section-label">{t("decks.cover.title")}</p>
+          <div className="cover-picker">
+            <div
+              className="cover-picker__preview"
+              style={cover.image ? undefined : { background: "var(--surface-2)" }}
+            >
+              {cover.image && (
+                <CachedImage
+                  src={cover.image}
+                  alt=""
+                  style={{ objectPosition: deckCoverPosition(cover.source) }}
+                />
+              )}
+            </div>
+            <div className="cover-picker__body">
+              <p className="muted cover-picker__hint">
+                {cover.source === "upload"
+                  ? t("decks.cover.upload")
+                  : cover.source === "card"
+                    ? t("decks.cover.card", { name: cardsById.get(cover.cardId ?? "")?.name ?? "" })
+                    : cover.source === "legend"
+                      ? t("decks.cover.legend")
+                      : t("decks.cover.none")}
+              </p>
+              {coverCardId && (
+                <button className="btn btn--outline" onClick={() => setCoverCardId(null)}>
+                  {t("decks.cover.remove")}
+                </button>
+              )}
+            </div>
+          </div>
+          {coverCandidates.length > 0 && (
+            <div className="cover-picker__strip">
+              {coverCandidates.map((cardId) => {
+                const card = cardsById.get(cardId);
+                if (!card?.image) return null;
+                return (
+                  <button
+                    key={cardId}
+                    className={`cover-picker__candidate${coverCardId === cardId ? " cover-picker__candidate--active" : ""}`}
+                    onClick={() => setCoverCardId(cardId)}
+                    aria-label={card.name}
+                    aria-pressed={coverCardId === cardId}
+                  >
+                    <CachedImage src={card.image} alt="" loading="lazy" />
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
           <div className="chip-row">
             <DeckSizeLabel cards={cards} zones={zones} />

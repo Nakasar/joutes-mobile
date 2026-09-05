@@ -52,7 +52,10 @@
       "VideoGame": "Videospiel",
       "Miniatures": "Miniaturen",
       "Other": "Sonstiges"
-    }
+    },
+    "follow": "Folgen",
+    "following": "Gefolgt",
+    "unfollow": "Nicht mehr folgen"
   },
   "gameHub": {
     "fallbackTitle": "Spiel",
@@ -67,7 +70,18 @@
     "explore": "Dieses Spiel entdecken",
     "cardsSub": "Katalog und Suche",
     "readMore": "Mehr lesen",
-    "readLess": "Weniger anzeigen"
+    "readLess": "Weniger anzeigen",
+    "live": {
+      "badge": "Live",
+      "watch": "Auf YouTube ansehen",
+      "since": "seit {{when}}"
+    },
+    "social": {
+      "title": "In den Netzwerken",
+      "viewAll": "Alle ansehen",
+      "empty": "Noch keine Beiträge.",
+      "openOn": "Auf {{platform}} öffnen"
+    }
   },
   "events": {
     "title": "Events",
@@ -392,7 +406,12 @@
     "apiLabel": "API: {{url}}",
     "socialTitle": "Community",
     "socialText": "Finde deine Freunde, Spielgruppen und verfolgten Läden.",
-    "socialAction": "Zum Bereich Social"
+    "socialAction": "Zum Bereich Social",
+    "plan": {
+      "supporter": "Supporter",
+      "expert": "Joutes Expert",
+      "pro": "Joutes Pro"
+    }
   },
   "network": {
     "offlineBanner": "Offline",
@@ -628,6 +647,14 @@
         "hint": "Für alle sichtbar, in der Bibliothek gelistet"
       },
       "action": "Wer sieht dieses Deck"
+    },
+    "cover": {
+      "title": "Cover",
+      "upload": "Vom Autor auf der Website hochgeladenes Bild.",
+      "card": "Illustriert von {{name}}.",
+      "legend": "Die Legende illustriert das Deck. Wähle unten eine andere Karte.",
+      "none": "Wähle eine Karte des Decks als Illustration.",
+      "remove": "Auswahl entfernen"
     }
   },
   "deck": {
