@@ -2444,6 +2444,12 @@ export interface TournamentLiveState {
   stopwatch?: TournamentStopwatch | null;
   /** Type de la phase en cours : dit laquelle des deux horloges afficher. */
   phaseType?: TournamentPhaseType | null;
+  /**
+   * Tables attribuées aux joueurs de la phase puzzle en cours. Absent ou null
+   * hors phase puzzle. Voyage avec l'état live pour qu'un joueur voie sa table
+   * apparaître sans recharger, au moment où l'organisation la distribue.
+   */
+  puzzleSeats?: { playerId: string; tableNumber: number }[] | null;
   serverNow: string;
 }
 

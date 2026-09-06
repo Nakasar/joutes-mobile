@@ -3959,6 +3959,31 @@ button.card-link {
   margin-top: 12px;
 }
 
+/* Table d'un puzzle : le numéro qu'on cherche en arrivant, mis en avant
+   au-dessus du chronomètre sans lui voler sa taille. */
+.table-card__seat {
+  margin: -6px -4px 14px;
+  padding: 10px 12px;
+  border-radius: calc(var(--radius) - 4px);
+  background: var(--text);
+  color: var(--surface);
+}
+
+.table-card__seat .table-card__eyebrow {
+  color: inherit;
+  opacity: 0.7;
+}
+
+.table-card__seat-number {
+  margin: 2px 0 0;
+  font-family: var(--font-mono);
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
 .table-card__extension {
   margin: 12px 0 0;
   padding: 10px 12px;
