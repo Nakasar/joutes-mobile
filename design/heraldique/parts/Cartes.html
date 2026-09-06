@@ -1,0 +1,222 @@
+<style>
+.searchline {
+  display: flex; align-items: center; gap: 10px; margin-top: 14px;
+  padding-bottom: 8px; border-bottom: 1px solid var(--or-line);
+}
+.searchline input {
+  flex: 1; min-width: 0; background: none; border: 0; outline: none; color: var(--text);
+  font-family: Cinzel, Georgia, serif; font-size: 17px;
+}
+.searchline input::placeholder { font-family: Inter, sans-serif; font-size: 14px; color: var(--muted); }
+
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding-top: 4px; }
+.card { display: block; text-align: left; }
+.card__face {
+  display: block;
+  position: relative; aspect-ratio: 63 / 88; overflow: hidden;
+  border: 1px solid var(--or-line); border-radius: 2px;
+}
+.card__cost {
+  position: absolute; top: 5px; right: 5px; width: 21px; height: 21px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; background: rgba(0, 0, 0, .62); box-shadow: 0 0 0 1px var(--or-line);
+  font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: 11px; color: var(--or);
+}
+.card__band {
+  position: absolute; inset: auto 0 0 0; padding: 14px 6px 5px;
+  background: linear-gradient(to top, rgba(0, 0, 0, .92), transparent);
+  font-family: Cinzel, Georgia, serif; font-size: 10.5px; font-weight: 600; line-height: 1.2; color: #fff;
+}
+.card__price {
+  display: block; margin-top: 5px;
+  font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: 11px; color: var(--or-text);
+}
+.card__own {
+  position: absolute; top: 5px; left: 5px; min-width: 21px; height: 21px; padding: 0 5px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--or); color: #17130c;
+  font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 600;
+}
+
+.sheet {
+  position: absolute; inset: 0; z-index: 5; display: flex; flex-direction: column;
+  background: var(--bg); overflow-y: auto;
+}
+.sheet::-webkit-scrollbar { width: 0; }
+.sheet__inner { padding: 16px 16px 28px; }
+.bigcard {
+  position: relative; width: 208px; margin: 4px auto 0; aspect-ratio: 63 / 88; overflow: hidden;
+  border: 1px solid var(--or); border-radius: 3px;
+}
+.spec { display: flex; justify-content: space-between; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--or-faint); font-size: 13.5px; }
+.spec b { font-weight: 500; color: var(--muted); font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; }
+.ruling { padding: 13px 0; border-bottom: 1px solid var(--or-faint); }
+.ruling__kind { display: inline-flex; align-items: center; gap: 6px; }
+</style>
+<div class="app" data-theme="{{theme}}" style="position: relative">
+  <div class="scroll">
+    <div class="head">
+      <div style="display: flex; align-items: center; gap: 12px; min-width: 0">
+        <button class="iconbtn" aria-label="Retour">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5-7 7 7 7"></path></svg>
+        </button>
+        <div style="min-width: 0">
+          <p class="eyebrow mono" style="margin: 0">Riftbound</p>
+          <h1 class="title" style="font-size: 24px">Cartes</h1>
+        </div>
+      </div>
+    </div>
+
+    <label class="searchline">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--or)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex: none" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.2-3.2"></path></svg>
+      <input type="search" value="" placeholder="Rechercher une carte…" aria-label="Rechercher une carte">
+    </label>
+
+    <div class="chiprow">
+      <sc-for list="{{sets}}" as="s" hint-placeholder-count="3">
+        <button class="{{s.cls}}" onClick="{{s.pick}}">{{s.label}}</button>
+      </sc-for>
+    </div>
+
+    <div class="movement" style="padding-top: 10px">
+      <h2>{{setTitle}}</h2>
+      <span class="rule"></span>
+      <span class="aside mono">{{count}} cartes</span>
+    </div>
+
+    <div class="grid">
+      <sc-for list="{{cards}}" as="c" hint-placeholder-count="6">
+        <button class="card" onClick="{{c.open}}">
+          <span class="card__face seme" style="{{c.tint}}">
+            <sc-if value="{{c.owned}}" hint-placeholder-val="{{ true }}">
+              <span class="card__own">{{c.copies}}</span>
+            </sc-if>
+            <span class="card__cost">{{c.cost}}</span>
+            <span class="card__band">{{c.name}}</span>
+          </span>
+          <span class="card__price">{{c.price}}</span>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+
+  <sc-if value="{{open}}" hint-placeholder-val="{{ false }}">
+    <div class="sheet">
+      <div class="sheet__inner">
+        <div class="head" style="margin-bottom: 14px">
+          <button class="iconbtn" onClick="{{close}}" aria-label="Fermer">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+          <button class="iconbtn" aria-label="Ajouter à la collection">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+          </button>
+        </div>
+
+        <div class="bigcard seme" style="{{card.tint}}">
+          <span class="card__cost" style="width: 30px; height: 30px; font-size: 14px; top: 8px; right: 8px">{{card.cost}}</span>
+          <span class="card__band" style="font-size: 17px; padding: 26px 12px 12px">{{card.name}}</span>
+        </div>
+
+        <p class="mono" style="margin: 12px 0 0; text-align: center; color: var(--muted)">Illustration à charger</p>
+
+        <div class="movement">
+          <h2>La carte</h2>
+          <span class="rule"></span>
+        </div>
+
+        <div class="spec"><b>Coût</b><span>{{card.cost}}</span></div>
+        <div class="spec"><b>Type</b><span>{{card.type}}</span></div>
+        <div class="spec"><b>Set</b><span>Origins · {{card.number}}</span></div>
+        <div class="spec"><b>Rareté</b><span>{{card.rarity}}</span></div>
+
+        <div class="movement">
+          <h2>Le prix</h2>
+          <span class="rule"></span>
+          <span class="aside mono">Cardmarket</span>
+        </div>
+
+        <p style="display: flex; align-items: baseline; gap: 10px; margin: 0">
+          <b style="font-family: Cinzel, Georgia, serif; font-size: 27px; font-weight: 700; color: var(--or-text)">à partir de {{card.price}}</b>
+        </p>
+        <p class="filet__meta" style="margin: 5px 0 0">Relevé du 24 août, édition anglaise · tirage le moins cher</p>
+
+        <div class="movement">
+          <h2>Erratas &amp; rulings</h2>
+          <span class="rule"></span>
+          <span class="aside mono">2 entrées</span>
+        </div>
+
+        <div class="ruling">
+          <p class="mono ruling__kind" style="margin: 0 0 6px; color: var(--or-text)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"></path><path d="M4 19V5"></path></svg>
+            Clarification
+          </p>
+          <p style="margin: 0; font-size: 13.5px; line-height: 1.55; text-wrap: pretty">
+            L&#39;effet ne se déclenche qu&#39;une fois par tour, même si plusieurs unités quittent le champ de bataille simultanément.
+          </p>
+          <p class="mono" style="margin: 8px 0 0; color: var(--muted)">14 pour · 1 contre</p>
+        </div>
+
+        <div class="ruling">
+          <p class="mono ruling__kind" style="margin: 0 0 6px; color: var(--or-text)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg>
+            Ruling
+          </p>
+          <p style="margin: 0; font-size: 13.5px; line-height: 1.55; text-wrap: pretty">
+            Si la cible est déjà partie quand l&#39;effet se résout, rien ne se passe : le coût reste dépensé.
+          </p>
+          <p class="mono" style="margin: 8px 0 0; color: var(--muted)">9 pour · 0 contre</p>
+        </div>
+
+        <button class="cta cta--ghost">
+          <span class="mono" style="letter-spacing: .16em">Proposer un errata</span>
+        </button>
+      </div>
+    </div>
+  </sc-if>
+</div>
+
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["Sombre","Clair"],"default":"Sombre"},"$preview":{"width":390,"height":844}}'>
+const CARDS = [
+  { name: "Garde de la Faille", cost: "3", type: "Unité — Gardien", rarity: "Rare", number: "042", price: "1,80 €", owned: true, copies: "×2", hue: "#2bb7dc" },
+  { name: "Serment du Guet", cost: "1", type: "Sort", rarity: "Commune", number: "018", price: "0,15 €", owned: true, copies: "×4", hue: "#7a4fd0" },
+  { name: "Brèche d'Ionia", cost: "5", type: "Terrain", rarity: "Épique", number: "007", price: "12,40 €", owned: false, copies: "", hue: "#2f9e6b" },
+  { name: "Éclaireuse de Piltover", cost: "2", type: "Unité — Éclaireur", rarity: "Peu commune", number: "061", price: "0,45 €", owned: true, copies: "×1", hue: "#c88b3a" },
+  { name: "Volée de Carreaux", cost: "2", type: "Sort", rarity: "Commune", number: "073", price: "0,10 €", owned: false, copies: "", hue: "#c0432f" },
+  { name: "Sentinelle du Vide", cost: "6", type: "Unité — Légende", rarity: "Légendaire", number: "001", price: "28,90 €", owned: false, copies: "", hue: "#8b6bd4" },
+];
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { set: "Tous les sets", open: null };
+  }
+
+  renderVals() {
+    const sets = ["Tous les sets", "Origins", "Proving Grounds"].map((label) => ({
+      label,
+      cls: this.state.set === label ? "chip chip--on mono" : "chip mono",
+      pick: () => this.setState({ set: label }),
+    }));
+
+    const cards = CARDS.map((card, index) => ({
+      ...card,
+      tint: `--primary: ${card.hue}`,
+      open: () => this.setState({ open: index }),
+    }));
+
+    const open = this.state.open;
+
+    return {
+      theme: (this.props.theme ?? "Sombre").toLowerCase(),
+      sets,
+      cards,
+      setTitle: this.state.set === "Tous les sets" ? "Le catalogue" : this.state.set,
+      count: this.state.set === "Origins" ? "298" : this.state.set === "Proving Grounds" ? "214" : "1 186",
+      open: open !== null,
+      card: open !== null ? { ...CARDS[open], tint: `--primary: ${CARDS[open].hue}` } : CARDS[0],
+      close: () => this.setState({ open: null }),
+    };
+  }
+}
+</script>

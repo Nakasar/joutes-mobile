@@ -1,0 +1,288 @@
+<style>
+.bleed { margin: -16px -16px 0; }
+.banner { position: relative; height: 208px; overflow: hidden; }
+.banner__wash {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(3, 12, 18, .95) 12%, rgba(3, 12, 18, .40) 58%, rgba(3, 12, 18, .12));
+}
+.banner__back {
+  position: absolute; top: 14px; left: 14px; z-index: 2;
+  width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--or-line); border-radius: 2px; background: rgba(0, 0, 0, .5); color: #fff;
+}
+.banner__body { position: absolute; inset: auto 0 0 0; display: flex; gap: 12px; padding: 0 16px 14px; }
+.banner__name {
+  margin: 0; color: #fff;
+  font-family: Cinzel, Georgia, serif; font-weight: 700; font-size: 25px; line-height: 1.1;
+}
+.pill {
+  display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px;
+  border: 1px solid var(--or-line); border-radius: 2px; color: var(--or);
+  background: rgba(0, 0, 0, .4);
+}
+.actions { display: flex; gap: 8px; padding: 12px 0 0; }
+.act {
+  flex: 1; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  border: 1px solid var(--or-line); border-radius: 2px; color: var(--or-text);
+}
+.act--on { background: var(--or); border-color: var(--or); color: #17130c; font-weight: 600; }
+.tabs {
+  display: flex; gap: 18px; margin: 14px -16px 0; padding: 0 16px;
+  border-top: 1px solid var(--or-faint); border-bottom: 1px solid var(--or-faint);
+  overflow-x: auto;
+}
+.tabs::-webkit-scrollbar { height: 0; }
+.tab { position: relative; flex: none; min-height: 46px; padding: 0 1px; color: var(--muted); }
+.tab--on { color: var(--or-text); font-weight: 600; }
+.tab--on::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--or); }
+.pinned {
+  position: relative; margin-top: 16px; padding: 16px 14px;
+  border: 1px solid var(--or-line);
+  background: linear-gradient(90deg, color-mix(in oklab, var(--or) 14%, transparent), transparent);
+}
+.hours { width: 100%; border-collapse: collapse; margin-top: 6px; }
+.hours td { padding: 9px 0; border-bottom: 1px solid var(--or-faint); font-size: 13px; }
+.hours td + td { text-align: right; font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: 12px; color: var(--muted); }
+.hours tr[data-today] td { color: var(--or-text); }
+</style>
+<div class="app" data-theme="{{theme}}" style="--primary: {{accent}}">
+  <div class="scroll">
+    <div class="bleed">
+      <div class="banner seme">
+        <span class="banner__wash"></span>
+        <button class="banner__back" aria-label="Retour">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5-7 7 7 7"></path></svg>
+        </button>
+        <span class="corner" style="top: 8px; right: 8px; border-left: 0; border-bottom: 0"></span>
+        <span class="corner" style="bottom: 8px; right: 8px; border-left: 0; border-top: 0"></span>
+
+        <div class="banner__body">
+          <span class="sigil" style="width: 66px; height: 66px; background: linear-gradient(160deg, color-mix(in oklab, var(--primary) 88%, white 12%), color-mix(in oklab, var(--primary) 55%, black 45%)); color: #fff; font-size: 21px">RD</span>
+          <div style="min-width: 0; flex: 1">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+              <h1 class="banner__name">Le Repaire du Dragon</h1>
+              <span class="pill mono">Boutique</span>
+            </div>
+            <p class="mono" style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 7px 0 0; letter-spacing: .08em; color: rgba(255, 255, 255, .78)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              12 rue du Calvaire, Nantes
+              <span style="color: var(--or)">· ouvert jusqu&#39;à 20 h</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="{{followCls}}" onClick="{{toggleFollow}}">
+        <span class="mono" style="font-weight: inherit">{{followLabel}}</span>
+      </button>
+      <button class="act">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        <span class="mono">Itinéraire</span>
+      </button>
+    </div>
+
+    <nav class="tabs">
+      <sc-for list="{{tabs}}" as="tab" hint-placeholder-count="4">
+        <button class="{{tab.cls}}" onClick="{{tab.pick}}"><span class="mono">{{tab.label}}</span></button>
+      </sc-for>
+    </nav>
+
+    <sc-if value="{{isNews}}" hint-placeholder-val="{{ true }}">
+      <div class="pinned">
+        <span class="corner" style="top: 6px; left: 6px; border-right: 0; border-bottom: 0"></span>
+        <span class="corner" style="bottom: 6px; right: 6px; border-left: 0; border-top: 0"></span>
+        <p class="mono" style="margin: 0 0 6px; color: var(--or-text)">Épinglé</p>
+        <h3 style="margin: 0 0 6px; font-family: Cinzel, Georgia, serif; font-size: 17px; font-weight: 600">La boutique s&#39;agrandit : six tables de plus dès septembre</h3>
+        <p style="margin: 0; color: var(--muted); font-size: 13px">Les soirées Commander du mercredi passent à vingt-quatre places, sans réservation.</p>
+      </div>
+
+      <div class="movement">
+        <h2>Actualités</h2>
+        <span class="rule"></span>
+        <span class="aside mono">7 billets</span>
+      </div>
+
+      <a class="filet" href="#">
+        <span class="sigil seme" style="width: 54px; height: 54px"></span>
+        <span class="filet__body">
+          <span class="filet__title">Arrivage Origins : les boîtes sont là</span>
+          <span class="filet__meta">24 août</span>
+        </span>
+      </a>
+
+      <a class="filet" href="#">
+        <span class="sigil seme" style="width: 54px; height: 54px"></span>
+        <span class="filet__body">
+          <span class="filet__title">Le tournoi du jeudi change d&#39;horaire</span>
+          <span class="filet__meta">18 août</span>
+        </span>
+      </a>
+
+      <a class="filet" href="#">
+        <span class="sigil seme" style="width: 54px; height: 54px"></span>
+        <span class="filet__body">
+          <span class="filet__title">Nouvelle vitrine de cartes à l&#39;unité</span>
+          <span class="filet__meta">11 août</span>
+        </span>
+      </a>
+    </sc-if>
+
+    <sc-if value="{{isAgenda}}" hint-placeholder-val="{{ false }}">
+      <div class="movement">
+        <h2>À venir</h2>
+        <span class="rule"></span>
+        <span class="aside mono">9 événements</span>
+      </div>
+
+      <a class="filet" href="#">
+        <span class="filet__num" style="align-self: flex-start; width: 56px; text-align: left">
+          <b style="display: block; font-family: Cinzel, Georgia, serif; font-size: 22px; color: var(--text)">27</b>
+          <span class="mono" style="color: var(--muted)">Jeu</span>
+        </span>
+        <span class="filet__body">
+          <span class="filet__title">Draft Origins</span>
+          <span class="filet__meta">19 h 30 · 12 € · Riftbound</span>
+          <span class="mono" style="color: var(--accent)">Inscrit · 14/16 places</span>
+        </span>
+      </a>
+
+      <a class="filet" href="#">
+        <span class="filet__num" style="align-self: flex-start; width: 56px; text-align: left">
+          <b style="display: block; font-family: Cinzel, Georgia, serif; font-size: 22px; color: var(--text)">29</b>
+          <span class="mono" style="color: var(--muted)">Sam</span>
+        </span>
+        <span class="filet__body">
+          <span class="filet__title">Après-midi Lorcana débutants</span>
+          <span class="filet__meta">14 h · entrée libre · Lorcana</span>
+          <span class="mono" style="color: var(--muted)">6/20 places</span>
+        </span>
+      </a>
+
+      <a class="filet" href="#">
+        <span class="filet__num" style="align-self: flex-start; width: 56px; text-align: left">
+          <b style="display: block; font-family: Cinzel, Georgia, serif; font-size: 22px; color: var(--text)">02</b>
+          <span class="mono" style="color: var(--muted)">Mar</span>
+        </span>
+        <span class="filet__body">
+          <span class="filet__title">Modern hebdomadaire</span>
+          <span class="filet__meta">19 h 30 · 8 € · Magic</span>
+          <span class="mono" style="color: var(--danger)">Complet</span>
+        </span>
+      </a>
+    </sc-if>
+
+    <sc-if value="{{isGames}}" hint-placeholder-val="{{ false }}">
+      <div class="movement">
+        <h2>On y joue</h2>
+        <span class="rule"></span>
+        <span class="aside mono">5 jeux</span>
+      </div>
+
+      <a class="filet" href="#">
+        <span class="sigil" style="width: 54px; height: 54px; background: linear-gradient(160deg, #c88b3a, #5c3a12); font-size: 17px">MTG</span>
+        <span class="filet__body">
+          <span class="filet__title">Magic: The Gathering</span>
+          <span class="filet__meta">Modern, Commander, Draft</span>
+        </span>
+        <span class="filet__num">4/sem</span>
+      </a>
+
+      <a class="filet" href="#">
+        <span class="sigil" style="width: 54px; height: 54px; background: linear-gradient(160deg, #2bb7dc, #123f52); font-size: 17px">RB</span>
+        <span class="filet__body">
+          <span class="filet__title">Riftbound</span>
+          <span class="filet__meta">Draft, Constructé</span>
+        </span>
+        <span class="filet__num">2/sem</span>
+      </a>
+
+      <a class="filet" href="#">
+        <span class="sigil" style="width: 54px; height: 54px; background: linear-gradient(160deg, #8b6bd4, #2c1c52); font-size: 15px">SWU</span>
+        <span class="filet__body">
+          <span class="filet__title">Star Wars Unlimited</span>
+          <span class="filet__meta">Premier</span>
+        </span>
+        <span class="filet__num">1/sem</span>
+      </a>
+    </sc-if>
+
+    <sc-if value="{{isAbout}}" hint-placeholder-val="{{ false }}">
+      <div class="movement">
+        <h2>Horaires</h2>
+        <span class="rule"></span>
+        <span class="aside mono">Ouvert</span>
+      </div>
+
+      <table class="hours">
+        <tbody>
+          <tr><td>Lundi</td><td>Fermé</td></tr>
+          <tr><td>Mardi</td><td>10 h – 19 h</td></tr>
+          <tr><td>Mercredi</td><td>10 h – 22 h</td></tr>
+          <tr data-today="1"><td>Jeudi</td><td>10 h – 20 h</td></tr>
+          <tr><td>Vendredi</td><td>10 h – 22 h</td></tr>
+          <tr><td>Samedi</td><td>10 h – 20 h</td></tr>
+          <tr><td>Dimanche</td><td>14 h – 18 h</td></tr>
+        </tbody>
+      </table>
+
+      <div class="movement">
+        <h2>Le lieu</h2>
+        <span class="rule"></span>
+      </div>
+
+      <p style="margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.6; text-wrap: pretty">
+        Boutique et salle de jeu au cœur de Nantes. Vingt-quatre places assises, un mur de cartes à l&#39;unité, et une équipe qui arbitre les tournois du jeudi depuis 2014.
+      </p>
+
+      <div class="filet" style="margin-top: 16px; align-items: center">
+        <span class="filet__body">
+          <span class="mono" style="color: var(--or-text)">Adresse</span>
+          <span style="font-size: 13.5px">12 rue du Calvaire, 44000 Nantes</span>
+        </span>
+      </div>
+      <div class="filet" style="align-items: center">
+        <span class="filet__body">
+          <span class="mono" style="color: var(--or-text)">Téléphone</span>
+          <span style="font-size: 13.5px">[NUMÉRO DU LIEU]</span>
+        </span>
+      </div>
+    </sc-if>
+  </div>
+</div>
+
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["Sombre","Clair"],"default":"Sombre"},"accent":{"editor":"color","options":["#c0432f","#2bb7dc","#7a4fd0","#2f9e6b"],"default":"#c0432f"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tab: "news", following: false };
+  }
+
+  renderVals() {
+    const tabs = [
+      { key: "news", label: "Actualités" },
+      { key: "agenda", label: "Agenda" },
+      { key: "games", label: "Jeux" },
+      { key: "about", label: "À propos" },
+    ].map((tab) => ({
+      label: tab.label,
+      cls: this.state.tab === tab.key ? "tab tab--on" : "tab",
+      pick: () => this.setState({ tab: tab.key }),
+    }));
+
+    return {
+      theme: (this.props.theme ?? "Sombre").toLowerCase(),
+      accent: this.props.accent ?? "#c0432f",
+      tabs,
+      isNews: this.state.tab === "news",
+      isAgenda: this.state.tab === "agenda",
+      isGames: this.state.tab === "games",
+      isAbout: this.state.tab === "about",
+      followCls: this.state.following ? "act act--on" : "act",
+      followLabel: this.state.following ? "Suivi" : "Suivre ce lieu",
+      toggleFollow: () => this.setState({ following: !this.state.following }),
+    };
+  }
+}
+</script>
