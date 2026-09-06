@@ -333,6 +333,9 @@ function PuzzleTab({
 
   const elapsed = stopwatchElapsedSeconds(state?.stopwatch, serverOffsetMs);
   const myResult = results?.find((result) => result.playerId === myPlayerId);
+  // La table attribuée par l'organisation : c'est la première chose à savoir
+  // en arrivant, elle passe donc au-dessus du chronomètre.
+  const myTable = state?.puzzleSeats?.find((seat) => seat.playerId === myPlayerId)?.tableNumber;
 
   function declareFinished() {
     if (busy) return;
@@ -352,6 +355,12 @@ function PuzzleTab({
   return (
     <>
       <div className="table-card">
+        {myTable !== undefined && (
+          <div className="table-card__seat">
+            <p className="table-card__eyebrow">{t("tournaments.puzzleYourTable")}</p>
+            <p className="table-card__seat-number">{myTable}</p>
+          </div>
+        )}
         <p className="table-card__eyebrow">
           {myResult ? t("tournaments.puzzleYourTime") : t("tournaments.puzzleElapsed")}
         </p>
