@@ -75,6 +75,8 @@ export const endpoints = {
     detail: (lairId: string) => `/lairs/${lairId}`,
     /** Suivre / ne plus suivre : `PUT` et `DELETE` sur le même chemin. */
     follow: (lairId: string) => `/lairs/${lairId}/follow`,
+    /** Ce qu'on reçoit d'un lieu suivi : `GET` et `PUT`. */
+    notifications: (lairId: string) => `/lairs/${lairId}/notifications`,
   },
   friends: {
     list: "/friends",

@@ -1209,7 +1209,29 @@ export interface LairDetail extends Lair {
   isPro?: boolean;
   followersCount?: number;
   isFollowing?: boolean;
+  /** Ce que l'appelant reçoit du lieu. `null` s'il ne le suit pas. */
+  notificationPreference?: LairNotificationPreference | null;
 }
+
+/**
+ * Les types de notification qu'un lieu envoie à ceux qui le suivent. Même
+ * liste que `LAIR_NOTIFICATION_CATEGORIES` côté serveur : un type inconnu du
+ * serveur y est écarté sans erreur.
+ */
+export const LAIR_NOTIFICATION_CATEGORIES = ["announcements", "live"] as const;
+export type LairNotificationCategory = (typeof LAIR_NOTIFICATION_CATEGORIES)[number];
+
+export const LAIR_NOTIFICATION_LEVELS = ["all", "custom", "none"] as const;
+export type LairNotificationLevel = (typeof LAIR_NOTIFICATION_LEVELS)[number];
+
+/**
+ * Ce qu'un abonné reçoit d'un lieu : tout (le niveau d'un lieu qu'on vient de
+ * suivre), les types cochés, ou rien.
+ */
+export type LairNotificationPreference =
+  | { level: "all" }
+  | { level: "none" }
+  | { level: "custom"; categories: LairNotificationCategory[] };
 
 export interface LairsListResponse {
   lairs: Lair[];

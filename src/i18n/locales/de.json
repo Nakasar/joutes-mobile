@@ -1066,6 +1066,30 @@
       "game": "Spiel",
       "allGames": "Alle Spiele"
     },
+    "notifications": {
+      "trigger": "Benachrichtigungen des Spielorts: {{level}}",
+      "title": "Benachrichtigungen dieses Spielorts",
+      "description": "Wähle, was du von diesem Spielort erhältst – in der App, auf der Website und auf Discord.",
+      "levels": {
+        "all": {
+          "label": "Alle",
+          "hint": "Alle Benachrichtigungen, die der Spielort an seine Follower sendet."
+        },
+        "custom": {
+          "label": "Benutzerdefiniert",
+          "hint": "Nur die Arten, die du ankreuzt."
+        },
+        "none": {
+          "label": "Keine",
+          "hint": "Du folgst dem Spielort weiterhin, ohne seine Benachrichtigungen zu erhalten."
+        }
+      },
+      "categories": {
+        "announcements": "Angeheftete Ankündigungen",
+        "live": "Livestreams"
+      },
+      "emptyCustom": "Nichts angekreuzt: Du erhältst nichts von diesem Spielort."
+    },
     "follow": {
       "action": "Folgen",
       "following": "Folgt"

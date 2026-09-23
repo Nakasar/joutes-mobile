@@ -8771,3 +8771,23 @@ html.qr-scanning #root {
   font-size: 0.8rem;
   text-align: center;
 }
+
+/* Les types cochés d'un réglage « Personnalisé », sous l'option qu'ils précisent. */
+.lair-notification-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: -2px 0 10px 12px;
+}
+
+.lair-follow-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.lair-notification-btn {
+  flex-shrink: 0;
+  padding: 8px 10px;
+}
