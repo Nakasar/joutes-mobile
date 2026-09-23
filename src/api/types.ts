@@ -671,7 +671,26 @@ export interface JoutesEvent {
   /** IDs des utilisateurs ayant mis l'évènement en favori. Présent en liste comme au détail. */
   favoritedBy?: string[];
   lair?: { id?: string; name?: string; address?: string; [key: string]: unknown };
+  /** Liste d'attente — au détail seulement. Taille de la file. */
+  waitlistCount?: number;
+  /** La file accepte-t-elle de nouveaux joueurs ? */
+  waitlistOpen?: boolean;
+  /** Reste-t-il une place libre sans personne en attente ? */
+  canJoinDirectly?: boolean;
+  /** Délai laissé pour accepter une place libérée, en heures. */
+  waitlistResponseHours?: number;
+  /** Place de la personne connectée dans la file, `null` si elle n'y est pas. */
+  viewerWaitlist?: EventWaitlistStatus | null;
   [key: string]: unknown;
+}
+
+export interface EventWaitlistStatus {
+  /** Rang dans la file, à partir de 1. */
+  position: number;
+  total: number;
+  joinedAt: string;
+  /** Présente quand une place libérée est réservée à cette personne. */
+  offer?: { offeredAt: string; expiresAt: string };
 }
 
 export interface EventsListResponse {

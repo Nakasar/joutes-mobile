@@ -57,3 +57,24 @@ export function getEvent(eventId: string): Promise<JoutesEvent> {
 export function toggleEventFavorite(eventId: string): Promise<{ favorited: boolean }> {
   return api.post<{ favorited: boolean }>(endpoints.events.favorite(eventId), {});
 }
+
+/**
+ * Liste d'attente d'un évènement complet. Quand une place se libère, le
+ * premier de la file reçoit une notification et la place lui est réservée
+ * jusqu'à `viewerWaitlist.offer.expiresAt` : il l'accepte ou la décline.
+ */
+export function joinEventWaitlist(eventId: string): Promise<{ success: boolean }> {
+  return api.post<{ success: boolean }>(endpoints.events.waitlist(eventId), {});
+}
+
+export function leaveEventWaitlist(eventId: string): Promise<{ success: boolean }> {
+  return api.delete<{ success: boolean }>(endpoints.events.waitlist(eventId));
+}
+
+export function acceptEventWaitlistOffer(eventId: string): Promise<{ success: boolean }> {
+  return api.post<{ success: boolean }>(endpoints.events.waitlistAccept(eventId), {});
+}
+
+export function declineEventWaitlistOffer(eventId: string): Promise<{ success: boolean }> {
+  return api.post<{ success: boolean }>(endpoints.events.waitlistDecline(eventId), {});
+}

@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getEvent, toggleEventFavorite } from "../api/events";
 import { BackHeader } from "../components/BackHeader";
+import { EventWaitlistCard } from "../components/EventWaitlistCard";
 import { ExternalLinkIcon, PinIcon, StarIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
@@ -37,6 +38,7 @@ export function EventDetailScreen() {
   const isPreRegistered =
     isRegistered && data?.participantRegistrations?.[myUserId ?? ""] === "PRE_REGISTERED";
   const isFavorited = !!myUserId && (data?.favoritedBy ?? []).includes(myUserId);
+  const waitlist = data?.viewerWaitlist ?? null;
 
   function toggleFavorite() {
     if (busy) return;
@@ -82,6 +84,13 @@ export function EventDetailScreen() {
                 {t(isPreRegistered ? "events.preRegistered" : "events.registered")}
               </span>
             )}
+            {waitlist && (
+              <span className="chip chip--warning">
+                {waitlist.offer
+                  ? t("events.waitlist.yourTurn")
+                  : t("events.waitlist.chip", { position: waitlist.position })}
+              </span>
+            )}
             {data.status && statusLabelKeys[data.status] ? (
               <span className="chip chip--danger">{t(statusLabelKeys[data.status])}</span>
             ) : (
@@ -96,6 +105,10 @@ export function EventDetailScreen() {
               </span>
             )}
           </p>
+
+          {myUserId && (
+            <EventWaitlistCard event={data} isParticipant={isRegistered} onChange={reload} />
+          )}
 
           {data.lair?.address && (
             <p className="list-meta">
