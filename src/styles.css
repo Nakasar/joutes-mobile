@@ -8694,3 +8694,80 @@ html.qr-scanning #root {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* ---- Liste d'attente d'un évènement ---- */
+
+.waitlist-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.waitlist-card .list-meta {
+  margin: 0;
+}
+
+/* Une place offerte est l'action du moment : le liseré or la détache du reste,
+   sans fond teinté (illisible en mode sombre, cf. `.notification--unread`). */
+.waitlist-card--offer {
+  border: 1.5px solid var(--gold);
+}
+
+.waitlist-card--offer .chip {
+  align-self: flex-start;
+}
+
+.waitlist-card__title {
+  margin: 0;
+}
+
+.waitlist-card__head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.waitlist-card__rank {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: var(--grad);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.waitlist-card__rank strong {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+}
+
+.waitlist-card__rank span {
+  font-size: 0.65rem;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.waitlist-card__remaining {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  font-size: 0.85rem;
+}
+
+.waitlist-card__decline {
+  color: var(--danger);
+}
+
+.waitlist-card__note {
+  font-size: 0.8rem;
+  text-align: center;
+}

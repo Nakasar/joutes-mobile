@@ -65,6 +65,10 @@ export const endpoints = {
     list: "/events",
     detail: (eventId: string) => `/events/${eventId}`,
     favorite: (eventId: string) => `/events/${eventId}/favorite`,
+    /** Liste d'attente : `POST` pour la rejoindre, `DELETE` pour la quitter. */
+    waitlist: (eventId: string) => `/events/${eventId}/waitlist`,
+    waitlistAccept: (eventId: string) => `/events/${eventId}/waitlist/accept`,
+    waitlistDecline: (eventId: string) => `/events/${eventId}/waitlist/decline`,
   },
   lairs: {
     list: "/lairs",
