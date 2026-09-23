@@ -162,6 +162,7 @@
       "declineConfirm": "Conferma: rifiuta e lascia la lista",
       "offerNote": "Senza risposta entro la scadenza, il posto passa al giocatore successivo e lasci la lista d'attesa.",
       "outOf": "su {{total}}",
+      "rankLabel": "Posizione {{position}} su {{total}}",
       "onList": "Sei in lista d'attesa",
       "since": "Dal {{date}}",
       "explanation": "Appena un iscritto rinuncia, il posto viene proposto al primo della lista. Riceverai una notifica quando sarà il tuo turno.",

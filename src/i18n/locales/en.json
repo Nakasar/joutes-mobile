@@ -162,6 +162,7 @@
       "declineConfirm": "Confirm: decline and leave the waitlist",
       "offerNote": "Without an answer before the deadline, the spot goes to the next player and you leave the waitlist.",
       "outOf": "of {{total}}",
+      "rankLabel": "Position {{position}} of {{total}}",
       "onList": "You're on the waitlist",
       "since": "Since {{date}}",
       "explanation": "As soon as a registered player drops out, the spot is offered to the first in line. You'll get a notification when it's your turn.",

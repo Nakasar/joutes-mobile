@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   acceptEventWaitlistOffer,
@@ -49,8 +49,19 @@ export function EventWaitlistCard({ event, isParticipant, onChange }: EventWaitl
   const [pending, setPending] = useState<Pending | null>(null);
   const [confirming, setConfirming] = useState<"leave" | "decline" | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [now, setNow] = useState(() => Date.now());
 
   const status = event.viewerWaitlist ?? null;
+  const offerExpiresAt = status?.offer?.expiresAt;
+
+  // Le temps restant avance tant qu'une offre est ouverte : une fiche laissée
+  // ouverte ne doit pas afficher un délai figé.
+  useEffect(() => {
+    if (!offerExpiresAt) return;
+    setNow(Date.now());
+    const timer = window.setInterval(() => setNow(Date.now()), 30_000);
+    return () => window.clearInterval(timer);
+  }, [offerExpiresAt]);
   const canJoin =
     !isParticipant &&
     !status &&
@@ -87,7 +98,7 @@ export function EventWaitlistCard({ event, isParticipant, onChange }: EventWaitl
         </p>
         <p className="waitlist-card__remaining">
           <ClockIcon size={16} />
-          {t("events.waitlist.remaining", { time: formatRemaining(expiresAt, Date.now()) })}
+          {t("events.waitlist.remaining", { time: formatRemaining(expiresAt, now) })}
         </p>
         {error && <p className="form-error">{error}</p>}
         <button
@@ -126,7 +137,11 @@ export function EventWaitlistCard({ event, isParticipant, onChange }: EventWaitl
     return (
       <section className="card waitlist-card" aria-labelledby="waitlist-title">
         <div className="waitlist-card__head">
-          <div className="waitlist-card__rank" aria-hidden="true">
+          <div
+            className="waitlist-card__rank"
+            role="img"
+            aria-label={t("events.waitlist.rankLabel", { position: status.position, total: status.total })}
+          >
             <strong>{status.position}</strong>
             <span>{t("events.waitlist.outOf", { total: status.total })}</span>
           </div>

@@ -162,6 +162,7 @@
       "declineConfirm": "Bestätigen: ablehnen und Warteliste verlassen",
       "offerNote": "Ohne Antwort bis zur Frist geht der Platz an die nächste Person und du verlässt die Warteliste.",
       "outOf": "von {{total}}",
+      "rankLabel": "Position {{position}} von {{total}}",
       "onList": "Du stehst auf der Warteliste",
       "since": "Seit {{date}}",
       "explanation": "Sobald jemand absagt, wird der Platz der ersten Person in der Reihe angeboten. Du wirst benachrichtigt, wenn du dran bist.",
