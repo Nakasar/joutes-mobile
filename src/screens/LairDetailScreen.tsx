@@ -182,12 +182,15 @@ export function LairDetailScreen() {
     // l'impression d'un bouton mort.
     setFollow({ following: next, followersCount: followersCount + (next ? 1 : -1) });
     // Un lieu qu'on se met à suivre part en « Tout », côté serveur aussi.
+    const previousPreference = notificationPreference;
     if (next) setNotificationPreference({ level: "all" });
 
     try {
       setFollow(await setFollowingLair(lairId, next));
     } catch {
       setFollow({ following, followersCount });
+      // Le suivi n'a pas eu lieu : le réglage non plus.
+      setNotificationPreference(previousPreference);
     } finally {
       setBusy(false);
     }
