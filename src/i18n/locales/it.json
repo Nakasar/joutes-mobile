@@ -1066,6 +1066,30 @@
       "game": "Gioco",
       "allGames": "Tutti i giochi"
     },
+    "notifications": {
+      "trigger": "Notifiche del luogo: {{level}}",
+      "title": "Notifiche di questo luogo",
+      "description": "Scegli cosa ricevere da questo luogo, nell'app, sul sito e su Discord.",
+      "levels": {
+        "all": {
+          "label": "Tutte",
+          "hint": "Tutte le notifiche che il luogo invia a chi lo segue."
+        },
+        "custom": {
+          "label": "Personalizzate",
+          "hint": "Solo i tipi che selezioni."
+        },
+        "none": {
+          "label": "Nessuna",
+          "hint": "Continui a seguire il luogo, senza ricevere le sue notifiche."
+        }
+      },
+      "categories": {
+        "announcements": "Annunci in evidenza",
+        "live": "Dirette"
+      },
+      "emptyCustom": "Nessun tipo selezionato: non riceverai nulla da questo luogo."
+    },
     "follow": {
       "action": "Segui",
       "following": "Seguito"

@@ -1,6 +1,6 @@
 import { api } from "./client";
 import { endpoints } from "./endpoints";
-import type { LairDetail, LairsListResponse } from "./types";
+import type { LairDetail, LairNotificationPreference, LairsListResponse } from "./types";
 import { cacheDelete, withCache } from "../lib/response-cache";
 
 /**
@@ -84,6 +84,26 @@ export async function setFollowingLair(
   const result = following
     ? await api.put<{ following: boolean; followersCount: number }>(path)
     : await api.delete<{ following: boolean; followersCount: number }>(path);
+
+  await cacheDelete(`lairs:detail:${lairId}`);
+
+  return result;
+}
+
+/**
+ * Régler ce qu'on reçoit d'un lieu suivi.
+ *
+ * La fiche mémorisée est purgée : elle porte `notificationPreference`, et la
+ * rouvrir hors ligne ne doit pas remontrer l'ancien réglage.
+ */
+export async function setLairNotificationPreference(
+  lairId: string,
+  preference: LairNotificationPreference,
+): Promise<LairNotificationPreference> {
+  const result = await api.put<LairNotificationPreference>(
+    endpoints.lairs.notifications(lairId),
+    preference,
+  );
 
   await cacheDelete(`lairs:detail:${lairId}`);
 

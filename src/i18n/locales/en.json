@@ -1066,6 +1066,30 @@
       "game": "Game",
       "allGames": "All games"
     },
+    "notifications": {
+      "trigger": "Venue notifications: {{level}}",
+      "title": "Notifications from this venue",
+      "description": "Choose what you receive from this venue, in the app, on the site and on Discord.",
+      "levels": {
+        "all": {
+          "label": "All",
+          "hint": "Every notification the venue sends to its followers."
+        },
+        "custom": {
+          "label": "Custom",
+          "hint": "Only the types you tick."
+        },
+        "none": {
+          "label": "None",
+          "hint": "You still follow the venue, without receiving its notifications."
+        }
+      },
+      "categories": {
+        "announcements": "Pinned announcements",
+        "live": "Live streams"
+      },
+      "emptyCustom": "Nothing ticked: you won't receive anything from this venue."
+    },
     "follow": {
       "action": "Follow",
       "following": "Following"

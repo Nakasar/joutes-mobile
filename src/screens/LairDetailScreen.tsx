@@ -5,12 +5,13 @@ import { listEvents } from "../api/events";
 import { getLair, setFollowingLair } from "../api/lairs";
 import { listGames } from "../api/games";
 import { getMyFollowedGameIds } from "../api/users";
-import type { JoutesEvent, LairNewsItem } from "../api/types";
+import type { JoutesEvent, LairNewsItem, LairNotificationPreference } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
 import { CachedImage } from "../components/CachedImage";
 import { LairAgenda } from "../components/LairAgenda";
 import { LairFeaturedEvent } from "../components/LairFeaturedEvent";
 import { LairHours } from "../components/LairHours";
+import { LairNotificationSheet } from "../components/LairNotificationSheet";
 import { LairNewsCard } from "../components/LairNewsCard";
 import { LairPracticalInfo, directionsUrl } from "../components/LairPracticalInfo";
 import { LairUpcomingEvents } from "../components/LairUpcomingEvents";
@@ -19,6 +20,8 @@ import { StatusView } from "../components/StatusView";
 import { Tabs } from "../components/Tabs";
 import { UserMarkdown } from "../components/UserMarkdown";
 import {
+  BellIcon,
+  BellOffIcon,
   CalendarIcon,
   CheckIcon,
   ExternalLinkIcon,
@@ -88,12 +91,18 @@ export function LairDetailScreen() {
     followersCount: number;
   } | null>(null);
   const [busy, setBusy] = useState(false);
+  /** Le réglage de notifications changé depuis l'ouverture de la fiche. */
+  const [notificationPreference, setNotificationPreference] =
+    useState<LairNotificationPreference | null>(null);
+  const [notificationSheet, setNotificationSheet] = useState(false);
 
   // Changer de lieu garde le composant monté : sans remise à zéro, le suivant
-  // hériterait du « je le suis » et du compteur du précédent. L'onglet, lui,
-  // vit dans l'URL : un autre lieu est une autre URL.
+  // hériterait du « je le suis », du compteur et du réglage du précédent.
+  // L'onglet, lui, vit dans l'URL : un autre lieu est une autre URL.
   useEffect(() => {
     setFollow(null);
+    setNotificationPreference(null);
+    setNotificationSheet(false);
   }, [lairId]);
 
   const lair = useApi(() => getLair(lairId), [lairId]);
@@ -121,6 +130,8 @@ export function LairDetailScreen() {
 
   const following = follow?.following ?? data?.isFollowing ?? false;
   const followersCount = follow?.followersCount ?? data?.followersCount ?? 0;
+  const preference: LairNotificationPreference =
+    notificationPreference ?? data?.notificationPreference ?? { level: "all" };
 
   // La section « à propos » éteinte n'a plus de contenu du tout — ni sa
   // présentation, ni ses équipements, ni son équipe.
@@ -170,11 +181,16 @@ export function LairDetailScreen() {
     // conséquence pour personne, et le faire attendre un aller-retour donnerait
     // l'impression d'un bouton mort.
     setFollow({ following: next, followersCount: followersCount + (next ? 1 : -1) });
+    // Un lieu qu'on se met à suivre part en « Tout », côté serveur aussi.
+    const previousPreference = notificationPreference;
+    if (next) setNotificationPreference({ level: "all" });
 
     try {
       setFollow(await setFollowingLair(lairId, next));
     } catch {
       setFollow({ following, followersCount });
+      // Le suivi n'a pas eu lieu : le réglage non plus.
+      setNotificationPreference(previousPreference);
     } finally {
       setBusy(false);
     }
@@ -189,15 +205,31 @@ export function LairDetailScreen() {
     );
   }
 
+  const NotificationLevelIcon = preference.level === "none" ? BellOffIcon : BellIcon;
+
   const followButton = isAuthenticated ? (
-    <button
-      className={`btn ${following ? "btn--outline" : "btn--grad"} follow-btn`}
-      disabled={busy}
-      onClick={toggleFollow}
-    >
-      {following ? <CheckIcon size={16} /> : <PinIcon size={16} />}
-      {following ? t("lairs.follow.following") : t("lairs.follow.action")}
-    </button>
+    <span className="lair-follow-actions">
+      <button
+        className={`btn ${following ? "btn--outline" : "btn--grad"} follow-btn`}
+        disabled={busy}
+        onClick={toggleFollow}
+      >
+        {following ? <CheckIcon size={16} /> : <PinIcon size={16} />}
+        {following ? t("lairs.follow.following") : t("lairs.follow.action")}
+      </button>
+      {following && (
+        <button
+          className="btn btn--outline lair-notification-btn"
+          disabled={busy}
+          onClick={() => setNotificationSheet(true)}
+          aria-label={t("lairs.notifications.trigger", {
+            level: t(`lairs.notifications.levels.${preference.level}.label`),
+          })}
+        >
+          <NotificationLevelIcon size={16} />
+        </button>
+      )}
+    </span>
   ) : (
     <Link to="/login" className="btn btn--grad follow-btn">
       <PinIcon size={16} />
@@ -570,6 +602,15 @@ export function LairDetailScreen() {
             {followButton}
           </section>
         </>
+      )}
+
+      {notificationSheet && following && (
+        <LairNotificationSheet
+          lairId={lairId}
+          preference={preference}
+          onSaved={setNotificationPreference}
+          onClose={() => setNotificationSheet(false)}
+        />
       )}
     </div>
   );
