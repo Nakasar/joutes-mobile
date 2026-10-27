@@ -54,6 +54,10 @@
       "empty": "In den nächsten sieben Tagen ist nichts geplant.",
       "all": "Ganzer Kalender"
     },
+    "highlights": {
+      "title": "Nicht verpassen",
+      "window": "{{days}} Tage"
+    },
     "feed": {
       "title": "Der Feed",
       "empty": "Derzeit nichts Neues zu diesen Spielen.",
@@ -191,6 +195,19 @@
       "inviteText": "Wähle einen Ort, um die Veranstaltungen in deiner Nähe zu sehen.",
       "orSignIn": "Oder anmelden, um deinen Orten zu folgen"
     }
+  },
+  "highlights": {
+    "lairPick": "Tipp des Ladens",
+    "popular": "Beliebt",
+    "going_one": "{{names}} ist dabei",
+    "going_other": "{{names}} sind dabei",
+    "interested_one": "{{names}} hat es favorisiert",
+    "interested_other": "{{names}} haben es favorisiert",
+    "others_one": "{{count}} weitere Person",
+    "others_other": "{{count}} weitere",
+    "byLair": "Empfohlen von {{lair}}",
+    "popularCount": "Beliebt · {{count}} angemeldet oder interessiert",
+    "popularFilling": "Beliebt · die Plätze sind schnell weg"
   },
   "collection": {
     "title": "Sammlung",

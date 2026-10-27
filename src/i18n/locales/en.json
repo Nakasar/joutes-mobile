@@ -54,6 +54,10 @@
       "empty": "Nothing planned in the next seven days.",
       "all": "Full agenda"
     },
+    "highlights": {
+      "title": "Don't miss",
+      "window": "{{days}} days"
+    },
     "feed": {
       "title": "The feed",
       "empty": "Nothing new on these games for now.",
@@ -191,6 +195,19 @@
       "inviteText": "Pick a town to see the events around you.",
       "orSignIn": "Or sign in to follow your venues"
     }
+  },
+  "highlights": {
+    "lairPick": "Venue pick",
+    "popular": "Popular",
+    "going_one": "{{names}} is going",
+    "going_other": "{{names}} are going",
+    "interested_one": "{{names}} favorited it",
+    "interested_other": "{{names}} favorited it",
+    "others_one": "{{count}} other",
+    "others_other": "{{count}} others",
+    "byLair": "Picked by {{lair}}",
+    "popularCount": "Popular · {{count}} going or interested",
+    "popularFilling": "Popular · filling up fast"
   },
   "collection": {
     "title": "Collection",

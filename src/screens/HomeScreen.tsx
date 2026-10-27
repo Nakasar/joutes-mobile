@@ -271,6 +271,25 @@ export function HomeScreen() {
             </Link>
           </section>
 
+          {(data.highlights?.length ?? 0) > 0 && (
+            <section className="home-section">
+              <Movement
+                section
+                title={t("home.highlights.title")}
+                aside={t("home.highlights.window", { days: 14 })}
+              />
+              {data.highlights?.map((event) => (
+                <EventCard
+                  key={event.id}
+                  event={event}
+                  myUserId={user?.id}
+                  onChanged={feed.reload}
+                  showReason
+                />
+              ))}
+            </section>
+          )}
+
           <section className="home-section">
             <Movement section title={t("home.feed.title")} />
             <div className="chip-row">

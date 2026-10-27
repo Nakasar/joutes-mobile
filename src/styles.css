@@ -21,6 +21,10 @@
      tient un filet ou une pastille, pas un mot. La nuit lui rend sa valeur
      pure, n'ayant plus de fond clair à tenir. */
   --gold-text: color-mix(in oklab, #b8912f 62%, #06131a 38%);
+  /* Les deux marques d'un événement qui n'ont pas de couleur à elles dans la
+     charte : la popularité et les amis, les mêmes teintes que sur le site. */
+  --hot: #c2410c;
+  --friends: #7c3aed;
   /* Le filet d'or d'un mouvement. `.roll` le redéfinit à son propre or, plus
      chaud ; partout ailleurs il se dérive de l'or de l'application. Sans cette
      valeur de base, le filet disparaissait hors du rôle d'armes — une variable
@@ -117,6 +121,8 @@
     --accent: #22c9ad;
     --gold: #e0bd63;
     --gold-text: #e0bd63;
+    --hot: #fb923c;
+    --friends: #a78bfa;
     --danger: #f14d4c;
     --danger-fg: #04121b;
     --border: rgba(255, 255, 255, 0.09);
@@ -2345,6 +2351,92 @@ textarea:focus {
   flex-wrap: wrap;
   gap: 6px;
   margin: 0;
+}
+
+/* La raison d'une carte « À ne pas manquer », en tête : la plus forte des
+   marques, dite en une phrase et dans sa couleur. */
+.event-card__reason {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 4px;
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.event-card__reason svg {
+  flex-shrink: 0;
+}
+
+.event-card__reason--friends {
+  color: var(--friends);
+}
+
+.event-card__reason--lairPick {
+  color: var(--gold-text);
+}
+
+.event-card__reason--popular {
+  color: var(--hot);
+}
+
+/* Les marques : rosette d'or pour le choix du lieu (l'étoile est déjà le
+   favori), flamme pour la popularité, avatars violets pour les amis. */
+.chip--pick {
+  background: color-mix(in srgb, var(--gold) 18%, transparent);
+  color: var(--gold-text);
+}
+
+.chip--hot {
+  background: color-mix(in srgb, var(--hot) 13%, transparent);
+  color: var(--hot);
+}
+
+.chip--friends {
+  background: color-mix(in srgb, var(--friends) 13%, transparent);
+  color: var(--friends);
+  padding-left: 4px;
+}
+
+.friend-avatars {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.friend-avatars__one {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--friends);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  box-shadow: 0 0 0 2px var(--surface);
+}
+
+.friend-avatars__one + .friend-avatars__one {
+  margin-left: -6px;
+}
+
+.friend-avatars__one img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.friend-avatars--small .friend-avatars__one {
+  width: 15px;
+  height: 15px;
+  font-size: 8px;
+}
+
+.friend-avatars--small .friend-avatars__one + .friend-avatars__one {
+  margin-left: -4px;
 }
 
 /* ---- Collection ---- */

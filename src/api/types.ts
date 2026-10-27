@@ -124,6 +124,8 @@ export interface HomeFeed {
   position: { latitude: number; longitude: number; radiusKm: number; name?: string } | null;
   lives: HomeLive[];
   agenda: JoutesEvent[];
+  /** « À ne pas manquer » : absent d'un serveur antérieur à la mise en avant. */
+  highlights?: JoutesEvent[];
   feed: FeedEntry[];
   lairs: { source: "followed" | "nearby" | "none"; lairs: Lair[] };
   decks: { source: "mine" | "featured"; decks: Deck[] };
@@ -681,7 +683,28 @@ export interface JoutesEvent {
   waitlistResponseHours?: number;
   /** Place de la personne connectée dans la file, `null` si elle n'y est pas. */
   viewerWaitlist?: EventWaitlistStatus | null;
+  /** Mis en avant par le lieu (« Choix du lieu »). */
+  featured?: boolean;
+  /** Ses marques, calculées par le serveur pour la personne connectée. */
+  highlights?: EventHighlights;
   [key: string]: unknown;
+}
+
+/** Un ami sur un événement : inscrit, ou qui l'a en favori. */
+export interface HighlightFriend {
+  id: string;
+  displayName: string;
+  avatar?: string;
+  kind: "registered" | "interested";
+}
+
+/** Ce qui fait remarquer un événement (`lib/events/highlights.ts` côté joutes-app). */
+export interface EventHighlights {
+  popular: boolean;
+  /** Inscrits et intéressés, chacun compté une fois. */
+  interest: number;
+  lairPick: boolean;
+  friends: HighlightFriend[];
 }
 
 export interface EventWaitlistStatus {
