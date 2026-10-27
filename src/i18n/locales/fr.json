@@ -54,6 +54,10 @@
       "empty": "Rien de prévu ces sept prochains jours.",
       "all": "Tout l'agenda"
     },
+    "highlights": {
+      "title": "À ne pas manquer",
+      "window": "{{days}} jours"
+    },
     "feed": {
       "title": "Le fil",
       "empty": "Rien de nouveau sur ces jeux pour le moment.",
@@ -191,6 +195,19 @@
       "inviteText": "Choisissez une ville pour voir les événements autour de vous.",
       "orSignIn": "Ou se connecter pour suivre ses lieux"
     }
+  },
+  "highlights": {
+    "lairPick": "Choix du lieu",
+    "popular": "Populaire",
+    "going_one": "{{names}} y va",
+    "going_other": "{{names}} y vont",
+    "interested_one": "{{names}} l'a en favori",
+    "interested_other": "{{names}} l'ont en favori",
+    "others_one": "{{count}} autre",
+    "others_other": "{{count}} autres",
+    "byLair": "Mis en avant par {{lair}}",
+    "popularCount": "Populaire · {{count}} inscrits et intéressés",
+    "popularFilling": "Populaire · les places partent vite"
   },
   "collection": {
     "title": "Collection",
