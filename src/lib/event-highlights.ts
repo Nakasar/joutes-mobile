@@ -23,10 +23,6 @@ const ListFormat = (
 
 export type HighlightReason = { kind: "friends" | "lairPick" | "popular"; text: string };
 
-export function hasHighlight(highlights: EventHighlights | undefined): boolean {
-  return Boolean(highlights && (highlights.popular || highlights.lairPick || highlights.friends.length > 0));
-}
-
 function listNames(friends: HighlightFriend[], t: TFunction, locale: string, max: number): string {
   const names = friends.slice(0, max).map((friend) => friend.displayName);
   const rest = friends.length - names.length;
