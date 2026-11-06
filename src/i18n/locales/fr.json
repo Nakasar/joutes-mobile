@@ -954,7 +954,9 @@
       "mine": "Validé",
       "partner": "Validé",
       "validate": "Valider l'échange",
-      "revoke": "Annuler ma validation"
+      "revoke": "Annuler ma validation",
+      "finalize": "Finaliser l'échange",
+      "pendingFinalization": "Toutes les validations sont là : finalisez l'échange pour mettre à jour les collections."
     },
     "partner": {
       "remove": "Retirer le partenaire",
