@@ -954,7 +954,9 @@
       "mine": "Validated",
       "partner": "Validated",
       "validate": "Validate the trade",
-      "revoke": "Revoke my validation"
+      "revoke": "Revoke my validation",
+      "finalize": "Complete the trade",
+      "pendingFinalization": "Every offer is validated: complete the trade to update the collections."
     },
     "partner": {
       "remove": "Remove partner",
