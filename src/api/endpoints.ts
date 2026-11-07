@@ -145,6 +145,14 @@ export const endpoints = {
      */
     value: "/collection/value",
     gameValue: (gameSlug: string) => `/collection/games/${gameSlug}/value`,
+    /** Ajout d'une extension entière : liste des extensions (GET), aperçu ou ajout (POST). */
+    quickAdd: (gameSlug: string) => `/collection/games/${gameSlug}/quick-add`,
+    /** Import d'un fichier CSV (POST, `dryRun` pour vérifier sans écrire). */
+    import: (gameSlug: string) => `/collection/games/${gameSlug}/import`,
+    /** Export CSV (GET), au format et sur le contenu demandés. */
+    export: (gameSlug: string) => `/collection/games/${gameSlug}/export`,
+    /** Annulation d'un ajout groupé (DELETE). */
+    batch: (batchId: string) => `/collection/batches/${batchId}`,
     /** Catalogue de produits d'un jeu, annoté de ce que l'appelant possède. */
     gameProducts: (gameSlug: string) => `/collection/games/${gameSlug}/products`,
     gameProduct: (gameSlug: string, productId: string) =>

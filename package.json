@@ -1,7 +1,7 @@
 {
   "name": "joutes-mobile",
   "private": true,
-  "version": "0.51.1",
+  "version": "0.52.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -14,6 +14,8 @@
     "@choochmeque/tauri-plugin-notifications-api": "^0.4",
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-barcode-scanner": "^2.4.5",
+    "@tauri-apps/plugin-dialog": "^2",
+    "@tauri-apps/plugin-fs": "^2",
     "@tauri-apps/plugin-http": "^2",
     "@tauri-apps/plugin-opener": "^2",
     "i18next": "^26.3.6",

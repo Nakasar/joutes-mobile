@@ -3,8 +3,9 @@ import { useTranslation } from "react-i18next";
 import { searchCards } from "../api/cards";
 import type { Card } from "../api/types";
 import { CardImage } from "./CardImage";
-import { SearchIcon } from "./icons";
+import { CardSearchBar } from "./CardSearchBar";
 import { StatusView } from "./StatusView";
+import { useCardSearchFields } from "../hooks/useCardSearchFields";
 
 const PAGE_SIZE = 20;
 
@@ -29,6 +30,7 @@ export function DeckCardPickerSheet({
 }) {
   const { t } = useTranslation();
   const [searchInput, setSearchInput] = useState("");
+  const searchFields = useCardSearchFields(gameSlugOrId);
   const [query, setQuery] = useState("");
   const [cards, setCards] = useState<Card[]>([]);
   const [totalPages, setTotalPages] = useState(1);
@@ -72,14 +74,9 @@ export function DeckCardPickerSheet({
         <div className="sheet__body form-sheet">
           <h2 className="form-sheet__title">{t("decks.edit.addTo", { zone: zoneLabel })}</h2>
 
-          <div className="search-field" style={{ marginBottom: 12 }}>
-            <SearchIcon size={18} />
-            <input
-              type="search"
-              value={searchInput}
-              placeholder={t("decks.edit.searchPlaceholder")}
-              onChange={(e) => setSearchInput(e.currentTarget.value)}
-            />
+          {/* Même syntaxe que la galerie : `domain:fury energy<=3`. */}
+          <div style={{ marginBottom: 12 }}>
+            <CardSearchBar value={searchInput} onChange={setSearchInput} fields={searchFields} />
           </div>
 
           {cards.map((card) => (

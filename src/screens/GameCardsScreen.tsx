@@ -7,15 +7,20 @@ import type { Card } from "../api/types";
 import { BackHeader } from "../components/BackHeader";
 import { CardImage } from "../components/CardImage";
 import { CardPriceTag } from "../components/CardPriceTag";
-import { BookIcon, DeckCheckIcon, SearchIcon } from "../components/icons";
+import { CardSearchBar } from "../components/CardSearchBar";
+import { BookIcon, DeckCheckIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
+import { useCardSearchFields } from "../hooks/useCardSearchFields";
+import { parseSearchSyntax } from "../lib/search-syntax";
+import { withFieldToken } from "../lib/search-tokens";
 
 const PAGE_SIZE = 30;
 
 /**
- * Galerie des cartes d'un jeu : recherche plein texte, filtres par set et
- * par type (facettes renvoyées par l'API), chargement par pages.
+ * Galerie des cartes d'un jeu : recherche avec la syntaxe du site
+ * (`domain:fury energy<=3 set:OGN`), que le serveur relit lui-même, et
+ * chargement par pages. Les listes de set et de type écrivent dans la barre.
  */
 export function GameCardsScreen() {
   const { t } = useTranslation();
@@ -23,8 +28,8 @@ export function GameCardsScreen() {
 
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [setCode, setSetCode] = useState("");
-  const [type, setType] = useState("");
+  const fields = useCardSearchFields(gameSlug);
+  const shown = parseSearchSyntax(searchInput, fields);
 
   const [cards, setCards] = useState<Card[]>([]);
   const [total, setTotal] = useState(0);
@@ -44,7 +49,7 @@ export function GameCardsScreen() {
   // Toute modification des critères repart de la page 1.
   useEffect(() => {
     setPage(1);
-  }, [searchQuery, setCode, type, gameSlug]);
+  }, [searchQuery, gameSlug]);
 
   const game = useApi(() => getGame(gameSlug), [gameSlug]);
 
@@ -55,8 +60,6 @@ export function GameCardsScreen() {
     setError(null);
     searchCards(gameSlug, {
       searchQuery: searchQuery || undefined,
-      setCode: setCode || undefined,
-      type: type || undefined,
       page,
       limit: PAGE_SIZE,
     })
@@ -77,7 +80,7 @@ export function GameCardsScreen() {
       .finally(() => {
         if (id === requestId.current) setLoading(false);
       });
-  }, [gameSlug, searchQuery, setCode, type, page]);
+  }, [gameSlug, searchQuery, page]);
 
   return (
     <div className="screen">
@@ -105,19 +108,17 @@ export function GameCardsScreen() {
         }
       />
       <div className="card-filters">
-        <div className="search-field">
-          <SearchIcon size={18} className="search-field__icon" />
-          <input
-            type="search"
-            placeholder={t("cards.searchPlaceholder")}
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.currentTarget.value)}
-          />
-        </div>
+        <CardSearchBar
+          value={searchInput}
+          onChange={setSearchInput}
+          fields={fields}
+        />
         <div className="card-filters__row">
           <select
-            value={setCode}
-            onChange={(e) => setSetCode(e.currentTarget.value)}
+            value={shown.setCode ?? ""}
+            onChange={(e) =>
+              setSearchInput(withFieldToken(searchInput, fields, "set", e.currentTarget.value))
+            }
           >
             <option value="">{t("cards.allSets")}</option>
             {setCodes.map((code) => (
@@ -126,11 +127,16 @@ export function GameCardsScreen() {
               </option>
             ))}
           </select>
-          <select value={type} onChange={(e) => setType(e.currentTarget.value)}>
+          <select
+            value={shown.type ?? ""}
+            onChange={(e) =>
+              setSearchInput(withFieldToken(searchInput, fields, "type", e.currentTarget.value))
+            }
+          >
             <option value="">{t("cards.allTypes")}</option>
-            {types.map((t) => (
-              <option key={t} value={t}>
-                {t}
+            {types.map((ty) => (
+              <option key={ty} value={ty}>
+                {ty}
               </option>
             ))}
           </select>

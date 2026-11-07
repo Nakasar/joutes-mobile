@@ -6,7 +6,12 @@ import type {
   CollectionValue,
   CollectionValueTotal,
   GameCollectionResult,
+  ImportPreview,
+  ImportResult,
   OwnedCopiesResponse,
+  QuickAddRequest,
+  QuickAddResult,
+  QuickAddSet,
 } from "./types";
 import { withCache } from "../lib/response-cache";
 
@@ -33,6 +38,7 @@ export function getPlayGroupCollectionOverview(
 export interface GameCollectionParams {
   page?: number;
   limit?: number;
+  /** Texte et filtres, dans la syntaxe du site : `domain:fury owned<3 set:OGN`. */
   search?: string;
   setCode?: string;
   type?: string;
@@ -116,4 +122,60 @@ export function removeCollectionCard(
 /** Copies possédées d'une carte du catalogue (pour la mettre en vente). */
 export function getOwnedCopies(cardId: string): Promise<OwnedCopiesResponse> {
   return api.get<OwnedCopiesResponse>(endpoints.collection.card(cardId));
+}
+
+/** Extensions du jeu proposées à l'ajout rapide, avec leurs tailles et raretés. */
+export function getQuickAddSets(gameSlug: string): Promise<{ sets: QuickAddSet[] }> {
+  return api.get(endpoints.collection.quickAdd(gameSlug));
+}
+
+/**
+ * Ajoute toute une extension à la collection personnelle. Avec `dryRun`,
+ * calcule seulement ce qui serait ajouté ; sinon renvoie l'identifiant du lot,
+ * qui permet de l'annuler.
+ */
+export function quickAddSet(
+  gameSlug: string,
+  request: QuickAddRequest,
+  dryRun: boolean,
+): Promise<QuickAddResult> {
+  return api.post(endpoints.collection.quickAdd(gameSlug), { ...request, dryRun });
+}
+
+/** Annule un ajout groupé (extension, import) : retire les exemplaires de ce lot. */
+export function undoCollectionBatch(batchId: string): Promise<{ removed: number }> {
+  return api.delete(endpoints.collection.batch(batchId));
+}
+
+export interface ImportRequest {
+  format: string;
+  csv: string;
+  /** Ligne → carte choisie parmi les candidats d'une ligne ambiguë. */
+  resolutions?: Record<string, string>;
+  /** `replace` retire d'abord les exemplaires du jeu. */
+  mode?: "add" | "replace";
+}
+
+/** Vérifie un fichier sans rien écrire. */
+export function previewImport(gameSlug: string, request: ImportRequest): Promise<ImportPreview> {
+  return api.post(endpoints.collection.import(gameSlug), { ...request, dryRun: true });
+}
+
+export function importCollection(gameSlug: string, request: ImportRequest): Promise<ImportResult> {
+  return api.post(endpoints.collection.import(gameSlug), request);
+}
+
+/**
+ * Exporte la collection d'un jeu en CSV. `search` (la recherche en cours)
+ * ne sert qu'avec `scope: "search"`.
+ */
+export function exportCollection(
+  gameSlug: string,
+  params: { format: string; scope: "all" | "search" | "doubles"; search?: string },
+): Promise<string> {
+  return api.get<string>(endpoints.collection.export(gameSlug), {
+    format: params.format,
+    scope: params.scope,
+    search: params.scope === "search" ? params.search : undefined,
+  });
 }

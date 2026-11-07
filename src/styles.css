@@ -8883,3 +8883,225 @@ html.qr-scanning #root {
   flex-shrink: 0;
   padding: 8px 10px;
 }
+
+/* ---- Recherche de cartes avec syntaxe (`domain:fury energy<=3`) ---- */
+
+.card-search {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-search__suggestions {
+  position: absolute;
+  top: 52px;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  padding: 4px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.card-search__suggestion {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 10px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  min-width: 0;
+}
+
+.card-search__suggestion:active {
+  background: var(--chip);
+}
+
+.card-search__token {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.82rem;
+  color: var(--primary);
+  white-space: nowrap;
+}
+
+/* À droite, et coupé plutôt que de pousser le token hors de la ligne. */
+.card-search__hint {
+  margin-left: auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.card-search__chip {
+  padding: 5px 10px;
+  border: 0;
+}
+
+.card-search__rejected {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.75rem;
+  color: var(--gold-text);
+}
+
+/* ---- Ajout d'une extension, import / export ---- */
+
+.collection-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+/* Deux actions côte à côte sur un téléphone : plus compactes qu'un bouton de
+   formulaire, et une seule ligne de texte chacune quand c'est possible. */
+.collection-actions > .btn {
+  flex: 1 1 140px;
+  min-width: 0;
+  padding: 0.7em 0.8em;
+  font-size: 0.85rem;
+}
+
+.undo-banner {
+  margin-bottom: 12px;
+}
+
+/* Une option d'un choix exclusif, en carte : titre et explication. */
+.option-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  text-align: left;
+}
+
+.option-card--active {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 8%, var(--surface));
+}
+
+.option-card input {
+  margin-top: 3px;
+  accent-color: var(--primary);
+}
+
+.option-card__title {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.option-card__text {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.option-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Les chiffres d'un aperçu : ce qui sera ajouté, ignoré, à préciser. */
+.preview-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 8px;
+}
+
+.preview-tile {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.preview-tile__value {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.preview-tile__label {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.preview-tile--ok .preview-tile__value {
+  color: var(--accent);
+}
+
+.preview-tile--warn .preview-tile__value {
+  color: var(--gold-text);
+}
+
+.preview-tile--bad .preview-tile__value {
+  color: var(--danger);
+}
+
+.qty-input {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.qty-input input {
+  width: 64px;
+  text-align: center;
+}
+
+.import-issue {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 0;
+  border-top: 1px solid var(--border-2);
+}
+
+.import-issue__title {
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.import-issue__text {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* Bandeau du dernier ajout groupé, avec de quoi l'annuler. */
+.undo-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  font-size: 0.85rem;
+}
+
+.undo-banner__text {
+  flex: 1;
+  min-width: 0;
+}

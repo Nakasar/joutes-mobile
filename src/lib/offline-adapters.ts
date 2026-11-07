@@ -10,6 +10,7 @@ import type {
   RuleLang,
 } from "../api/types";
 import { hyperlinkEntries, searchHyperlinkedEntries } from "./rules-hyperlink";
+import { buildSearchFields, parseSearchSyntax } from "./search-syntax";
 
 /**
  * Transforme les données du document d'export en réponses au format de l'API,
@@ -144,14 +145,6 @@ export function offlineSearchCards(
 ): CardsSearchResponse {
   const { cardsById } = buildIndices(exp);
   const all = [...cardsById.values()];
-  const q = params.searchQuery?.trim().toLowerCase();
-
-  const filtered = all.filter((c) => {
-    if (params.setCode && c.setCode !== params.setCode) return false;
-    if (params.type && c.type !== params.type) return false;
-    if (q && !c.name.toLowerCase().includes(q)) return false;
-    return true;
-  });
 
   const setCodes = [
     ...new Set(all.map((c) => c.setCode).filter(Boolean) as string[]),
@@ -159,6 +152,29 @@ export function offlineSearchCards(
   const types = [
     ...new Set(all.map((c) => c.type).filter(Boolean) as string[]),
   ].sort();
+
+  // La saisie suit la syntaxe du site (`set:OGN type:unit jinx`). Hors ligne,
+  // seuls l'extension et le type se filtrent : les attributs du jeu ne sont pas
+  // dans l'export, et leurs tokens sont simplement retirés du nom cherché.
+  const parsed = parseSearchSyntax(
+    params.searchQuery ?? "",
+    buildSearchFields([], { setCodes, types }),
+  );
+  const q = parsed.text
+    .split(/\s+/)
+    .filter((word) => !/^[a-z]+(:|<=|>=|<|>|=)/i.test(word))
+    .join(" ")
+    .trim()
+    .toLowerCase();
+  const setCode = params.setCode || parsed.setCode;
+  const type = params.type || parsed.type;
+
+  const filtered = all.filter((c) => {
+    if (setCode && c.setCode?.toUpperCase() !== setCode.toUpperCase()) return false;
+    if (type && c.type?.toLowerCase() !== type.toLowerCase()) return false;
+    if (q && !c.name.toLowerCase().includes(q)) return false;
+    return true;
+  });
 
   const limit = params.limit ?? 30;
   const page = params.page ?? 1;

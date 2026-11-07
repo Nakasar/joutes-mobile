@@ -6,15 +6,20 @@ import {
   getGameCollection,
   recomputeGameCollectionValue,
   removeCollectionCard,
+  undoCollectionBatch,
 } from "../api/collection";
 import type { CollectionItem, CollectionValue } from "../api/types";
 import { getGame } from "../api/games";
 import { AddCollectionCopySheet } from "../components/AddCollectionCopySheet";
+import { AddSetSheet } from "../components/AddSetSheet";
 import { BackHeader } from "../components/BackHeader";
+import { CardSearchBar } from "../components/CardSearchBar";
+import { CollectionTransferSheet } from "../components/CollectionTransferSheet";
 import { CardImage } from "../components/CardImage";
 import { CardPriceTag } from "../components/CardPriceTag";
 import { CollectionValueCard } from "../components/CollectionValueCard";
 import {
+  ArrowLeftRightIcon,
   BoxIcon,
   ChevronIcon,
   LockIcon,
@@ -23,7 +28,11 @@ import {
 } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
+import { useCardSearchFields } from "../hooks/useCardSearchFields";
 import { useSearchParamState } from "../hooks/useSearchParamState";
+import { COLLECTION_EXTRA_FIELDS } from "../lib/collection-search";
+import { parseSearchSyntax } from "../lib/search-syntax";
+import { withFieldToken } from "../lib/search-tokens";
 import { resolvePrinting, type PrintingChoice } from "../lib/printings";
 import { useAuth } from "../store/auth";
 
@@ -47,8 +56,15 @@ function CollectionGameContent({
 
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [setCode, setSetCode] = useState("");
-  const [type, setType] = useState("");
+  // Même syntaxe que la galerie et le site, plus ce que seule la collection
+  // comprend : `owned<3`, `foil:yes`, `cond:nm`.
+  const fields = useCardSearchFields(gameSlug, COLLECTION_EXTRA_FIELDS);
+  const shown = parseSearchSyntax(searchInput, fields);
+  /** Ajout d'une extension, import / export : collection personnelle seulement. */
+  const [sheet, setSheet] = useState<"addSet" | "transfer" | null>(null);
+  /** Dernier ajout groupé, annulable d'un geste. */
+  const [lastBatch, setLastBatch] = useState<{ batchId: string; label: string } | null>(null);
+  const [undoing, setUndoing] = useState(false);
   const [ownership, setOwnership] = useSearchParamState<Ownership>("ownership", OWNERSHIPS, "all");
 
   const [gameName, setGameName] = useState("");
@@ -81,7 +97,7 @@ function CollectionGameContent({
 
   useEffect(() => {
     setPage(1);
-  }, [searchQuery, setCode, type, ownership, gameSlug, groupId]);
+  }, [searchQuery, ownership, gameSlug, groupId]);
 
   const requestId = useRef(0);
   useEffect(() => {
@@ -92,8 +108,6 @@ function CollectionGameContent({
       gameSlug,
       {
         search: searchQuery || undefined,
-        setCode: setCode || undefined,
-        type: type || undefined,
         owned:
           ownership === "owned" ? true : ownership === "unowned" ? false : undefined,
         page,
@@ -127,7 +141,27 @@ function CollectionGameContent({
       .finally(() => {
         if (id === requestId.current) setLoading(false);
       });
-  }, [gameSlug, groupId, searchQuery, setCode, type, ownership, page, retryTick, t]);
+  }, [gameSlug, groupId, searchQuery, ownership, page, retryTick, t]);
+
+  /** Recharge depuis la première page, après un ajout ou un import. */
+  const reload = () => {
+    setPage(1);
+    setRetryTick((tick) => tick + 1);
+  };
+
+  const undoLastBatch = async () => {
+    if (!lastBatch) return;
+    setUndoing(true);
+    try {
+      const { removed } = await undoCollectionBatch(lastBatch.batchId);
+      setLastBatch({ batchId: "", label: t("quickAdd.undone", { count: removed }) });
+      reload();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t("collection.browse.error"));
+    } finally {
+      setUndoing(false);
+    }
+  };
 
   const applyQuantity = (cardId: string, quantity: number) => {
     setItems((previous) =>
@@ -277,17 +311,48 @@ function CollectionGameContent({
         />
       )}
 
-      <div className="card-filters">
-        <div className="search-field">
-          <input
-            type="search"
-            placeholder={t("collection.browse.searchPlaceholder")}
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.currentTarget.value)}
-          />
+      {!groupId && (
+        <div className="collection-actions">
+          <button className="btn btn--grad" onClick={() => setSheet("addSet")}>
+            <PlusIcon size={16} />
+            {t("quickAdd.action")}
+          </button>
+          <button className="btn btn--outline" onClick={() => setSheet("transfer")}>
+            <ArrowLeftRightIcon size={16} />
+            {t("transfer.action")}
+          </button>
         </div>
+      )}
+
+      {lastBatch && (
+        <div className="undo-banner" role="status">
+          <span className="undo-banner__text">{lastBatch.label}</span>
+          {lastBatch.batchId ? (
+            <button className="btn btn--ghost" onClick={undoLastBatch} disabled={undoing}>
+              {t("quickAdd.undo")}
+            </button>
+          ) : (
+            <button className="btn btn--ghost" onClick={() => setLastBatch(null)}>
+              {t("common.close")}
+            </button>
+          )}
+        </div>
+      )}
+
+      <div className="card-filters">
+        <CardSearchBar
+          value={searchInput}
+          onChange={setSearchInput}
+          fields={fields}
+          placeholder={t("collection.browse.searchPlaceholder")}
+        />
         <div className="card-filters__row">
-          <select value={setCode} onChange={(e) => setSetCode(e.currentTarget.value)}>
+          <select
+            value={shown.setCode ?? ""}
+            onChange={(e) =>
+              setSearchInput(withFieldToken(searchInput, fields, "set", e.currentTarget.value))
+            }
+          >
             <option value="">{t("cards.allSets")}</option>
             {setCodes.map((code) => (
               <option key={code} value={code}>
@@ -295,7 +360,12 @@ function CollectionGameContent({
               </option>
             ))}
           </select>
-          <select value={type} onChange={(e) => setType(e.currentTarget.value)}>
+          <select
+            value={shown.type ?? ""}
+            onChange={(e) =>
+              setSearchInput(withFieldToken(searchInput, fields, "type", e.currentTarget.value))
+            }
+          >
             <option value="">{t("cards.allTypes")}</option>
             {types.map((ty) => (
               <option key={ty} value={ty}>
@@ -411,6 +481,41 @@ function CollectionGameContent({
         >
           {t("cards.loadMore")}
         </button>
+      )}
+
+      {sheet === "addSet" && (
+        <AddSetSheet
+          gameSlug={gameSlug}
+          initialSetCode={shown.setCode}
+          onClose={() => setSheet(null)}
+          onAdded={(result) => {
+            setSheet(null);
+            setLastBatch(
+              result.batchId
+                ? { batchId: result.batchId, label: t("quickAdd.done", { count: result.copies }) }
+                : null,
+            );
+            reload();
+          }}
+        />
+      )}
+
+      {sheet === "transfer" && (
+        <CollectionTransferSheet
+          gameSlug={gameSlug}
+          search={searchQuery}
+          onClose={() => setSheet(null)}
+          onImported={(result) => {
+            setSheet(null);
+            setLastBatch({
+              batchId: result.batchId ?? "",
+              label: result.removed
+                ? t("transfer.import.replaced", { count: result.added, removed: result.removed })
+                : t("transfer.import.done", { count: result.added }),
+            });
+            reload();
+          }}
+        />
       )}
 
       {pickingPrinting && (
