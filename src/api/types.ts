@@ -1,3 +1,5 @@
+import type { CardFilterFacet } from "../lib/search-syntax";
+
 /**
  * Types des données échangées avec l'API Joutes (spec OpenAPI 2.0.0).
  * Vérifiés contre l'API réelle le 2026-07-19 — noter que `GET /games`
@@ -353,6 +355,8 @@ export interface CardsSearchResponse {
   setCodes?: string[];
   types?: string[];
   languages?: string[];
+  /** Attributs filtrables du jeu, d'où la syntaxe de recherche tire son vocabulaire. */
+  facets?: CardFilterFacet[];
 }
 
 export type ErrataType = "errata" | "clarification" | "ruling";
@@ -2720,4 +2724,66 @@ export interface PushDeviceSummary {
   state: "active" | "revoked";
   createdAt: string;
   lastSeenAt: string;
+}
+
+/** Une extension proposée à l'ajout rapide (`GET /collection/games/{slug}/quick-add`). */
+export interface QuickAddSet {
+  setCode: string;
+  name?: string;
+  /** Tirages distincts, variantes comprises. */
+  masterTotal: number;
+  /** Cartes distinctes par nom. */
+  gameTotal: number;
+  rarities: string[];
+}
+
+export interface QuickAddRequest {
+  setCode: string;
+  copies: number;
+  /** `add` : N de plus à chaque carte ; `fill` : compléter jusqu'à N. */
+  mode: "add" | "fill";
+  /** `game` : une version par carte ; `master` : toutes les variantes. */
+  scope: "game" | "master";
+  rarities?: string[];
+  language?: string;
+  foil: boolean;
+}
+
+export interface QuickAddResult {
+  copies: number;
+  cards: number;
+  unchanged: number;
+  batchId?: string;
+}
+
+/** Ligne d'un import qui demande une décision, ou qui sera ignorée. */
+export interface ImportIssue {
+  line: number;
+  label?: string;
+  message: string;
+  /** Exemplaires que la ligne ajouterait une fois sa carte choisie. */
+  quantity?: number;
+  candidates?: Array<{
+    id: string;
+    name: string;
+    setCode: string;
+    collectorNumber: string;
+    rarity?: string;
+  }>;
+}
+
+export interface ImportPreview {
+  rows: number;
+  copies: number;
+  issues: ImportIssue[];
+  /** Exemplaires actuels du jeu : ce qu'un remplacement retirerait. */
+  currentCopies: number;
+}
+
+export interface ImportResult {
+  added: number;
+  rows: number;
+  removed: number;
+  issues: ImportIssue[];
+  batchId?: string;
 }
