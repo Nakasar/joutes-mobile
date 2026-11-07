@@ -536,6 +536,10 @@ export function TradeDetailScreen() {
 
   const myValidated = !!mySide?.validatedAt;
   const partnerValidated = !!otherSide?.validatedAt;
+  // Toutes les validations sont acquises mais l'échange est resté ouvert : il
+  // reste à l'appliquer (échanges validés avant la correction du serveur, ou
+  // application interrompue). Revalider le finalise.
+  const awaitingFinalization = isOpen && myValidated && (!partner || partnerValidated);
   const canValidate = isOpen && !busy && (drafts.mine.length > 0 || drafts.counterparty.length > 0);
 
   return (
@@ -625,6 +629,21 @@ export function TradeDetailScreen() {
 
           {isOpen && (
             <>
+              {awaitingFinalization && (
+                <>
+                  <p className="muted" style={{ marginBottom: 10 }}>
+                    {t("trades.validation.pendingFinalization")}
+                  </p>
+                  <button
+                    className="btn btn--grad btn--block"
+                    style={{ marginBottom: 10 }}
+                    disabled={busy}
+                    onClick={validate}
+                  >
+                    {t("trades.validation.finalize")}
+                  </button>
+                </>
+              )}
               {myValidated ? (
                 <button
                   className="btn btn--outline btn--block"

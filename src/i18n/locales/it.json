@@ -952,7 +952,9 @@
       "mine": "Convalidato",
       "partner": "Convalidato",
       "validate": "Convalida lo scambio",
-      "revoke": "Revoca la mia convalida"
+      "revoke": "Revoca la mia convalida",
+      "finalize": "Completa lo scambio",
+      "pendingFinalization": "Tutte le offerte sono convalidate: completa lo scambio per aggiornare le collezioni."
     },
     "partner": {
       "remove": "Rimuovi partner",
