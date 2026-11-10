@@ -463,13 +463,16 @@ export function UserProfileScreen() {
           </div>
 
           <div className="profile-id">
-            {user.avatar ? (
-              <CachedImage src={user.avatar} alt="" className="avatar avatar--lg" />
-            ) : (
-              <span className="avatar avatar--lg" style={tintStyle(colorFor(user.id))}>
-                {initialOf(label || "?")}
-              </span>
-            )}
+            <CachedImage
+              src={user.avatar}
+              alt=""
+              className="avatar avatar--lg"
+              fallback={
+                <span className="avatar avatar--lg" style={tintStyle(colorFor(user.id))}>
+                  {initialOf(label || "?")}
+                </span>
+              }
+            />
             <div className="profile-id__body">
               <h1 className="profile-id__name">
                 <span className="profile-id__handle">

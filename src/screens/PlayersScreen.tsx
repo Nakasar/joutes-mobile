@@ -56,7 +56,18 @@ function BoardAvatar({ row, className }: { row: LeaderboardRow; className: strin
   const label = user ? userLabel(user) : "?";
 
   if (user?.avatar) {
-    return <CachedImage src={user.avatar} alt="" className={className} />;
+    return (
+      <CachedImage
+        src={user.avatar}
+        alt=""
+        className={className}
+        fallback={
+          <span className={className} style={tintStyle(colorFor(row.userId))}>
+            {initialOf(label)}
+          </span>
+        }
+      />
+    );
   }
   return (
     <span className={className} style={tintStyle(colorFor(row.userId))}>

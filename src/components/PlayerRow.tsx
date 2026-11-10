@@ -43,13 +43,16 @@ export function PlayerRow({ entry }: { entry: RegistryEntry }) {
 
   return (
     <Link to={userProfilePath(user)} className="registry-row">
-      {user.avatar ? (
-        <CachedImage src={user.avatar} alt="" className="avatar avatar--sm" />
-      ) : (
-        <span className="avatar avatar--sm" style={tintStyle(colorFor(user.id))}>
-          {initialOf(label)}
-        </span>
-      )}
+      <CachedImage
+        src={user.avatar}
+        alt=""
+        className="avatar avatar--sm"
+        fallback={
+          <span className="avatar avatar--sm" style={tintStyle(colorFor(user.id))}>
+            {initialOf(label)}
+          </span>
+        }
+      />
 
       <div className="registry-row__body">
         <p className="registry-row__name">
