@@ -31,9 +31,14 @@ export function GroupDecksView({
   const [removing, setRemoving] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const decks = useApi(() => listGroupDecks(groupId, { membre: member }), [groupId, member]);
+  // La bibliothèque entière, filtrée ici : les pastilles des auteurs et les
+  // decks déjà partagés se lisent sur toute la liste, pas sur le filtre en
+  // cours — sinon choisir un membre ferait disparaître les autres pastilles.
+  const decks = useApi(() => listGroupDecks(groupId), [groupId]);
+  const all = decks.data ?? [];
+  const shown = member === undefined ? all : all.filter((link) => link.ownerId === member);
   const nameOf = (id: string) => members.find((entry) => entry.userId === id)?.name ?? "";
-  const owners = members.filter((entry) => (decks.data ?? []).some((link) => link.ownerId === entry.userId) || entry.userId === member);
+  const owners = members.filter((entry) => all.some((link) => link.ownerId === entry.userId));
 
   async function remove(link: PlayGroupDeck) {
     setRemoving(link.deckId);
@@ -55,7 +60,7 @@ export function GroupDecksView({
         {t("social.groupDecks.add")}
       </button>
 
-      {owners.length > 1 && (
+      {(owners.length > 1 || member !== undefined) && (
         <div className="chip-row" style={{ marginBottom: 12 }}>
           <button
             className={`chip-filter${member === undefined ? " chip-filter--active" : ""}`}
@@ -79,11 +84,11 @@ export function GroupDecksView({
         loading={decks.loading}
         error={decks.error}
         onRetry={decks.reload}
-        empty={decks.data && decks.data.length === 0 ? t("social.groupDecks.empty") : undefined}
+        empty={decks.data && shown.length === 0 ? t("social.groupDecks.empty") : undefined}
       />
       {error && <p className="form-error">{error}</p>}
 
-      {decks.data?.map((link) => {
+      {shown.map((link) => {
         const owner = link.ownerId === userId ? t("social.groupGame.you") : nameOf(link.ownerId);
         const note = [
           t("social.groupDecks.by", { name: owner }),
@@ -119,10 +124,10 @@ export function GroupDecksView({
       {adding && (
         <AddGroupDecksSheet
           groupId={groupId}
-          alreadyIn={new Set((decks.data ?? []).map((link) => link.deckId))}
+          alreadyIn={new Set(all.map((link) => link.deckId))}
           onClose={() => setAdding(false)}
-          onAdded={() => {
-            setAdding(false);
+          onAdded={(done) => {
+            if (done) setAdding(false);
             decks.reload();
           }}
         />

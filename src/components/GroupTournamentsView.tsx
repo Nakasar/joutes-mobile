@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getGroupTournaments } from "../api/play-group-game";
@@ -32,10 +32,17 @@ export function GroupTournamentsView({
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [moreError, setMoreError] = useState<string | null>(null);
   const [tick, setTick] = useState(0);
+  // Change à chaque premier chargement : une page de « Mois précédents »
+  // lancée sous un autre filtre arrive trop tard et doit être jetée.
+  const generation = useRef(0);
 
   useEffect(() => {
     let cancelled = false;
+    generation.current += 1;
+    setMoreError(null);
+    setLoadingMore(false);
     setLoading(true);
     setError(null);
     setMore([]);
@@ -57,14 +64,17 @@ export function GroupTournamentsView({
   const last = more.length > 0 ? more[more.length - 1] : first;
   async function loadMore() {
     if (!last?.nextBefore) return;
+    const started = generation.current;
     setLoadingMore(true);
+    setMoreError(null);
     try {
       const page = await getGroupTournaments(groupId, { membre: member, avant: last.nextBefore });
-      setMore((previous) => [...previous, page]);
+      if (generation.current === started) setMore((previous) => [...previous, page]);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : t("common.error"));
+      // Erreur locale au bouton : les mois déjà ouverts restent affichés.
+      if (generation.current === started) setMoreError(err instanceof Error ? err.message : t("common.error"));
     } finally {
-      setLoadingMore(false);
+      if (generation.current === started) setLoadingMore(false);
     }
   }
 
@@ -186,6 +196,7 @@ export function GroupTournamentsView({
             </div>
           ))}
 
+          {moreError && <p className="form-error">{moreError}</p>}
           {last?.nextBefore && (
             <button className="btn btn--outline btn--block" disabled={loadingMore} onClick={loadMore}>
               {loadingMore ? t("common.loading") : t("social.groupTournaments.more")}

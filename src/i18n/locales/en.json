@@ -849,7 +849,17 @@
       "resolvedIn": "Resolved in v{{version}}",
       "showResolved_one": "Show {{count}} resolved comment",
       "showResolved_other": "Show {{count}} resolved comments",
-      "hideResolved": "Hide resolved"
+      "hideResolved": "Hide resolved",
+      "errors": {
+        "unauthenticated": "Sign in to comment on this deck.",
+        "forbidden": "You no longer have access to this thread (deck removed from the group?).",
+        "notFound": "This comment or deck no longer exists.",
+        "empty": "The comment is empty.",
+        "tooLong": "The comment is too long (2,000 characters max).",
+        "tooManyCards": "Ten linked cards at most.",
+        "cardNotInDeck": "A linked card is no longer in the deck: remove it and try again.",
+        "replyWithCards": "A reply can't link cards."
+      }
     }
   },
   "deck": {

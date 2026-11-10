@@ -849,7 +849,17 @@
       "resolvedIn": "Résolu en v{{version}}",
       "showResolved_one": "Voir {{count}} commentaire résolu",
       "showResolved_other": "Voir {{count}} commentaires résolus",
-      "hideResolved": "Masquer les résolus"
+      "hideResolved": "Masquer les résolus",
+      "errors": {
+        "unauthenticated": "Connectez-vous pour commenter ce deck.",
+        "forbidden": "Vous n'avez plus accès à ce fil (deck retiré du groupe ?).",
+        "notFound": "Ce commentaire ou ce deck n'existe plus.",
+        "empty": "Le commentaire est vide.",
+        "tooLong": "Le commentaire est trop long (2 000 caractères au plus).",
+        "tooManyCards": "Dix cartes liées au plus.",
+        "cardNotInDeck": "Une carte liée n'est plus dans le deck : retirez-la et réessayez.",
+        "replyWithCards": "Une réponse ne lie pas de cartes."
+      }
     }
   },
   "deck": {

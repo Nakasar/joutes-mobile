@@ -19,7 +19,8 @@ export function AddGroupDecksSheet({
   groupId: string;
   alreadyIn: Set<string>;
   onClose: () => void;
-  onAdded: () => void;
+  /** Des decks ont été ajoutés ; `done` : rien n'a été refusé, la feuille peut se fermer. */
+  onAdded: (done: boolean) => void;
 }) {
   const { t } = useTranslation();
   const [picked, setPicked] = useState<Set<string>>(new Set());
@@ -42,12 +43,17 @@ export function AddGroupDecksSheet({
     setError(null);
     try {
       const outcome = await addGroupDecks(groupId, [...picked]);
-      if ((outcome.refused?.length ?? 0) > 0 && outcome.added === 0) {
-        setError(t("social.groupDecks.refused", { count: outcome.refused?.length ?? 0 }));
-        setSaving(false);
+      const refused = outcome.refused ?? [];
+      if (refused.length === 0) {
+        onAdded(true);
         return;
       }
-      onAdded();
+      // Un ajout partiel ne ferme pas la feuille : les refusés restent cochés,
+      // avec le message, et les ajoutés passent en « déjà dans le groupe ».
+      setPicked(new Set(refused.map((entry) => entry.deckId)));
+      setError(t("social.groupDecks.refused", { count: refused.length }));
+      setSaving(false);
+      if (outcome.added > 0) onAdded(false);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : t("common.error"));
       setSaving(false);

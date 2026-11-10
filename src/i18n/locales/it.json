@@ -849,7 +849,17 @@
       "resolvedIn": "Risolto in v{{version}}",
       "showResolved_one": "Mostra {{count}} commento risolto",
       "showResolved_other": "Mostra {{count}} commenti risolti",
-      "hideResolved": "Nascondi i risolti"
+      "hideResolved": "Nascondi i risolti",
+      "errors": {
+        "unauthenticated": "Accedi per commentare questo mazzo.",
+        "forbidden": "Non hai più accesso a questa discussione (mazzo rimosso dal gruppo?).",
+        "notFound": "Questo commento o questo mazzo non esiste più.",
+        "empty": "Il commento è vuoto.",
+        "tooLong": "Il commento è troppo lungo (massimo 2.000 caratteri).",
+        "tooManyCards": "Al massimo dieci carte collegate.",
+        "cardNotInDeck": "Una carta collegata non è più nel mazzo: rimuovila e riprova.",
+        "replyWithCards": "Una risposta non può collegare carte."
+      }
     }
   },
   "deck": {

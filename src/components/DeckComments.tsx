@@ -13,6 +13,7 @@ import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
 import { DeckCommentCardsSheet } from "./DeckCommentCardsSheet";
 import { CheckIcon, TrashIcon } from "./icons";
 import { StatusView } from "./StatusView";
+import { deckCommentErrorMessage } from "../lib/deck-comment-errors";
 
 const MAX_BODY = 2000;
 
@@ -63,7 +64,7 @@ export function DeckComments({
         if (!cancelled) setThread(data);
       })
       .catch((err: unknown) => {
-        if (!cancelled) setError(err instanceof Error ? err.message : t("common.error"));
+        if (!cancelled) setError(deckCommentErrorMessage(err, t));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -83,7 +84,7 @@ export function DeckComments({
       reload();
       return true;
     } catch (err: unknown) {
-      setActionError(err instanceof Error ? err.message : t("common.error"));
+      setActionError(deckCommentErrorMessage(err, t));
       return false;
     } finally {
       setBusy(false);

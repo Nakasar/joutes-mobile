@@ -849,7 +849,17 @@
       "resolvedIn": "Erledigt in v{{version}}",
       "showResolved_one": "{{count}} erledigten Kommentar zeigen",
       "showResolved_other": "{{count}} erledigte Kommentare zeigen",
-      "hideResolved": "Erledigte ausblenden"
+      "hideResolved": "Erledigte ausblenden",
+      "errors": {
+        "unauthenticated": "Melde dich an, um dieses Deck zu kommentieren.",
+        "forbidden": "Du hast keinen Zugriff mehr auf diesen Verlauf (Deck aus der Gruppe entfernt?).",
+        "notFound": "Dieser Kommentar oder dieses Deck existiert nicht mehr.",
+        "empty": "Der Kommentar ist leer.",
+        "tooLong": "Der Kommentar ist zu lang (höchstens 2.000 Zeichen).",
+        "tooManyCards": "Höchstens zehn verknüpfte Karten.",
+        "cardNotInDeck": "Eine verknüpfte Karte ist nicht mehr im Deck: entferne sie und versuche es erneut.",
+        "replyWithCards": "Eine Antwort kann keine Karten verknüpfen."
+      }
     }
   },
   "deck": {

@@ -1,7 +1,6 @@
 import { api } from "./client";
 import { endpoints } from "./endpoints";
 import type {
-  DeckComment,
   DeckCommentsResponse,
   GroupMetaResponse,
   GroupTournamentsResponse,
@@ -91,8 +90,9 @@ export interface DeckCommentDraft {
   parentId?: string;
 }
 
-export function postDeckComment(deckId: string, draft: DeckCommentDraft): Promise<DeckComment> {
-  return api.post<DeckComment>(endpoints.decks.comments(deckId), draft);
+/** Le serveur renvoie le commentaire stocké, pas sa forme de vue : on recharge le fil. */
+export async function postDeckComment(deckId: string, draft: DeckCommentDraft): Promise<void> {
+  await api.post<{ comment: unknown }>(endpoints.decks.comments(deckId), draft);
 }
 
 /** Marque une racine résolue (à la version actuelle du deck) ou la rouvre. */
