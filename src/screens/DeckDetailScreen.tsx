@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   copyDeck,
@@ -9,10 +9,13 @@ import {
   setDeckFavorite,
 } from "../api/decks";
 import { getGame } from "../api/games";
+import { groupSpace } from "../api/play-group-game";
+import { getPlayGroup } from "../api/play-groups";
 import type { Deck } from "../api/types";
 import { UserMarkdown } from "../components/UserMarkdown";
 import { BackHeader } from "../components/BackHeader";
 import { CachedImage } from "../components/CachedImage";
+import { DeckComments } from "../components/DeckComments";
 import { DeckCostCurve } from "../components/DeckCostCurve";
 import { DeckLegalityBadge, DeckSizeLabel, DeckVisibilityBadge } from "../components/DeckBadges";
 import { DeckTextSheet } from "../components/DeckTextSheet";
@@ -27,7 +30,7 @@ import { deckCardIds, type DeckCardInfo } from "../lib/deck-contents";
 import { getDeckZones } from "../lib/deck-zones";
 import { useAuth } from "../store/auth";
 
-const TABS = ["description", "guide", "cards"] as const;
+const TABS = ["description", "guide", "cards", "comments"] as const;
 type Tab = (typeof TABS)[number];
 
 /**
@@ -49,6 +52,13 @@ export function DeckDetailScreen() {
   const { deckId = "" } = useParams();
 
   const [tab, setTab] = useSearchParamState<Tab>("tab", TABS, "description");
+  // Ouvert depuis la bibliothèque d'un groupe : le fil est celui du groupe.
+  const [searchParams] = useSearchParams();
+  const groupId = searchParams.get("groupe") ?? undefined;
+  const group = useApi(
+    () => (groupId ? getPlayGroup(groupId) : Promise.resolve(null)),
+    [groupId],
+  );
   const [deck, setDeck] = useState<Deck | null>(null);
   const [busy, setBusy] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -89,6 +99,10 @@ export function DeckDetailScreen() {
 
   const isAuthor = Boolean(deck?.playerId && user?.id && deck.playerId === user.id);
   const isFavorite = Boolean(user?.id && deck?.favoritedBy?.includes(user.id));
+  // Le fil d'un groupe pour qui vient du groupe ; sinon l'espace personnel,
+  // réservé à l'auteur pour l'instant.
+  const space = groupId ? groupSpace(groupId) : isAuthor ? "personal" : undefined;
+  const tabs = TABS.filter((key) => key !== "comments" || space);
 
   async function toggleFavorite() {
     if (!deck) return;
@@ -164,7 +178,7 @@ export function DeckDetailScreen() {
           </div>
 
           <div className="segmented" style={{ margin: "12px 0" }}>
-            {TABS.map((key) => (
+            {tabs.map((key) => (
               <button
                 key={key}
                 className={`segmented__item${tab === key ? " segmented__item--active" : ""}`}
@@ -245,6 +259,16 @@ export function DeckDetailScreen() {
                 <p className="status muted">{t("decks.noCards")}</p>
               )}
             </>
+          )}
+
+          {tab === "comments" && space && (
+            <DeckComments
+              deckId={deck.id}
+              space={space}
+              spaceLabel={groupId ? (group.data?.name ?? t("social.groupDetail.fallbackTitle")) : t("decks.comments.personal")}
+              cardIds={cardIds}
+              cardsById={cardsById}
+            />
           )}
 
           {actionError && <p className="form-error">{actionError}</p>}
