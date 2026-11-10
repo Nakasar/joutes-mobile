@@ -48,13 +48,16 @@ export function SettingsScreen() {
         {isAuthenticated ? (
           <>
             <div className="settings-head">
-              {user?.avatar ? (
-                <CachedImage src={user.avatar} alt="" className="avatar avatar--lg" />
-              ) : (
-                <span className="avatar avatar--lg" style={tintStyle(colorFor(user?.id ?? ""))}>
-                  {(user?.displayName ?? user?.name ?? user?.username ?? "?").slice(0, 1).toUpperCase()}
-                </span>
-              )}
+              <CachedImage
+                src={user?.avatar}
+                alt=""
+                className="avatar avatar--lg"
+                fallback={
+                  <span className="avatar avatar--lg" style={tintStyle(colorFor(user?.id ?? ""))}>
+                    {(user?.displayName ?? user?.name ?? user?.username ?? "?").slice(0, 1).toUpperCase()}
+                  </span>
+                }
+              />
               <div className="settings-head__body">
                 <p className="settings-head__name">
                   {user ? userLabel(user) : t("settings.connected")}
