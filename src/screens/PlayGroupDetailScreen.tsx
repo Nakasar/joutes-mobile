@@ -12,6 +12,9 @@ import { AnnouncementCard } from "../components/AnnouncementCard";
 import { BackHeader } from "../components/BackHeader";
 import { CollectionValueCard } from "../components/CollectionValueCard";
 import { CreateSessionSheet } from "../components/CreateSessionSheet";
+import { GroupDecksView } from "../components/GroupDecksView";
+import { GroupMetaView } from "../components/GroupMetaView";
+import { GroupTournamentsView } from "../components/GroupTournamentsView";
 import { SessionCard } from "../components/SessionCard";
 import { UserMarkdown } from "../components/UserMarkdown";
 import {
@@ -30,7 +33,16 @@ import { canManagePlayGroup, readMemberRole } from "../lib/play-group-access";
 import { readPlayGroupAccent } from "../lib/play-group-theme";
 import { useAuth } from "../store/auth";
 
-const VIEWS = ["etabli", "sessions", "announcements", "lists", "members"] as const;
+const VIEWS = [
+  "etabli",
+  "sessions",
+  "announcements",
+  "decks",
+  "tournaments",
+  "meta",
+  "lists",
+  "members",
+] as const;
 type View = (typeof VIEWS)[number];
 
 /** La prochaine session confirmée : celle qui attend encore une réponse. */
@@ -76,6 +88,21 @@ function PlayGroupDetailContent({ groupId }: { groupId: string }) {
   );
 
   const upcoming = nextSession(allSessions);
+  // Les membres, nommés, pour les vues du jeu (auteurs de decks, résultats, méta).
+  const memberNames = useMemo(
+    () =>
+      (group.data?.members ?? []).flatMap((member) =>
+        member.userId
+          ? [
+              {
+                userId: member.userId,
+                name: member.user?.displayName || member.user?.username || t("social.friendDefault"),
+              },
+            ]
+          : [],
+      ),
+    [group.data?.members, t],
+  );
   const games = overview.data?.games.filter((game) => game !== null) ?? [];
 
   function sessionChanged(updated: PlayGroupSession) {
@@ -223,6 +250,18 @@ function PlayGroupDetailContent({ groupId }: { groupId: string }) {
                 <p className="status muted">{t("social.announcements.publishOnWeb")}</p>
               )}
             </>
+          )}
+
+          {view === "decks" && (
+            <GroupDecksView groupId={groupId} userId={user?.id ?? null} members={memberNames} />
+          )}
+
+          {view === "tournaments" && (
+            <GroupTournamentsView groupId={groupId} userId={user?.id ?? null} members={memberNames} />
+          )}
+
+          {view === "meta" && (
+            <GroupMetaView groupId={groupId} userId={user?.id ?? null} members={memberNames} />
           )}
 
           {view === "lists" && (
@@ -395,10 +434,10 @@ function PlayGroupDetailContent({ groupId }: { groupId: string }) {
 /**
  * L'Établi d'un groupe : ce que ses membres y font.
  *
- * Cinq vues plutôt qu'une page à dérouler — sessions, annonces, listes et
- * membres n'ont pas la même urgence, et la première d'entre elles, « Établi »,
- * ne montre que ce qui attend une réponse : la prochaine session et les deux
- * dernières annonces.
+ * Des vues plutôt qu'une page à dérouler — sessions, annonces, decks,
+ * tournois, méta, listes et membres n'ont pas la même urgence, et la première
+ * d'entre elles, « Établi », ne montre que ce qui attend une réponse : la
+ * prochaine session et les deux dernières annonces.
  */
 export function PlayGroupDetailScreen() {
   const { t } = useTranslation();

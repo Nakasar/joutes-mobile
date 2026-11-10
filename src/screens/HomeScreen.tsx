@@ -187,13 +187,16 @@ export function HomeScreen() {
               aria-label={t("common.settings")}
               onClick={() => navigate("/settings")}
             >
-              {user.avatar ? (
-                <CachedImage src={user.avatar} alt="" className="avatar avatar--sm" />
-              ) : (
-                <span className="avatar avatar--sm" style={tintStyle(colorFor(user.id))}>
-                  {(firstName || "?").slice(0, 1).toUpperCase()}
-                </span>
-              )}
+              <CachedImage
+                src={user.avatar}
+                alt=""
+                className="avatar avatar--sm"
+                fallback={
+                  <span className="avatar avatar--sm" style={tintStyle(colorFor(user.id))}>
+                    {(firstName || "?").slice(0, 1).toUpperCase()}
+                  </span>
+                }
+              />
             </button>
           ) : (
             <button

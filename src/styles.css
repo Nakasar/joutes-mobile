@@ -9105,3 +9105,557 @@ html.qr-scanning #root {
   flex: 1;
   min-width: 0;
 }
+
+/* ---- Groupe de jeu : decks partagés, tournois, méta (0.53.0) ---- */
+
+/* Une liste à cocher : decks à partager, cartes à lier à un commentaire. Toute
+   la rangée est la cible, pas seulement la case : au pouce, une case de 18 px
+   ne se vise pas. */
+.check-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 52vh;
+  overflow-y: auto;
+  margin-bottom: 14px;
+}
+
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  cursor: pointer;
+  min-height: 48px;
+}
+
+.check-row input[type="checkbox"] {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--primary);
+}
+
+.check-row:has(input:checked:not(:disabled)) {
+  border-color: var(--primary);
+  background: var(--chip);
+}
+
+.check-row--disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.check-row__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.check-row__title {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.check-row__sub {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* Un deck du groupe : la rangée de la liste, et la corbeille à côté pour qui
+   peut le retirer (son auteur, un responsable du groupe). */
+.group-deck {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.group-deck > .list-row {
+  flex: 1;
+  min-width: 0;
+}
+
+.group-deck__remove {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--danger);
+}
+
+.group-deck__remove:disabled {
+  opacity: 0.5;
+}
+
+/* Le prochain tournoi d'un membre et le palmarès : des lignes dans une carte. */
+.group-upcoming,
+.group-palmares {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  color: var(--text);
+}
+
+.group-upcoming + .group-upcoming,
+.group-palmares + .group-palmares {
+  border-top: 1px solid var(--border-2);
+}
+
+.group-upcoming__date,
+.group-tournament__date {
+  flex-shrink: 0;
+  min-width: 52px;
+  padding: 4px 6px;
+  border-radius: 10px;
+  background: var(--chip);
+  color: var(--primary);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.group-upcoming__body,
+.group-tournament__body,
+.group-result__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+  font-size: 0.82rem;
+}
+
+.group-upcoming__name,
+.group-palmares__name,
+.group-result__name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.group-palmares__name {
+  flex: 1;
+  min-width: 0;
+}
+
+.group-palmares .muted {
+  font-size: 0.8rem;
+  text-align: right;
+}
+
+/* Un tournoi de la timeline, et sous lui une ligne par membre qui y a joué. */
+.group-tournament__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.group-tournament__name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  overflow-wrap: anywhere;
+}
+
+.group-tournament__body p {
+  margin: 0;
+}
+
+.group-result {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-top: 1px solid var(--border-2);
+}
+
+.group-result > .chip {
+  flex-shrink: 0;
+}
+
+.group-result__place {
+  flex-shrink: 0;
+  min-width: 40px;
+  padding: 3px 6px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.group-result__place--1 {
+  background: color-mix(in srgb, var(--gold) 22%, transparent);
+  color: var(--gold-text);
+}
+
+.group-result__place--2 {
+  background: color-mix(in srgb, #8a9ba5 24%, transparent);
+  color: var(--text);
+}
+
+.group-result__place--3 {
+  background: color-mix(in srgb, #b07a4a 22%, transparent);
+  color: var(--text);
+}
+
+.group-result__place--top {
+  background: var(--chip);
+  color: var(--primary);
+}
+
+/* Méta du groupe */
+.meta-kpis {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.meta-kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  min-width: 0;
+}
+
+.meta-kpi__label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.meta-kpi__value {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.meta-kpi__value--gold {
+  color: var(--gold-text);
+}
+
+.meta-kpi__hint {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.meta-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+/* La légende du repère : un trait vertical, comme sur les barres. */
+.meta-head__marker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.meta-head__marker::before {
+  content: "";
+  width: 2px;
+  height: 12px;
+  border-radius: 1px;
+  background: var(--text);
+}
+
+.meta-legend {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.meta-legend + .meta-legend {
+  border-top: 1px solid var(--border-2);
+}
+
+.meta-legend__thumb {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  object-fit: cover;
+  object-position: 50% 22%;
+}
+
+.meta-legend__thumb--empty {
+  display: block;
+  background: var(--chip);
+}
+
+.meta-legend__body {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  min-width: 0;
+}
+
+.meta-legend__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.meta-legend__name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.meta-legend__detail {
+  font-size: 0.75rem;
+}
+
+/* Une barre de part, et le trait de la méta du jeu posé dessus. */
+.meta-bar {
+  position: relative;
+  display: block;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  flex: 1;
+  min-width: 0;
+}
+
+/* Sous le nom de la légende, la barre est une ligne de la colonne : elle ne
+   doit pas s'étirer, sinon sa hauteur retombe à zéro. */
+.meta-legend__body .meta-bar {
+  flex: none;
+}
+
+.meta-bar__fill {
+  display: block;
+  height: 100%;
+  max-width: 100%;
+  border-radius: inherit;
+  background: var(--grad);
+}
+
+.meta-bar__marker {
+  position: absolute;
+  top: -3px;
+  width: 2px;
+  height: 14px;
+  margin-left: -1px;
+  border-radius: 1px;
+  background: var(--text);
+}
+
+.meta-num {
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.meta-num--up {
+  color: var(--accent);
+}
+
+.meta-num--down {
+  color: var(--danger);
+}
+
+.meta-domain {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+}
+
+.meta-domain__name {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  width: 92px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.meta-dot {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.meta-opponent,
+.meta-member {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+}
+
+.meta-opponent + .meta-opponent,
+.meta-member + .meta-member {
+  border-top: 1px solid var(--border-2);
+}
+
+.meta-opponent__name,
+.meta-member__name {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.meta-opponent__name .muted {
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+
+.meta-member .muted {
+  font-size: 0.8rem;
+  text-align: right;
+}
+
+.meta-footnote {
+  margin-top: 8px;
+  font-size: 0.75rem;
+}
+
+/* ---- Commentaires d'un deck ---- */
+
+.avatar--xs {
+  width: 24px;
+  height: 24px;
+  font-size: 11px;
+}
+
+/* Une action en texte : répondre, résoudre, supprimer. Plus discrète qu'un
+   bouton, parce qu'il y en a trois par commentaire. */
+.link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 0;
+  border: none;
+  background: none;
+  color: var(--primary);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.link-btn:disabled {
+  opacity: 0.5;
+}
+
+.link-btn--danger {
+  color: var(--danger);
+}
+
+.comment-compose {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.comment-compose textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+.comment-compose__actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.comment-compose--reply {
+  margin: 8px 0 0;
+  padding-left: 12px;
+  border-left: 2px solid var(--border);
+}
+
+.comment-compose--reply .btn {
+  align-self: flex-end;
+}
+
+.comment {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.comment p {
+  margin: 0;
+}
+
+.comment--reply {
+  margin-top: 10px;
+  padding-left: 12px;
+  border-left: 2px solid var(--border);
+}
+
+.comment--resolved {
+  opacity: 0.72;
+}
+
+.comment__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.comment__author {
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+.comment__when {
+  font-size: 0.75rem;
+}
+
+.comment__body {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 0.92rem;
+}
+
+/* Une carte liée qui n'est plus dans le deck : on la garde, barrée. */
+.comment__card--removed {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.comment__resolved {
+  font-size: 0.78rem;
+}
+
+.comment__actions {
+  display: flex;
+  gap: 16px;
+}

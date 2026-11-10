@@ -19,7 +19,19 @@ import { deckCoverPosition, resolveDeckCover } from "../lib/deck-cover";
  * charge pas. L'annoncer ici demanderait de résoudre le catalogue pour vingt
  * decks à chaque page.
  */
-export function DeckRow({ deck, showAuthor }: { deck: Deck; showAuthor?: boolean }) {
+export function DeckRow({
+  deck,
+  showAuthor,
+  to,
+  note,
+}: {
+  deck: Deck;
+  showAuthor?: boolean;
+  /** Où mène la rangée ; par défaut, la fiche du deck. */
+  to?: string;
+  /** Une ligne de plus sous le sous-titre (l'auteur dans un groupe, une épingle). */
+  note?: string;
+}) {
   const { t } = useTranslation();
 
   const subtitle = [
@@ -36,7 +48,7 @@ export function DeckRow({ deck, showAuthor }: { deck: Deck; showAuthor?: boolean
   const cover = resolveDeckCover(deck);
 
   return (
-    <Link to={`/decks/${deck.id}`} className="list-row list-row--link deck-row">
+    <Link to={to ?? `/decks/${deck.id}`} className="list-row list-row--link deck-row">
       {cover.image ? (
         <CachedImage
           src={cover.image}
@@ -52,6 +64,7 @@ export function DeckRow({ deck, showAuthor }: { deck: Deck; showAuthor?: boolean
       <div className="list-row__body">
         <p className="list-row__title">{deck.name}</p>
         <p className="list-row__sub">{subtitle || t("decks.noLegend")}</p>
+        {note && <p className="list-row__sub">{note}</p>}
       </div>
       <div className="deck-row__meta">
         <DeckVisibilityBadge visibility={deck.visibility} />

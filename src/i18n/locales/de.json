@@ -367,6 +367,9 @@
         "etabli": "Werkbank",
         "sessions": "Sitzungen",
         "announcements": "Neuigkeiten",
+        "decks": "Decks",
+        "tournaments": "Turniere",
+        "meta": "Meta",
         "lists": "Listen",
         "members": "Mitglieder"
       }
@@ -475,7 +478,79 @@
         "published_other": "Veröffentlichungen"
       }
     },
-    "myGroups": "Meine Gruppen"
+    "myGroups": "Meine Gruppen",
+    "groupGame": {
+      "you": "Du"
+    },
+    "groupDecks": {
+      "add": "Meine Decks hinzufügen",
+      "addHint": "Die Mitglieder der Gruppe können sie lesen, auch private, aber nicht bearbeiten.",
+      "addCount_one": "{{count}} Deck hinzufügen",
+      "addCount_other": "{{count}} Decks hinzufügen",
+      "allMembers": "Alle",
+      "alreadyIn": "Schon in der Gruppe",
+      "by": "von {{name}}",
+      "empty": "Noch keine geteilten Decks. Füge deine hinzu, damit die Gruppe sie kommentieren kann.",
+      "noneMine": "Du hast noch kein Deck.",
+      "pinned": "Angeheftet",
+      "pinnedNote": "Angeheftet: {{note}}",
+      "refused_one": "Dieses Deck konnte nicht hinzugefügt werden (Spiel in der Gruppe nicht aktiviert?).",
+      "refused_other": "Diese {{count}} Decks konnten nicht hinzugefügt werden (Spiel in der Gruppe nicht aktiviert?).",
+      "remove": "Aus der Gruppe entfernen"
+    },
+    "groupTournaments": {
+      "summary_one": "{{count}} Teilnahme an {{tournaments}}",
+      "summary_other": "{{count}} Teilnahmen an {{tournaments}}",
+      "tournaments_one": "{{count}} Turnier",
+      "tournaments_other": "{{count}} Turnieren",
+      "wins_one": "{{count}} Sieg",
+      "wins_other": "{{count}} Siege",
+      "topEights_one": "{{count}} Top 8",
+      "topEights_other": "{{count}} Top 8",
+      "players_one": "{{count}} Spieler",
+      "players_other": "{{count}} Spieler",
+      "upcoming": "Kommende Turniere",
+      "palmares": "Erfolge",
+      "deck": "Deck",
+      "more": "Frühere Monate",
+      "empty": "Noch keine Ergebnisse. Beendete Joutes-Turniere kommen automatisch hinzu.",
+      "declareOnWeb": "Ein Ergebnis eintragen oder sich in einem Locator-Turnier zuordnen geht auf der Website.",
+      "source": {
+        "joutes": "Joutes",
+        "locator": "Locator",
+        "declared": "Eingetragen"
+      }
+    },
+    "groupMeta": {
+      "empty": "Die Meta der Gruppe entsteht aus den Turnierergebnissen der Mitglieder. Noch nichts da.",
+      "allPeriods": "Alle",
+      "compare": "Mit der Meta des Spiels vergleichen",
+      "noResultsInPeriod": "Keine Ergebnisse der Mitglieder in diesem Zeitraum.",
+      "kpi": {
+        "participations": "Teilnahmen",
+        "legends": "Legenden",
+        "topEights": "Top 8",
+        "winrate": "Winrate",
+        "members_one": "{{count}} Mitglied",
+        "members_other": "{{count}} Mitglieder",
+        "noRecord": "keine Bilanz"
+      },
+      "matches_one": "{{count}} Match",
+      "matches_other": "{{count}} Matches",
+      "legends": "Legenden der Mitglieder",
+      "marker": "Marke: Meta des Spiels",
+      "decks_one": "{{count}} Deck",
+      "decks_other": "{{count}} Decks",
+      "vsMeta": "{{points}} Pkt. vs. Meta",
+      "winrate": "{{rate}} Siege",
+      "domains": "Domänen",
+      "topPair": "Meistgespieltes Paar: {{pair}} ({{share}})",
+      "matchups": "Gegen wen die Gruppe gewinnt",
+      "noMatchups": "Noch nicht genug bekannte Matches gegen Spieler außerhalb der Gruppe.",
+      "footnote": "Winrate ab 10 Matches, ohne Spiegel und ohne Matches zwischen Mitgliedern.",
+      "members": "Mitglieder",
+      "best": "beste: {{place}}"
+    }
   },
   "notifications": {
     "title": "Benachrichtigungen",
@@ -634,7 +709,8 @@
     "tabs2": {
       "description": "Beschreibung",
       "guide": "Leitfaden",
-      "cards": "Karten"
+      "cards": "Karten",
+      "comments": "Kommentare"
     },
     "empty": {
       "all": "Noch keine Decks.",
@@ -749,6 +825,41 @@
       "legend": "Die Legende illustriert das Deck. Wähle unten eine andere Karte.",
       "none": "Wähle eine Karte des Decks als Illustration.",
       "remove": "Auswahl entfernen"
+    },
+    "comments": {
+      "space": "Thread: {{space}}",
+      "personal": "Deine persönlichen Notizen",
+      "placeholder": "Feedback zum Deck, eine Karte zum Tauschen…",
+      "replyPlaceholder": "Antworten…",
+      "send": "Senden",
+      "linkCards": "Karten verknüpfen",
+      "cardsLinked_one": "{{count}} Karte verknüpft",
+      "cardsLinked_other": "{{count}} Karten verknüpft",
+      "searchCards": "Eine Karte im Deck suchen",
+      "cardsPicked": "{{count}} / {{max}} Karten",
+      "done": "Fertig",
+      "empty": "Noch keine Kommentare.",
+      "new": "Neu",
+      "deleted": "Kommentar gelöscht.",
+      "reply": "Antworten",
+      "resolve": "Erledigt",
+      "reopen": "Wieder öffnen",
+      "delete": "Löschen",
+      "resolved": "Erledigt",
+      "resolvedIn": "Erledigt in v{{version}}",
+      "showResolved_one": "{{count}} erledigten Kommentar zeigen",
+      "showResolved_other": "{{count}} erledigte Kommentare zeigen",
+      "hideResolved": "Erledigte ausblenden",
+      "errors": {
+        "unauthenticated": "Melde dich an, um dieses Deck zu kommentieren.",
+        "forbidden": "Du hast keinen Zugriff mehr auf diesen Verlauf (Deck aus der Gruppe entfernt?).",
+        "notFound": "Dieser Kommentar oder dieses Deck existiert nicht mehr.",
+        "empty": "Der Kommentar ist leer.",
+        "tooLong": "Der Kommentar ist zu lang (höchstens 2.000 Zeichen).",
+        "tooManyCards": "Höchstens zehn verknüpfte Karten.",
+        "cardNotInDeck": "Eine verknüpfte Karte ist nicht mehr im Deck: entferne sie und versuche es erneut.",
+        "replyWithCards": "Eine Antwort kann keine Karten verknüpfen."
+      }
     }
   },
   "deck": {
