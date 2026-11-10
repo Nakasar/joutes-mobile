@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "check-i18n": "node scripts/check-i18n-parity.mjs",
-    "build": "npm run check-i18n && tsc && vite build",
+    "check-tauri": "node scripts/check-tauri-versions.mjs",
+    "build": "npm run check-i18n && npm run check-tauri && tsc && vite build",
     "preview": "vite preview",
     "tauri": "tauri"
   },
@@ -29,7 +30,7 @@
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^2",
+    "@tauri-apps/cli": "^2.12.4",
     "@types/qrcode": "^1.5.6",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
