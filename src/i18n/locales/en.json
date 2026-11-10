@@ -367,6 +367,9 @@
         "etabli": "Workbench",
         "sessions": "Sessions",
         "announcements": "News",
+        "decks": "Decks",
+        "tournaments": "Tournaments",
+        "meta": "Meta",
         "lists": "Lists",
         "members": "Members"
       }
@@ -475,7 +478,79 @@
         "published_other": "publications"
       }
     },
-    "myGroups": "My groups"
+    "myGroups": "My groups",
+    "groupGame": {
+      "you": "You"
+    },
+    "groupDecks": {
+      "add": "Add my decks",
+      "addHint": "Group members will be able to read them, even private ones, without editing them.",
+      "addCount_one": "Add {{count}} deck",
+      "addCount_other": "Add {{count}} decks",
+      "allMembers": "All",
+      "alreadyIn": "Already in the group",
+      "by": "by {{name}}",
+      "empty": "No shared decks yet. Add yours so the group can comment on them.",
+      "noneMine": "You don't have any decks yet.",
+      "pinned": "Pinned",
+      "pinnedNote": "Pinned: {{note}}",
+      "refused_one": "This deck couldn't be added (game not enabled in the group?).",
+      "refused_other": "These {{count}} decks couldn't be added (game not enabled in the group?).",
+      "remove": "Remove from the group"
+    },
+    "groupTournaments": {
+      "summary_one": "{{count}} participation in {{tournaments}}",
+      "summary_other": "{{count}} participations in {{tournaments}}",
+      "tournaments_one": "{{count}} tournament",
+      "tournaments_other": "{{count}} tournaments",
+      "wins_one": "{{count}} win",
+      "wins_other": "{{count}} wins",
+      "topEights_one": "{{count}} top 8",
+      "topEights_other": "{{count}} top 8s",
+      "players_one": "{{count}} player",
+      "players_other": "{{count}} players",
+      "upcoming": "Upcoming tournaments",
+      "palmares": "Honours",
+      "deck": "Deck",
+      "more": "Earlier months",
+      "empty": "No results yet. Finished Joutes tournaments are added automatically.",
+      "declareOnWeb": "Declaring a result or claiming yourself in a locator tournament is done on the website.",
+      "source": {
+        "joutes": "Joutes",
+        "locator": "Locator",
+        "declared": "Declared"
+      }
+    },
+    "groupMeta": {
+      "empty": "The group meta is built from the members' tournament results. Nothing yet.",
+      "allPeriods": "All",
+      "compare": "Compare with the game's meta",
+      "noResultsInPeriod": "No member results in this period.",
+      "kpi": {
+        "participations": "Participations",
+        "legends": "Legends",
+        "topEights": "Top 8",
+        "winrate": "Winrate",
+        "members_one": "{{count}} member",
+        "members_other": "{{count}} members",
+        "noRecord": "no record"
+      },
+      "matches_one": "{{count}} match",
+      "matches_other": "{{count}} matches",
+      "legends": "Members' legends",
+      "marker": "marker: game meta",
+      "decks_one": "{{count}} deck",
+      "decks_other": "{{count}} decks",
+      "vsMeta": "{{points}} pts vs meta",
+      "winrate": "{{rate}} wins",
+      "domains": "Domains",
+      "topPair": "Most played pair: {{pair}} ({{share}})",
+      "matchups": "Who the group beats",
+      "noMatchups": "Not enough known matches against players outside the group yet.",
+      "footnote": "Winrate from 10 matches, no mirrors, no matches between members.",
+      "members": "Members",
+      "best": "best: {{place}}"
+    }
   },
   "notifications": {
     "title": "Notifications",
@@ -634,7 +709,8 @@
     "tabs2": {
       "description": "Description",
       "guide": "Guide",
-      "cards": "Cards"
+      "cards": "Cards",
+      "comments": "Comments"
     },
     "empty": {
       "all": "No decks yet.",
@@ -749,6 +825,31 @@
       "legend": "The legend illustrates the deck. Pick another card below.",
       "none": "Pick a card of the deck to illustrate it.",
       "remove": "Clear the choice"
+    },
+    "comments": {
+      "space": "Thread: {{space}}",
+      "personal": "Your personal notes",
+      "placeholder": "Feedback on the deck, a card to swap…",
+      "replyPlaceholder": "Reply…",
+      "send": "Send",
+      "linkCards": "Link cards",
+      "cardsLinked_one": "{{count}} card linked",
+      "cardsLinked_other": "{{count}} cards linked",
+      "searchCards": "Search a card in the deck",
+      "cardsPicked": "{{count}} / {{max}} cards",
+      "done": "Done",
+      "empty": "No comments yet.",
+      "new": "New",
+      "deleted": "Comment deleted.",
+      "reply": "Reply",
+      "resolve": "Resolve",
+      "reopen": "Reopen",
+      "delete": "Delete",
+      "resolved": "Resolved",
+      "resolvedIn": "Resolved in v{{version}}",
+      "showResolved_one": "Show {{count}} resolved comment",
+      "showResolved_other": "Show {{count}} resolved comments",
+      "hideResolved": "Hide resolved"
     }
   },
   "deck": {

@@ -121,6 +121,12 @@ export const endpoints = {
     sellList: (playGroupId: string) => `/play-groups/${playGroupId}/sell-list`,
     sellListItems: (playGroupId: string) =>
       `/play-groups/${playGroupId}/sell-list/items`,
+    /** La bibliothèque de decks du groupe : lire, partager (POST), retirer (DELETE ?deckId=). */
+    decks: (playGroupId: string) => `/play-groups/${playGroupId}/decks`,
+    /** La timeline des tournois des membres, page par page (`avant=AAAA-MM`). */
+    tournaments: (playGroupId: string) => `/play-groups/${playGroupId}/tournaments`,
+    /** La méta du groupe : `jeu`, `ext` (extension ou `tout`), `membre`, `comparer=0`. */
+    meta: (playGroupId: string) => `/play-groups/${playGroupId}/meta`,
   },
   decks: {
     list: "/decks",
@@ -133,6 +139,8 @@ export const endpoints = {
      * catalogue de cartes.
      */
     legends: "/decks/legends",
+    /** Le fil de commentaires d'un deck dans un espace (`personal` ou `group:<id>`). */
+    comments: (deckId: string) => `/decks/${deckId}/comments`,
   },
   collection: {
     overview: "/collection",

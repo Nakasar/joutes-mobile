@@ -367,6 +367,9 @@
         "etabli": "Établi",
         "sessions": "Sessions",
         "announcements": "Annonces",
+        "decks": "Decks",
+        "tournaments": "Tournois",
+        "meta": "Méta",
         "lists": "Listes",
         "members": "Membres"
       }
@@ -475,7 +478,79 @@
         "published_other": "publications"
       }
     },
-    "myGroups": "Mes groupes"
+    "myGroups": "Mes groupes",
+    "groupGame": {
+      "you": "Vous"
+    },
+    "groupDecks": {
+      "add": "Ajouter mes decks",
+      "addHint": "Les membres du groupe pourront les lire, même privés, sans pouvoir les modifier.",
+      "addCount_one": "Ajouter {{count}} deck",
+      "addCount_other": "Ajouter {{count}} decks",
+      "allMembers": "Tous",
+      "alreadyIn": "Déjà dans le groupe",
+      "by": "par {{name}}",
+      "empty": "Aucun deck partagé pour l'instant. Ajoutez les vôtres pour que le groupe les commente.",
+      "noneMine": "Vous n'avez pas encore de deck.",
+      "pinned": "Épinglé",
+      "pinnedNote": "Épinglé : {{note}}",
+      "refused_one": "Ce deck n'a pas pu être ajouté (jeu non activé dans le groupe ?).",
+      "refused_other": "Ces {{count}} decks n'ont pas pu être ajoutés (jeu non activé dans le groupe ?).",
+      "remove": "Retirer du groupe"
+    },
+    "groupTournaments": {
+      "summary_one": "{{count}} participation à {{tournaments}}",
+      "summary_other": "{{count}} participations à {{tournaments}}",
+      "tournaments_one": "{{count}} tournoi",
+      "tournaments_other": "{{count}} tournois",
+      "wins_one": "{{count}} victoire",
+      "wins_other": "{{count}} victoires",
+      "topEights_one": "{{count}} top 8",
+      "topEights_other": "{{count}} top 8",
+      "players_one": "{{count}} joueur",
+      "players_other": "{{count}} joueurs",
+      "upcoming": "Prochains tournois",
+      "palmares": "Palmarès",
+      "deck": "Deck",
+      "more": "Mois précédents",
+      "empty": "Aucun résultat pour l'instant. Les tournois Joutes terminés s'ajoutent tout seuls.",
+      "declareOnWeb": "Déclarer un résultat ou se reconnaître dans un tournoi du locator se fait depuis le site.",
+      "source": {
+        "joutes": "Joutes",
+        "locator": "Locator",
+        "declared": "Déclaré"
+      }
+    },
+    "groupMeta": {
+      "empty": "La méta du groupe se construit à partir des résultats en tournoi des membres. Rien pour l'instant.",
+      "allPeriods": "Tout",
+      "compare": "Comparer à la méta du jeu",
+      "noResultsInPeriod": "Aucun résultat des membres sur cette période.",
+      "kpi": {
+        "participations": "Participations",
+        "legends": "Légendes",
+        "topEights": "Top 8",
+        "winrate": "Winrate",
+        "members_one": "{{count}} membre",
+        "members_other": "{{count}} membres",
+        "noRecord": "aucun bilan"
+      },
+      "matches_one": "{{count}} match",
+      "matches_other": "{{count}} matchs",
+      "legends": "Légendes des membres",
+      "marker": "repère : méta du jeu",
+      "decks_one": "{{count}} deck",
+      "decks_other": "{{count}} decks",
+      "vsMeta": "{{points}} pts vs méta",
+      "winrate": "{{rate}} de victoires",
+      "domains": "Domaines",
+      "topPair": "Paire la plus jouée : {{pair}} ({{share}})",
+      "matchups": "Contre qui le groupe gagne",
+      "noMatchups": "Pas encore assez de matchs connus contre des joueurs hors du groupe.",
+      "footnote": "Winrate à partir de 10 matchs, sans miroirs ni matchs entre membres.",
+      "members": "Membres",
+      "best": "meilleur : {{place}}"
+    }
   },
   "notifications": {
     "title": "Notifications",
@@ -634,7 +709,8 @@
     "tabs2": {
       "description": "Description",
       "guide": "Guide",
-      "cards": "Cartes"
+      "cards": "Cartes",
+      "comments": "Commentaires"
     },
     "empty": {
       "all": "Aucun deck pour l'instant.",
@@ -749,6 +825,31 @@
       "legend": "La légende illustre le deck. Choisissez une autre carte ci-dessous.",
       "none": "Choisissez une carte du deck pour l'illustrer.",
       "remove": "Retirer le choix"
+    },
+    "comments": {
+      "space": "Fil : {{space}}",
+      "personal": "Vos notes personnelles",
+      "placeholder": "Un retour sur le deck, une carte à changer…",
+      "replyPlaceholder": "Répondre…",
+      "send": "Envoyer",
+      "linkCards": "Lier des cartes",
+      "cardsLinked_one": "{{count}} carte liée",
+      "cardsLinked_other": "{{count}} cartes liées",
+      "searchCards": "Chercher une carte du deck",
+      "cardsPicked": "{{count}} / {{max}} cartes",
+      "done": "Valider",
+      "empty": "Aucun commentaire pour l'instant.",
+      "new": "Nouveau",
+      "deleted": "Commentaire supprimé.",
+      "reply": "Répondre",
+      "resolve": "Résoudre",
+      "reopen": "Rouvrir",
+      "delete": "Supprimer",
+      "resolved": "Résolu",
+      "resolvedIn": "Résolu en v{{version}}",
+      "showResolved_one": "Voir {{count}} commentaire résolu",
+      "showResolved_other": "Voir {{count}} commentaires résolus",
+      "hideResolved": "Masquer les résolus"
     }
   },
   "deck": {

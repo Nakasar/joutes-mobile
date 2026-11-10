@@ -367,6 +367,9 @@
         "etabli": "Banco",
         "sessions": "Sessioni",
         "announcements": "Novità",
+        "decks": "Mazzi",
+        "tournaments": "Tornei",
+        "meta": "Meta",
         "lists": "Liste",
         "members": "Membri"
       }
@@ -475,7 +478,79 @@
         "published_other": "pubblicazioni"
       }
     },
-    "myGroups": "I miei gruppi"
+    "myGroups": "I miei gruppi",
+    "groupGame": {
+      "you": "Tu"
+    },
+    "groupDecks": {
+      "add": "Aggiungi i miei mazzi",
+      "addHint": "I membri del gruppo potranno leggerli, anche privati, senza poterli modificare.",
+      "addCount_one": "Aggiungi {{count}} mazzo",
+      "addCount_other": "Aggiungi {{count}} mazzi",
+      "allMembers": "Tutti",
+      "alreadyIn": "Già nel gruppo",
+      "by": "di {{name}}",
+      "empty": "Nessun mazzo condiviso per ora. Aggiungi i tuoi perché il gruppo li commenti.",
+      "noneMine": "Non hai ancora mazzi.",
+      "pinned": "Fissato",
+      "pinnedNote": "Fissato: {{note}}",
+      "refused_one": "Questo mazzo non è stato aggiunto (gioco non attivo nel gruppo?).",
+      "refused_other": "Questi {{count}} mazzi non sono stati aggiunti (gioco non attivo nel gruppo?).",
+      "remove": "Togli dal gruppo"
+    },
+    "groupTournaments": {
+      "summary_one": "{{count}} partecipazione a {{tournaments}}",
+      "summary_other": "{{count}} partecipazioni a {{tournaments}}",
+      "tournaments_one": "{{count}} torneo",
+      "tournaments_other": "{{count}} tornei",
+      "wins_one": "{{count}} vittoria",
+      "wins_other": "{{count}} vittorie",
+      "topEights_one": "{{count}} top 8",
+      "topEights_other": "{{count}} top 8",
+      "players_one": "{{count}} giocatore",
+      "players_other": "{{count}} giocatori",
+      "upcoming": "Prossimi tornei",
+      "palmares": "Palmarès",
+      "deck": "Mazzo",
+      "more": "Mesi precedenti",
+      "empty": "Ancora nessun risultato. I tornei Joutes conclusi si aggiungono da soli.",
+      "declareOnWeb": "Dichiarare un risultato o riconoscersi in un torneo del locator si fa dal sito.",
+      "source": {
+        "joutes": "Joutes",
+        "locator": "Locator",
+        "declared": "Dichiarato"
+      }
+    },
+    "groupMeta": {
+      "empty": "La meta del gruppo si costruisce dai risultati in torneo dei membri. Ancora niente.",
+      "allPeriods": "Tutto",
+      "compare": "Confronta con la meta del gioco",
+      "noResultsInPeriod": "Nessun risultato dei membri in questo periodo.",
+      "kpi": {
+        "participations": "Partecipazioni",
+        "legends": "Leggende",
+        "topEights": "Top 8",
+        "winrate": "Winrate",
+        "members_one": "{{count}} membro",
+        "members_other": "{{count}} membri",
+        "noRecord": "nessun bilancio"
+      },
+      "matches_one": "{{count}} partita",
+      "matches_other": "{{count}} partite",
+      "legends": "Leggende dei membri",
+      "marker": "riferimento: meta del gioco",
+      "decks_one": "{{count}} mazzo",
+      "decks_other": "{{count}} mazzi",
+      "vsMeta": "{{points}} pt vs meta",
+      "winrate": "{{rate}} di vittorie",
+      "domains": "Domini",
+      "topPair": "Coppia più giocata: {{pair}} ({{share}})",
+      "matchups": "Contro chi vince il gruppo",
+      "noMatchups": "Non ci sono ancora abbastanza partite note contro giocatori esterni al gruppo.",
+      "footnote": "Winrate da 10 partite, senza specchi né partite tra membri.",
+      "members": "Membri",
+      "best": "migliore: {{place}}"
+    }
   },
   "notifications": {
     "title": "Notifiche",
@@ -634,7 +709,8 @@
     "tabs2": {
       "description": "Descrizione",
       "guide": "Guida",
-      "cards": "Carte"
+      "cards": "Carte",
+      "comments": "Commenti"
     },
     "empty": {
       "all": "Ancora nessun mazzo.",
@@ -749,6 +825,31 @@
       "legend": "La leggenda illustra il mazzo. Scegli un'altra carta qui sotto.",
       "none": "Scegli una carta del mazzo per illustrarlo.",
       "remove": "Rimuovi la scelta"
+    },
+    "comments": {
+      "space": "Discussione: {{space}}",
+      "personal": "Le tue note personali",
+      "placeholder": "Un parere sul mazzo, una carta da cambiare…",
+      "replyPlaceholder": "Rispondi…",
+      "send": "Invia",
+      "linkCards": "Collega carte",
+      "cardsLinked_one": "{{count}} carta collegata",
+      "cardsLinked_other": "{{count}} carte collegate",
+      "searchCards": "Cerca una carta del mazzo",
+      "cardsPicked": "{{count}} / {{max}} carte",
+      "done": "Conferma",
+      "empty": "Ancora nessun commento.",
+      "new": "Nuovo",
+      "deleted": "Commento eliminato.",
+      "reply": "Rispondi",
+      "resolve": "Risolvi",
+      "reopen": "Riapri",
+      "delete": "Elimina",
+      "resolved": "Risolto",
+      "resolvedIn": "Risolto in v{{version}}",
+      "showResolved_one": "Mostra {{count}} commento risolto",
+      "showResolved_other": "Mostra {{count}} commenti risolti",
+      "hideResolved": "Nascondi i risolti"
     }
   },
   "deck": {

@@ -2787,3 +2787,199 @@ export interface ImportResult {
   issues: ImportIssue[];
   batchId?: string;
 }
+
+/* ------------------------------------------------------------------ */
+/* Groupe de jeu : decks partagés, tournois des membres, méta          */
+/* ------------------------------------------------------------------ */
+
+/** Un deck de la bibliothèque d'un groupe : le lien, et le résumé du deck (sans cartes). */
+export interface PlayGroupDeck {
+  playGroupId: string;
+  deckId: string;
+  gameId: string;
+  ownerId: string;
+  addedBy: string;
+  addedAt: string;
+  pinnedAt?: string;
+  pinNote?: string;
+  deck: Deck;
+  /** L'appelant peut le retirer : son auteur, ou un admin du groupe. */
+  canRemove: boolean;
+}
+
+export interface PlayGroupDecksAddOutcome {
+  /** Decks réellement ajoutés : ceux déjà présents ne comptent pas. */
+  added: number;
+  refused?: { deckId: string; reason: string }[];
+}
+
+export type TournamentResultSource = "joutes" | "locator" | "declared";
+
+export interface TournamentRecord {
+  wins: number;
+  losses: number;
+  draws: number;
+}
+
+/** Le résultat d'un membre à un tournoi, quelle qu'en soit la source. */
+export interface TournamentResult {
+  id: string;
+  userId: string;
+  gameId?: string;
+  source: TournamentResultSource;
+  name: string;
+  date: string;
+  place?: string;
+  playerCount?: number;
+  placement?: number;
+  topCut?: number;
+  record?: TournamentRecord;
+  deckId?: string;
+  legendCardId?: string;
+  legendName?: string;
+  domains: string[];
+  visibility: "groups" | "public";
+}
+
+export interface GroupTimelineTournament {
+  key: string;
+  name: string;
+  date: string;
+  gameId?: string;
+  place?: string;
+  playerCount?: number;
+  source: TournamentResultSource;
+  results: TournamentResult[];
+}
+
+export interface GroupTournamentsResponse {
+  months: { month: string; tournaments: GroupTimelineTournament[] }[];
+  /** Le mois à passer en `avant` pour la page suivante, s'il en reste. */
+  nextBefore?: string;
+  participations: number;
+  tournaments: number;
+  since?: string;
+  palmares: { userId: string; wins: number; topEights: number; tournaments: number }[];
+  upcoming: {
+    tournamentId: string;
+    name: string;
+    date: string;
+    gameId?: string;
+    place?: string;
+    userIds: string[];
+  }[];
+}
+
+export interface MatchRecord {
+  wins: number;
+  losses: number;
+  draws: number;
+}
+
+export interface GroupMetaLegend extends MatchRecord {
+  key: string;
+  name: string;
+  cardId?: string;
+  image?: string;
+  domains: string[];
+  decks: number;
+  share: number;
+  topCuts: number;
+  matches: number;
+  /** De 0 à 1, à partir de 10 matchs seulement. */
+  rate?: number;
+  userIds: string[];
+  /** Part dans la méta du jeu sur la même période, quand on compare. */
+  metaShare?: number;
+}
+
+export interface GroupMetaMember extends MatchRecord {
+  userId: string;
+  tournaments: number;
+  topEights: number;
+  best?: number;
+  matches: number;
+  rate?: number;
+  legends: string[];
+  last?: { name: string; date: string; placement?: number };
+}
+
+export interface GroupMetaOpponent extends MatchRecord {
+  legend: string;
+  cardId?: string;
+  matches: number;
+  rate?: number;
+}
+
+export interface SetPeriod {
+  setCode: string;
+  name: string;
+  from: string;
+  to?: string;
+}
+
+export interface GroupMetaGame {
+  id: string;
+  name: string;
+  slug?: string;
+  icon?: string;
+}
+
+export interface GroupMetaResponse {
+  games: { game: GroupMetaGame; count: number; hasMeta: boolean }[];
+  game?: GroupMetaGame;
+  hasMeta: boolean;
+  compared: boolean;
+  periods: SetPeriod[];
+  period?: SetPeriod;
+  memberIds: string[];
+  meta: {
+    totals: MatchRecord & {
+      participations: number;
+      tournaments: number;
+      members: number;
+      topEights: number;
+      matches: number;
+      rate?: number;
+      latest?: string;
+    };
+    legends: GroupMetaLegend[];
+    domains: { domain: string; decks: number; share: number; metaShare?: number }[];
+    members: GroupMetaMember[];
+    overview: { topPair?: { domains: [string, string]; share: number } };
+  };
+  matchups: {
+    known: number;
+    counted: number;
+    opponents: GroupMetaOpponent[];
+  };
+  withCards: number;
+  cards: Record<string, { id: string; name: string; image?: string; domains?: string[] }>;
+}
+
+/** Un commentaire de deck : une racine porte ses réponses (un seul niveau). */
+export interface DeckComment {
+  id: string;
+  authorId: string;
+  /** Vide pour une racine supprimée, gardée pour ses réponses. */
+  body: string;
+  cards: { id: string; name: string; removed?: boolean }[];
+  deckVersion: number;
+  createdAt: string;
+  editedAt?: string;
+  resolvedAt?: string;
+  resolvedVersion?: number;
+  deleted?: boolean;
+  permissions: { canEdit: boolean; canDelete: boolean; canResolve: boolean };
+  replies?: DeckComment[];
+}
+
+export interface DeckCommentsResponse {
+  deckId: string;
+  space: string;
+  deckVersion: number;
+  /** La visite précédente de l'appelant, absente la première fois. */
+  lastReadAt?: string;
+  authors: Record<string, { name: string; avatar?: string }>;
+  comments: DeckComment[];
+}
