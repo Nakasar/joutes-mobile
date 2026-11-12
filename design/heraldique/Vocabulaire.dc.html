@@ -1,0 +1,497 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    a { color: #2bb7dc; text-decoration: none; }
+    a:hover { color: #e0bd63; }
+    button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+
+    .app {
+      --or: #e0bd63;
+      --or-text: #e0bd63;
+      --or-line: rgba(224, 189, 99, .34);
+      --or-faint: rgba(224, 189, 99, .16);
+      --bg: #06121a;
+      --bg-2: #081a24;
+      --surface: #0c1f2b;
+      --surface-2: #102836;
+      --text: #e8f3f7;
+      --muted: #7fa0ae;
+      --primary: #2bb7dc;
+      --accent: #22c9ad;
+      --danger: #f14d4c;
+      --border: rgba(255, 255, 255, .09);
+      width: 390px;
+      height: 844px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app[data-theme="clair"] {
+      --or: #e8b969;
+      --or-text: #93712f;
+      --or-line: rgba(232, 185, 105, .48);
+      --or-faint: rgba(232, 185, 105, .26);
+      --bg: #f3f6f8;
+      --bg-2: #eaeff2;
+      --surface: #ffffff;
+      --surface-2: #f7fafb;
+      --text: #08222f;
+      --muted: #587483;
+      --primary: #0079b6;
+      --accent: #00a692;
+      --danger: #e40014;
+      --border: rgba(8, 34, 47, .10);
+    }
+
+    .scroll { flex: 1; overflow-y: auto; padding: 16px 16px 24px; }
+    .scroll::-webkit-scrollbar { width: 0; }
+
+    .mono {
+      font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+      font-size: 10px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow { display: flex; align-items: center; gap: 8px; color: var(--or-text); }
+    .mark {
+      width: 26px; height: 26px; flex: none; border-radius: 2px;
+      box-shadow: 0 0 0 1px var(--or-line);
+      background: linear-gradient(160deg, #2bb7dc, #12525f);
+      display: flex; align-items: center; justify-content: center;
+      font-family: Cinzel, Georgia, serif; font-weight: 700; font-size: 13px; color: #04121b;
+    }
+
+    .title {
+      margin: 6px 0 0;
+      font-family: Cinzel, Georgia, "Times New Roman", serif;
+      font-weight: 700; font-size: 27px; line-height: 1.12; letter-spacing: .012em;
+    }
+
+    .head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .head-actions { display: flex; gap: 8px; flex: none; }
+    .iconbtn {
+      width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+      border: 1px solid var(--or-faint); border-radius: 2px; color: var(--text);
+    }
+    .iconbtn:hover { border-color: var(--or-line); color: var(--or-text); }
+
+    .movement { display: flex; align-items: center; gap: 10px; padding: 22px 0 10px; }
+    .movement h2 {
+      margin: 0; white-space: nowrap;
+      font-family: Cinzel, Georgia, serif; font-weight: 600; font-size: 19px; letter-spacing: .02em;
+    }
+    .rule { flex: 1; height: 1px; background: linear-gradient(90deg, var(--or-line), transparent); }
+    .aside { color: var(--muted); white-space: nowrap; }
+
+    .chiprow { display: flex; gap: 8px; overflow-x: auto; padding-top: 14px; }
+    .chiprow::-webkit-scrollbar { height: 0; }
+    .chip {
+      flex: none; min-height: 34px; display: inline-flex; align-items: center;
+      padding: 0 12px; border: 1px solid var(--or-faint); border-radius: 2px;
+      color: var(--muted); white-space: nowrap;
+    }
+    .chip--on { border-color: var(--or); background: var(--or); color: #17130c; font-weight: 600; }
+
+    .seme {
+      background-color: var(--surface-2);
+      background-image:
+        radial-gradient(circle at 25% 30%, color-mix(in oklab, var(--primary) 40%, transparent) 0 5px, transparent 6px),
+        radial-gradient(circle at 75% 80%, color-mix(in oklab, var(--primary) 40%, transparent) 0 5px, transparent 6px),
+        linear-gradient(148deg, color-mix(in oklab, var(--primary) 34%, transparent), transparent 62%);
+      background-size: 54px 54px, 54px 54px, 100% 100%;
+    }
+
+    .corner { position: absolute; width: 14px; height: 14px; border: 1px solid var(--or); opacity: .55; }
+
+    .plate {
+      position: relative; display: block; overflow: hidden;
+      height: 196px; margin-top: 16px; border: 1px solid var(--or-faint); border-radius: 2px;
+    }
+    .plate__wash {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(3, 12, 18, .95) 14%, rgba(3, 12, 18, .35) 58%, rgba(3, 12, 18, .05));
+    }
+    .plate__body { position: absolute; inset: auto 0 0 0; padding: 0 14px 14px; }
+    .plate__title {
+      margin: 8px 0 5px; color: #fff;
+      font-family: Cinzel, Georgia, serif; font-weight: 600; font-size: 21px; line-height: 1.16;
+      text-wrap: pretty;
+    }
+    .plate__meta { margin: 0; color: rgba(255, 255, 255, .72); }
+
+    .filet { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--or-faint); }
+    .filet__body { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 4px; }
+    .filet__title {
+      margin: 0; font-family: Cinzel, Georgia, serif; font-weight: 600; font-size: 16px; line-height: 1.2;
+      text-wrap: pretty;
+    }
+    .filet__meta { margin: 0; color: var(--muted); font-size: 12.5px; }
+    .filet__num {
+      flex: none; align-self: center; text-align: right;
+      font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: 15px; color: var(--or-text);
+    }
+
+    .sigil {
+      flex: none; width: 62px; height: 62px; border-radius: 2px; overflow: hidden;
+      box-shadow: 0 0 0 1px var(--or-line);
+      display: flex; align-items: center; justify-content: center;
+      font-family: Cinzel, Georgia, serif; font-weight: 700; font-size: 20px; color: #04121b;
+    }
+
+    .bar { display: block; height: 3px; background: var(--or-faint); border-radius: 0; overflow: hidden; }
+    .bar > i { display: block; height: 100%; background: var(--or); }
+
+    .value {
+      margin-top: 14px; padding: 16px 14px; border: 1px solid var(--or-line); border-radius: 2px;
+      background: linear-gradient(90deg, color-mix(in oklab, var(--or) 10%, transparent), transparent);
+    }
+    .value__n { font-family: Cinzel, Georgia, serif; font-size: 32px; font-weight: 700; letter-spacing: .01em; }
+
+    .cta {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; min-height: 50px; margin-top: 16px;
+      border: 1px solid var(--or); background: var(--or); color: #17130c;
+      border-radius: 2px; font-weight: 600;
+    }
+    .cta--ghost { background: none; color: var(--or-text); border-color: var(--or-line); }
+
+    .livedot { width: 6px; height: 6px; border-radius: 50%; background: var(--danger); flex: none; }
+
+    .tabbar {
+      display: flex; flex: none;
+      border-top: 1px solid var(--or-line); background: var(--bg-2);
+      padding: 0 4px 14px;
+    }
+    .tabitem {
+      position: relative; flex: 1; min-height: 58px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+      padding-top: 8px; color: var(--muted);
+    }
+    .tabitem--on { color: var(--or-text); }
+    .tabitem--on::before {
+      content: ""; position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+      width: 26px; height: 2px; background: var(--or);
+    }
+    .tabitem b { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 400; letter-spacing: .1em; text-transform: uppercase; }
+    .tabitem--on b { font-weight: 600; }
+
+    /*
+     * ---- Trois sceaux, trois natures ----
+     *
+     * La forme se lit avant la couleur, et bien avant le nom : elle dit donc ce
+     * qu'on regarde, et rien d'autre.
+     *
+     *   BLASON  un groupe de jeu — `.escu`, l'héraldique du rôle d'armes ;
+     *   CARRÉ   un lieu, un jeu — `.sigil`, une enseigne, quelque chose qui a
+     *           pignon sur rue ;
+     *   ROND    un joueur — `.avatar`, une personne.
+     *
+     * Le liseré d'or est commun aux trois : c'est lui qui en fait une famille
+     * plutôt que trois vignettes sans rapport.
+     */
+    .avatar {
+      flex: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 0 0 1px var(--or-line);
+      font-family: Cinzel, Georgia, serif;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .sheet { width: 900px; padding: 40px 44px 52px; background: var(--bg); color: var(--text); }
+    .sheet__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-bottom: 22px; border-bottom: 1px solid var(--or-line); }
+    .sheet__title { margin: 8px 0 0; font-family: Cinzel, Georgia, serif; font-size: 38px; font-weight: 700; letter-spacing: .012em; }
+    .cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 34px; }
+    .cols--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .swatch { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--or-faint); }
+    .swatch__chip { width: 44px; height: 30px; flex: none; border-radius: 2px; box-shadow: 0 0 0 1px var(--or-line); }
+    .swatch__name { flex: 1; min-width: 0; font-size: 13px; }
+    .swatch__hex { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: 11px; color: var(--muted); }
+    .spec-row { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; padding: 12px 0; border-bottom: 1px solid var(--or-faint); }
+    .spec-row__note { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+    .seal-demo { display: flex; align-items: flex-end; gap: 30px; padding: 18px 0 6px; }
+    .seal-demo figcaption { margin-top: 10px; font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+    .escu { display: block; position: relative; flex: none; width: 62px; height: 73px; }
+    .escu::before, .escu__field { clip-path: polygon(0 0, 100% 0, 100% 58%, 50% 100%, 0 58%); }
+    .escu::before { content: ""; position: absolute; inset: -1px; background: var(--or); }
+    .escu__field {
+      position: absolute; inset: 0; overflow: hidden;
+      display: flex; align-items: flex-start; justify-content: center; padding-top: 22%;
+      background: linear-gradient(165deg, color-mix(in oklab, #7a4fd0 88%, white 12%), color-mix(in oklab, #7a4fd0 60%, black 40%));
+      font-family: Cinzel, Georgia, serif; font-weight: 700; font-size: 18px; letter-spacing: .04em; color: rgba(0, 0, 0, .8);
+    }
+    .before-after { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; padding-top: 8px; }
+    .pane { border: 1px solid var(--or-faint); border-radius: 2px; padding: 16px; }
+    .pane--old { border-style: dashed; }
+    .old-card {
+      display: flex; gap: 13px; padding: 12px; border-radius: 20px;
+      background: var(--surface); border: 1px solid var(--border); box-shadow: 0 2px 10px -4px rgba(8, 60, 90, .5);
+    }
+    .old-card__thumb { width: 66px; height: 66px; border-radius: 13px; flex: none; }
+    .old-card__game { margin: 0 0 3px; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--primary); }
+    .old-card__title { margin: 0 0 4px; font-family: Sora, Inter, sans-serif; font-size: 15.5px; font-weight: 600; line-height: 1.25; }
+    .old-card__meta { margin: 0; font-size: 12px; color: var(--muted); }
+    .tabbar-demo { display: flex; border-top: 1px solid var(--or-line); background: var(--bg-2); padding: 0 4px 10px; margin-top: 10px; }
+    .principle { padding: 16px 0; border-bottom: 1px solid var(--or-faint); }
+    .principle h3 { margin: 0 0 6px; font-family: Cinzel, Georgia, serif; font-size: 17px; font-weight: 600; }
+    .principle p { margin: 0; font-size: 13px; line-height: 1.6; color: var(--muted); text-wrap: pretty; }
+  </style>
+</helmet>
+
+<div class="app sheet" data-theme="{{theme}}" style="width: 900px; height: auto; min-height: 100vh; display: block; overflow: visible">
+  <header class="sheet__head">
+    <div>
+      <p class="eyebrow mono" style="margin: 0">Joutes Mobile · vocabulaire</p>
+      <h1 class="sheet__title">Le rôle et le filet</h1>
+    </div>
+    <p class="mono" style="margin: 0; max-width: 320px; color: var(--muted); letter-spacing: .04em; text-transform: none; font-size: 12px; line-height: 1.6">
+      Ce que le rôle d&#39;armes et les vitrines du web imposent au reste de l&#39;application : une structure, pas un décor.
+    </p>
+  </header>
+
+  <div class="movement">
+    <h2>Cinq principes</h2>
+    <span class="rule"></span>
+  </div>
+
+  <div class="cols">
+    <div>
+      <div class="principle">
+        <h3>Le mouvement ouvre chaque section</h3>
+        <p>Un titre en capitales romaines, un filet d&#39;or qui se perd vers la droite, une mention en petite capitale. Il remplace partout le libellé de section actuel.</p>
+      </div>
+      <div class="principle">
+        <h3>Le filet remplace la carte</h3>
+        <p>Une liste est un rôle écrit : des lignes séparées d&#39;un filet, pas des cartes ombrées posées sur un fond. Le rayon tombe de 20 px à 2 px.</p>
+      </div>
+      <div class="principle">
+        <h3>L&#39;or est une structure</h3>
+        <p>Il trace les séparations, cerne les sceaux et remplit l&#39;action principale. Il ne décore rien : là où il n&#39;y a pas de hiérarchie à dire, il n&#39;y a pas d&#39;or.</p>
+      </div>
+    </div>
+    <div>
+      <div class="principle">
+        <h3>Cinzel dit les noms</h3>
+        <p>Titres d&#39;écran, noms de groupes, de lieux, de joueurs, de cartes et de decks. Sora se retire ; Inter garde le corps de texte, JetBrains Mono les compteurs et les étiquettes.</p>
+      </div>
+      <div class="principle">
+        <h3>Les couleurs restent celles de Joutes</h3>
+        <p>Le bleu et le teal ne bougent pas — seul le fond se neutralise pour que l&#39;or tienne. L&#39;accent d&#39;un lieu ou d&#39;un groupe continue de teindre sa vitrine.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="movement">
+    <h2>Trois sceaux</h2>
+    <span class="rule"></span>
+    <span class="aside mono">La forme dit la nature</span>
+  </div>
+
+  <div class="seal-demo">
+    <figure style="margin: 0">
+      <span class="escu"><span class="escu__field">LB</span></span>
+      <figcaption>Blason · un groupe</figcaption>
+    </figure>
+    <figure style="margin: 0">
+      <span class="sigil" style="width: 62px; height: 62px; background: linear-gradient(160deg, #c0432f, #4a130c); color: #fff">RD</span>
+      <figcaption>Carré · un lieu, un jeu</figcaption>
+    </figure>
+    <figure style="margin: 0">
+      <span class="avatar" style="width: 62px; height: 62px; font-size: 21px; background: linear-gradient(160deg, #2bb7dc, #123f52); color: #04121b">MD</span>
+      <figcaption>Rond · un joueur</figcaption>
+    </figure>
+    <p style="margin: 0 0 6px; max-width: 300px; font-size: 13px; line-height: 1.6; color: var(--muted); text-wrap: pretty">
+      Le liseré d&#39;or est commun aux trois : c&#39;est lui qui en fait une famille plutôt que trois vignettes sans rapport.
+    </p>
+  </div>
+
+  <div class="movement">
+    <h2>Typographie</h2>
+    <span class="rule"></span>
+    <span class="aside mono">Cinzel · Inter · JetBrains Mono</span>
+  </div>
+
+  <div class="spec-row">
+    <span style="font-family: Cinzel, Georgia, serif; font-size: 27px; font-weight: 700">Titre d&#39;écran</span>
+    <span class="spec-row__note">Cinzel 700 · 27 px</span>
+  </div>
+  <div class="spec-row">
+    <span style="font-family: Cinzel, Georgia, serif; font-size: 19px; font-weight: 600">Titre de mouvement</span>
+    <span class="spec-row__note">Cinzel 600 · 19 px</span>
+  </div>
+  <div class="spec-row">
+    <span style="font-family: Cinzel, Georgia, serif; font-size: 16px; font-weight: 600">Nom d&#39;une entrée</span>
+    <span class="spec-row__note">Cinzel 600 · 16 px</span>
+  </div>
+  <div class="spec-row">
+    <span style="font-size: 14px">Corps de texte, résumés, descriptions</span>
+    <span class="spec-row__note">Inter 400 · 14 px / 1,5</span>
+  </div>
+  <div class="spec-row">
+    <span style="font-size: 12.5px; color: var(--muted)">Métadonnée secondaire</span>
+    <span class="spec-row__note">Inter 400 · 12,5 px</span>
+  </div>
+  <div class="spec-row">
+    <span class="mono" style="color: var(--or-text)">Étiquette · compteur · filtre</span>
+    <span class="spec-row__note">Mono 400 · 10 px · .16 em</span>
+  </div>
+
+  <div class="movement">
+    <h2>Palette</h2>
+    <span class="rule"></span>
+    <span class="aside mono">{{themeLabel}}</span>
+  </div>
+
+  <div class="cols cols--3">
+    <div>
+      <div class="swatch"><span class="swatch__chip" style="background: var(--bg)"></span><span class="swatch__name">Fond</span><span class="swatch__hex">{{hexBg}}</span></div>
+      <div class="swatch"><span class="swatch__chip" style="background: var(--surface)"></span><span class="swatch__name">Surface</span><span class="swatch__hex">{{hexSurface}}</span></div>
+      <div class="swatch"><span class="swatch__chip" style="background: var(--text)"></span><span class="swatch__name">Texte</span><span class="swatch__hex">{{hexText}}</span></div>
+    </div>
+    <div>
+      <div class="swatch"><span class="swatch__chip" style="background: var(--or)"></span><span class="swatch__name">Or — structure</span><span class="swatch__hex">{{hexOr}}</span></div>
+      <div class="swatch"><span class="swatch__chip" style="background: var(--or-line)"></span><span class="swatch__name">Filet</span><span class="swatch__hex">or 34 %</span></div>
+      <div class="swatch"><span class="swatch__chip" style="background: var(--or-faint)"></span><span class="swatch__name">Filet léger</span><span class="swatch__hex">or 16 %</span></div>
+    </div>
+    <div>
+      <div class="swatch"><span class="swatch__chip" style="background: var(--primary)"></span><span class="swatch__name">Primaire</span><span class="swatch__hex">{{hexPrimary}}</span></div>
+      <div class="swatch"><span class="swatch__chip" style="background: var(--accent)"></span><span class="swatch__name">Accent</span><span class="swatch__hex">{{hexAccent}}</span></div>
+      <div class="swatch"><span class="swatch__chip" style="background: var(--danger)"></span><span class="swatch__name">Direct · alerte</span><span class="swatch__hex">{{hexDanger}}</span></div>
+    </div>
+  </div>
+
+  <div class="movement">
+    <h2>Commandes</h2>
+    <span class="rule"></span>
+    <span class="aside mono">44 px de cible minimum</span>
+  </div>
+
+  <div class="cols">
+    <div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; padding-bottom: 16px">
+        <span class="chip chip--on mono">Actif</span>
+        <span class="chip mono">Magic</span>
+        <span class="chip mono">Riftbound</span>
+        <span class="chip mono">Lorcana</span>
+      </div>
+      <button class="cta" style="margin-top: 0">
+        <span class="mono" style="letter-spacing: .16em; font-weight: 600">Action principale</span>
+      </button>
+      <button class="cta cta--ghost" style="margin-top: 10px">
+        <span class="mono" style="letter-spacing: .16em">Action secondaire</span>
+      </button>
+    </div>
+    <div>
+      <p class="mono" style="margin: 0 0 6px; color: var(--muted)">Barre d&#39;onglets</p>
+      <nav class="tabbar tabbar-demo">
+        <span class="tabitem tabitem--on">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5.5 9.5V20h13V9.5"></path><path d="M9.5 20v-6h5v6"></path></svg>
+          <b>Accueil</b>
+        </span>
+        <span class="tabitem">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 3 7.5l9 4.5 9-4.5L12 3Z"></path><path d="M3 12.5 12 17l9-4.5"></path><path d="M3 17 12 21.5 21 17"></path></svg>
+          <b>Jeux</b>
+        </span>
+        <span class="tabitem">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 19 5"></path><path d="M5.5 15.5 8.5 18.5"></path><path d="M17 17 5 5"></path><path d="M18.5 15.5 15.5 18.5"></path></svg>
+          <b>Jouer</b>
+        </span>
+        <span class="tabitem">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg>
+          <b>Agenda</b>
+        </span>
+        <span class="tabitem">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="2"></rect><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"></rect><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"></rect><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"></rect></svg>
+          <b>Collection</b>
+        </span>
+      </nav>
+      <p style="margin: 10px 0 0; font-size: 12.5px; line-height: 1.55; color: var(--muted); text-wrap: pretty">
+        L&#39;onglet actif se marque d&#39;une barre d&#39;or posée sur le filet, à la place de la pastille pleine : le même geste que l&#39;onglet souligné d&#39;une vitrine.
+      </p>
+    </div>
+  </div>
+
+  <div class="movement">
+    <h2>Avant · après</h2>
+    <span class="rule"></span>
+    <span class="aside mono">La même dépêche</span>
+  </div>
+
+  <div class="before-after">
+    <div class="pane pane--old">
+      <p class="mono" style="margin: 0 0 12px; color: var(--muted)">Aujourd&#39;hui — la carte « Halo »</p>
+      <div class="old-card">
+        <span class="old-card__thumb seme"></span>
+        <span style="min-width: 0; flex: 1">
+          <p class="old-card__game">Magic</p>
+          <p class="old-card__title">Bannissements en Standard : trois cartes quittent le format</p>
+          <p class="old-card__meta">22 août · 84 j&#39;aime</p>
+        </span>
+      </div>
+    </div>
+
+    <div class="pane">
+      <p class="mono" style="margin: 0 0 12px; color: var(--or-text)">Demain — la ligne du rôle</p>
+      <a class="filet" href="#" style="border-top: 1px solid var(--or-faint)">
+        <span class="sigil seme" style="width: 62px; height: 62px"></span>
+        <span class="filet__body">
+          <span class="mono" style="color: var(--primary)">Magic</span>
+          <span class="filet__title">Bannissements en Standard : trois cartes quittent le format</span>
+          <span class="filet__meta">22 août · 84 j&#39;aime</span>
+        </span>
+      </a>
+    </div>
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["Sombre","Clair"],"default":"Sombre"},"$preview":{"width":900,"height":1560}}'>
+const PALETTES = {
+  sombre: { bg: "#06121a", surface: "#0c1f2b", text: "#e8f3f7", or: "#e0bd63", primary: "#2bb7dc", accent: "#22c9ad", danger: "#f14d4c" },
+  clair: { bg: "#f3f6f8", surface: "#ffffff", text: "#08222f", or: "#e8b969", primary: "#0079b6", accent: "#00a692", danger: "#e40014" },
+};
+
+class Component extends DCLogic {
+  renderVals() {
+    const theme = (this.props.theme ?? "Sombre").toLowerCase();
+    const palette = PALETTES[theme] ?? PALETTES.sombre;
+
+    return {
+      theme,
+      themeLabel: theme === "clair" ? "Mode clair" : "Mode sombre",
+      hexBg: palette.bg,
+      hexSurface: palette.surface,
+      hexText: palette.text,
+      hexOr: palette.or,
+      hexPrimary: palette.primary,
+      hexAccent: palette.accent,
+      hexDanger: palette.danger,
+    };
+  }
+}
+</script>
+</body>
+</html>

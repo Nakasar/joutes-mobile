@@ -1,0 +1,109 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "Le socle — 5 onglets",
+      "is_interactive": true
+    },
+    {
+      "file": "Lieu.dc.html",
+      "x": 470,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "Vitrine d'un lieu",
+      "is_interactive": true
+    },
+    {
+      "file": "Groupe.dc.html",
+      "x": 940,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "Vitrine d'un groupe",
+      "is_interactive": true
+    },
+    {
+      "file": "Profil.dc.html",
+      "x": 1410,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "Vitrine d'un joueur",
+      "is_interactive": true
+    },
+    {
+      "file": "Tournoi.dc.html",
+      "x": 0,
+      "y": 990,
+      "w": 390,
+      "h": 844,
+      "title": "Portail tournoi",
+      "is_interactive": true
+    },
+    {
+      "file": "Cartes.dc.html",
+      "x": 470,
+      "y": 990,
+      "w": 390,
+      "h": 844,
+      "title": "Cartes & fiche",
+      "is_interactive": true
+    },
+    {
+      "file": "Deck.dc.html",
+      "x": 940,
+      "y": 990,
+      "w": 390,
+      "h": 844,
+      "title": "Un deck",
+      "is_interactive": true
+    },
+    {
+      "file": "Vocabulaire.dc.html",
+      "x": 1410,
+      "y": 990,
+      "w": 900,
+      "h": 2060,
+      "title": "Le vocabulaire",
+      "print": "flow"
+    }
+  ],
+  "annotations": [
+    {
+      "id": "these",
+      "x": 0,
+      "y": -430,
+      "w": 860,
+      "text": "La thèse du redesign\n\nCe que le rôle d'armes et les vitrines apportent, ce n'est pas une palette : c'est une STRUCTURE. On la généralise, et on garde le bleu et le teal de Joutes.\n\n1. Le mouvement (titre Cinzel + filet d'or + mention mono) ouvre chaque section, partout.\n2. Le filet remplace la carte : une liste est un rôle écrit. Rayon 20 px → 2 px, ombres retirées.\n3. Cinzel dit les noms — écrans, groupes, lieux, joueurs, cartes, decks. Sora se retire.\n4. L'or est une structure, jamais un décor : séparations, liserés de sceaux, action principale.\n5. Les trois sceaux (blason, carré, rond) deviennent la règle de toute l'app, pas celle d'un écran."
+    },
+    {
+      "id": "interactif",
+      "x": 940,
+      "y": -230,
+      "w": 400,
+      "text": "Les planches sont cliquables : onglets, filtres, suivre, saisie de résultat, ouverture d'une fiche de carte. Le contenu est réaliste mais fictif — noms, prix et dates sont des exemples."
+    },
+    {
+      "id": "theme",
+      "x": 1410,
+      "y": -230,
+      "w": 400,
+      "text": "Chaque planche porte un réglage « Sombre / Clair » au-dessus d'elle : le fond clair se neutralise (#f3f6f8 au lieu de #eaf5fc) pour que l'or tienne comme filet et comme texte."
+    },
+    {
+      "id": "ecrans",
+      "x": -380,
+      "y": 990,
+      "w": 300,
+      "text": "Les écrans profonds : ce qu'on ouvre depuis le socle."
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  }
+}
