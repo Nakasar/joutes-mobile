@@ -9,6 +9,8 @@ export interface SearchCardsParams {
   setCode?: string;
   type?: string;
   lang?: string;
+  /** Facette de valeur `domain` : plusieurs valeurs séparées par des virgules. */
+  in_domain?: string;
   page?: number;
   limit?: number;
 }

@@ -1,5 +1,6 @@
 import {
   DECK_ZONE_KEYS,
+  contributingZones,
   isZoneCompliant,
   type DeckZone,
   type DeckZoneKey,
@@ -41,6 +42,10 @@ export type DeckCardInfo = {
   cost?: number;
   domain?: string[];
   orientation?: "portrait" | "landscape";
+  /** Tous les types de la carte, quand elle en a plusieurs (`type` est le premier). */
+  types?: string[];
+  /** Surtype : « Champion », « Signature »… Range les champions de Riftbound. */
+  superType?: string;
 };
 
 export function zoneEntries(cards: DeckCards | undefined, zone: DeckZoneKey): DeckCardEntry[] {
@@ -101,6 +106,29 @@ export function setCardQuantity(
   return { ...cards, [zone]: entries };
 }
 
+/**
+ * Déplace des exemplaires d'une carte d'une zone à une autre — tous, ou
+ * `quantity` au plus, et jamais plus que la place restante (`room`) de la zone
+ * d'arrivée. Rien ne bouge si la carte n'est pas dans la zone de départ, si
+ * l'arrivée est pleine ou si les deux zones sont la même.
+ */
+export function moveCard(
+  cards: DeckCards,
+  from: DeckZoneKey,
+  to: DeckZoneKey,
+  cardId: string,
+  quantity?: number,
+  room = Infinity,
+): DeckCards {
+  if (from === to) return cards;
+
+  const held = zoneEntries(cards, from).find((entry) => entry.cardId === cardId)?.quantity ?? 0;
+  const moved = Math.min(held, quantity ?? held, room);
+  if (moved <= 0) return cards;
+
+  return changeCardQuantity(changeCardQuantity(cards, from, cardId, -moved), to, cardId, moved);
+}
+
 /** Tous les identifiants de carte du deck, sans doublon — de quoi charger le catalogue en une requête. */
 export function deckCardIds(cards: DeckCards | undefined): string[] {
   const ids = new Set<string>();
@@ -116,19 +144,39 @@ export function deckCardIds(cards: DeckCards | undefined): string[] {
 
 export type DeckZoneLegality = {
   zone: DeckZone;
+  /** Compte jugé : la zone, plus les zones qui comptent dans la sienne. */
   count: number;
+  /** Part de `count` venue des zones liées (le champion choisi). */
+  contributed: number;
   compliant: boolean;
 };
 
 /**
+ * Compte d'une zone tel que sa règle le juge : ses cartes, plus celles des
+ * zones qui comptent dans la sienne (`countsTowards`).
+ */
+export function zoneRuleCount(
+  cards: DeckCards | undefined,
+  zones: DeckZone[],
+  zone: DeckZone,
+): { count: number; contributed: number } {
+  const contributed = contributingZones(zones, zone).reduce(
+    (total, other) => total + zoneCount(cards, other.key),
+    0,
+  );
+  return { count: zoneCount(cards, zone.key) + contributed, contributed };
+}
+
+/**
  * État de chaque zone au regard de sa contrainte de taille. C'est de là que
- * sortent le badge de la fiche et celui des en-têtes de zone : les deux disent
- * la même chose parce qu'ils lisent le même calcul.
+ * sortent le badge de la fiche, celui des en-têtes de zone et l'onglet
+ * « Analyse » de l'éditeur : tous disent la même chose parce qu'ils lisent le
+ * même calcul.
  */
 export function deckLegality(cards: DeckCards | undefined, zones: DeckZone[]): DeckZoneLegality[] {
   return zones.map((zone) => {
-    const count = zoneCount(cards, zone.key);
-    return { zone, count, compliant: isZoneCompliant(zone, count) };
+    const { count, contributed } = zoneRuleCount(cards, zones, zone);
+    return { zone, count, contributed, compliant: isZoneCompliant(zone, count) };
   });
 }
 
@@ -228,4 +276,55 @@ export function maxCopies(
   }
 
   return Math.max(0, ...counts.values());
+}
+
+export type CollectionCoverage = {
+  /** Exemplaires du deck déjà couverts par la collection. */
+  owned: number;
+  /** Exemplaires qu'il reste à trouver. */
+  missing: number;
+  /** Cartes dont il manque au moins un exemplaire, avec le nombre manquant. */
+  missingCards: { cardId: string; missing: number }[];
+};
+
+/**
+ * Ce que la collection couvre du deck.
+ *
+ * Le besoin se cumule par carte avant d'être comparé : la même carte jouée dans
+ * le deck principal et dans la réserve ne se dédouble pas, on ne possède pas
+ * deux fois le même exemplaire.
+ */
+export function collectionCoverage(
+  cards: DeckCards | undefined,
+  zones: DeckZone[],
+  ownedByCardId: Map<string, number> | undefined,
+): CollectionCoverage {
+  const needed = deckNeeds(cards, zones);
+
+  let owned = 0;
+  let missing = 0;
+  const missingCards: { cardId: string; missing: number }[] = [];
+
+  for (const [cardId, quantity] of needed) {
+    const have = Math.min(ownedByCardId?.get(cardId) ?? 0, quantity);
+    owned += have;
+    if (have < quantity) {
+      missing += quantity - have;
+      missingCards.push({ cardId, missing: quantity - have });
+    }
+  }
+
+  missingCards.sort((a, b) => b.missing - a.missing);
+  return { owned, missing, missingCards };
+}
+
+/** Exemplaires demandés par le deck, par carte, toutes zones confondues. */
+export function deckNeeds(cards: DeckCards | undefined, zones: DeckZone[]): Map<string, number> {
+  const needed = new Map<string, number>();
+  for (const zone of zones) {
+    for (const entry of zoneEntries(cards, zone.key)) {
+      needed.set(entry.cardId, (needed.get(entry.cardId) ?? 0) + entry.quantity);
+    }
+  }
+  return needed;
 }

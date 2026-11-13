@@ -51,6 +51,11 @@ export type ParsedDeckLine = {
   zone: DeckZoneKey;
   name: string;
   quantity: number;
+  /**
+   * Vrai quand aucun en-tête ne précédait la ligne : sa zone est celle par
+   * défaut, faute de mieux, et le rangement par type peut la corriger.
+   */
+  inferred?: boolean;
 };
 
 export type ParsedDeckText = {
@@ -84,6 +89,7 @@ export function parseDeckText(text: string, zones: DeckZone[]): ParsedDeckText {
   const sections: DeckZoneKey[] = [];
   const ignored: string[] = [];
   let current = defaultDeckZone(zones);
+  let headed = false;
 
   for (const raw of text.split(/\r?\n/)) {
     const line = raw.trim();
@@ -94,6 +100,7 @@ export function parseDeckText(text: string, zones: DeckZone[]): ParsedDeckText {
       const zone = known.get(normalizeHeader(headerMatch[1]));
       if (zone) {
         current = zone;
+        headed = true;
         if (!sections.includes(zone)) {
           sections.push(zone);
         }
@@ -118,7 +125,7 @@ export function parseDeckText(text: string, zones: DeckZone[]): ParsedDeckText {
     if (existing) {
       existing.quantity += quantity;
     } else {
-      lines.push({ zone: current, name, quantity });
+      lines.push({ zone: current, name, quantity, ...(headed ? {} : { inferred: true }) });
     }
   }
 
@@ -171,6 +178,12 @@ export type DeckTextApplication = {
 export function applyDeckText(
   parsed: ParsedDeckText,
   resolve: (name: string) => string | undefined,
+  /**
+   * Zone d'une ligne sans en-tête, d'après la carte appariée et ce qui est
+   * déjà rangé : une liste collée sans sections met sa légende et ses runes
+   * à leur place plutôt que dans le deck principal.
+   */
+  route?: (cardId: string, cards: DeckCards) => DeckZoneKey,
 ): DeckTextApplication {
   const cards: DeckCards = {};
   const unmatched: string[] = [];
@@ -180,20 +193,34 @@ export function applyDeckText(
   for (const line of parsed.lines) {
     const cardId = resolve(line.name);
     if (!cardId) {
-      unmatched.push(line.name);
+      if (!unmatched.includes(line.name)) unmatched.push(line.name);
       continue;
     }
 
     matched += 1;
-    const entries: DeckCardEntry[] = cards[line.zone] ?? [];
-    const existing = entries.find((entry) => entry.cardId === cardId);
-    if (existing) {
-      existing.quantity += line.quantity;
+
+    const add = (zone: DeckZoneKey, quantity: number) => {
+      const entries: DeckCardEntry[] = cards[zone] ?? [];
+      const existing = entries.find((entry) => entry.cardId === cardId);
+      if (existing) {
+        existing.quantity += quantity;
+      } else {
+        entries.push({ cardId, quantity });
+      }
+      cards[zone] = entries;
+      return Boolean(existing);
+    };
+
+    if (line.inferred && route) {
+      // Exemplaire par exemplaire : « 3 Jinx » sans en-tête donne un champion
+      // choisi et deux cartes du deck principal, pas trois champions choisis.
+      if (add(route(cardId, cards), 1)) merged += 1;
+      for (let copy = 1; copy < line.quantity; copy += 1) {
+        add(route(cardId, cards), 1);
+      }
+    } else if (add(line.zone, line.quantity)) {
       merged += 1;
-    } else {
-      entries.push({ cardId, quantity: line.quantity });
     }
-    cards[line.zone] = entries;
   }
 
   return { cards, matched, unmatched, merged };
@@ -214,4 +241,54 @@ export function normalizeCardName(name: string): string {
     .toLowerCase()
     .replace(/\s+/g, " ")
     .trim();
+}
+
+/**
+ * Ce qu'une liste appliquée change dans le deck en cours, zone par zone — copie
+ * de `mergeDeckText` de joutes-app.
+ *
+ * Une zone nommée par un en-tête est remplacée : c'est ce que dit la liste. La
+ * zone par défaut l'est aussi quand des lignes sans en-tête y tombent. Une zone
+ * que seul le rangement atteint — une rune égarée dans une liste sans
+ * sections — reçoit ces cartes **en plus** de ce qu'elle porte.
+ */
+export function mergeDeckText(
+  current: DeckCards,
+  applied: DeckCards,
+  parsed: ParsedDeckText,
+  zones: DeckZone[],
+): DeckCards {
+  const replaced = replacedDeckZones(parsed, zones);
+  const next: DeckCards = { ...current };
+  for (const [key, entries] of Object.entries(applied) as [DeckZoneKey, DeckCardEntry[]][]) {
+    next[key] = replaced.has(key) ? entries : combineEntries(current[key] ?? [], entries);
+  }
+  return next;
+}
+
+/** Les zones qu'une liste appliquée remplace, plutôt que de les compléter. */
+export function replacedDeckZones(parsed: ParsedDeckText, zones: DeckZone[]): Set<DeckZoneKey> {
+  const replaced = new Set<DeckZoneKey>(parsed.sections);
+  if (parsed.lines.some((line) => line.inferred)) {
+    replaced.add(defaultDeckZone(zones));
+  }
+  return replaced;
+}
+
+/** Ce qui reste du deck en cours une fois les zones remplacées vidées : le contexte du rangement. */
+export function keptDeckCards(current: DeckCards, parsed: ParsedDeckText, zones: DeckZone[]): DeckCards {
+  const replaced = replacedDeckZones(parsed, zones);
+  return Object.fromEntries(
+    Object.entries(current).filter(([key]) => !replaced.has(key as DeckZoneKey)),
+  ) as DeckCards;
+}
+
+function combineEntries(a: DeckCardEntry[], b: DeckCardEntry[]): DeckCardEntry[] {
+  const combined = a.map((entry) => ({ ...entry }));
+  for (const entry of b) {
+    const existing = combined.find((other) => other.cardId === entry.cardId);
+    if (existing) existing.quantity += entry.quantity;
+    else combined.push({ ...entry });
+  }
+  return combined;
 }

@@ -153,6 +153,8 @@ export const endpoints = {
      */
     value: "/collection/value",
     gameValue: (gameSlug: string) => `/collection/games/${gameSlug}/value`,
+    /** Exemplaires possédés par nom de carte, toutes impressions confondues (120 noms au plus). */
+    ownership: (gameSlug: string) => `/collection/games/${gameSlug}/ownership`,
     /** Ajout d'une extension entière : liste des extensions (GET), aperçu ou ajout (POST). */
     quickAdd: (gameSlug: string) => `/collection/games/${gameSlug}/quick-add`,
     /** Import d'un fichier CSV (POST, `dryRun` pour vérifier sans écrire). */

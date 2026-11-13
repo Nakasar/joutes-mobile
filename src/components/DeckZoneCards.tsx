@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import type { DeckCardInfo, DeckCards } from "../lib/deck-contents";
-import { zoneCount, zoneEntries } from "../lib/deck-contents";
+import { zoneEntries, zoneRuleCount } from "../lib/deck-contents";
 import { isZoneCompliant, zoneCounterLabel, type DeckZone } from "../lib/deck-zones";
 import { CardImage } from "./CardImage";
 
@@ -19,8 +19,11 @@ export function DeckZoneCards({
   zone,
   cards,
   cardsById,
+  zones,
 }: {
   zone: DeckZone;
+  /** Toutes les zones du deck : le champion choisi compte dans le deck principal. */
+  zones: DeckZone[];
   cards: DeckCards | undefined;
   cardsById: Map<string, DeckCardInfo>;
 }) {
@@ -29,7 +32,7 @@ export function DeckZoneCards({
 
   if (entries.length === 0) return null;
 
-  const count = zoneCount(cards, zone.key);
+  const { count, contributed } = zoneRuleCount(cards, zones, zone);
   const compliant = isZoneCompliant(zone, count);
 
   return (
@@ -37,7 +40,7 @@ export function DeckZoneCards({
       <div className="deck-zone__head">
         <h3 className="section-label">{t(`decks.zones.${zone.key}`)}</h3>
         <span className={`chip${compliant ? "" : " chip--danger"}`}>
-          {zoneCounterLabel(zone, count)}
+          {zoneCounterLabel(zone, count, contributed)}
         </span>
       </div>
 

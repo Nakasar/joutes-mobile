@@ -1,4 +1,4 @@
-import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
+import { HashRouter, Navigate, Route, Routes, matchPath, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { OfflineBanner } from "./components/OfflineBanner";
 import { TabBar } from "./components/TabBar";
@@ -66,6 +66,10 @@ function Shell() {
   // Hors connexion au sens de l'app : appareil déconnecté, ou réseau si lent
   // qu'on a préféré servir le contenu local plutôt que de le faire attendre.
   const offline = !online || degraded;
+  // L'éditeur de deck prend tout l'écran : sa barre d'action (« Ajouter des
+  // cartes », « Enregistrer ») tient la place de la barre d'onglets.
+  const location = useLocation();
+  const immersive = matchPath("/decks/:deckId/edit", location.pathname) !== null;
 
   if (!ready) {
     return (
@@ -218,7 +222,7 @@ function Shell() {
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </main>
-            <TabBar />
+            {!immersive && <TabBar />}
           </div>
         }
       />
