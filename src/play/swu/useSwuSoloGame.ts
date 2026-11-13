@@ -1,3 +1,4 @@
+import type { SoloMeta } from "../history";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { loadSwuEngine, type SwuBrowserEngine } from "../../engine/swu/browser";
@@ -13,6 +14,8 @@ export type SwuSave = {
   seat: number | null;
   bots: (BotLevel | null)[];
   record: SwuRecord;
+  /** Le deck et l'IA choisis, pour l'accueil et l'historique. */
+  meta?: SoloMeta;
 };
 
 export const SWU_SOLO_STORAGE_KEY = "joutes.play.swu.solo";

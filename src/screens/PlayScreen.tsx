@@ -19,6 +19,8 @@ import {
   TrophyIcon,
 } from "../components/icons";
 import { JoinPlaySheet } from "../components/JoinPlaySheet";
+import { historyStats } from "../play/history";
+import { FlameIcon } from "../play/icons";
 import { PlayHubPane } from "../play/PlayHubPane";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
@@ -33,7 +35,7 @@ const PAGE_SIZE = 20;
 
 const FILTERS = ["current", "past"] as const;
 type Filter = (typeof FILTERS)[number];
-const SECTIONS = ["tournaments", "matches", "table"] as const;
+const SECTIONS = ["table", "tournaments", "matches"] as const;
 type Section = (typeof SECTIONS)[number];
 
 interface TournamentSummary {
@@ -602,7 +604,10 @@ function GameMatchesPane({
  */
 export function PlayScreen() {
   const { t } = useTranslation();
-  const [section, setSection] = useSearchParamState<Section>("section", SECTIONS, "tournaments");
+  const [section, setSection] = useSearchParamState<Section>("section", SECTIONS, "table");
+  const { user, isAuthenticated } = useAuth();
+  const name = user?.displayName ?? user?.name ?? user?.username ?? "";
+  const streak = useMemo(() => (section === "table" ? historyStats().streak : 0), [section]);
   const [filters, setFilters] = useState<CommonFilters>(NO_FILTERS);
 
   const { data: catalog } = useApi(() => listGames(), []);
@@ -619,11 +624,29 @@ export function PlayScreen() {
       <div className="screen-head">
         <div className="screen-head__titles">
           <h1 className="screen-title">{t("play.title")}</h1>
-          <p className="screen-subtitle">{t("play.subtitle")}</p>
+          <p className="screen-subtitle">
+            {section !== "table"
+              ? t("play.subtitle")
+              : isAuthenticated && name
+                ? t("playHub.greeting", { name })
+                : t("playHub.greetingAnon")}
+          </p>
         </div>
+        {section === "table" && streak >= 2 && (
+          <span className="hub-streak">
+            <FlameIcon size={16} />
+            {t("playHub.streak", { count: streak })}
+          </span>
+        )}
       </div>
 
       <div className="segmented" style={{ marginBottom: 16 }}>
+        <button
+          className={`segmented__item${section === "table" ? " segmented__item--active" : ""}`}
+          onClick={() => setSection("table")}
+        >
+          {t("play.sectionTable")}
+        </button>
         <button
           className={`segmented__item${section === "tournaments" ? " segmented__item--active" : ""}`}
           onClick={() => setSection("tournaments")}
@@ -635,12 +658,6 @@ export function PlayScreen() {
           onClick={() => setSection("matches")}
         >
           {t("play.sectionMatches")}
-        </button>
-        <button
-          className={`segmented__item${section === "table" ? " segmented__item--active" : ""}`}
-          onClick={() => setSection("table")}
-        >
-          {t("play.sectionTable")}
         </button>
       </div>
 

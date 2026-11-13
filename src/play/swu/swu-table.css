@@ -358,10 +358,15 @@ button.swu-stat { cursor: pointer; text-decoration: underline dotted; text-under
   min-height: 12rem;
 }
 
-/* Portrait : la main reste visible entre la table et le dock. */
-.pt--portrait .swu-fan-dock {
+/* Debout et couché : la main reste visible sous la table, jamais par-dessus. */
+.pt--portrait .swu-fan-dock,
+.pt--landscape .swu-fan-dock {
   flex: none;
   border-top: 1px solid var(--border);
   background: rgba(4, 18, 27, 0.9);
   overflow-x: auto;
+}
+.pt--landscape .swu-fan-dock .swu-fan {
+  --cw: 46px;
+  padding: 16px 12px 10px;
 }
