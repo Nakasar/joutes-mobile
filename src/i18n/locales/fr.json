@@ -140,7 +140,8 @@
       "viewAll": "Voir tout",
       "empty": "Aucune publication pour le moment.",
       "openOn": "Ouvrir sur {{platform}}"
-    }
+    },
+    "play": "Jouer"
   },
   "events": {
     "title": "Événements",
@@ -1476,11 +1477,11 @@
     "sectionMatches": "Parties",
     "joinAction": "Scanner ou saisir un code",
     "joinTitle": "Rejoindre",
-    "joinHint": "Le code dit lui-même s'il ouvre un tournoi ou une partie.",
+    "joinHint": "Le code dit lui-même s'il ouvre un tournoi, une partie ou une table de jeu.",
     "joinCodeLabel": "Code ou lien",
     "joinCodePlaceholder": "Code du tournoi, ou lien de la partie",
     "joinSubmit": "Rejoindre",
-    "joinInvalidCode": "Ce code ne correspond ni à un tournoi ni à une partie.",
+    "joinInvalidCode": "Ce code ne correspond ni à un tournoi, ni à une partie, ni à une table.",
     "joinMatchLoginRequired": "Connecte-toi pour rejoindre une partie.",
     "scanAction": "Scanner un QR code",
     "filters": {
@@ -1488,7 +1489,13 @@
       "from": "À partir du",
       "to": "Jusqu'au",
       "clear": "Effacer les filtres"
-    }
+    },
+    "sectionTable": "Table",
+    "tableIntro": "Joue contre l'IA, même hors ligne, ou en ligne avec tes decks Joutes. Le moteur applique les règles et raconte chaque action.",
+    "tableSub": "Contre l'IA, en ligne ou sur un serveur",
+    "tableResume": "Une partie contre l'IA t'attend",
+    "tableEmpty": "Aucun jeu ne propose encore la table.",
+    "joinTableNotFound": "Aucune table ne porte ce code."
   },
   "gameMatches": {
     "newAction": "Nouvelle partie",

@@ -1,0 +1,658 @@
+{
+  "Play": {
+    "title": "Play Riftbound",
+    "description": "Play Riftbound in your browser: against the AI, online with your decks, or on an organizer's server. The engine applies the rules and cites each one.",
+    "back": "Back to the game portal",
+    "backToLobby": "Back to the play lobby",
+    "status": {
+      "loading": "Loading the table…",
+      "error": "The table could not be loaded.",
+      "reconnecting": "Connection lost, retrying…"
+    },
+    "mode": {
+      "duel": "Duel",
+      "ffa3": "3-player free-for-all",
+      "ffa4": "4-player free-for-all",
+      "teams": "2v2 teams"
+    },
+    "modeHint": {
+      "duel": "2 players, 8 points",
+      "ffa3": "3 players, 3 battlefields",
+      "ffa4": "4 players, 3 battlefields",
+      "teams": "2 teams of 2, 11 points"
+    },
+    "level": {
+      "easy": "Easy",
+      "normal": "Normal",
+      "hard": "Hard"
+    },
+    "kind": {
+      "unit": "Unit",
+      "gear": "Gear",
+      "spell": "Spell",
+      "rune": "Rune",
+      "legend": "Legend",
+      "battlefield": "Battlefield"
+    },
+    "domain": {
+      "fury": "Fury",
+      "calm": "Calm",
+      "mind": "Mind",
+      "body": "Body",
+      "chaos": "Chaos",
+      "order": "Order"
+    },
+    "tableStatus": {
+      "waiting": "Waiting",
+      "playing": "In progress",
+      "finished": "Finished",
+      "cancelled": "Cancelled"
+    },
+    "error": {
+      "UNAUTHENTICATED": "Sign in to do this.",
+      "OFFLINE": "Online play is not available right now.",
+      "NOT_FOUND": "This table does not exist.",
+      "FORBIDDEN": "Only the table host can do this.",
+      "INVALID": "Invalid request.",
+      "INVALID_DECK": "This deck cannot be played.",
+      "FULL": "The table is full.",
+      "ALREADY_SEATED": "You are already seated at this table.",
+      "NOT_FULL": "Some seats are still free.",
+      "NOT_WAITING": "The game has already started.",
+      "SERVER": "The game server did not answer. Try again in a moment."
+    },
+    "card": {
+      "hidden": "Hidden card",
+      "hiddenHint": "You cannot see this card.",
+      "inspect": "View {name}",
+      "attacker": "Attacker",
+      "defender": "Defender",
+      "stunned": "Stunned",
+      "exhausted": "Exhausted",
+      "buffed": "Has a buff",
+      "might": "Might {might}, damage taken {damage}",
+      "unsupported": "The engine cannot play this card yet."
+    },
+    "choices": {
+      "filter": "Filter the choices",
+      "none": "No choice matches."
+    },
+    "zone": {
+      "baseOf": "{name}'s base",
+      "myBase": "My base",
+      "hand": "My hand",
+      "champion": "Champion",
+      "emptyHand": "Your hand is empty.",
+      "trashOf": "{name}'s trash",
+      "trashHint": "Discarded cards, oldest first.",
+      "banish": "Banished cards",
+      "empty": "No cards."
+    },
+    "bf": {
+      "controlled": "Controlled by {name}",
+      "contested": "Contested by {name}",
+      "free": "Uncontrolled",
+      "showdown": "Showdown"
+    },
+    "player": {
+      "you": "you",
+      "turn": "Their turn",
+      "deciding": "Thinking",
+      "away": "Disconnected",
+      "points": "{points} / {max} points",
+      "hand": "Hand",
+      "deck": "Deck",
+      "runes": "Runes",
+      "runesReady": "{ready} ready of {total}",
+      "runeDeck": "Rune deck",
+      "pool": "Pool",
+      "energy": "{count} Energy",
+      "trash": "Trash ({count})",
+      "trashLabel": "Trash"
+    },
+    "prompt": {
+      "onTable": "Choose on the table: whatever is outlined is allowed.",
+      "mulligan": "Click the cards to set aside ({count} of {max}).",
+      "keepHand": "Keep my hand",
+      "setAside": "{count, plural, one {Set # card aside} other {Set # cards aside}}",
+      "waiting": "Waiting…",
+      "waitingFor": "Waiting for {name}…"
+    },
+    "chain": {
+      "title": "Chain",
+      "pending": "being declared"
+    },
+    "table": {
+      "quit": "Leave the table",
+      "turn": "Turn {turn}"
+    },
+    "journal": {
+      "title": "Log",
+      "empty": "The game begins.",
+      "rule": "Open rule {rule}",
+      "thisTurn": "This turn",
+      "all": "Whole game",
+      "setup": "Setup"
+    },
+    "pace": {
+      "telling": "The table is replaying what just happened…",
+      "remaining": "{count} more",
+      "skip": "Show all",
+      "settings": "Game pace",
+      "speed": {
+        "slow": "Slow",
+        "normal": "Normal",
+        "fast": "Fast",
+        "instant": "Instant"
+      },
+      "stops": "Pause at key moments",
+      "stopsHint": "A card played by an opponent, end of combat, points scored, start of your turn.",
+      "view": "Table",
+      "views": {
+        "3d": "3D",
+        "flat": "Flat"
+      },
+      "camera": "Camera on combats",
+      "cameraHint": "It moves in on the battlefield during combat, then pulls back.",
+      "effects": "Card effects",
+      "effectsHint": "Lightning, comets, flames: each card has its own effect. Off at “Instant” speed.",
+      "continue": "Continue",
+      "play": "Play my turn",
+      "key": "Space",
+      "yourTurn": "Your turn",
+      "sinceLastTurn": "Since your last turn:",
+      "autoPay": "Pay without confirming",
+      "autoPayHint": "The suggested payment goes through right away, without showing it."
+    },
+    "concede": {
+      "action": "Concede",
+      "confirm": "Concede the game?",
+      "yes": "Yes, concede",
+      "no": "Keep playing"
+    },
+    "result": {
+      "won": "Victory!",
+      "winner": "{names} won",
+      "draw": "Draw",
+      "replay": "Play again",
+      "toLobby": "Back to the play lobby"
+    },
+    "solo": {
+      "broken": "This game can no longer be resumed: the game engine has been updated since.",
+      "none": "No game in progress in this browser.",
+      "toLobby": "Choose a game"
+    },
+    "watch": {
+      "title": "You are watching",
+      "pause": "Pause",
+      "resume": "Resume",
+      "pauseLong": "Pause the game",
+      "resumeLong": "Resume the game",
+      "step": "Next event",
+      "paused": "Paused · the AIs are waiting",
+      "pausedHint": "Game paused on turn {turn}. \"Next event\" steps forward; the log and cards stay available.",
+      "playingHint": "The AIs play at the chosen pace. Space pauses.",
+      "hands": "Show the AIs' hands",
+      "handOf": "{name}'s hand",
+      "stops": "Pause automatically at key moments",
+      "stopsHint": "Card or ability played, end of combat, points scored: the game waits for \"Continue\"."
+    },
+    "deck": {
+      "of": "{name} deck",
+      "random": "Random automatic deck",
+      "randomHint": "A legend drawn at random each game",
+      "randomGroup": "Random",
+      "shared": "Shared in my groups",
+      "public": "Public",
+      "publicHint": "most liked · type to search",
+      "publicSearched": "searched on Joutes",
+      "meta": "Meta decks",
+      "metaHint": "most recent · type to search",
+      "completed": "filled in to play",
+      "autoHint": "automatic deck",
+      "search": "Deck name, legend, author…",
+      "count": "{count, plural, one {# deck} other {# decks}}",
+      "searching": "Searching…",
+      "none": "No deck matches.",
+      "label": "Deck",
+      "placeholder": "Choose a deck",
+      "mine": "My decks",
+      "auto": "Automatic deck around a legend",
+      "refused": "{count, plural, one {# deck cannot be played} other {# decks cannot be played}}",
+      "problem": {
+        "noLegend": "The legend is missing.",
+        "noChampion": "The chosen champion is missing.",
+        "unknownCard": "A card is not recognised.",
+        "noLeader": "The leader is missing.",
+        "noBase": "The base is missing."
+      }
+    },
+    "lobby": {
+      "whoTitle": "2. Who plays?",
+      "watch": "AI vs AI",
+      "watchHint": "Watch AIs play each other, with pause.",
+      "youBadge": "you",
+      "levelOf": "{name} level",
+      "openLists": "Open decklists",
+      "openListsHint": "The AIs know the cards in the opposing deck, but not their order or which are in hand. Otherwise they only know what has been shown.",
+      "watchInfo": "You watch the game without playing: the AIs' hands are visible, and you can pause at any time.",
+      "startWatch": "Watch the game",
+      "resumeWatchTitle": "AI vs AI game in progress",
+      "resumeWatchHint": "{mode}, {moves} moves played.",
+      "you": "Player",
+      "botName": "AI {number}",
+      "signIn": "Sign in",
+      "resumeTitle": "Game in progress against the AI",
+      "resumeHint": "{mode}, {moves} moves played.",
+      "resume": "Resume",
+      "discard": "Abandon this game",
+      "modeTitle": "1. Game mode",
+      "signInForDecks": "Sign in to play with your own decks.",
+      "sets": "The engine plays the Origins (OGN) and Proving Grounds (OGS) sets.",
+      "ai": "AI",
+      "aiHint": "Right now, in your browser.",
+      "online": "Online",
+      "onlineHint": "Create a table and invite by link.",
+      "host": "My server",
+      "hostHint": "A game hosted by you or an organizer.",
+      "level": "Level",
+      "startSolo": "Start the game",
+      "replaces": "Starting a game replaces the one in progress against the AI.",
+      "offline": "Online play is not open on Joutes yet. You can play against the AI or on your own server.",
+      "signInForOnline": "Sign in to create or join a table.",
+      "createTable": "Create a table",
+      "joinLabel": "Join a table",
+      "joinPlaceholder": "Table code or link",
+      "join": "Join",
+      "tablesTitle": "My tables",
+      "noTables": "No online table yet.",
+      "aboutTitle": "How it works",
+      "about": "The Joutes engine knows the rules: it only offers what is allowed, resolves effects and narrates every event, citing the rule applied. Engine texts are in French for now."
+    },
+    "room": {
+      "title": "Online table · {mode}",
+      "code": "Code {code}",
+      "invite": "Share this page's link to invite players. Once the game has started, the same link lets people watch it.",
+      "copy": "Copy link",
+      "copied": "Link copied",
+      "seats": "Seats ({taken} of {total})",
+      "host": "Host",
+      "freeSeat": "Free seat",
+      "botSeat": "AI, {level} level",
+      "addBot": "Add an AI ({level})",
+      "start": "Start the game",
+      "waitingPlayers": "{count, plural, one {# seat still free} other {# seats still free}}",
+      "waitingHost": "Waiting for the host to start.",
+      "cancel": "Cancel the table",
+      "leave": "Leave",
+      "remove": "Remove",
+      "cancelled": "This table was cancelled.",
+      "join": "Sit at this table",
+      "signIn": "Sign in to take a seat.",
+      "sit": "Take a seat",
+      "unreachableHint": "The game has started, but the game server is not answering. Reload the page in a moment."
+    },
+    "remote": {
+      "badLink": "This invitation link is incomplete.",
+      "unreachable": "Unable to join the game.",
+      "server": "Game hosted by {host}, outside Joutes.",
+      "unreachableHint": "The host's server is not answering, or the invitation has expired. From an https page, the browser also refuses an unencrypted server (except on your own machine)."
+    },
+    "host": {
+      "intro": "Start the game server (joutes-server host) on a machine, then enter its address and organizer code here. Each player gets an invitation link. Joutes sees neither the address nor the code.",
+      "server": "Server address",
+      "token": "Organizer code",
+      "seat": "Seat {number}",
+      "guest": "Guest",
+      "guestName": "Guest {number}",
+      "guestNameLabel": "Player name",
+      "guestDeck": "Link to a Joutes deck (empty: automatic deck)",
+      "needDeck": "Choose your deck first, in step 2.",
+      "create": "Create the game",
+      "refused": "The server refused the request ({status}).",
+      "unreachable": "Server unreachable. Check the address, and that it uses https if this page does.",
+      "created": "The game is created. Send each player their link: it gives access to their seat, and theirs only.",
+      "open": "Open my table",
+      "another": "Create another game",
+      "spectators": "Spectators",
+      "spectator": "Spectator",
+      "tls": "From joutes.app (https), the browser only accepts a server over https, or one running on your own machine (localhost)."
+    },
+    "sim": {
+      "lobbyTitle": "Simulate a deck",
+      "lobbyHint": "Have the AI play your deck over dozens of games and see how many it wins.",
+      "lobbyOpen": "Simulate a deck",
+      "title": "Simulate a deck",
+      "intro": "Have the AI play your deck against a specific opponent, or against a deck drawn at random each game, and see how many games it wins.",
+      "deckTitle": "1. Your deck",
+      "opponentTitle": "2. Opponent",
+      "kind": {
+        "fixed": "A specific deck",
+        "pool": "Random each game"
+      },
+      "kindHint": {
+        "fixed": "The same opponent for the whole run.",
+        "pool": "A deck drawn from a pool, game after game."
+      },
+      "poolIntro": "Each game draws a deck from the ticked pools:",
+      "source": {
+        "meta": "Meta decks",
+        "mine": "My decks",
+        "shared": "Shared in my groups",
+        "public": "Most liked public decks",
+        "auto": "Automatic decks"
+      },
+      "sourceHint": {
+        "meta": "The most recent tournament decks",
+        "mine": "The ones the engine can play",
+        "shared": "Decks from my play groups",
+        "public": "The 50 public decks with the most stars",
+        "auto": "A random deck built around each legend"
+      },
+      "sourceShort": {
+        "meta": "the meta",
+        "mine": "my decks",
+        "shared": "my groups",
+        "public": "public decks",
+        "auto": "automatic decks"
+      },
+      "weighted": "Draw meta decks by how often they appear in tournaments (a legend played twice as much comes up twice as often)",
+      "poolSummary": "{count, plural, one {# possible deck} other {# possible decks}}. Your own deck is left out of the draw.",
+      "poolEmpty": "Tick at least one pool that has decks.",
+      "gamesTitle": "3. Games",
+      "count": "Number of games",
+      "level": "Level of both AIs",
+      "precision": "Precision of the result",
+      "points": "±{count} points",
+      "precisionHint": "a 55% result means between {low} and {high}%",
+      "duration": "Estimated time",
+      "durationHint": "in this browser, with the tab open",
+      "aboutSeconds": "about {count} s",
+      "aboutMinutes": "about {count} min",
+      "fairness": "Your deck switches seats every two games and who goes first alternates every game. Easy plays almost at random: it is no use for judging a deck.",
+      "start": "Run {count} games",
+      "saved": "Results are saved as they come: closing the tab keeps the games already played.",
+      "historyTitle": "My simulations",
+      "historyNone": "No simulation yet.",
+      "againstDeck": "against {name}",
+      "againstPool": "against {sources}",
+      "gamesOf": "{played}/{target} games",
+      "aboutTitle": "What this number measures",
+      "about1": "Your deck's chances when the Joutes AI plays it. The AI reads the game with a simple grid (points, battlefields, board, cards in hand) and doesn't know a deck's game plan.",
+      "about2": "It favors straightforward aggressive decks and underrates control and combo. Compare two versions of the same deck with each other rather than with meta winrates.",
+      "back": "Simulate a deck",
+      "autoDeck": "{legend} (automatic deck)",
+      "resultTitle": "{deck} against {against}",
+      "resultHint": "{target} games · {level} AI · {pool, plural, one {# possible opposing deck} other {# possible opposing decks}}",
+      "pause": "Pause",
+      "run": "Run",
+      "resume": "Resume",
+      "more": "Add {count} games",
+      "again": "Run with another deck",
+      "delete": "Delete",
+      "deleteConfirm": "Delete this simulation and all its games?",
+      "otherEngine": "These games were played by another version of the engine: \"Watch\" may show a different game.",
+      "progress": "{played} of {target} games played",
+      "progressLabel": "Games played",
+      "complete": "Run complete",
+      "warming": "first game in progress…",
+      "paused": "Paused: \"Resume\" picks up where the run stopped",
+      "winsOf": "Wins for {deck}",
+      "record": "{wins} wins, {losses} losses",
+      "rangeLabel": "Range from {low} to {high}%, 50% marker",
+      "range": "Probably between <strong>{low}%</strong> and <strong>{high}%</strong>.",
+      "favored": "The deck is favored: even the bottom of the range is above 50%.",
+      "unfavored": "The deck is unfavored: even the top of the range is below 50%.",
+      "undecided": "Not enough games to tell: the range crosses 50%.",
+      "first": "Going first",
+      "second": "Going second",
+      "tally": "{wins} wins out of {games}",
+      "turns": "Average length",
+      "turnsValue": "{count} turns",
+      "winTurns": "wins in {count} turns",
+      "score": "Average score",
+      "undecidedGames": "{count, plural, =0 {no unfinished game} one {# unfinished game} other {# unfinished games}}",
+      "byOpponent": "By opponent",
+      "byOpponentHint": "Grouped by legend. Under {count} games, the number is greyed out.",
+      "opponentLegend": "Opposing legend",
+      "gamesColumn": "Games",
+      "wlColumn": "W – L",
+      "winsColumn": "Wins",
+      "gamesList": "Games",
+      "filter": "Filter games",
+      "filters": {
+        "all": "All",
+        "win": "Wins",
+        "loss": "Losses"
+      },
+      "number": "#",
+      "opponentColumn": "Opponent",
+      "startsColumn": "Goes first",
+      "resultColumn": "Result",
+      "scoreColumn": "Score",
+      "turnsColumn": "Turns",
+      "startsMe": "your deck",
+      "startsThem": "opponent",
+      "win": "Win",
+      "loss": "Loss",
+      "draw": "Unfinished",
+      "watch": "Watch",
+      "showMore": "Show more games",
+      "watchHint": "\"Watch\" reopens the exact same game at the spectator table, with pause and visible hands.",
+      "error": {
+        "UNAUTHENTICATED": "Sign in to simulate a deck: results are kept in your account.",
+        "NOT_FOUND": "This simulation does not exist.",
+        "INVALID": "Invalid request.",
+        "INVALID_DECK": "The engine cannot play this deck.",
+        "EMPTY_POOL": "No opposing deck in the chosen pool.",
+        "SERVER": "The server did not answer. Try again in a moment.",
+        "ENGINE": "The engine failed on a game. Restart the run; if it happens again, please report it."
+      }
+    },
+    "hand": {
+      "play": "Play",
+      "playHere": "Play here",
+      "hideHere": "Hide face down",
+      "cancel": "Cancel",
+      "dropAnywhere": "Drop anywhere on the table",
+      "where": "Where to play {name}? Click a highlighted spot.",
+      "here": "Here",
+      "playAt": "Play at: {place}",
+      "cost": "Cost:",
+      "whereSpell": "A spell: drop it anywhere on the table, then choose its targets.",
+      "whereList": "Plays to: {places}",
+      "base": "your base",
+      "battlefield": "battlefield {n}"
+    },
+    "payment": {
+      "total": "Total cost",
+      "energy": "Energy",
+      "anyPower": "Any power",
+      "cardPower": "Card's power",
+      "proposed": "Suggested payment",
+      "yours": "Your payment",
+      "nothing": "Nothing chosen.",
+      "rune": "{domain} rune",
+      "alreadyExhausted": "already exhausted",
+      "givesEnergy": "1 Energy",
+      "givesPower": "1 {domain}",
+      "givesBoth": "1 Energy + 1 {domain}",
+      "source": "Resource",
+      "adds": "adds its resource",
+      "customHint": "Click the runes in your base: exhaust, exhaust then recycle, recycle, nothing. A Seal or Gold is used with one click, on the table or below.",
+      "extra": "Left over: {energy} Energy, {power} Power. The pool empties at the end of the phase.",
+      "pay": "Pay",
+      "key": "Space",
+      "customize": "Customize",
+      "useProposed": "Suggested payment",
+      "cancel": "Cancel",
+      "use": "Use {name} to pay",
+      "mark": {
+        "exhaust": "exhausted",
+        "both": "exhausted then recycled",
+        "recycle": "recycled"
+      }
+    }
+  },
+  "PlaySwu": {
+    "title": "Play Star Wars: Unlimited",
+    "description": "Play Star Wars: Unlimited in your browser against the AI, with your own decks or an automatic one. The engine applies the Premier format rules and cites each of them.",
+    "lobby": {
+      "whoTitle": "Who is playing?",
+      "resumeHint": "{players}, {moves, plural, one {# move played} other {# moves played}}.",
+      "sets": "The engine plays all nine sets, from Spark of Rebellion to Heroes of Mandalore, in the Premier format.",
+      "watchInfo": "You watch the game without playing: the AI hands are visible, and you can pause it.",
+      "about": "The Joutes engine knows the rules of Star Wars: Unlimited: it only offers what is allowed, resolves every ability and cites the rule applied in the log.",
+      "deckAuto": "Automatic deck around a leader",
+      "deckRandomHint": "A leader drawn at random each game",
+      "deckSearch": "Deck name, leader, author…",
+      "hostNeedDeck": "Choose your deck first, just above."
+    },
+    "sim": {
+      "fairness": "Your deck switches seats every two games and the initiative is drawn at random every game. Easy plays almost at random: it is no use for judging a deck.",
+      "about1": "Your deck's chances when the Joutes AI plays it. The AI reads the game with a simple grid (bases, units in play, resources, cards in hand) and doesn't know a deck's game plan.",
+      "about2": "It favors straightforward aggressive decks and underrates control and combo. Compare two versions of the same deck with each other rather than with tournament results.",
+      "first": "With the initiative",
+      "second": "Without the initiative",
+      "turnsValue": "{count} rounds",
+      "winTurns": "wins in {count} rounds",
+      "score": "Remaining base HP",
+      "byOpponentHint": "Grouped by leader. Under {count} games, the number is greyed out.",
+      "opponentLegend": "Opposing leader",
+      "startsColumn": "Initiative",
+      "scoreColumn": "Bases",
+      "turnsColumn": "Rounds",
+      "sourceHint": {
+        "auto": "A random deck built around each leader"
+      }
+    },
+    "arena": {
+      "ground": "Ground arena",
+      "space": "Space arena"
+    },
+    "round": "Round {round}",
+    "phase": {
+      "setup": "Setup",
+      "action": "Action phase",
+      "regroup": "Regroup phase",
+      "over": "Game over"
+    },
+    "stat": {
+      "hand": "Hand",
+      "deck": "Deck",
+      "discard": "Discard",
+      "resources": "Resources",
+      "resourcesValue": "{ready} ready of {total}",
+      "credits": "Credits",
+      "force": "Force"
+    },
+    "initiative": "Initiative",
+    "initiativeTaken": "Initiative taken",
+    "tag": {
+      "exhausted": "exhausted",
+      "deployed": "deployed",
+      "attacking": "Attacking"
+    },
+    "leader": {
+      "action": "Action",
+      "deploy": "Deploy",
+      "deployPilot": "Deploy as Pilot"
+    },
+    "life": "{left} / {total} HP",
+    "baseOf": "{name}'s base",
+    "captives": "{count} captured",
+    "cost": "Current cost: {cost}",
+    "ask": {
+      "cancel": "Cancel",
+      "pickTarget": "Choose the target: whatever is circled in red is allowed.",
+      "turnHint": "{ready, plural, =0 {No ready resource} one {# ready resource} other {# ready resources}} · play a card, attack or use your leader."
+    },
+    "pile": {
+      "discardOf": "{name}'s discard pile",
+      "resourcesOf": "{name}'s resources",
+      "empty": "No card."
+    },
+    "inspect": {
+      "power": "Power",
+      "hp": "HP",
+      "damage": "{damage} damage taken",
+      "keywords": "Keywords",
+      "upgrades": "Upgrades",
+      "captives": "Captured cards",
+      "unitSide": "Leader unit side",
+      "unsupported": "The engine cannot play this card yet."
+    },
+    "kw": {
+      "ambush": "Ambush",
+      "grit": "Grit",
+      "overwhelm": "Overwhelm",
+      "raid": "Raid {n}",
+      "restore": "Restore {n}",
+      "saboteur": "Saboteur",
+      "sentinel": "Sentinel",
+      "shielded": "Shielded",
+      "hidden": "Hidden",
+      "support": "Support",
+      "exploit": "Exploit {n}",
+      "piloting": "Piloting {n}",
+      "plot": "Plot",
+      "fortify": "Fortify"
+    }
+  },
+  "Mobile": {
+    "Play": {
+      "hand": {
+        "touchHint": "Tap a card to see it large, long-press to drag it onto the table.",
+        "where": "Where to play {name}? Tap a highlighted spot."
+      },
+      "table": {
+        "turnShort": "Turn"
+      },
+      "panel": {
+        "open": "Open the panel",
+        "fold": "Fold the panel",
+        "yourMove": "Your move",
+        "pinned": "Open",
+        "auto": "Opens when you need to act",
+        "back": "Back"
+      },
+      "lobby": {
+        "aiHint": "Right away, on your phone, even offline.",
+        "titleSwu": "Play Star Wars: Unlimited",
+        "swuTable": "Star Wars: Unlimited"
+      },
+      "retry": "Try again",
+      "room": {
+        "share": "Share the link",
+        "codeLabel": "Table code",
+        "qr": "Table QR code",
+        "invite": "Have players scan this QR code from the app's Play tab, or share the link: it also opens in a browser. Once the game starts, it lets people watch.",
+        "unreachableHint": "The game has started, but the game server isn't answering. Come back in a moment."
+      },
+      "remote": {
+        "unreachableHint": "The host's server isn't answering, or the invitation has expired. The phone only accepts https servers."
+      },
+      "host": {
+        "tls": "In the app, the server needs an https address: the phone refuses http addresses, even on the local network.",
+        "unreachable": "Server unreachable. Check the address, and that it uses https.",
+        "needDeck": "Pick your deck first, just above."
+      },
+      "solo": {
+        "none": "No game in progress on this phone."
+      },
+      "prompt": {
+        "mulligan": "Tap the cards to set aside ({count} of {max})."
+      },
+      "payment": {
+        "customHint": "Tap the runes in your base: exhaust, exhaust then recycle, recycle, nothing. A Seal or Gold turns on with a tap, on the table or below."
+      }
+    },
+    "PlaySwu": {
+      "roundShort": "R",
+      "ask": {
+        "pickTarget": "Tap the target: whatever is circled in red is allowed.",
+        "turnHint": "{ready, plural, =0 {No ready resource} one {# ready resource} other {# ready resources}} · tap a card to play it, attack or use your leader. Long press: see the card large."
+      }
+    }
+  }
+}

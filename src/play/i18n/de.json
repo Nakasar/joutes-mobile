@@ -1,0 +1,658 @@
+{
+  "Play": {
+    "title": "Riftbound spielen",
+    "description": "Spiele Riftbound im Browser: gegen die KI, online mit deinen Decks oder auf dem Server eines Veranstalters. Die Engine wendet die Regeln an und nennt jede einzelne.",
+    "back": "Zurück zum Spielportal",
+    "backToLobby": "Zurück zur Spiellobby",
+    "status": {
+      "loading": "Tisch wird geladen…",
+      "error": "Der Tisch konnte nicht geladen werden.",
+      "reconnecting": "Verbindung verloren, neuer Versuch…"
+    },
+    "mode": {
+      "duel": "Duell",
+      "ffa3": "Jeder gegen jeden zu dritt",
+      "ffa4": "Jeder gegen jeden zu viert",
+      "teams": "Teams 2 gegen 2"
+    },
+    "modeHint": {
+      "duel": "2 Spieler, 8 Punkte",
+      "ffa3": "3 Spieler, 3 Schlachtfelder",
+      "ffa4": "4 Spieler, 3 Schlachtfelder",
+      "teams": "2 Zweierteams, 11 Punkte"
+    },
+    "level": {
+      "easy": "Leicht",
+      "normal": "Normal",
+      "hard": "Schwer"
+    },
+    "kind": {
+      "unit": "Einheit",
+      "gear": "Ausrüstung",
+      "spell": "Zauber",
+      "rune": "Rune",
+      "legend": "Legende",
+      "battlefield": "Schlachtfeld"
+    },
+    "domain": {
+      "fury": "Zorn",
+      "calm": "Ruhe",
+      "mind": "Geist",
+      "body": "Körper",
+      "chaos": "Chaos",
+      "order": "Ordnung"
+    },
+    "tableStatus": {
+      "waiting": "Wartet",
+      "playing": "Läuft",
+      "finished": "Beendet",
+      "cancelled": "Abgesagt"
+    },
+    "error": {
+      "UNAUTHENTICATED": "Melde dich an, um das zu tun.",
+      "OFFLINE": "Das Online-Spiel ist derzeit nicht verfügbar.",
+      "NOT_FOUND": "Diesen Tisch gibt es nicht.",
+      "FORBIDDEN": "Das kann nur der Gastgeber des Tisches.",
+      "INVALID": "Ungültige Anfrage.",
+      "INVALID_DECK": "Dieses Deck kann nicht gespielt werden.",
+      "FULL": "Der Tisch ist voll.",
+      "ALREADY_SEATED": "Du sitzt bereits an diesem Tisch.",
+      "NOT_FULL": "Es sind noch Plätze frei.",
+      "NOT_WAITING": "Die Partie wurde bereits gestartet.",
+      "SERVER": "Der Spielserver hat nicht geantwortet. Versuche es gleich noch einmal."
+    },
+    "card": {
+      "hidden": "Verdeckte Karte",
+      "hiddenHint": "Du kannst diese Karte nicht sehen.",
+      "inspect": "{name} ansehen",
+      "attacker": "Angreifer",
+      "defender": "Verteidiger",
+      "stunned": "Betäubt",
+      "exhausted": "Erschöpft",
+      "buffed": "Trägt einen Bonus",
+      "might": "Macht {might}, erlittener Schaden {damage}",
+      "unsupported": "Die Engine kann diese Karte noch nicht spielen."
+    },
+    "choices": {
+      "filter": "Auswahl filtern",
+      "none": "Keine passende Auswahl."
+    },
+    "zone": {
+      "baseOf": "Basis von {name}",
+      "myBase": "Meine Basis",
+      "hand": "Meine Hand",
+      "champion": "Champion",
+      "emptyHand": "Deine Hand ist leer.",
+      "trashOf": "Ablage von {name}",
+      "trashHint": "Die abgelegten Karten, von der ältesten zur neuesten.",
+      "banish": "Verbannte Karten",
+      "empty": "Keine Karten."
+    },
+    "bf": {
+      "controlled": "Kontrolliert von {name}",
+      "contested": "Umkämpft von {name}",
+      "free": "Frei",
+      "showdown": "Showdown"
+    },
+    "player": {
+      "you": "du",
+      "turn": "Am Zug",
+      "deciding": "Überlegt",
+      "away": "Getrennt",
+      "points": "{points} / {max} Punkte",
+      "hand": "Hand",
+      "deck": "Deck",
+      "runes": "Runen",
+      "runesReady": "{ready} von {total} bereit",
+      "runeDeck": "Runendeck",
+      "pool": "Vorrat",
+      "energy": "{count} Energie",
+      "trash": "Ablage ({count})",
+      "trashLabel": "Ablage"
+    },
+    "prompt": {
+      "onTable": "Wähle auf dem Tisch: Was umrandet ist, ist erlaubt.",
+      "mulligan": "Klicke die Karten an, die du beiseitelegst ({count} von {max}).",
+      "keepHand": "Hand behalten",
+      "setAside": "{count, plural, one {# Karte beiseitelegen} other {# Karten beiseitelegen}}",
+      "waiting": "Warten…",
+      "waitingFor": "Warten auf {name}…"
+    },
+    "chain": {
+      "title": "Kette",
+      "pending": "wird angesagt"
+    },
+    "table": {
+      "quit": "Tisch verlassen",
+      "turn": "Zug {turn}"
+    },
+    "journal": {
+      "title": "Protokoll",
+      "empty": "Die Partie beginnt.",
+      "rule": "Regel {rule} öffnen",
+      "thisTurn": "Dieser Zug",
+      "all": "Ganze Partie",
+      "setup": "Aufbau"
+    },
+    "pace": {
+      "telling": "Der Tisch zeigt, was gerade passiert ist …",
+      "remaining": "noch {count}",
+      "skip": "Alles zeigen",
+      "settings": "Spieltempo",
+      "speed": {
+        "slow": "Langsam",
+        "normal": "Normal",
+        "fast": "Schnell",
+        "instant": "Sofort"
+      },
+      "stops": "Bei wichtigen Momenten anhalten",
+      "stopsHint": "Vom Gegner gespielte Karte, Kampfende, erzielte Punkte, Beginn deines Zuges.",
+      "view": "Tisch",
+      "views": {
+        "3d": "3D",
+        "flat": "Flach"
+      },
+      "camera": "Kamera bei Kämpfen",
+      "cameraHint": "Sie fährt während des Kampfes an das Schlachtfeld heran und dann zurück.",
+      "effects": "Karteneffekte",
+      "effectsHint": "Blitze, Kometen, Flammen: Jede Karte hat ihren eigenen Effekt. Bei „Sofort“ aus.",
+      "continue": "Weiter",
+      "play": "Meinen Zug spielen",
+      "key": "Leertaste",
+      "yourTurn": "Du bist dran",
+      "sinceLastTurn": "Seit deinem letzten Zug:",
+      "autoPay": "Ohne Bestätigung bezahlen",
+      "autoPayHint": "Die vorgeschlagene Zahlung wird sofort ausgeführt."
+    },
+    "concede": {
+      "action": "Aufgeben",
+      "confirm": "Die Partie aufgeben?",
+      "yes": "Ja, aufgeben",
+      "no": "Weiterspielen"
+    },
+    "result": {
+      "won": "Sieg!",
+      "winner": "Sieg für {names}",
+      "draw": "Unentschieden",
+      "replay": "Noch einmal spielen",
+      "toLobby": "Zurück zur Spiellobby"
+    },
+    "solo": {
+      "broken": "Diese Partie kann nicht mehr fortgesetzt werden: Die Spiel-Engine wurde inzwischen aktualisiert.",
+      "none": "Keine laufende Partie in diesem Browser.",
+      "toLobby": "Partie wählen"
+    },
+    "watch": {
+      "title": "Du schaust zu",
+      "pause": "Pause",
+      "resume": "Weiter",
+      "pauseLong": "Partie pausieren",
+      "resumeLong": "Partie fortsetzen",
+      "step": "Nächstes Ereignis",
+      "paused": "Pausiert · die KIs warten",
+      "pausedHint": "Partie in Runde {turn} pausiert. „Nächstes Ereignis“ geht Schritt für Schritt weiter; Protokoll und Karten bleiben einsehbar.",
+      "playingHint": "Die KIs spielen im gewählten Tempo. Leertaste pausiert.",
+      "hands": "Hände der KIs zeigen",
+      "handOf": "Hand von {name}",
+      "stops": "An wichtigen Momenten automatisch pausieren",
+      "stopsHint": "Karte oder Fähigkeit gespielt, Kampfende, Punkte: Die Partie wartet auf „Weiter“."
+    },
+    "deck": {
+      "of": "Deck von {name}",
+      "random": "Zufälliges automatisches Deck",
+      "randomHint": "Jede Partie eine zufällige Legende",
+      "randomGroup": "Zufall",
+      "shared": "In meinen Gruppen geteilt",
+      "public": "Öffentlich",
+      "publicHint": "beliebteste · tippen zum Suchen",
+      "publicSearched": "auf Joutes gesucht",
+      "meta": "Meta-Decks",
+      "metaHint": "die neuesten · tippen zum Suchen",
+      "completed": "zum Spielen ergänzt",
+      "autoHint": "automatisches Deck",
+      "search": "Deckname, Legende, Autor…",
+      "count": "{count, plural, one {# Deck} other {# Decks}}",
+      "searching": "Suche…",
+      "none": "Kein passendes Deck.",
+      "label": "Deck",
+      "placeholder": "Deck wählen",
+      "mine": "Meine Decks",
+      "auto": "Automatisches Deck um eine Legende",
+      "refused": "{count, plural, one {# Deck kann nicht gespielt werden} other {# Decks können nicht gespielt werden}}",
+      "problem": {
+        "noLegend": "Die Legende fehlt.",
+        "noChampion": "Der gewählte Champion fehlt.",
+        "unknownCard": "Eine Karte wird nicht erkannt.",
+        "noLeader": "Der Anführer fehlt.",
+        "noBase": "Die Basis fehlt."
+      }
+    },
+    "lobby": {
+      "whoTitle": "2. Wer spielt?",
+      "watch": "KI gegen KI",
+      "watchHint": "Sieh KIs gegeneinander spielen, mit Pause.",
+      "youBadge": "du",
+      "levelOf": "Stufe von {name}",
+      "openLists": "Offene Decklisten",
+      "openListsHint": "Die KIs kennen die Karten des gegnerischen Decks, aber weder ihre Reihenfolge noch die Handkarten. Sonst wissen sie nur, was gezeigt wurde.",
+      "watchInfo": "Du schaust zu, ohne mitzuspielen: Die Hände der KIs sind sichtbar, und du kannst jederzeit pausieren.",
+      "startWatch": "Partie ansehen",
+      "resumeWatchTitle": "Laufende Partie KI gegen KI",
+      "resumeWatchHint": "{mode}, {moves} Züge gespielt.",
+      "you": "Spieler",
+      "botName": "KI {number}",
+      "signIn": "Anmelden",
+      "resumeTitle": "Laufende Partie gegen die KI",
+      "resumeHint": "{mode}, {moves} Züge gespielt.",
+      "resume": "Fortsetzen",
+      "discard": "Diese Partie verwerfen",
+      "modeTitle": "1. Spielmodus",
+      "signInForDecks": "Melde dich an, um mit deinen eigenen Decks zu spielen.",
+      "sets": "Die Engine spielt die Sets Origins (OGN) und Proving Grounds (OGS).",
+      "ai": "KI",
+      "aiHint": "Sofort, in deinem Browser.",
+      "online": "Online",
+      "onlineHint": "Erstelle einen Tisch und lade per Link ein.",
+      "host": "Mein Server",
+      "hostHint": "Eine Partie, die du oder ein Veranstalter hostet.",
+      "level": "Stufe",
+      "startSolo": "Partie starten",
+      "replaces": "Eine neue Partie ersetzt die laufende Partie gegen die KI.",
+      "offline": "Das Online-Spiel ist auf Joutes noch nicht geöffnet. Du kannst gegen die KI oder auf deinem eigenen Server spielen.",
+      "signInForOnline": "Melde dich an, um einen Tisch zu erstellen oder ihm beizutreten.",
+      "createTable": "Tisch erstellen",
+      "joinLabel": "Einem Tisch beitreten",
+      "joinPlaceholder": "Code oder Link des Tisches",
+      "join": "Beitreten",
+      "tablesTitle": "Meine Tische",
+      "noTables": "Noch kein Online-Tisch.",
+      "aboutTitle": "So funktioniert es",
+      "about": "Die Joutes-Engine kennt die Regeln: Sie bietet dir nur an, was erlaubt ist, wickelt Effekte ab und erzählt jedes Ereignis mit der angewandten Regel. Die Texte der Engine sind vorerst auf Französisch."
+    },
+    "room": {
+      "title": "Online-Tisch · {mode}",
+      "code": "Code {code}",
+      "invite": "Teile den Link dieser Seite, um Spieler einzuladen. Nach dem Start kann man die Partie über denselben Link verfolgen.",
+      "copy": "Link kopieren",
+      "copied": "Link kopiert",
+      "seats": "Plätze ({taken} von {total})",
+      "host": "Gastgeber",
+      "freeSeat": "Freier Platz",
+      "botSeat": "KI, Stufe {level}",
+      "addBot": "KI hinzufügen ({level})",
+      "start": "Partie starten",
+      "waitingPlayers": "{count, plural, one {Noch # Platz frei} other {Noch # Plätze frei}}",
+      "waitingHost": "Warten auf den Start durch den Gastgeber.",
+      "cancel": "Tisch absagen",
+      "leave": "Verlassen",
+      "remove": "Entfernen",
+      "cancelled": "Dieser Tisch wurde abgesagt.",
+      "join": "An diesen Tisch setzen",
+      "signIn": "Melde dich an, um Platz zu nehmen.",
+      "sit": "Platz nehmen",
+      "unreachableHint": "Die Partie ist gestartet, aber der Spielserver antwortet nicht. Lade die Seite gleich neu."
+    },
+    "remote": {
+      "badLink": "Dieser Einladungslink ist unvollständig.",
+      "unreachable": "Der Partie kann nicht beigetreten werden.",
+      "server": "Partie gehostet von {host}, außerhalb von Joutes.",
+      "unreachableHint": "Der Server des Gastgebers antwortet nicht, oder die Einladung ist abgelaufen. Von einer https-Seite aus lehnt der Browser außerdem einen unverschlüsselten Server ab (außer auf deinem eigenen Rechner)."
+    },
+    "host": {
+      "intro": "Starte den Spielserver (joutes-server host) auf einem Rechner und gib hier seine Adresse und den Veranstaltercode an. Jeder Spieler erhält einen Einladungslink. Joutes sieht weder Adresse noch Code.",
+      "server": "Serveradresse",
+      "token": "Veranstaltercode",
+      "seat": "Platz {number}",
+      "guest": "Gast",
+      "guestName": "Gast {number}",
+      "guestNameLabel": "Name des Spielers",
+      "guestDeck": "Link zu einem Joutes-Deck (leer: automatisches Deck)",
+      "needDeck": "Wähle zuerst dein Deck, in Schritt 2.",
+      "create": "Partie erstellen",
+      "refused": "Der Server hat die Anfrage abgelehnt ({status}).",
+      "unreachable": "Server nicht erreichbar. Prüfe die Adresse, und dass sie https nutzt, wenn diese Seite es tut.",
+      "created": "Die Partie ist erstellt. Schicke jedem seinen Link: Er gibt Zugang zu seinem Platz, und nur zu diesem.",
+      "open": "Meinen Tisch öffnen",
+      "another": "Weitere Partie erstellen",
+      "spectators": "Zuschauer",
+      "spectator": "Zuschauer",
+      "tls": "Von joutes.app (https) aus akzeptiert der Browser nur einen Server über https oder einen auf deinem eigenen Rechner (localhost)."
+    },
+    "sim": {
+      "lobbyTitle": "Deck simulieren",
+      "lobbyHint": "Lass die KI dein Deck über Dutzende Partien spielen und sieh, wie viele es gewinnt.",
+      "lobbyOpen": "Deck simulieren",
+      "title": "Deck simulieren",
+      "intro": "Lass die KI dein Deck gegen einen bestimmten Gegner oder gegen ein pro Partie zufällig gezogenes Deck spielen und sieh, wie viele Partien es gewinnt.",
+      "deckTitle": "1. Dein Deck",
+      "opponentTitle": "2. Gegner",
+      "kind": {
+        "fixed": "Ein bestimmtes Deck",
+        "pool": "Zufällig in jeder Partie"
+      },
+      "kindHint": {
+        "fixed": "Derselbe Gegner für die ganze Serie.",
+        "pool": "Ein Deck aus einer Auswahl, Partie für Partie gezogen."
+      },
+      "poolIntro": "Jede Partie zieht ein Deck aus der angehakten Auswahl:",
+      "source": {
+        "meta": "Meta-Decks",
+        "mine": "Meine Decks",
+        "shared": "In meinen Gruppen geteilt",
+        "public": "Beliebteste öffentliche Decks",
+        "auto": "Automatische Decks"
+      },
+      "sourceHint": {
+        "meta": "Die neuesten Turnierdecks",
+        "mine": "Die, die die Engine spielen kann",
+        "shared": "Decks aus meinen Spielgruppen",
+        "public": "Die 50 öffentlichen Decks mit den meisten Sternen",
+        "auto": "Ein zufällig gebautes Deck um jede Legende"
+      },
+      "sourceShort": {
+        "meta": "die Meta",
+        "mine": "meine Decks",
+        "shared": "meine Gruppen",
+        "public": "öffentliche Decks",
+        "auto": "automatische Decks"
+      },
+      "weighted": "Meta-Decks nach ihrer Turnierpräsenz ziehen (eine doppelt so oft gespielte Legende kommt doppelt so oft)",
+      "poolSummary": "{count, plural, one {# mögliches Deck} other {# mögliche Decks}}. Dein eigenes Deck wird nicht gezogen.",
+      "poolEmpty": "Hake mindestens eine Auswahl mit Decks an.",
+      "gamesTitle": "3. Partien",
+      "count": "Anzahl Partien",
+      "level": "Stufe beider KIs",
+      "precision": "Genauigkeit des Ergebnisses",
+      "points": "±{count} Punkte",
+      "precisionHint": "ein Ergebnis von 55 % heißt zwischen {low} und {high} %",
+      "duration": "Geschätzte Dauer",
+      "durationHint": "in diesem Browser, bei offenem Tab",
+      "aboutSeconds": "etwa {count} s",
+      "aboutMinutes": "etwa {count} Min.",
+      "fairness": "Dein Deck wechselt alle zwei Partien den Platz, und wer beginnt, wechselt jede Partie. Leicht spielt fast zufällig: Es taugt nicht, um ein Deck zu beurteilen.",
+      "start": "{count} Partien starten",
+      "saved": "Die Ergebnisse werden laufend gespeichert: Schließt du den Tab, bleiben die gespielten Partien erhalten.",
+      "historyTitle": "Meine Simulationen",
+      "historyNone": "Noch keine Simulation.",
+      "againstDeck": "gegen {name}",
+      "againstPool": "gegen {sources}",
+      "gamesOf": "{played}/{target} Partien",
+      "aboutTitle": "Was diese Zahl misst",
+      "about1": "Die Chancen deines Decks, wenn die Joutes-KI es spielt. Die KI liest die Partie mit einem einfachen Raster (Punkte, Schlachtfelder, Spielfeld, Handkarten) und kennt den Plan eines Decks nicht.",
+      "about2": "Sie bevorzugt direkte, aggressive Decks und unterschätzt Kontrolle und Kombos. Vergleiche lieber zwei Versionen desselben Decks miteinander als mit den Winrates der Meta.",
+      "back": "Deck simulieren",
+      "autoDeck": "{legend} (automatisches Deck)",
+      "resultTitle": "{deck} gegen {against}",
+      "resultHint": "{target} Partien · KI {level} · {pool, plural, one {# mögliches gegnerisches Deck} other {# mögliche gegnerische Decks}}",
+      "pause": "Pausieren",
+      "run": "Starten",
+      "resume": "Fortsetzen",
+      "more": "{count} Partien hinzufügen",
+      "again": "Mit einem anderen Deck neu starten",
+      "delete": "Löschen",
+      "deleteConfirm": "Diese Simulation und alle ihre Partien löschen?",
+      "otherEngine": "Diese Partien wurden von einer anderen Engine-Version gespielt: „Ansehen“ kann eine andere Partie zeigen.",
+      "progress": "{played} von {target} Partien gespielt",
+      "progressLabel": "Gespielte Partien",
+      "complete": "Serie beendet",
+      "warming": "erste Partie läuft…",
+      "paused": "Pausiert: „Fortsetzen“ macht dort weiter, wo die Serie stand",
+      "winsOf": "Siege von {deck}",
+      "record": "{wins} Siege, {losses} Niederlagen",
+      "rangeLabel": "Bereich von {low} bis {high} %, Marke bei 50 %",
+      "range": "Wahrscheinlich zwischen <strong>{low} %</strong> und <strong>{high} %</strong>.",
+      "favored": "Das Deck ist Favorit: Selbst das untere Ende des Bereichs liegt über 50 %.",
+      "unfavored": "Das Deck ist unterlegen: Selbst das obere Ende des Bereichs liegt unter 50 %.",
+      "undecided": "Zu wenige Partien für ein Urteil: Der Bereich schließt 50 % ein.",
+      "first": "Als Erster",
+      "second": "Als Zweiter",
+      "tally": "{wins} Siege aus {games}",
+      "turns": "Durchschnittliche Dauer",
+      "turnsValue": "{count} Züge",
+      "winTurns": "Siege in {count} Zügen",
+      "score": "Durchschnittlicher Punktestand",
+      "undecidedGames": "{count, plural, =0 {keine Partie ohne Ergebnis} one {# Partie ohne Ergebnis} other {# Partien ohne Ergebnis}}",
+      "byOpponent": "Nach Gegner",
+      "byOpponentHint": "Nach Legende gruppiert. Unter {count} Partien ist die Zahl ausgegraut.",
+      "opponentLegend": "Gegnerische Legende",
+      "gamesColumn": "Partien",
+      "wlColumn": "S – N",
+      "winsColumn": "Siege",
+      "gamesList": "Partien",
+      "filter": "Partien filtern",
+      "filters": {
+        "all": "Alle",
+        "win": "Siege",
+        "loss": "Niederlagen"
+      },
+      "number": "Nr.",
+      "opponentColumn": "Gegner",
+      "startsColumn": "Beginnt",
+      "resultColumn": "Ergebnis",
+      "scoreColumn": "Punkte",
+      "turnsColumn": "Züge",
+      "startsMe": "dein Deck",
+      "startsThem": "der Gegner",
+      "win": "Sieg",
+      "loss": "Niederlage",
+      "draw": "Ohne Ergebnis",
+      "watch": "Ansehen",
+      "showMore": "Mehr Partien zeigen",
+      "watchHint": "„Ansehen“ öffnet genau dieselbe Partie am Zuschauertisch, mit Pause und sichtbaren Händen.",
+      "error": {
+        "UNAUTHENTICATED": "Melde dich an, um ein Deck zu simulieren: Die Ergebnisse werden in deinem Konto gespeichert.",
+        "NOT_FOUND": "Diese Simulation existiert nicht.",
+        "INVALID": "Ungültige Anfrage.",
+        "INVALID_DECK": "Die Engine kann dieses Deck nicht spielen.",
+        "EMPTY_POOL": "Kein gegnerisches Deck in der gewählten Auswahl.",
+        "SERVER": "Der Server hat nicht geantwortet. Versuche es gleich noch einmal.",
+        "ENGINE": "Die Engine ist bei einer Partie abgestürzt. Starte die Serie neu; wenn es wieder passiert, melde es bitte."
+      }
+    },
+    "hand": {
+      "play": "Spielen",
+      "playHere": "Hier spielen",
+      "hideHere": "Verdeckt verstecken",
+      "cancel": "Abbrechen",
+      "dropAnywhere": "Irgendwo auf dem Tisch ablegen",
+      "where": "Wo {name} spielen? Klicke auf einen markierten Platz.",
+      "here": "Hier",
+      "playAt": "Spielen auf: {place}",
+      "cost": "Kosten:",
+      "whereSpell": "Ein Zauber: irgendwo auf dem Tisch ablegen, dann Ziele wählen.",
+      "whereList": "Wird gespielt auf: {places}",
+      "base": "deine Basis",
+      "battlefield": "Schlachtfeld {n}"
+    },
+    "payment": {
+      "total": "Gesamtkosten",
+      "energy": "Energie",
+      "anyPower": "Beliebige Macht",
+      "cardPower": "Macht der Karte",
+      "proposed": "Vorgeschlagene Zahlung",
+      "yours": "Deine Zahlung",
+      "nothing": "Nichts gewählt.",
+      "rune": "{domain}-Rune",
+      "alreadyExhausted": "bereits erschöpft",
+      "givesEnergy": "1 Energie",
+      "givesPower": "1 {domain}",
+      "givesBoth": "1 Energie + 1 {domain}",
+      "source": "Ressource",
+      "adds": "fügt ihre Ressource hinzu",
+      "customHint": "Klicke die Runen deiner Basis: erschöpfen, erschöpfen und recyceln, recyceln, nichts. Ein Siegel oder Gold wird mit einem Klick genutzt, auf dem Tisch oder unten.",
+      "extra": "Übrig: {energy} Energie, {power} Macht. Der Pool leert sich am Ende der Phase.",
+      "pay": "Bezahlen",
+      "key": "Leertaste",
+      "customize": "Anpassen",
+      "useProposed": "Vorgeschlagene Zahlung",
+      "cancel": "Abbrechen",
+      "use": "{name} zum Bezahlen nutzen",
+      "mark": {
+        "exhaust": "erschöpft",
+        "both": "erschöpft, dann recycelt",
+        "recycle": "recycelt"
+      }
+    }
+  },
+  "PlaySwu": {
+    "title": "Star Wars: Unlimited spielen",
+    "description": "Spiele Star Wars: Unlimited im Browser gegen die KI, mit deinen eigenen Decks oder einem automatischen Deck. Die Engine wendet die Regeln des Premier-Formats an und nennt jede davon.",
+    "lobby": {
+      "whoTitle": "Wer spielt?",
+      "resumeHint": "{players}, {moves, plural, one {# Zug gespielt} other {# Züge gespielt}}.",
+      "sets": "Die Engine spielt alle neun Sets, von Spark of Rebellion bis Heroes of Mandalore, im Premier-Format.",
+      "watchInfo": "Du schaust der Partie zu, ohne mitzuspielen: Die Hände der KIs sind sichtbar, und du kannst pausieren.",
+      "about": "Die Joutes-Engine kennt die Regeln von Star Wars: Unlimited: Sie bietet nur an, was erlaubt ist, wickelt jede Fähigkeit ab und nennt im Protokoll die angewandte Regel.",
+      "deckAuto": "Automatisches Deck um einen Anführer",
+      "deckRandomHint": "In jeder Partie ein zufällig gezogener Anführer",
+      "deckSearch": "Deckname, Anführer, Autor…",
+      "hostNeedDeck": "Wähle zuerst dein Deck, direkt darüber."
+    },
+    "sim": {
+      "fairness": "Dein Deck wechselt alle zwei Partien den Platz, und die Initiative wird in jeder Partie ausgelost. Leicht spielt fast zufällig: Es taugt nicht, um ein Deck zu beurteilen.",
+      "about1": "Die Chancen deines Decks, wenn die Joutes-KI es spielt. Die KI liest die Partie mit einem einfachen Raster (Basen, Einheiten im Spiel, Ressourcen, Handkarten) und kennt den Plan eines Decks nicht.",
+      "about2": "Sie bevorzugt direkte, aggressive Decks und unterschätzt Kontrolle und Kombos. Vergleiche lieber zwei Versionen desselben Decks miteinander als mit Turnierergebnissen.",
+      "first": "Mit der Initiative",
+      "second": "Ohne die Initiative",
+      "turnsValue": "{count} Runden",
+      "winTurns": "Siege in {count} Runden",
+      "score": "Verbleibende LP der Basen",
+      "byOpponentHint": "Nach Anführer gruppiert. Unter {count} Partien ist die Zahl ausgegraut.",
+      "opponentLegend": "Gegnerischer Anführer",
+      "startsColumn": "Initiative",
+      "scoreColumn": "Basen",
+      "turnsColumn": "Runden",
+      "sourceHint": {
+        "auto": "Ein zufällig gebautes Deck um jeden Anführer"
+      }
+    },
+    "arena": {
+      "ground": "Bodenarena",
+      "space": "Weltraumarena"
+    },
+    "round": "Runde {round}",
+    "phase": {
+      "setup": "Aufbau",
+      "action": "Aktionsphase",
+      "regroup": "Neuordnungsphase",
+      "over": "Partie beendet"
+    },
+    "stat": {
+      "hand": "Hand",
+      "deck": "Deck",
+      "discard": "Ablage",
+      "resources": "Ressourcen",
+      "resourcesValue": "{ready} von {total} bereit",
+      "credits": "Credits",
+      "force": "Macht"
+    },
+    "initiative": "Initiative",
+    "initiativeTaken": "Initiative genommen",
+    "tag": {
+      "exhausted": "erschöpft",
+      "deployed": "aufgestellt",
+      "attacking": "Greift an"
+    },
+    "leader": {
+      "action": "Aktion",
+      "deploy": "Aufstellen",
+      "deployPilot": "Als Pilot aufstellen"
+    },
+    "life": "{left} / {total} LP",
+    "baseOf": "Basis von {name}",
+    "captives": "{count} gefangen",
+    "cost": "Aktuelle Kosten: {cost}",
+    "ask": {
+      "cancel": "Abbrechen",
+      "pickTarget": "Wähle das Ziel: Erlaubt ist, was rot umrandet ist.",
+      "turnHint": "{ready, plural, =0 {Keine Ressource bereit} one {# Ressource bereit} other {# Ressourcen bereit}} · spiele eine Karte, greife an oder nutze deinen Anführer."
+    },
+    "pile": {
+      "discardOf": "Ablage von {name}",
+      "resourcesOf": "Ressourcen von {name}",
+      "empty": "Keine Karte."
+    },
+    "inspect": {
+      "power": "Stärke",
+      "hp": "LP",
+      "damage": "{damage} Schaden erlitten",
+      "keywords": "Schlüsselwörter",
+      "upgrades": "Aufwertungen",
+      "captives": "Gefangene Karten",
+      "unitSide": "Einheitenseite des Anführers",
+      "unsupported": "Die Engine kann diese Karte noch nicht spielen."
+    },
+    "kw": {
+      "ambush": "Hinterhalt",
+      "grit": "Zähigkeit",
+      "overwhelm": "Überwältigen",
+      "raid": "Überfall {n}",
+      "restore": "Wiederherstellen {n}",
+      "saboteur": "Saboteur",
+      "sentinel": "Wächter",
+      "shielded": "Abgeschirmt",
+      "hidden": "Verborgen",
+      "support": "Unterstützung",
+      "exploit": "Ausbeuten {n}",
+      "piloting": "Pilotieren {n}",
+      "plot": "Komplott",
+      "fortify": "Befestigen"
+    }
+  },
+  "Mobile": {
+    "Play": {
+      "hand": {
+        "touchHint": "Tippe auf eine Karte, um sie groß zu sehen; halte sie gedrückt, um sie auf den Tisch zu ziehen.",
+        "where": "Wo soll {name} gespielt werden? Tippe auf einen markierten Platz."
+      },
+      "table": {
+        "turnShort": "Zug"
+      },
+      "panel": {
+        "open": "Seitenleiste öffnen",
+        "fold": "Seitenleiste einklappen",
+        "yourMove": "Du bist dran",
+        "pinned": "Geöffnet",
+        "auto": "Öffnet sich, wenn du handeln musst",
+        "back": "Zurück"
+      },
+      "lobby": {
+        "aiHint": "Sofort, auf deinem Handy, auch offline.",
+        "titleSwu": "Star Wars: Unlimited spielen",
+        "swuTable": "Star Wars: Unlimited"
+      },
+      "retry": "Erneut versuchen",
+      "room": {
+        "share": "Link teilen",
+        "codeLabel": "Tischcode",
+        "qr": "QR-Code des Tisches",
+        "invite": "Lass diesen QR-Code im Spielen-Tab der App scannen oder teile den Link: Er öffnet sich auch im Browser. Nach dem Start kann man damit zuschauen.",
+        "unreachableHint": "Die Partie läuft, aber der Spielserver antwortet nicht. Versuch es gleich noch einmal."
+      },
+      "remote": {
+        "unreachableHint": "Der Server des Gastgebers antwortet nicht, oder die Einladung ist abgelaufen. Das Handy akzeptiert nur https-Server."
+      },
+      "host": {
+        "tls": "In der App braucht der Server eine https-Adresse: Das Handy lehnt http-Adressen ab, auch im lokalen Netzwerk.",
+        "unreachable": "Server nicht erreichbar. Prüfe die Adresse und ob sie https verwendet.",
+        "needDeck": "Wähle zuerst dein Deck, direkt darüber."
+      },
+      "solo": {
+        "none": "Keine laufende Partie auf diesem Handy."
+      },
+      "prompt": {
+        "mulligan": "Tippe auf die Karten, die du beiseitelegen willst ({count} von {max})."
+      },
+      "payment": {
+        "customHint": "Tippe auf die Runen deiner Basis: erschöpfen, erschöpfen und recyceln, recyceln, nichts. Ein Siegel oder Gold aktivierst du mit einem Tippen, auf dem Tisch oder unten."
+      }
+    },
+    "PlaySwu": {
+      "roundShort": "R",
+      "ask": {
+        "pickTarget": "Tippe auf das Ziel: Rot umrandet ist erlaubt.",
+        "turnHint": "{ready, plural, =0 {Keine bereite Ressource} one {# bereite Ressource} other {# bereite Ressourcen}} · tippe auf eine Karte, um sie zu spielen, anzugreifen oder deinen Anführer zu nutzen. Lange drücken: Karte groß."
+      }
+    }
+  }
+}

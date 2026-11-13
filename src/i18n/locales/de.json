@@ -140,7 +140,8 @@
       "viewAll": "Alle ansehen",
       "empty": "Noch keine Beiträge.",
       "openOn": "Auf {{platform}} öffnen"
-    }
+    },
+    "play": "Spielen"
   },
   "events": {
     "title": "Events",
@@ -1476,11 +1477,11 @@
     "sectionMatches": "Partien",
     "joinAction": "Code scannen oder eingeben",
     "joinTitle": "Beitreten",
-    "joinHint": "Der Code sagt selbst, ob er ein Turnier oder eine Partie öffnet.",
+    "joinHint": "Der Code verrät selbst, ob er ein Turnier, eine Partie oder einen Spieltisch öffnet.",
     "joinCodeLabel": "Code oder Link",
     "joinCodePlaceholder": "Turniercode oder Partie-Link",
     "joinSubmit": "Beitreten",
-    "joinInvalidCode": "Dieser Code passt weder zu einem Turnier noch zu einer Partie.",
+    "joinInvalidCode": "Dieser Code passt zu keinem Turnier, keiner Partie und keinem Tisch.",
     "joinMatchLoginRequired": "Melde dich an, um einer Partie beizutreten.",
     "scanAction": "QR-Code scannen",
     "filters": {
@@ -1488,7 +1489,13 @@
       "from": "Ab",
       "to": "Bis",
       "clear": "Filter zurücksetzen"
-    }
+    },
+    "sectionTable": "Tisch",
+    "tableIntro": "Spiel gegen die KI, auch offline, oder online mit deinen Joutes-Decks. Die Engine wendet die Regeln an und erzählt jede Aktion.",
+    "tableSub": "Gegen die KI, online oder auf einem Server",
+    "tableResume": "Eine Partie gegen die KI wartet auf dich",
+    "tableEmpty": "Noch kein Spiel bietet den Tisch an.",
+    "joinTableNotFound": "Kein Tisch hat diesen Code."
   },
   "gameMatches": {
     "newAction": "Neue Partie",

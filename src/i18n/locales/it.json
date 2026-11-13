@@ -140,7 +140,8 @@
       "viewAll": "Vedi tutto",
       "empty": "Nessuna pubblicazione per ora.",
       "openOn": "Apri su {{platform}}"
-    }
+    },
+    "play": "Gioca"
   },
   "events": {
     "title": "Eventi",
@@ -1476,11 +1477,11 @@
     "sectionMatches": "Partite",
     "joinAction": "Scansiona o inserisci un codice",
     "joinTitle": "Unisciti",
-    "joinHint": "È il codice stesso a dire se apre un torneo o una partita.",
+    "joinHint": "Il codice dice da solo se apre un torneo, una partita o un tavolo di gioco.",
     "joinCodeLabel": "Codice o link",
     "joinCodePlaceholder": "Codice del torneo, o link della partita",
     "joinSubmit": "Unisciti",
-    "joinInvalidCode": "Questo codice non corrisponde né a un torneo né a una partita.",
+    "joinInvalidCode": "Questo codice non corrisponde a nessun torneo, partita o tavolo.",
     "joinMatchLoginRequired": "Accedi per unirti a una partita.",
     "scanAction": "Scansiona un QR code",
     "filters": {
@@ -1488,7 +1489,13 @@
       "from": "Dal",
       "to": "Al",
       "clear": "Azzera i filtri"
-    }
+    },
+    "sectionTable": "Tavolo",
+    "tableIntro": "Gioca contro l'IA, anche offline, o online con i tuoi mazzi Joutes. Il motore applica le regole e racconta ogni azione.",
+    "tableSub": "Contro l'IA, online o su un server",
+    "tableResume": "Una partita contro l'IA ti aspetta",
+    "tableEmpty": "Nessun gioco offre ancora il tavolo.",
+    "joinTableNotFound": "Nessun tavolo ha questo codice."
   },
   "gameMatches": {
     "newAction": "Nuova partita",

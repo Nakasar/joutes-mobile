@@ -212,6 +212,8 @@ export interface Game extends GameSummary {
     quizz?: boolean;
     /** Les publications de l'éditeur sont collectées : `GET /games/{id}/social-posts` répond. */
     socialFeed?: boolean;
+    /** Le mode Jouer (moteur de Joutes) : Riftbound et Star Wars: Unlimited. */
+    play?: boolean;
   };
   [key: string]: unknown;
 }

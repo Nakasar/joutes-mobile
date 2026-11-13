@@ -33,6 +33,8 @@ import { PlayGroupsExploreScreen } from "./screens/PlayGroupsExploreScreen";
 import { PlayGroupWishlistsScreen } from "./screens/PlayGroupWishlistsScreen";
 import { PlayersScreen } from "./screens/PlayersScreen";
 import { PlayScreen } from "./screens/PlayScreen";
+import { PlayLobbyScreen } from "./play/PlayLobbyScreen";
+import { RemoteGameScreen, SoloGameScreen, TableRoomScreen } from "./play/PlayGameScreens";
 import { PoliciesListScreen } from "./screens/PoliciesListScreen";
 import { PolicyDetailScreen } from "./screens/PolicyDetailScreen";
 import { QuizScreen } from "./screens/QuizScreen";
@@ -69,7 +71,13 @@ function Shell() {
   // L'éditeur de deck prend tout l'écran : sa barre d'action (« Ajouter des
   // cartes », « Enregistrer ») tient la place de la barre d'onglets.
   const location = useLocation();
-  const immersive = matchPath("/decks/:deckId/edit", location.pathname) !== null;
+  // La table de jeu aussi prend tout l'écran (partie contre l'IA, en ligne,
+  // sur un serveur) ; la salle d'attente d'une table garde la barre.
+  const immersive =
+    matchPath("/decks/:deckId/edit", location.pathname) !== null ||
+    matchPath("/play/:gameSlug/solo", location.pathname) !== null ||
+    matchPath("/play/:gameSlug/remote", location.pathname) !== null ||
+    matchPath("/play/:gameSlug/tables/:tableId", location.pathname) !== null;
 
   if (!ready) {
     return (
@@ -166,6 +174,10 @@ function Shell() {
                 <Route path="/trades" element={<TradesScreen />} />
                 <Route path="/trades/:tradeId" element={<TradeDetailScreen />} />
                 <Route path="/play" element={<PlayScreen />} />
+                <Route path="/play/:gameSlug" element={<PlayLobbyScreen />} />
+                <Route path="/play/:gameSlug/solo" element={<SoloGameScreen />} />
+                <Route path="/play/:gameSlug/remote" element={<RemoteGameScreen />} />
+                <Route path="/play/:gameSlug/tables/:tableId" element={<TableRoomScreen />} />
                 <Route
                   path="/game-matches/:matchId"
                   element={<GameMatchDetailScreen />}
