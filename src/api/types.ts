@@ -10,6 +10,7 @@ import type { CardFilterFacet } from "../lib/search-syntax";
 // calculs qui les lisent, dans un module porté depuis joutes-app : les répéter
 // ici en ferait deux définitions à tenir d'accord.
 import type { DeckCards, DeckCardInfo } from "../lib/deck-contents";
+import type { GameDeckBuilder } from "../lib/deck-zones";
 import type { UserShowcaseSectionState } from "../lib/user-showcase";
 import type { LairOpeningHours } from "../lib/lair-hours";
 import type { LairSectionState } from "../lib/lair-sections";
@@ -193,6 +194,8 @@ export interface Game extends GameSummary {
     playingTimeMinutes?: { min?: number; max?: number };
   };
   formats?: { name: string }[];
+  /** Zones et plafonds du deck builder, réglés depuis l'administration du site. */
+  deckBuilder?: GameDeckBuilder;
   stats?: { communityRating?: number; popularityScore?: number };
   /** Fonctionnalités activées pour ce jeu côté backend (toutes optionnelles/absentes = désactivées). */
   features?: {

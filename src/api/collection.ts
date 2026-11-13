@@ -44,6 +44,8 @@ export interface GameCollectionParams {
   type?: string;
   /** true = uniquement les cartes possédées, false = uniquement les manquantes, undefined = toutes. */
   owned?: boolean;
+  /** Facette `domain` : plusieurs valeurs séparées par des virgules. */
+  inDomain?: string;
 }
 
 /**
@@ -66,6 +68,7 @@ export function getGameCollection(
     setCode: params.setCode,
     type: params.type,
     owned: params.owned,
+    in_domain: params.inDomain,
   });
 }
 
@@ -178,4 +181,39 @@ export function exportCollection(
     scope: params.scope,
     search: params.scope === "search" ? params.search : undefined,
   });
+}
+
+/** Noms par requête : le plafond de la route `ownership`. */
+const OWNERSHIP_BATCH = 120;
+
+/**
+ * Exemplaires possédés, par nom de carte : la collection se compte toutes
+ * impressions confondues, comme dans l'éditeur de deck du site. Les noms partent
+ * par lots, la route en refusant plus de 120 à la fois.
+ */
+export async function getOwnershipByName(
+  gameSlug: string,
+  names: string[],
+): Promise<Map<string, number>> {
+  const unique = [...new Set(names.filter(Boolean))];
+  const batches: string[][] = [];
+  for (let start = 0; start < unique.length; start += OWNERSHIP_BATCH) {
+    batches.push(unique.slice(start, start + OWNERSHIP_BATCH));
+  }
+
+  const owned = new Map<string, number>();
+  const results = await Promise.all(
+    batches.map((batch) =>
+      api.get<{ ownership?: Record<string, { total?: number }> }>(
+        endpoints.collection.ownership(gameSlug),
+        { names: batch },
+      ),
+    ),
+  );
+  results.forEach((result, index) => {
+    for (const name of batches[index]) {
+      owned.set(name, result.ownership?.[name]?.total ?? 0);
+    }
+  });
+  return owned;
 }

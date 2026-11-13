@@ -33,42 +33,60 @@ export function isDeckZoneKey(key: string): key is DeckZoneKey {
 }
 
 /**
- * Contrainte de taille d'une zone.
+ * Une zone telle qu'elle est **réglée** : deux bornes, et rien d'autre.
  *
- * `exact` veut dire « ni plus ni moins » (12 runes), `min` un plancher (40
- * cartes au minimum), `max` un plafond (10 cartes de réserve au plus). Une zone
- * sans contrainte — `none` — ne rend jamais le deck non conforme.
+ * `min` est un plancher, `max` un plafond ; les deux ensemble encadrent, égales
+ * elles imposent un compte exact (12 runes), absentes toutes deux elles ne
+ * contraignent rien. C'est la forme que le serveur sert dans
+ * `game.deckBuilder.zones`, réglée depuis l'administration du site.
  */
-export type DeckZoneBound = "exact" | "min" | "max" | "none";
-
 export type DeckZone = {
   key: DeckZoneKey;
   /** Libellé de référence, celui qu'écrit une liste en texte. */
   label: string;
   /** Libellé court, reconnu lui aussi en tête d'une liste collée. */
   short: string;
-  bound: DeckZoneBound;
-  /** Nombre visé par la contrainte ; absent quand `bound` vaut `none`. */
-  target?: number;
+  min?: number;
+  max?: number;
   /** La zone compte dans la courbe de coûts (le deck principal, en pratique). */
   curve?: boolean;
+  /**
+   * Zone dont le plancher et le plafond comptent aussi les cartes de celle-ci.
+   *
+   * Le champion choisi de Riftbound est mis de côté, mais il fait partie des
+   * 40 cartes du deck principal : un deck de 39 cartes plus son champion est
+   * conforme.
+   */
+  countsTowards?: DeckZoneKey;
+  /** Légendes ajoutées par Neeko (`deck-extra-legends.ts`) : la règle affichée le dit. */
+  extraLegends?: number;
+};
+
+/** Réglages du deck builder d'un jeu, tels que le serveur les sert sur la fiche du jeu. */
+export type GameDeckBuilder = {
+  zones?: DeckZone[];
+  /** Plafond d'exemplaires d'une même carte, toutes zones confondues. */
+  maxCopies?: number;
+  totalMin?: number;
+  totalMax?: number;
+  unlimitedTypes?: string[];
 };
 
 /** Zones de Riftbound, telles que les impose le format Standard. */
 const RIFTBOUND_ZONES: DeckZone[] = [
-  { key: "legend", label: "Légende", short: "Légende", bound: "exact", target: 1 },
-  { key: "champions", label: "Champions", short: "Champions", bound: "max", target: 3 },
-  { key: "maindeck", label: "Deck principal", short: "Principal", bound: "min", target: 40, curve: true },
-  { key: "runes", label: "Runes", short: "Runes", bound: "exact", target: 12 },
-  { key: "battlefields", label: "Battlefields", short: "Battlefields", bound: "exact", target: 3 },
-  { key: "sideboard", label: "Réserve", short: "Réserve", bound: "max", target: 10 },
+  { key: "legend", label: "Légende", short: "Légende", min: 1, max: 1 },
+  { key: "champions", label: "Champion choisi", short: "Champion", min: 1, max: 1, countsTowards: "maindeck" },
+  { key: "maindeck", label: "Deck principal", short: "Principal", min: 40, curve: true },
+  { key: "runes", label: "Runes", short: "Runes", min: 12, max: 12 },
+  { key: "battlefields", label: "Battlefields", short: "Battlefields", min: 3, max: 3 },
+  { key: "sideboard", label: "Réserve", short: "Réserve", max: 10 },
 ];
 
 /** Zones par défaut, pour tout jeu qui n'en déclare pas de particulières. */
 const GENERIC_ZONES: DeckZone[] = [
-  { key: "maindeck", label: "Deck principal", short: "Principal", bound: "min", target: 60, curve: true },
-  { key: "sideboard", label: "Réserve", short: "Réserve", bound: "max", target: 15 },
-  { key: "extra", label: "Zone extra", short: "Extra", bound: "max", target: 15 },
+  { key: "maindeck", label: "Deck principal", short: "Principal", min: 60, curve: true },
+  { key: "sideboard", label: "Réserve", short: "Réserve", max: 15 },
+  { key: "extra", label: "Zone extra", short: "Extra", max: 15 },
 ];
 
 /**
@@ -79,8 +97,25 @@ const GENERIC_ZONES: DeckZone[] = [
  * n'expose pas les garde en base — elles réapparaîtront si le jeu la déclare à
  * nouveau — mais ne les montre pas.
  */
-export function getDeckZones(gameSlug?: string | null): DeckZone[] {
-  return gameSlug === "riftbound" ? RIFTBOUND_ZONES : GENERIC_ZONES;
+export function getDeckZones(
+  game?: { slug?: string | null; deckBuilder?: GameDeckBuilder | null } | string | null,
+): DeckZone[] {
+  if (typeof game === "string" || game === null || game === undefined) {
+    return game === "riftbound" ? RIFTBOUND_ZONES : GENERIC_ZONES;
+  }
+  // Un jeu réglé depuis l'administration passe devant les tables livrées ; une
+  // liste vide n'est pas un réglage et retombe sur elles.
+  const configured = game.deckBuilder?.zones?.filter((zone) => isDeckZoneKey(zone.key));
+  if (configured && configured.length > 0) return configured;
+  return game.slug === "riftbound" ? RIFTBOUND_ZONES : GENERIC_ZONES;
+}
+
+/**
+ * Les zones dont les cartes s'ajoutent au compte de `zone` pour juger de sa
+ * taille — le champion choisi, pour le deck principal de Riftbound.
+ */
+export function contributingZones(zones: DeckZone[], zone: DeckZone): DeckZone[] {
+  return zones.filter((other) => other.countsTowards === zone.key && other.key !== zone.key);
 }
 
 /** La zone visée par défaut : celle où va le gros du deck. */
@@ -99,29 +134,34 @@ export function findDeckZone(zones: DeckZone[], key: string): DeckZone | undefin
  * n'est pas un deck illégal.
  */
 export function isZoneCompliant(zone: DeckZone, count: number): boolean {
-  if (zone.bound === "none" || zone.target === undefined) {
-    return true;
-  }
-
-  switch (zone.bound) {
-    case "exact":
-      return count === zone.target;
-    case "min":
-      return count >= zone.target;
-    case "max":
-      return count <= zone.target;
-  }
+  if (zone.min !== undefined && count < zone.min) return false;
+  if (zone.max !== undefined && count > zone.max) return false;
+  return true;
 }
 
 /**
- * Compteur affiché dans l'en-tête d'une zone : « 12 / 12 » quand il y a une
- * cible à atteindre ou à ne pas dépasser, le seul nombre sinon — un plancher se
- * lit mal en fraction, un deck de 58 cartes sur 40 n'est pas « 58 / 40 ».
+ * Compteur affiché dans l'en-tête d'une zone : « 12 / 12 » quand il y a un
+ * plafond, le seul nombre sinon — un plancher se lit mal en fraction, un deck
+ * de 58 cartes sur 40 n'est pas « 58 / 40 ». « 39 + 1 = 40 » quand une zone liée
+ * (le champion choisi) compte dans celle-ci : `count` est alors le total jugé.
  */
-export function zoneCounterLabel(zone: DeckZone, count: number): string {
-  if (zone.target !== undefined && (zone.bound === "exact" || zone.bound === "max")) {
-    return `${count} / ${zone.target}`;
-  }
+export function zoneCounterLabel(zone: DeckZone, count: number, contributed = 0): string {
+  const own = contributed > 0 ? `${count - contributed} + ${contributed}` : String(count);
+  if (zone.max !== undefined) return `${own} / ${zone.max}`;
+  return contributed > 0 ? `${own} = ${count}` : own;
+}
 
-  return String(count);
+/** La règle d'une zone, à traduire : quelle phrase, et avec quels nombres. */
+export function zoneRuleKey(zone: Pick<DeckZone, "min" | "max">): {
+  key: "exact" | "range" | "min" | "max" | "none";
+  min?: number;
+  max?: number;
+} {
+  const { min, max } = zone;
+  if (min !== undefined && max !== undefined) {
+    return min === max ? { key: "exact", min } : { key: "range", min, max };
+  }
+  if (min !== undefined) return { key: "min", min };
+  if (max !== undefined) return { key: "max", max };
+  return { key: "none" };
 }

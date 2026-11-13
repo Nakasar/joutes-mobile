@@ -28,6 +28,7 @@ import { deckCoverPosition, resolveDeckCover } from "../lib/deck-cover";
 import { useSearchParamState } from "../hooks/useSearchParamState";
 import { deckCardIds, type DeckCardInfo } from "../lib/deck-contents";
 import { getDeckZones } from "../lib/deck-zones";
+import { zonesForDeck } from "../lib/deck-extra-legends";
 import { useAuth } from "../store/auth";
 
 const TABS = ["description", "guide", "cards", "comments"] as const;
@@ -77,7 +78,10 @@ export function DeckDetailScreen() {
     () => (deck?.gameId ? getGame(deck.gameId) : Promise.resolve(null)),
     [deck?.gameId],
   );
-  const zones = useMemo(() => getDeckZones(game.data?.slug), [game.data?.slug]);
+  const zones = useMemo(
+    () => zonesForDeck(getDeckZones(game.data), deck?.cards),
+    [game.data, deck?.cards],
+  );
 
   const cardIds = useMemo(() => deckCardIds(deck?.cards), [deck?.cards]);
   const catalog = useApi(
@@ -251,6 +255,7 @@ export function DeckDetailScreen() {
                 <DeckZoneCards
                   key={zone.key}
                   zone={zone}
+                  zones={zones}
                   cards={deck.cards}
                   cardsById={cardsById}
                 />
