@@ -20,6 +20,7 @@ import {
   QuizIcon,
   ScrollIcon,
   SwordsIcon,
+  TrophyIcon,
 } from "../components/icons";
 import { isPlayGame } from "../api/play";
 import { StatusView } from "../components/StatusView";
@@ -125,6 +126,14 @@ export function GameScreen() {
         to: `/games/${gameSlug}/rules`,
         icon: <BookIcon size={21} />,
         label: t("gameHub.rules"),
+      });
+    }
+    if (game.features?.meta) {
+      list.push({
+        key: "meta",
+        to: `/games/${gameSlug}/meta`,
+        icon: <TrophyIcon size={21} />,
+        label: t("gameHub.meta"),
       });
     }
     if (game.features?.deckChecker) {

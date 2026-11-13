@@ -5,6 +5,8 @@ import { TabBar } from "./components/TabBar";
 import { CardDetailScreen } from "./screens/CardDetailScreen";
 import { CollectionGameScreen } from "./screens/CollectionGameScreen";
 import { CollectionScreen } from "./screens/CollectionScreen";
+import { BoosterScreen } from "./screens/BoosterScreen";
+import { BoostersScreen } from "./screens/BoostersScreen";
 import { DeckCheckerScreen } from "./screens/DeckCheckerScreen";
 import { DeckDetailScreen } from "./screens/DeckDetailScreen";
 import { DeckEditScreen } from "./screens/DeckEditScreen";
@@ -16,6 +18,7 @@ import { GameCardsScreen } from "./screens/GameCardsScreen";
 import { GameProductsScreen } from "./screens/GameProductsScreen";
 import { GameQuizzesScreen } from "./screens/GameQuizzesScreen";
 import { GameMatchDetailScreen } from "./screens/GameMatchDetailScreen";
+import { GameMetaScreen } from "./screens/GameMetaScreen";
 import { GameScreen } from "./screens/GameScreen";
 import { GameSocialScreen } from "./screens/GameSocialScreen";
 import { GamesScreen } from "./screens/GamesScreen";
@@ -23,6 +26,7 @@ import { HomeScreen } from "./screens/HomeScreen";
 import { LairDetailScreen } from "./screens/LairDetailScreen";
 import { LairsScreen } from "./screens/LairsScreen";
 import { LoginScreen } from "./screens/LoginScreen";
+import { MetaTournamentScreen } from "./screens/MetaTournamentScreen";
 import { MySellListScreen } from "./screens/MySellListScreen";
 import { NewsDetailScreen } from "./screens/NewsDetailScreen";
 import { NewsScreen } from "./screens/NewsScreen";
@@ -138,6 +142,11 @@ function Shell() {
                   element={<GameQuizzesScreen />}
                 />
                 <Route path="/games/:gameSlug/social" element={<GameSocialScreen />} />
+                <Route path="/games/:gameSlug/meta" element={<GameMetaScreen />} />
+                <Route
+                  path="/games/:gameSlug/meta/tournaments/:date/:slug"
+                  element={<MetaTournamentScreen />}
+                />
                 <Route
                   path="/games/:gameSlug/quizzes/:quizId"
                   element={<QuizScreen />}
@@ -153,6 +162,14 @@ function Shell() {
                     d'un jeu de figurines *est* sa collection, annotée de ce
                     qu'on possède. Les deux chemins existent parce que les deux
                     lectures existent — explorer un jeu, ou suivre sa gamme. */}
+                <Route
+                  path="/collection/:gameSlug/boosters"
+                  element={<BoostersScreen />}
+                />
+                <Route
+                  path="/collection/:gameSlug/boosters/:boosterId"
+                  element={<BoosterScreen />}
+                />
                 <Route
                   path="/collection/:gameSlug/products"
                   element={<GameProductsScreen />}

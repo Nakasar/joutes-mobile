@@ -10584,3 +10584,369 @@ html.qr-scanning #root {
   white-space: nowrap;
   font-size: 14px;
 }
+
+/* ---- Ajouter un ami ---- */
+
+.form-success {
+  color: var(--accent);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.friend-row__actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.friend-code {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.friend-code .section-label {
+  align-self: stretch;
+}
+
+.friend-code__qr {
+  width: 200px;
+  height: 200px;
+  border-radius: 12px;
+  border: 4px solid var(--border);
+}
+
+.friend-code__qr--empty {
+  border: 1px dashed var(--border);
+}
+
+.friend-code__value {
+  font-family: var(--font-mono, monospace);
+  font-size: 18px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  border: 0;
+  cursor: pointer;
+}
+
+.friend-code__hint {
+  text-align: center;
+  font-size: 12px;
+  margin: 0;
+}
+
+/* ---- Boosters ---- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.booster-row__cover {
+  width: 40px;
+  height: 56px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--surface-2);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.booster-row__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.booster-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+}
+
+.booster-summary__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.booster-summary__label {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.booster-summary__value {
+  margin: 2px 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.booster-scan {
+  margin-top: 14px;
+}
+
+.booster-scan__hint {
+  text-align: center;
+  margin-top: 6px;
+}
+
+.booster-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 8px;
+  text-align: left;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.booster-card--result {
+  background: var(--surface-2);
+}
+
+.booster-card__img {
+  width: 40px;
+  height: 56px;
+  flex: none;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.booster-card__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.booster-card__body p {
+  margin: 0;
+}
+
+.booster-card__name {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.booster-danger {
+  margin-top: 24px;
+}
+
+/* Scan à la caméra : plein écran, la vidéo au centre, les actions en bas. */
+.booster-scanner {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  background: #000;
+}
+
+.booster-scanner__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: calc(var(--safe-top) + 10px) 12px 8px;
+}
+
+.booster-scanner__round {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.booster-scanner__round--on {
+  color: #000;
+  background: #fff;
+}
+
+.booster-scanner__round--empty {
+  background: none;
+}
+
+.booster-scanner__titles {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.booster-scanner__title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.booster-scanner__subtitle {
+  font-size: 12px;
+  opacity: 0.7;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.booster-scanner__view {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  background: #050505;
+}
+
+.booster-scanner__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.booster-scanner__guide {
+  position: absolute;
+  pointer-events: none;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+}
+
+.booster-scanner__guide--doubt {
+  border-color: #fbbf24;
+}
+
+.booster-scanner__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 0 24px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.booster-scanner__overlay--dim {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.booster-scanner__status {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  max-width: calc(100% - 32px);
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.75);
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.booster-scanner__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px calc(var(--safe-bottom) + 14px);
+  color: var(--text);
+  background: var(--bg);
+  border-radius: 18px 18px 0 0;
+}
+
+.booster-scanner__panel--doubt {
+  max-height: 60%;
+  overflow-y: auto;
+}
+
+.booster-scanner__panel p {
+  margin: 0;
+}
+
+.booster-scanner__panel-title {
+  margin: 0 0 4px;
+  font-size: 16px;
+}
+
+.booster-scanner__candidates {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.booster-scanner__added {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.booster-scanner__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.booster-scanner__row > .btn {
+  flex: 1;
+}
+
+.booster-scanner__done {
+  margin-left: auto;
+}
+
+.booster-scanner__count {
+  font-size: 12px;
+}
+
+.meta-link {
+  color: inherit;
+  text-decoration: none;
+}

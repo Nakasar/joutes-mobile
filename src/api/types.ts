@@ -214,7 +214,13 @@ export interface Game extends GameSummary {
     socialFeed?: boolean;
     /** Le mode Jouer (moteur de Joutes) : Riftbound et Star Wars: Unlimited. */
     play?: boolean;
+    /** La méta des decks de tournoi est ouverte : `GET /games/{id}/meta` répond. */
+    meta?: boolean;
   };
+  /** Types de booster réglés dans l'administration ; absent = liste livrée. */
+  boosterTypes?: { key: string; label?: string }[];
+  /** Langues des cartes du jeu ; absent = langue libre. */
+  languages?: string[];
   [key: string]: unknown;
 }
 
