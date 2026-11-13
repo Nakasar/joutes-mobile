@@ -1,0 +1,658 @@
+{
+  "Play": {
+    "title": "Gioca a Riftbound",
+    "description": "Gioca a Riftbound nel browser: contro l'IA, online con i tuoi mazzi o sul server di un organizzatore. Il motore applica le regole e cita ciascuna di esse.",
+    "back": "Torna al portale del gioco",
+    "backToLobby": "Torna alla sala di gioco",
+    "status": {
+      "loading": "Caricamento del tavolo…",
+      "error": "Impossibile caricare il tavolo.",
+      "reconnecting": "Connessione persa, nuovo tentativo…"
+    },
+    "mode": {
+      "duel": "Duello",
+      "ffa3": "Tutti contro tutti a 3",
+      "ffa4": "Tutti contro tutti a 4",
+      "teams": "Squadre 2 contro 2"
+    },
+    "modeHint": {
+      "duel": "2 giocatori, 8 punti",
+      "ffa3": "3 giocatori, 3 campi di battaglia",
+      "ffa4": "4 giocatori, 3 campi di battaglia",
+      "teams": "2 squadre da 2, 11 punti"
+    },
+    "level": {
+      "easy": "Facile",
+      "normal": "Normale",
+      "hard": "Difficile"
+    },
+    "kind": {
+      "unit": "Unità",
+      "gear": "Equipaggiamento",
+      "spell": "Magia",
+      "rune": "Runa",
+      "legend": "Leggenda",
+      "battlefield": "Campo di battaglia"
+    },
+    "domain": {
+      "fury": "Furia",
+      "calm": "Calma",
+      "mind": "Mente",
+      "body": "Corpo",
+      "chaos": "Caos",
+      "order": "Ordine"
+    },
+    "tableStatus": {
+      "waiting": "In attesa",
+      "playing": "In corso",
+      "finished": "Terminata",
+      "cancelled": "Annullata"
+    },
+    "error": {
+      "UNAUTHENTICATED": "Accedi per farlo.",
+      "OFFLINE": "Il gioco online non è disponibile al momento.",
+      "NOT_FOUND": "Questo tavolo non esiste.",
+      "FORBIDDEN": "Solo chi ospita il tavolo può farlo.",
+      "INVALID": "Richiesta non valida.",
+      "INVALID_DECK": "Questo mazzo non può essere giocato.",
+      "FULL": "Il tavolo è al completo.",
+      "ALREADY_SEATED": "Sei già seduto a questo tavolo.",
+      "NOT_FULL": "Ci sono ancora posti liberi.",
+      "NOT_WAITING": "La partita è già iniziata.",
+      "SERVER": "Il server di gioco non ha risposto. Riprova tra un momento."
+    },
+    "card": {
+      "hidden": "Carta nascosta",
+      "hiddenHint": "Non puoi vedere questa carta.",
+      "inspect": "Vedi {name}",
+      "attacker": "Attaccante",
+      "defender": "Difensore",
+      "stunned": "Stordita",
+      "exhausted": "Esaurita",
+      "buffed": "Ha un potenziamento",
+      "might": "Potenza {might}, danni subiti {damage}",
+      "unsupported": "Il motore non sa ancora giocare questa carta."
+    },
+    "choices": {
+      "filter": "Filtra le scelte",
+      "none": "Nessuna scelta corrisponde."
+    },
+    "zone": {
+      "baseOf": "Base di {name}",
+      "myBase": "La mia base",
+      "hand": "La mia mano",
+      "champion": "Campione",
+      "emptyHand": "La tua mano è vuota.",
+      "trashOf": "Scarti di {name}",
+      "trashHint": "Le carte scartate, dalla più vecchia alla più recente.",
+      "banish": "Carte esiliate",
+      "empty": "Nessuna carta."
+    },
+    "bf": {
+      "controlled": "Controllato da {name}",
+      "contested": "Conteso da {name}",
+      "free": "Libero",
+      "showdown": "Confronto"
+    },
+    "player": {
+      "you": "tu",
+      "turn": "Il suo turno",
+      "deciding": "Sta pensando",
+      "away": "Disconnesso",
+      "points": "{points} / {max} punti",
+      "hand": "Mano",
+      "deck": "Mazzo",
+      "runes": "Rune",
+      "runesReady": "{ready, plural, one {# pronta} other {# pronte}} su {total}",
+      "runeDeck": "Mazzo delle rune",
+      "pool": "Riserva",
+      "energy": "{count} Energia",
+      "trash": "Scarti ({count})",
+      "trashLabel": "Scarti"
+    },
+    "prompt": {
+      "onTable": "Scegli sul tavolo: ciò che è evidenziato è permesso.",
+      "mulligan": "Clicca le carte da mettere da parte ({count} su {max}).",
+      "keepHand": "Tengo la mano",
+      "setAside": "{count, plural, one {Metti # carta da parte} other {Metti # carte da parte}}",
+      "waiting": "In attesa…",
+      "waitingFor": "In attesa di {name}…"
+    },
+    "chain": {
+      "title": "Catena",
+      "pending": "in dichiarazione"
+    },
+    "table": {
+      "quit": "Lascia il tavolo",
+      "turn": "Turno {turn}"
+    },
+    "journal": {
+      "title": "Registro",
+      "empty": "La partita comincia.",
+      "rule": "Apri la regola {rule}",
+      "thisTurn": "Questo turno",
+      "all": "Tutta la partita",
+      "setup": "Preparazione"
+    },
+    "pace": {
+      "telling": "Il tavolo mostra cosa è appena successo…",
+      "remaining": "ancora {count}",
+      "skip": "Mostra tutto",
+      "settings": "Ritmo della partita",
+      "speed": {
+        "slow": "Lento",
+        "normal": "Normale",
+        "fast": "Veloce",
+        "instant": "Istantaneo"
+      },
+      "stops": "Fermati nei momenti chiave",
+      "stopsHint": "Carta giocata da un avversario, fine del combattimento, punti segnati, inizio del tuo turno.",
+      "view": "Tavolo",
+      "views": {
+        "3d": "3D",
+        "flat": "Piatto"
+      },
+      "camera": "Telecamera sui combattimenti",
+      "cameraHint": "Si avvicina al campo di battaglia durante il combattimento, poi torna indietro.",
+      "effects": "Effetti delle carte",
+      "effectsHint": "Fulmini, comete, fiamme: ogni carta ha il suo effetto. Disattivati con «Istantaneo».",
+      "continue": "Continua",
+      "play": "Gioca il mio turno",
+      "key": "Spazio",
+      "yourTurn": "Tocca a te",
+      "sinceLastTurn": "Dal tuo ultimo turno:",
+      "autoPay": "Paga senza confermare",
+      "autoPayHint": "Il pagamento proposto parte subito, senza mostrarlo."
+    },
+    "concede": {
+      "action": "Arrenditi",
+      "confirm": "Abbandonare la partita?",
+      "yes": "Sì, mi arrendo",
+      "no": "Continua"
+    },
+    "result": {
+      "won": "Vittoria!",
+      "winner": "Vittoria di {names}",
+      "draw": "Pareggio",
+      "replay": "Gioca ancora",
+      "toLobby": "Torna alla sala di gioco"
+    },
+    "solo": {
+      "broken": "Questa partita non può più essere ripresa: il motore di gioco è stato aggiornato nel frattempo.",
+      "none": "Nessuna partita in corso in questo browser.",
+      "toLobby": "Scegli una partita"
+    },
+    "watch": {
+      "title": "Stai guardando la partita",
+      "pause": "Pausa",
+      "resume": "Riprendi",
+      "pauseLong": "Metti in pausa",
+      "resumeLong": "Riprendi la partita",
+      "step": "Evento successivo",
+      "paused": "In pausa · le IA aspettano",
+      "pausedHint": "Partita in pausa al turno {turn}. «Evento successivo» avanza passo dopo passo; registro e carte restano consultabili.",
+      "playingHint": "Le IA giocano al ritmo scelto. Spazio mette in pausa.",
+      "hands": "Mostra le mani delle IA",
+      "handOf": "Mano di {name}",
+      "stops": "Pausa automatica nei momenti chiave",
+      "stopsHint": "Carta o abilità giocata, fine del combattimento, punti segnati: la partita attende «Continua»."
+    },
+    "deck": {
+      "of": "Mazzo di {name}",
+      "random": "Mazzo automatico a caso",
+      "randomHint": "Una leggenda estratta a sorte a ogni partita",
+      "randomGroup": "A caso",
+      "shared": "Condivisi nei miei gruppi",
+      "public": "Pubblici",
+      "publicHint": "i più apprezzati · digita per cercare",
+      "publicSearched": "cercati su Joutes",
+      "meta": "Mazzi del meta",
+      "metaHint": "i più recenti · digita per cercare",
+      "completed": "completato per giocare",
+      "autoHint": "mazzo automatico",
+      "search": "Nome del mazzo, leggenda, autore…",
+      "count": "{count, plural, one {# mazzo} other {# mazzi}}",
+      "searching": "Ricerca…",
+      "none": "Nessun mazzo corrisponde.",
+      "label": "Mazzo",
+      "placeholder": "Scegli un mazzo",
+      "mine": "I miei mazzi",
+      "auto": "Mazzo automatico attorno a una leggenda",
+      "refused": "{count, plural, one {# mazzo non può essere giocato} other {# mazzi non possono essere giocati}}",
+      "problem": {
+        "noLegend": "Manca la leggenda.",
+        "noChampion": "Manca il campione scelto.",
+        "unknownCard": "Una carta non è riconosciuta.",
+        "noLeader": "Manca il leader.",
+        "noBase": "Manca la base."
+      }
+    },
+    "lobby": {
+      "whoTitle": "2. Chi gioca?",
+      "watch": "IA contro IA",
+      "watchHint": "Guarda le IA sfidarsi, con pausa.",
+      "youBadge": "tu",
+      "levelOf": "Livello di {name}",
+      "openLists": "Liste aperte",
+      "openListsHint": "Le IA conoscono le carte del mazzo avversario, ma non il loro ordine né quelle in mano. Altrimenti sanno solo ciò che è stato mostrato.",
+      "watchInfo": "Guardi la partita senza giocare: le mani delle IA sono visibili e puoi metterla in pausa in qualsiasi momento.",
+      "startWatch": "Guarda la partita",
+      "resumeWatchTitle": "Partita IA contro IA in corso",
+      "resumeWatchHint": "{mode}, {moves} mosse giocate.",
+      "you": "Giocatore",
+      "botName": "IA {number}",
+      "signIn": "Accedi",
+      "resumeTitle": "Partita in corso contro l'IA",
+      "resumeHint": "{mode}, {moves} mosse giocate.",
+      "resume": "Riprendi",
+      "discard": "Abbandona questa partita",
+      "modeTitle": "1. Modalità di gioco",
+      "signInForDecks": "Accedi per giocare con i tuoi mazzi.",
+      "sets": "Il motore gioca le espansioni Origins (OGN) e Proving Grounds (OGS).",
+      "ai": "IA",
+      "aiHint": "Subito, nel tuo browser.",
+      "online": "Online",
+      "onlineHint": "Crea un tavolo e invita con un link.",
+      "host": "Il mio server",
+      "hostHint": "Una partita ospitata da te o da un organizzatore.",
+      "level": "Livello",
+      "startSolo": "Avvia la partita",
+      "replaces": "Avviare una partita sostituisce quella in corso contro l'IA.",
+      "offline": "Il gioco online non è ancora aperto su Joutes. Puoi giocare contro l'IA o sul tuo server.",
+      "signInForOnline": "Accedi per creare o raggiungere un tavolo.",
+      "createTable": "Crea un tavolo",
+      "joinLabel": "Unisciti a un tavolo",
+      "joinPlaceholder": "Codice o link del tavolo",
+      "join": "Unisciti",
+      "tablesTitle": "I miei tavoli",
+      "noTables": "Nessun tavolo online per ora.",
+      "aboutTitle": "Come funziona",
+      "about": "Il motore di Joutes conosce le regole: ti propone solo ciò che è permesso, risolve gli effetti e racconta ogni evento citando la regola applicata. I testi del motore sono in francese per ora."
+    },
+    "room": {
+      "title": "Tavolo online · {mode}",
+      "code": "Codice {code}",
+      "invite": "Condividi il link di questa pagina per invitare giocatori. A partita avviata, lo stesso link permette di guardarla.",
+      "copy": "Copia il link",
+      "copied": "Link copiato",
+      "seats": "Posti ({taken} su {total})",
+      "host": "Ospite",
+      "freeSeat": "Posto libero",
+      "botSeat": "IA, livello {level}",
+      "addBot": "Aggiungi un'IA ({level})",
+      "start": "Avvia la partita",
+      "waitingPlayers": "{count, plural, one {Ancora # posto libero} other {Ancora # posti liberi}}",
+      "waitingHost": "In attesa dell'avvio da parte di chi ospita.",
+      "cancel": "Annulla il tavolo",
+      "leave": "Esci",
+      "remove": "Rimuovi",
+      "cancelled": "Questo tavolo è stato annullato.",
+      "join": "Siediti a questo tavolo",
+      "signIn": "Accedi per sederti.",
+      "sit": "Siediti",
+      "unreachableHint": "La partita è avviata, ma il server di gioco non risponde. Ricarica la pagina tra un momento."
+    },
+    "remote": {
+      "badLink": "Questo link di invito è incompleto.",
+      "unreachable": "Impossibile raggiungere la partita.",
+      "server": "Partita ospitata da {host}, fuori da Joutes.",
+      "unreachableHint": "Il server di chi ospita non risponde, oppure l'invito è scaduto. Da una pagina https, il browser rifiuta anche un server non cifrato (tranne sulla tua macchina)."
+    },
+    "host": {
+      "intro": "Avvia il server di gioco (joutes-server host) su una macchina, poi indica qui il suo indirizzo e il codice organizzatore. Ogni giocatore riceve un link di invito. Joutes non vede né l'indirizzo né il codice.",
+      "server": "Indirizzo del server",
+      "token": "Codice organizzatore",
+      "seat": "Posto {number}",
+      "guest": "Invitato",
+      "guestName": "Invitato {number}",
+      "guestNameLabel": "Nome del giocatore",
+      "guestDeck": "Link di un mazzo Joutes (vuoto: mazzo automatico)",
+      "needDeck": "Scegli prima il tuo mazzo, al passo 2.",
+      "create": "Crea la partita",
+      "refused": "Il server ha rifiutato la richiesta ({status}).",
+      "unreachable": "Server irraggiungibile. Controlla l'indirizzo, e che sia in https se questa pagina lo è.",
+      "created": "La partita è creata. Invia a ciascuno il suo link: dà accesso al suo posto, e solo a quello.",
+      "open": "Apri il mio tavolo",
+      "another": "Crea un'altra partita",
+      "spectators": "Spettatori",
+      "spectator": "Spettatore",
+      "tls": "Da joutes.app (https), il browser accetta solo un server in https, o avviato sulla tua macchina (localhost)."
+    },
+    "sim": {
+      "lobbyTitle": "Simula un mazzo",
+      "lobbyHint": "Fai giocare il tuo mazzo all'IA per decine di partite e guarda quante ne vince.",
+      "lobbyOpen": "Simula un mazzo",
+      "title": "Simula un mazzo",
+      "intro": "Fai giocare il tuo mazzo all'IA contro un avversario preciso o contro un mazzo estratto a caso a ogni partita, e guarda quante partite vince.",
+      "deckTitle": "1. Il tuo mazzo",
+      "opponentTitle": "2. Avversario",
+      "kind": {
+        "fixed": "Un mazzo preciso",
+        "pool": "A caso a ogni partita"
+      },
+      "kindHint": {
+        "fixed": "Lo stesso avversario per tutta la serie.",
+        "pool": "Un mazzo estratto da un insieme, partita dopo partita."
+      },
+      "poolIntro": "Ogni partita estrae un mazzo dall'insieme selezionato:",
+      "source": {
+        "meta": "Mazzi del meta",
+        "mine": "I miei mazzi",
+        "shared": "Condivisi nei miei gruppi",
+        "public": "Pubblici più apprezzati",
+        "auto": "Mazzi automatici"
+      },
+      "sourceHint": {
+        "meta": "I mazzi da torneo più recenti",
+        "mine": "Quelli che il motore sa giocare",
+        "shared": "I mazzi dei miei gruppi di gioco",
+        "public": "I 50 mazzi pubblici con più stelle",
+        "auto": "Un mazzo costruito a caso attorno a ogni leggenda"
+      },
+      "sourceShort": {
+        "meta": "il meta",
+        "mine": "i miei mazzi",
+        "shared": "i miei gruppi",
+        "public": "i pubblici",
+        "auto": "i mazzi automatici"
+      },
+      "weighted": "Estrai i mazzi del meta secondo la loro presenza nei tornei (una leggenda giocata il doppio esce il doppio delle volte)",
+      "poolSummary": "{count, plural, one {# mazzo possibile} other {# mazzi possibili}}. Il tuo mazzo è escluso dall'estrazione.",
+      "poolEmpty": "Seleziona almeno un insieme che contenga dei mazzi.",
+      "gamesTitle": "3. Partite",
+      "count": "Numero di partite",
+      "level": "Livello delle due IA",
+      "precision": "Precisione del risultato",
+      "points": "±{count} punti",
+      "precisionHint": "un risultato del 55 % significa tra {low} e {high} %",
+      "duration": "Durata stimata",
+      "durationHint": "in questo browser, con la scheda aperta",
+      "aboutSeconds": "circa {count} s",
+      "aboutMinutes": "circa {count} min",
+      "fairness": "Il tuo mazzo cambia posto ogni due partite e chi inizia si alterna a ogni partita. Facile gioca quasi a caso: non serve a giudicare un mazzo.",
+      "start": "Avvia {count} partite",
+      "saved": "I risultati vengono salvati man mano: chiudere la scheda conserva le partite già giocate.",
+      "historyTitle": "Le mie simulazioni",
+      "historyNone": "Ancora nessuna simulazione.",
+      "againstDeck": "contro {name}",
+      "againstPool": "contro {sources}",
+      "gamesOf": "{played}/{target} partite",
+      "aboutTitle": "Cosa misura questo numero",
+      "about1": "Le probabilità del tuo mazzo quando lo gioca l'IA di Joutes. L'IA legge la partita con una griglia semplice (punti, campi di battaglia, tavolo, carte in mano) e non conosce il piano di gioco di un mazzo.",
+      "about2": "Favorisce i mazzi diretti e aggressivi e sottovaluta controllo e combo. Confronta piuttosto due versioni dello stesso mazzo tra loro che con i winrate del meta.",
+      "back": "Simula un mazzo",
+      "autoDeck": "{legend} (mazzo automatico)",
+      "resultTitle": "{deck} contro {against}",
+      "resultHint": "{target} partite · IA {level} · {pool, plural, one {# mazzo avversario possibile} other {# mazzi avversari possibili}}",
+      "pause": "Metti in pausa",
+      "run": "Avvia",
+      "resume": "Riprendi",
+      "more": "Aggiungi {count} partite",
+      "again": "Rilancia con un altro mazzo",
+      "delete": "Elimina",
+      "deleteConfirm": "Eliminare questa simulazione e tutte le sue partite?",
+      "otherEngine": "Queste partite sono state giocate da un'altra versione del motore: «Rivedi» può mostrare una partita diversa.",
+      "progress": "{played} partite giocate su {target}",
+      "progressLabel": "Partite giocate",
+      "complete": "Serie terminata",
+      "warming": "prima partita in corso…",
+      "paused": "In pausa: «Riprendi» continua da dove la serie si è fermata",
+      "winsOf": "Vittorie di {deck}",
+      "record": "{wins} vittorie, {losses} sconfitte",
+      "rangeLabel": "Intervallo da {low} a {high} %, riferimento al 50 %",
+      "range": "Probabilmente tra <strong>{low} %</strong> e <strong>{high} %</strong>.",
+      "favored": "Il mazzo è favorito: anche il fondo dell'intervallo supera il 50 %.",
+      "unfavored": "Il mazzo è sfavorito: anche la cima dell'intervallo resta sotto il 50 %.",
+      "undecided": "Non abbastanza partite per decidere: l'intervallo comprende il 50 %.",
+      "first": "Iniziando",
+      "second": "Per secondo",
+      "tally": "{wins} vittorie su {games}",
+      "turns": "Durata media",
+      "turnsValue": "{count} turni",
+      "winTurns": "vittorie in {count} turni",
+      "score": "Punteggio medio",
+      "undecidedGames": "{count, plural, =0 {nessuna partita senza esito} one {# partita senza esito} other {# partite senza esito}}",
+      "byOpponent": "Per avversario",
+      "byOpponentHint": "Raggruppato per leggenda. Sotto le {count} partite, il numero è in grigio.",
+      "opponentLegend": "Leggenda avversaria",
+      "gamesColumn": "Partite",
+      "wlColumn": "V – S",
+      "winsColumn": "Vittorie",
+      "gamesList": "Partite",
+      "filter": "Filtra le partite",
+      "filters": {
+        "all": "Tutte",
+        "win": "Vittorie",
+        "loss": "Sconfitte"
+      },
+      "number": "N.",
+      "opponentColumn": "Avversario",
+      "startsColumn": "Inizia",
+      "resultColumn": "Risultato",
+      "scoreColumn": "Punteggio",
+      "turnsColumn": "Turni",
+      "startsMe": "il tuo mazzo",
+      "startsThem": "l'avversario",
+      "win": "Vittoria",
+      "loss": "Sconfitta",
+      "draw": "Senza esito",
+      "watch": "Rivedi",
+      "showMore": "Mostra altre partite",
+      "watchHint": "«Rivedi» riapre la stessa identica partita al tavolo spettatore, con pausa e mani visibili.",
+      "error": {
+        "UNAUTHENTICATED": "Accedi per simulare un mazzo: i risultati restano nel tuo account.",
+        "NOT_FOUND": "Questa simulazione non esiste.",
+        "INVALID": "Richiesta non valida.",
+        "INVALID_DECK": "Il motore non può giocare questo mazzo.",
+        "EMPTY_POOL": "Nessun mazzo avversario nell'insieme scelto.",
+        "SERVER": "Il server non ha risposto. Riprova tra un attimo.",
+        "ENGINE": "Il motore ha avuto un errore in una partita. Riavvia la serie; se succede di nuovo, segnalalo."
+      }
+    },
+    "hand": {
+      "play": "Gioca",
+      "playHere": "Gioca qui",
+      "hideHere": "Nascondi coperta",
+      "cancel": "Annulla",
+      "dropAnywhere": "Rilascia ovunque sul tavolo",
+      "where": "Dove giocare {name}? Clicca un punto evidenziato.",
+      "here": "Qui",
+      "playAt": "Gioca in: {place}",
+      "cost": "Costo:",
+      "whereSpell": "Una magia: rilasciala ovunque sul tavolo, poi scegli i bersagli.",
+      "whereList": "Si gioca in: {places}",
+      "base": "la tua base",
+      "battlefield": "campo di battaglia {n}"
+    },
+    "payment": {
+      "total": "Costo totale",
+      "energy": "Energia",
+      "anyPower": "Potere a scelta",
+      "cardPower": "Potere della carta",
+      "proposed": "Pagamento proposto",
+      "yours": "Il tuo pagamento",
+      "nothing": "Niente scelto.",
+      "rune": "Runa {domain}",
+      "alreadyExhausted": "già esaurita",
+      "givesEnergy": "1 Energia",
+      "givesPower": "1 {domain}",
+      "givesBoth": "1 Energia + 1 {domain}",
+      "source": "Risorsa",
+      "adds": "aggiunge la sua risorsa",
+      "customHint": "Clicca le rune della tua base: esaurire, esaurire poi riciclare, riciclare, niente. Un Sigillo o un Oro si usa con un clic, sul tavolo o qui sotto.",
+      "extra": "In eccesso: {energy} Energia, {power} Potere. La riserva si svuota alla fine della fase.",
+      "pay": "Paga",
+      "key": "Spazio",
+      "customize": "Personalizza",
+      "useProposed": "Pagamento proposto",
+      "cancel": "Annulla",
+      "use": "Usa {name} per pagare",
+      "mark": {
+        "exhaust": "esaurita",
+        "both": "esaurita poi riciclata",
+        "recycle": "riciclata"
+      }
+    }
+  },
+  "PlaySwu": {
+    "title": "Giocare a Star Wars: Unlimited",
+    "description": "Gioca a Star Wars: Unlimited nel browser contro l'IA, con i tuoi mazzi o con un mazzo automatico. Il motore applica le regole del formato Premier e cita ciascuna di esse.",
+    "lobby": {
+      "whoTitle": "Chi gioca?",
+      "resumeHint": "{players}, {moves, plural, one {# mossa giocata} other {# mosse giocate}}.",
+      "sets": "Il motore gioca tutte e nove le espansioni, da Spark of Rebellion a Heroes of Mandalore, nel formato Premier.",
+      "watchInfo": "Guardi la partita senza giocare: le mani delle IA sono visibili e puoi metterla in pausa.",
+      "about": "Il motore di Joutes conosce le regole di Star Wars: Unlimited: ti propone solo ciò che è permesso, risolve ogni abilità e cita nel registro la regola applicata.",
+      "deckAuto": "Mazzo automatico attorno a un leader",
+      "deckRandomHint": "Un leader estratto a sorte a ogni partita",
+      "deckSearch": "Nome del mazzo, leader, autore…",
+      "hostNeedDeck": "Scegli prima il tuo mazzo, qui sopra."
+    },
+    "sim": {
+      "fairness": "Il tuo mazzo cambia posto ogni due partite e l'iniziativa è sorteggiata a ogni partita. Facile gioca quasi a caso: non serve a giudicare un mazzo.",
+      "about1": "Le probabilità del tuo mazzo quando lo gioca l'IA di Joutes. L'IA legge la partita con una griglia semplice (basi, unità in gioco, risorse, carte in mano) e non conosce il piano di gioco di un mazzo.",
+      "about2": "Favorisce i mazzi diretti e aggressivi e sottovaluta controllo e combo. Confronta piuttosto due versioni dello stesso mazzo tra loro che con i risultati dei tornei.",
+      "first": "Con l'iniziativa",
+      "second": "Senza l'iniziativa",
+      "turnsValue": "{count} round",
+      "winTurns": "vittorie in {count} round",
+      "score": "PV rimasti alle basi",
+      "byOpponentHint": "Raggruppato per leader. Sotto le {count} partite, il numero è in grigio.",
+      "opponentLegend": "Leader avversario",
+      "startsColumn": "Iniziativa",
+      "scoreColumn": "Basi",
+      "turnsColumn": "Round",
+      "sourceHint": {
+        "auto": "Un mazzo costruito a caso attorno a ogni leader"
+      }
+    },
+    "arena": {
+      "ground": "Arena terrestre",
+      "space": "Arena spaziale"
+    },
+    "round": "Round {round}",
+    "phase": {
+      "setup": "Preparazione",
+      "action": "Fase di azione",
+      "regroup": "Fase di raggruppamento",
+      "over": "Partita terminata"
+    },
+    "stat": {
+      "hand": "Mano",
+      "deck": "Mazzo",
+      "discard": "Scarti",
+      "resources": "Risorse",
+      "resourcesValue": "{ready} pronte su {total}",
+      "credits": "Crediti",
+      "force": "Forza"
+    },
+    "initiative": "Iniziativa",
+    "initiativeTaken": "Iniziativa presa",
+    "tag": {
+      "exhausted": "esaurita",
+      "deployed": "schierato",
+      "attacking": "Attacca"
+    },
+    "leader": {
+      "action": "Azione",
+      "deploy": "Schierare",
+      "deployPilot": "Schierare come Pilota"
+    },
+    "life": "{left} / {total} PV",
+    "baseOf": "Base di {name}",
+    "captives": "{count, plural, one {# catturata} other {# catturate}}",
+    "cost": "Costo attuale: {cost}",
+    "ask": {
+      "cancel": "Annulla",
+      "pickTarget": "Scegli il bersaglio: è permesso ciò che è cerchiato di rosso.",
+      "turnHint": "{ready, plural, =0 {Nessuna risorsa pronta} one {# risorsa pronta} other {# risorse pronte}} · gioca una carta, attacca o usa il tuo leader."
+    },
+    "pile": {
+      "discardOf": "Scarti di {name}",
+      "resourcesOf": "Risorse di {name}",
+      "empty": "Nessuna carta."
+    },
+    "inspect": {
+      "power": "Potenza",
+      "hp": "PV",
+      "damage": "{damage, plural, one {# danno subito} other {# danni subiti}}",
+      "keywords": "Parole chiave",
+      "upgrades": "Miglioramenti",
+      "captives": "Carte catturate",
+      "unitSide": "Lato unità del leader",
+      "unsupported": "Il motore non sa ancora giocare questa carta."
+    },
+    "kw": {
+      "ambush": "Imboscata",
+      "grit": "Grinta",
+      "overwhelm": "Travolgere",
+      "raid": "Incursione {n}",
+      "restore": "Ripristino {n}",
+      "saboteur": "Sabotatore",
+      "sentinel": "Sentinella",
+      "shielded": "Schermata",
+      "hidden": "Nascosta",
+      "support": "Supporto",
+      "exploit": "Sfruttare {n}",
+      "piloting": "Pilotare {n}",
+      "plot": "Complotto",
+      "fortify": "Fortificare"
+    }
+  },
+  "Mobile": {
+    "Play": {
+      "hand": {
+        "touchHint": "Tocca una carta per vederla in grande, tieni premuto per trascinarla sul tavolo.",
+        "where": "Dove giocare {name}? Tocca uno spazio evidenziato."
+      },
+      "table": {
+        "turnShort": "Turno"
+      },
+      "panel": {
+        "open": "Apri il pannello",
+        "fold": "Chiudi il pannello",
+        "yourMove": "Tocca a te",
+        "pinned": "Aperto",
+        "auto": "Si apre quando devi agire",
+        "back": "Indietro"
+      },
+      "lobby": {
+        "aiHint": "Subito, sul tuo telefono, anche offline.",
+        "titleSwu": "Gioca a Star Wars: Unlimited",
+        "swuTable": "Star Wars: Unlimited"
+      },
+      "retry": "Riprova",
+      "room": {
+        "share": "Condividi il link",
+        "codeLabel": "Codice del tavolo",
+        "qr": "QR code del tavolo",
+        "invite": "Fai scansionare questo QR code dalla scheda Gioca dell'app, o condividi il link: si apre anche in un browser. Una volta iniziata la partita, permette di guardarla.",
+        "unreachableHint": "La partita è iniziata, ma il server di gioco non risponde. Riprova tra un attimo."
+      },
+      "remote": {
+        "unreachableHint": "Il server dell'host non risponde, o l'invito è scaduto. Il telefono accetta solo server https."
+      },
+      "host": {
+        "tls": "Nell'app il server deve avere un indirizzo https: il telefono rifiuta gli indirizzi http, anche sulla rete locale.",
+        "unreachable": "Server irraggiungibile. Verifica l'indirizzo e che usi https.",
+        "needDeck": "Scegli prima il tuo mazzo, qui sopra."
+      },
+      "solo": {
+        "none": "Nessuna partita in corso su questo telefono."
+      },
+      "prompt": {
+        "mulligan": "Tocca le carte da mettere da parte ({count} su {max})."
+      },
+      "payment": {
+        "customHint": "Tocca le rune della tua base: esaurire, esaurire poi riciclare, riciclare, niente. Un Sigillo o un Oro si attiva con un tocco, sul tavolo o qui sotto."
+      }
+    },
+    "PlaySwu": {
+      "roundShort": "R",
+      "ask": {
+        "pickTarget": "Tocca il bersaglio: ciò che è cerchiato di rosso è consentito.",
+        "turnHint": "{ready, plural, =0 {Nessuna risorsa pronta} one {# risorsa pronta} other {# risorse pronte}} · tocca una carta per giocarla, attaccare o usare il tuo leader. Pressione lunga: la carta in grande."
+      }
+    }
+  }
+}

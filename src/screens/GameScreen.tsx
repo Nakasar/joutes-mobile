@@ -19,7 +19,9 @@ import {
   LayersIcon,
   QuizIcon,
   ScrollIcon,
+  SwordsIcon,
 } from "../components/icons";
+import { isPlayGame } from "../api/play";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
@@ -141,6 +143,16 @@ export function GameScreen() {
         to: `/games/${gameSlug}/products`,
         icon: <BoxIcon size={21} />,
         label: t("gameHub.products"),
+      });
+    }
+    // Jouer contre l'IA ou en ligne : le moteur de Joutes ne connaît que
+    // Riftbound et Star Wars: Unlimited, et le jeu doit l'avoir activé.
+    if (game.features?.play && isPlayGame(gameSlug)) {
+      list.push({
+        key: "play",
+        to: `/play/${gameSlug}`,
+        icon: <SwordsIcon size={21} />,
+        label: t("gameHub.play"),
       });
     }
     if (game.features?.policies) {

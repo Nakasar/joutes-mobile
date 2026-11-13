@@ -140,7 +140,8 @@
       "viewAll": "See all",
       "empty": "No post yet.",
       "openOn": "Open on {{platform}}"
-    }
+    },
+    "play": "Play"
   },
   "events": {
     "title": "Events",
@@ -1476,11 +1477,11 @@
     "sectionMatches": "Games",
     "joinAction": "Scan or enter a code",
     "joinTitle": "Join",
-    "joinHint": "The code itself says whether it opens a tournament or a match.",
+    "joinHint": "The code itself tells whether it opens a tournament, a match or a game table.",
     "joinCodeLabel": "Code or link",
     "joinCodePlaceholder": "Tournament code, or match link",
     "joinSubmit": "Join",
-    "joinInvalidCode": "This code matches neither a tournament nor a match.",
+    "joinInvalidCode": "This code matches no tournament, match or table.",
     "joinMatchLoginRequired": "Sign in to join a match.",
     "scanAction": "Scan a QR code",
     "filters": {
@@ -1488,7 +1489,13 @@
       "from": "From",
       "to": "Until",
       "clear": "Clear filters"
-    }
+    },
+    "sectionTable": "Table",
+    "tableIntro": "Play against the AI, even offline, or online with your Joutes decks. The engine applies the rules and narrates every action.",
+    "tableSub": "Against the AI, online or on a server",
+    "tableResume": "A game against the AI is waiting",
+    "tableEmpty": "No game offers the table yet.",
+    "joinTableNotFound": "No table has this code."
   },
   "gameMatches": {
     "newAction": "New game",

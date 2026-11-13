@@ -1,0 +1,367 @@
+/*
+ * La table Star Wars: Unlimited, copiée du site (components/play/swu/swu-table.css) :
+ * le même bois, laiton et feutre que la table Riftbound. Deux arènes autour
+ * d'une colonne centrale qui porte les bases et les leaders. Les tailles
+ * suivent la mise en page de l'app (.pt--portrait, .pt--landscape, .pt--tablet)
+ * plutôt que la largeur de l'écran.
+ */
+.swu-table {
+  --swu-wood: #3a2416;
+  --swu-wood-dark: #1d120a;
+  --swu-brass: #c9a45a;
+  --swu-brass-dark: #7a5f2c;
+  --swu-felt: #0f2a2c;
+  --swu-me: #2bb7dc;
+  --swu-other: #e0566b;
+  --swu-danger: #ff5a4d;
+  --swu-gold: #f1d58e;
+  --cw: 84px;
+  --lw: 132px;
+  --gap: 12px;
+  --tilt: 8deg;
+  color: #e8eef2;
+}
+.swu-bar { display: flex; align-items: center; gap: 8px 12px; flex-wrap: wrap; padding: 6px 12px; background: var(--card); border-bottom: 1px solid var(--border); font-size: 12px; }
+.swu-bar .swu-sp { flex: 1; }
+.swu-chip { border: 1px solid var(--border); border-radius: 999px; padding: 2px 9px; color: var(--muted-foreground); white-space: nowrap; }
+.swu-layout { display: grid; grid-template-columns: minmax(0, 1fr) 270px; }
+.swu-scene { position: relative; padding: 10px 14px 0; min-width: 0; background: radial-gradient(70% 55% at 50% 30%, #3a2a1c 0%, #140d08 55%, #070504 100%); }
+.swu-scene::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(60% 45% at 50% 35%, rgb(255 200 120 / 0.1), transparent 70%); }
+
+.swu-band { position: relative; z-index: 1; display: flex; align-items: center; gap: 6px 14px; flex-wrap: wrap; padding: 6px 10px; border-radius: 10px; background: rgb(0 0 0 / 0.35); border-left: 3px solid var(--who); font-size: 12px; }
+.swu-band[data-active="true"] { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--who) 55%, transparent); }
+.swu-band .swu-name { font-weight: 700; color: var(--who); font-size: 13px; }
+.swu-stat { color: #cfd8dc; white-space: nowrap; background: none; border: 0; padding: 0; font: inherit; }
+button.swu-stat { cursor: pointer; text-decoration: underline dotted; text-underline-offset: 3px; }
+.swu-stat i { font-style: normal; color: #8fa3ad; margin-right: 3px; }
+.swu-pips { display: inline-flex; gap: 3px; vertical-align: middle; margin-left: 4px; }
+.swu-pip { width: 9px; height: 13px; border-radius: 2px; background: linear-gradient(160deg, var(--swu-brass), var(--swu-brass-dark)); box-shadow: 0 1px 2px #000; }
+.swu-pip[data-off="true"] { background: #2a2118; transform: rotate(24deg); opacity: 0.8; }
+.swu-init { display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-engrave), Georgia, serif; font-size: 10px; letter-spacing: 0.08em; color: #1a1206; background: linear-gradient(160deg, var(--swu-gold), var(--swu-brass)); padding: 2px 8px; border-radius: 999px; box-shadow: 0 2px 4px #000; white-space: nowrap; }
+.swu-init[data-taken="true"] { filter: saturate(0.4) brightness(0.8); }
+.swu-minihand { position: relative; z-index: 1; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; padding: 6px 0 0; --cw: 44px; --lw: 62px; }
+
+.swu-stage { perspective: 1800px; perspective-origin: 50% 25%; margin: 6px 0 0; position: relative; z-index: 1; }
+.swu-board { transform: rotateX(var(--tilt)); transform-origin: 50% 80%; border-radius: 22px; padding: 14px;
+  background: repeating-linear-gradient(92deg, rgb(255 255 255 / 0.04) 0 2px, transparent 2px 9px), repeating-linear-gradient(88deg, rgb(0 0 0 / 0.14) 0 5px, transparent 5px 18px), var(--swu-wood);
+  box-shadow: 0 0 0 1px var(--swu-wood-dark), 0 30px 60px rgb(0 0 0 / 0.75); }
+.swu-felt { border-radius: 14px; padding: 12px; display: grid; grid-template-columns: minmax(0, 1.55fr) auto minmax(0, 1fr); gap: 12px;
+  background: radial-gradient(80% 70% at 50% 40%, rgb(255 214 150 / 0.08), transparent 70%), radial-gradient(120% 100% at 50% 50%, #15383a 0%, var(--swu-felt) 60%, #0a1d1f 100%);
+  box-shadow: inset 0 0 0 2px var(--swu-brass-dark), inset 0 0 0 3px var(--swu-brass), inset 0 0 28px rgb(0 0 0 / 0.6); }
+.swu-zone { position: relative; border: 1px solid color-mix(in srgb, var(--swu-brass) 55%, transparent); background: rgb(0 0 0 / 0.16); outline: 1px solid color-mix(in srgb, var(--swu-brass) 16%, transparent); outline-offset: 3px; border-radius: 10px; padding: 8px; display: grid; grid-template-rows: 1fr auto 1fr; gap: 6px; min-width: 0; }
+.swu-zone h3 { margin: 0; text-align: center; font-family: var(--font-engrave), Georgia, serif; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--swu-brass); display: flex; align-items: center; gap: 8px; }
+.swu-zone h3::before, .swu-zone h3::after { content: ""; flex: 1; height: 1px; background: color-mix(in srgb, var(--swu-brass) 40%, transparent); }
+.swu-row { display: flex; justify-content: center; align-items: center; gap: calc(var(--gap) + 6px) var(--gap); flex-wrap: wrap; min-height: calc(var(--cw) * 1.4 + 26px); padding: 14px 4px 10px; }
+.swu-center { display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 6px; }
+.swu-mid { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.swu-side { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+
+/* ---- Cartes ---- */
+.swu-c { --w: var(--cw); position: relative; isolation: isolate; width: var(--w); flex: none; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; transition: transform 0.25s, filter 0.25s; }
+.swu-c .swu-face { position: relative; display: block; width: 100%; padding: 0; border: 0; color: inherit; font: inherit; cursor: inherit; aspect-ratio: 5 / 7; border-radius: calc(var(--w) * 0.05); overflow: hidden; background: #1b262c; box-shadow: 0 4px 8px rgb(0 0 0 / 0.6); }
+.swu-c .swu-face img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.swu-c .swu-face span { display: grid; place-items: center; width: 100%; height: 100%; padding: 4px; text-align: center; font-size: 9px; line-height: 1.2; color: #b8c4ca; }
+.swu-c[data-land="true"] { --w: var(--lw); }
+.swu-c[data-land="true"] .swu-face { aspect-ratio: 7 / 5; }
+.swu-c[data-back="true"] .swu-face { background: repeating-linear-gradient(135deg, #18242b 0 6px, #0f181d 6px 12px); }
+.swu-c[data-exh="true"] { transform: rotate(14deg); filter: saturate(0.55) brightness(0.72); }
+.swu-c[data-land="true"][data-exh="true"] { transform: none; }
+.swu-c .swu-tag { position: absolute; z-index: 1; top: 4px; left: 50%; transform: translateX(-50%); font-size: 9px; font-family: var(--font-mono, ui-monospace), monospace; background: rgb(0 0 0 / 0.8); color: #ddd; padding: 1px 5px; border-radius: 4px; white-space: nowrap; }
+.swu-c .swu-pw, .swu-c .swu-hp, .swu-c .swu-dmg { position: absolute; z-index: 1; bottom: -7px; min-width: 24px; height: 24px; padding: 0 4px; border-radius: 7px; display: grid; place-items: center; font-weight: 800; font-size: 13px; color: #fff; box-shadow: 0 2px 4px #000, inset 0 0 0 1.5px rgb(255 255 255 / 0.35); font-variant-numeric: tabular-nums; }
+.swu-c .swu-pw { left: -5px; background: #c0392b; }
+.swu-c .swu-hp { right: -5px; background: #2374c6; }
+.swu-c .swu-hp[data-hurt="true"] { background: #7d2f8f; }
+.swu-c .swu-dmg { bottom: auto; top: 32%; left: 50%; transform: translateX(-50%); background: rgb(20 0 0 / 0.85); color: #ff8d83; border-radius: 999px; font-size: 12px; }
+.swu-c .swu-ups { position: absolute; left: 50%; bottom: calc(100% - 4px); transform: translateX(-50%); display: flex; flex-direction: column-reverse; gap: 1px; width: 92%; z-index: -1; }
+.swu-c .swu-up { display: block; font-size: 9px; line-height: 1.2; padding: 2px 4px 5px; border: 0; border-radius: 5px 5px 0 0; background: #e9e2cf; color: #23190c; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; font-weight: 600; width: 100%; }
+.swu-c .swu-up[data-token="true"] { background: #2f7fd0; color: #fff; }
+.swu-c .swu-up[data-can="true"] { box-shadow: 0 0 0 2px var(--swu-me); cursor: pointer; }
+.swu-c .swu-kws { position: absolute; z-index: 1; top: 16%; left: -6px; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+.swu-c .swu-kw { font-size: 9px; font-weight: 700; background: var(--swu-brass); color: #1a1206; padding: 1px 6px; border-radius: 999px; box-shadow: 0 1px 3px #000; white-space: nowrap; }
+.swu-c .swu-kw[data-kind="attack"] { background: #c0392b; color: #fff; }
+.swu-c .swu-cost { position: absolute; z-index: 1; top: -8px; left: -6px; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 999px; background: #1a1206; color: var(--swu-gold); box-shadow: 0 0 0 1px var(--swu-brass); white-space: nowrap; }
+.swu-c .swu-cost[data-more="true"] { background: #5a1410; color: #ffb3aa; }
+.swu-c .swu-cost[data-less="true"] { background: #123d24; color: #a5f0c0; }
+.swu-c .swu-float { position: absolute; z-index: 3; left: 50%; top: 20%; pointer-events: none; font-size: 20px; font-weight: 800; color: var(--swu-danger); text-shadow: 0 2px 4px #000; }
+.swu-c[data-can="true"] { outline: 2px solid var(--swu-me); outline-offset: 2px; border-radius: 6px; cursor: pointer; }
+.swu-c[data-can="true"]:hover { transform: translateY(-4px); }
+.swu-c[data-sel="true"] { transform: translateY(-10px) scale(1.06); outline: 3px solid #fff; outline-offset: 2px; border-radius: 6px; z-index: 2; filter: none; }
+.swu-c[data-tgt="true"] { outline: 3px solid var(--swu-danger); outline-offset: 2px; border-radius: 6px; cursor: crosshair; animation: swu-pulse 1.4s infinite; }
+.swu-c[data-focus="true"] { outline: 2px solid #fbbf24; outline-offset: 2px; border-radius: 6px; }
+.swu-c[data-dim="true"] { filter: brightness(0.45) saturate(0.5); }
+.swu-c .swu-face:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+.swu-c { cursor: pointer; }
+@keyframes swu-pulse { 50% { outline-color: rgb(255 90 77 / 0.35); } }
+
+.swu-base { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.swu-life { width: var(--lw); height: 14px; border-radius: 999px; background: #1b120a; box-shadow: inset 0 0 0 1px var(--swu-brass-dark); position: relative; overflow: hidden; }
+.swu-life span { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, color-mix(in srgb, var(--who) 60%, #000), var(--who)); transition: width 0.4s; }
+.swu-life b { position: absolute; inset: 0; display: grid; place-items: center; font-size: 10px; color: #fff; text-shadow: 0 1px 2px #000; font-variant-numeric: tabular-nums; }
+.swu-lead-act { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; max-width: var(--lw); }
+
+.swu-btn { font: inherit; font-size: 12px; font-weight: 600; border-radius: 8px; padding: 6px 12px; border: 1px solid var(--border); background: var(--card); color: var(--foreground); cursor: pointer; }
+.swu-btn:hover { border-color: var(--primary); }
+.swu-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.swu-btn[data-kind="primary"] { background: var(--primary); border-color: var(--primary); color: var(--primary-foreground); }
+.swu-btn[data-kind="gold"] { background: linear-gradient(160deg, var(--swu-gold), var(--swu-brass)); border-color: var(--swu-brass-dark); color: #1a1206; }
+.swu-btn[data-size="sm"] { padding: 2px 8px; font-size: 10px; border-radius: 999px; }
+
+/* ---- Question, main, journal ---- */
+.swu-ask { position: relative; z-index: 2; margin: 10px auto 0; display: flex; align-items: center; justify-content: center; gap: 8px 10px; flex-wrap: wrap; padding: 8px 12px; border-radius: 12px; background: rgb(4 18 27 / 0.94); border: 1px solid color-mix(in srgb, var(--primary) 50%, transparent); max-width: 820px; min-height: 46px; }
+.swu-ask strong { font-size: 13px; text-align: center; }
+.swu-ask small { color: #8fa3ad; flex-basis: 100%; text-align: center; }
+.swu-ask .swu-tray { flex-basis: 100%; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; --cw: 64px; --lw: 92px; padding: 10px 0 4px; }
+.swu-told { color: #cdd6da; font-size: 13px; text-align: center; }
+.swu-fan { position: relative; z-index: 1; display: flex; justify-content: safe center; align-items: flex-end; padding: 30px 12px 40px; overflow-x: auto; min-height: calc(var(--cw) * 1.4 + 70px); }
+.swu-fan .swu-c { margin-inline: -5px; transform-origin: 50% 140%; transform: rotate(calc(var(--fan) * 3deg)) translateY(calc(var(--fan) * var(--fan) * 2px)); }
+.swu-fan .swu-c:hover, .swu-fan .swu-c:focus-within { transform: translateY(-18px); z-index: 2; }
+.swu-fan .swu-c[data-sel="true"] { transform: translateY(-22px) scale(1.06); }
+.swu-fan .swu-c[data-no="true"] { filter: brightness(0.5) saturate(0.6); }
+.swu-log { border-left: 1px solid var(--border); background: var(--card); padding: 10px; font-size: 12px; display: flex; flex-direction: column; gap: 6px; min-width: 0; max-height: 100%; }
+.swu-log-list { display: flex; flex-direction: column; gap: 6px; overflow-y: auto; min-height: 0; flex: 1 1 0; max-height: 78vh; }
+.swu-log h4 { margin: 4px 0 0; font-family: var(--font-mono, ui-monospace), monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); }
+.swu-log p { margin: 0; color: #cdd6da; padding-left: 8px; border-left: 2px solid var(--border); }
+.swu-who-me { color: var(--swu-me); font-weight: 600; }
+.swu-who-other { color: var(--swu-other); font-weight: 600; }
+.swu-cardname { color: var(--swu-gold); background: none; border: 0; padding: 0; font: inherit; cursor: pointer; text-align: inherit; }
+.swu-cardname:hover { text-decoration: underline; }
+.swu-rule { font-family: var(--font-mono, ui-monospace), monospace; font-size: 10px; color: var(--muted-foreground); white-space: nowrap; }
+.swu-result { position: relative; z-index: 2; margin: 10px auto 0; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 14px; border-radius: 12px; background: rgb(4 18 27 / 0.94); border: 1px solid var(--swu-brass); max-width: 620px; text-align: center; }
+.swu-result b { font-family: var(--font-engrave), Georgia, serif; font-size: 20px; color: var(--swu-gold); }
+
+@media (prefers-reduced-motion: reduce) {
+  .swu-c[data-tgt="true"] { animation: none; }
+  .swu-c, .swu-fan .swu-c, .swu-life span { transition: none; }
+}
+
+
+/* ---- Dans l'app ---- */
+.pt.swu-table {
+  background: #070504;
+}
+.swu-table .pt-center {
+  overflow-y: auto;
+}
+.swu-scene {
+  min-height: 100%;
+  padding: 8px 10px 0;
+}
+.swu-mine {
+  position: relative;
+  z-index: 1;
+  margin-top: 8px;
+}
+.swu-c .swu-face {
+  -webkit-touch-callout: none;
+}
+.swu-c[data-can="true"]:hover {
+  transform: none;
+}
+.swu-fan .swu-c:hover {
+  transform: rotate(calc(var(--fan) * 3deg)) translateY(calc(var(--fan) * var(--fan) * 2px));
+  z-index: auto;
+}
+.swu-fan .swu-c[data-sel="true"] {
+  transform: translateY(-22px) scale(1.06);
+  z-index: 2;
+}
+.swu-fan {
+  padding-bottom: 16px;
+}
+.swu-ask {
+  margin: 0;
+  max-width: none;
+  min-height: 0;
+  border: 0;
+  padding: 0;
+  background: none;
+}
+.swu-ask .pt-input {
+  flex-basis: 100%;
+}
+.swu-result {
+  margin: 0;
+  max-width: none;
+}
+.swu-log {
+  border: 0;
+  padding: 0;
+  background: none;
+}
+.swu-log-list {
+  max-height: none;
+}
+.swu-back-img {
+  width: 60%;
+  align-self: center;
+  border-radius: 10px;
+}
+.swu-dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 12px;
+  margin: 0;
+  font-size: 0.85rem;
+}
+.swu-dl dt {
+  color: var(--muted);
+}
+.swu-dl dd {
+  margin: 0;
+  font-weight: 600;
+}
+.swu-pile {
+  --cw: 76px;
+  --lw: 106px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 4px;
+}
+
+/* Debout et couché : pas de relief, petites cartes. */
+.pt--portrait.swu-table,
+.pt--landscape.swu-table {
+  --cw: 52px;
+  --lw: 84px;
+  --gap: 9px;
+  --tilt: 0deg;
+}
+.pt--portrait .swu-scene,
+.pt--landscape .swu-scene {
+  padding: 6px 6px 0;
+}
+.pt--portrait .swu-board,
+.pt--landscape .swu-board {
+  padding: 6px;
+  border-radius: 14px;
+}
+.pt--portrait .swu-c .swu-pw,
+.pt--portrait .swu-c .swu-hp,
+.pt--landscape .swu-c .swu-pw,
+.pt--landscape .swu-c .swu-hp {
+  min-width: 19px;
+  height: 19px;
+  font-size: 11px;
+  bottom: -5px;
+}
+.pt--portrait .swu-c .swu-up,
+.pt--landscape .swu-c .swu-up {
+  font-size: 7px;
+  padding: 1px 2px 4px;
+}
+.pt--portrait .swu-c .swu-tag,
+.pt--landscape .swu-c .swu-tag {
+  display: none;
+}
+.pt--portrait .swu-c .swu-kw,
+.pt--landscape .swu-c .swu-kw {
+  font-size: 7px;
+  padding: 1px 4px;
+}
+.pt--portrait .swu-row,
+.pt--landscape .swu-row {
+  min-height: calc(var(--cw) * 1.4 + 18px);
+}
+.pt--portrait .swu-fan,
+.pt--landscape .swu-fan {
+  padding-top: 22px;
+  min-height: 0;
+  --cw: 62px;
+}
+.pt--portrait .swu-fan .swu-c,
+.pt--landscape .swu-fan .swu-c {
+  margin-inline: -9px;
+}
+.pt--portrait .swu-band,
+.pt--landscape .swu-band {
+  font-size: 11px;
+  gap: 4px 9px;
+  padding: 5px 8px;
+}
+
+/* Debout : les arènes empilées, bases et leaders en bandeau au-dessus. */
+.pt--portrait .swu-felt {
+  grid-template-columns: minmax(0, 1fr);
+  padding: 6px;
+  gap: 8px;
+}
+.pt--portrait .swu-center {
+  order: -1;
+  gap: 6px;
+  align-items: stretch;
+}
+.pt--portrait .swu-side {
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+}
+.pt--portrait .swu-mid {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+.pt--portrait .swu-lead-act {
+  flex-direction: column;
+}
+.pt--portrait .swu-init {
+  align-self: center;
+}
+.swu-dock {
+  gap: 0.5rem;
+}
+.swu-dock .swu-ask {
+  justify-content: center;
+}
+
+/* Couché : les deux arènes de part et d'autre de la colonne centrale, plus serrées. */
+.pt--landscape.swu-table {
+  --cw: 44px;
+  --lw: 70px;
+  --gap: 7px;
+}
+.pt--landscape .swu-felt {
+  grid-template-columns: minmax(0, 1.4fr) auto minmax(0, 1fr);
+  padding: 6px;
+  gap: 6px;
+}
+.pt--landscape .swu-zone {
+  padding: 4px;
+}
+.pt--landscape .swu-row {
+  padding: 10px 2px 6px;
+}
+.pt--landscape .swu-panel-ask,
+.pt--landscape .pt-panel .swu-ask,
+.pt--tablet .pt-panel .swu-ask {
+  justify-content: flex-start;
+}
+.pt-panel .swu-ask strong {
+  text-align: left;
+  flex-basis: 100%;
+}
+.pt-panel .swu-ask small {
+  text-align: left;
+}
+
+/* Tablette : le relief, les cartes en grand. */
+.pt--tablet.swu-table {
+  --cw: 80px;
+  --lw: 124px;
+}
+.pt--tablet .swu-scene {
+  border-radius: 1rem;
+}
+.pt--tablet .pt-panel .swu-log {
+  flex: 1;
+  min-height: 12rem;
+}
+
+/* Portrait : la main reste visible entre la table et le dock. */
+.pt--portrait .swu-fan-dock {
+  flex: none;
+  border-top: 1px solid var(--border);
+  background: rgba(4, 18, 27, 0.9);
+  overflow-x: auto;
+}

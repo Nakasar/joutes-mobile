@@ -1,5 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { readTable } from "../api/play";
+import { remotePath } from "../play/remote";
 import { isTauri } from "../api/http";
 import { joinGameMatch } from "../api/game-matches";
 import { joinTournament } from "../api/tournaments";
@@ -40,11 +43,43 @@ export function JoinPlaySheet({
   const [displayName, setDisplayName] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   function join(raw: string) {
     const invite = parsePlayInvite(raw);
     if (!invite) {
       setError(t("play.joinInvalidCode"));
+      return;
+    }
+
+    // Le mode Jouer : une table en ligne, ou la partie du serveur d'un hôte.
+    if (invite.kind === "remote") {
+      onClose();
+      navigate(remotePath(invite.game, invite.server, invite.ticket));
+      return;
+    }
+    if (invite.kind === "table") {
+      if (invite.game) {
+        onClose();
+        navigate(`/play/${invite.game}/tables/${invite.id}`);
+        return;
+      }
+      // Un code seul ne dit pas son jeu : on demande la table à chacun.
+      setSaving(true);
+      setError(null);
+      void (async () => {
+        for (const game of ["riftbound", "swu"] as const) {
+          const result = await readTable(game, invite.id);
+          if (result.ok || result.error === "UNAUTHENTICATED") {
+            setSaving(false);
+            onClose();
+            navigate(`/play/${game}/tables/${invite.id}`);
+            return;
+          }
+        }
+        setSaving(false);
+        setError(t("play.joinTableNotFound"));
+      })();
       return;
     }
 
@@ -116,7 +151,11 @@ export function JoinPlaySheet({
             ? result.content
             : invite.kind === "tournament"
               ? invite.code
-              : invite.matchId,
+              : invite.kind === "match"
+                ? invite.matchId
+                : invite.kind === "table"
+                  ? invite.id
+                  : invite.server,
         );
         join(result.content);
       })
@@ -148,7 +187,7 @@ export function JoinPlaySheet({
                   onChange={(e) => setCode(e.currentTarget.value)}
                   placeholder={t("play.joinCodePlaceholder")}
                   autoFocus
-                  maxLength={200}
+                  maxLength={2000}
                 />
               </label>
               {!isAuthenticated && (

@@ -19,6 +19,7 @@ import {
   TrophyIcon,
 } from "../components/icons";
 import { JoinPlaySheet } from "../components/JoinPlaySheet";
+import { PlayHubPane } from "../play/PlayHubPane";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { useTournamentLive } from "../hooks/useTournamentLive";
@@ -32,7 +33,7 @@ const PAGE_SIZE = 20;
 
 const FILTERS = ["current", "past"] as const;
 type Filter = (typeof FILTERS)[number];
-const SECTIONS = ["tournaments", "matches"] as const;
+const SECTIONS = ["tournaments", "matches", "table"] as const;
 type Section = (typeof SECTIONS)[number];
 
 interface TournamentSummary {
@@ -635,9 +636,17 @@ export function PlayScreen() {
         >
           {t("play.sectionMatches")}
         </button>
+        <button
+          className={`segmented__item${section === "table" ? " segmented__item--active" : ""}`}
+          onClick={() => setSection("table")}
+        >
+          {t("play.sectionTable")}
+        </button>
       </div>
 
-      {section === "tournaments" ? (
+      {section === "table" ? (
+        <PlayHubPane />
+      ) : section === "tournaments" ? (
         <TournamentsPane filters={filters} onFiltersChange={setFilters} games={games} />
       ) : (
         <GameMatchesPane filters={filters} onFiltersChange={setFilters} games={games} />
