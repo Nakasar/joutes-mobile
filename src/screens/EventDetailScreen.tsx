@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getEvent, toggleEventFavorite } from "../api/events";
 import { BackHeader } from "../components/BackHeader";
+import { EventRegistrationCard } from "../components/EventRegistrationCard";
 import { EventWaitlistCard } from "../components/EventWaitlistCard";
 import { ExternalLinkIcon, PinIcon, StarIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
@@ -105,6 +106,8 @@ export function EventDetailScreen() {
               </span>
             )}
           </p>
+
+          <EventRegistrationCard event={data} userId={myUserId} onChange={reload} />
 
           {myUserId && (
             <EventWaitlistCard event={data} isParticipant={isRegistered} onChange={reload} />

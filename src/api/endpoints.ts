@@ -43,6 +43,14 @@ export const endpoints = {
      * une liste collée.
      */
     deckCards: (idOrSlug: string) => `/games/${idOrSlug}/deck-cards`,
+    /** Les cartes d'une extension, que le scanner d'un booster reconnaît en mémoire. */
+    scannerSetCards: (idOrSlug: string) => `/games/${idOrSlug}/scanner/set-cards`,
+    /** Identification d'une photo de carte par l'IA (permission `scanner:ai`). */
+    scannerAiMatch: (idOrSlug: string) => `/games/${idOrSlug}/scanner/ai-match`,
+    /** La méta du jeu : `period`, `legend`, `domain`, `source` (404 si fermée). */
+    meta: (idOrSlug: string) => `/games/${idOrSlug}/meta`,
+    metaTournament: (idOrSlug: string, date: string, slug: string) =>
+      `/games/${idOrSlug}/meta/tournaments/${date}/${encodeURIComponent(slug)}`,
   },
   quizzes: {
     detail: (quizId: string) => `/quizzes/${quizId}`,
@@ -66,6 +74,8 @@ export const endpoints = {
     detail: (eventId: string) => `/events/${eventId}`,
     favorite: (eventId: string) => `/events/${eventId}/favorite`,
     /** Liste d'attente : `POST` pour la rejoindre, `DELETE` pour la quitter. */
+    /** Inscription : `POST` pour s'inscrire, `DELETE` pour se désinscrire. */
+    registration: (eventId: string) => `/events/${eventId}/registration`,
     waitlist: (eventId: string) => `/events/${eventId}/waitlist`,
     waitlistAccept: (eventId: string) => `/events/${eventId}/waitlist/accept`,
     waitlistDecline: (eventId: string) => `/events/${eventId}/waitlist/decline`,
@@ -79,8 +89,15 @@ export const endpoints = {
     notifications: (lairId: string) => `/lairs/${lairId}/notifications`,
   },
   friends: {
+    /** `GET` la liste, `POST { username }` envoie une demande (pseudo#1234). */
     list: "/friends",
     requests: "/friends/requests",
+    /** `POST` accepte la demande, `DELETE` la refuse. */
+    request: (requestId: string) => `/friends/requests/${requestId}`,
+    /** Mon code ami (`GET`), celui que montre mon QR. */
+    code: "/friends/code",
+    /** `POST { code }` : ajout immédiat par le code ami d'un autre joueur. */
+    scan: "/friends/scan",
   },
   playGroups: {
     list: "/play-groups",
@@ -170,6 +187,16 @@ export const endpoints = {
     /** Exemplaires de produits : ajout (le jeu passe en query, un id n'étant unique qu'au sein d'un jeu). */
     products: "/collection/products",
     productEntry: (entryId: string) => `/collection/products/${entryId}`,
+    /** Boosters ouverts : liste (`?gameSlug=`) et création (POST). */
+    boosters: "/collection/boosters",
+    /** Un booster : lecture, `PATCH { type, note }`, suppression. */
+    booster: (boosterId: string) => `/collection/boosters/${boosterId}`,
+    /** Cartes d'un booster : ajout (POST), foil (`PATCH { entryId, foil }`), retrait (`DELETE ?entryId=`). */
+    boosterCards: (boosterId: string) => `/collection/boosters/${boosterId}/cards`,
+    /** Verser le booster dans la collection (POST) ou l'en retirer (DELETE). */
+    boosterCollection: (boosterId: string) => `/collection/boosters/${boosterId}/collection`,
+    /** Recalcul de la valeur du booster (POST). */
+    boosterValue: (boosterId: string) => `/collection/boosters/${boosterId}/value`,
   },
   gameMatches: {
     /** Parties de l'utilisateur connecté (lecture) et enregistrement (écriture). */

@@ -690,3 +690,14 @@ export function CopyIcon(p: IconProps) {
     </Icon>
   );
 }
+
+/** Lampe torche : l'éclairage de la caméra pendant un scan. */
+export function FlashlightIcon({ filled, ...p }: IconProps & { filled?: boolean }) {
+  return (
+    <Icon {...p}>
+      <path d="M8 2h8v4l-2 3v13h-4V9L8 6z" fill={filled ? "currentColor" : "none"} />
+      <path d="M8 6h8" />
+      <path d="M12 13v2" />
+    </Icon>
+  );
+}

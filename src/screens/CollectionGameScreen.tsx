@@ -25,6 +25,7 @@ import {
   LockIcon,
   MinusIcon,
   PlusIcon,
+  ScanIcon,
 } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
@@ -309,6 +310,22 @@ function CollectionGameContent({
             setGameValue(value);
           }}
         />
+      )}
+
+      {/* Les boosters ouverts, et le scan de leurs cartes : collection personnelle. */}
+      {!groupId && (
+        <Link to={`/collection/${gameSlug}/boosters`} className="list-row list-row--link">
+          <span className="list-row__icon" style={{ background: "var(--chip)" }}>
+            <ScanIcon size={20} style={{ color: "var(--primary)" }} />
+          </span>
+          <div className="list-row__body">
+            <p className="list-row__title">{t("boosters.entry")}</p>
+            <p className="list-row__sub">{t("boosters.entrySub")}</p>
+          </div>
+          <span className="chevron">
+            <ChevronIcon size={18} />
+          </span>
+        </Link>
       )}
 
       {!groupId && (

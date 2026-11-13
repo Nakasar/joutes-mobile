@@ -58,6 +58,27 @@ export function toggleEventFavorite(eventId: string): Promise<{ favorited: boole
   return api.post<{ favorited: boolean }>(endpoints.events.favorite(eventId), {});
 }
 
+export interface EventRegistrationResult {
+  success: boolean;
+  registrationStatus: "REGISTERED" | "PRE_REGISTERED" | null;
+}
+
+/**
+ * Inscription à un évènement. Le site refuse (409) un évènement fermé,
+ * commencé ou complet ; complet, la réponse porte `full: true` et
+ * l'inscription passe par la liste d'attente.
+ */
+export function registerToEvent(
+  eventId: string,
+): Promise<EventRegistrationResult> {
+  return api.post<EventRegistrationResult>(endpoints.events.registration(eventId), {});
+}
+
+/** Désinscription ; la place libérée est offerte au premier de la liste d'attente. */
+export function unregisterFromEvent(eventId: string): Promise<{ success: boolean }> {
+  return api.delete<{ success: boolean }>(endpoints.events.registration(eventId));
+}
+
 /**
  * Liste d'attente d'un évènement complet. Quand une place se libère, le
  * premier de la file reçoit une notification et la place lui est réservée

@@ -1,20 +1,28 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { listGames } from "../api/games";
 import { listPlayGroups } from "../api/play-groups";
-import { listFriendRequests, listFriends } from "../api/social";
-import type { PlayGroup, PublicUser } from "../api/types";
+import {
+  acceptFriendRequest,
+  declineFriendRequest,
+  listFriendRequests,
+  listFriends,
+} from "../api/social";
+import type { FriendRequest, PlayGroup, PublicUser } from "../api/types";
+import { AddFriendSheet } from "../components/AddFriendSheet";
 import { GroupEscu } from "../components/GroupEscu";
 import { LairsList } from "../components/LairsList";
 import { Movement } from "../components/Movement";
 import {
+  CheckIcon,
   ChevronIcon,
   PinIcon,
   RepeatIcon,
   SwordsIcon,
   UserPlusIcon,
   UsersIcon,
+  XIcon,
 } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
@@ -74,27 +82,93 @@ function AuthGate() {
   );
 }
 
-function FriendsTab() {
+/** Une demande d'ami reçue, avec de quoi l'accepter ou la refuser sur place. */
+function FriendRequestRow({ request, onDone }: { request: FriendRequest; onDone: () => void }) {
   const { t } = useTranslation();
-  const friends = useApi(() => listFriends());
-  const requests = useApi(() => listFriendRequests());
+  const [pending, setPending] = useState<"accept" | "decline" | null>(null);
+  const [error, setError] = useState(false);
+  const requester = request.requester;
+  const name = requester ? friendName(requester, t("social.friendDefault")) : t("social.friendDefault");
+
+  function run(kind: "accept" | "decline") {
+    if (pending) return;
+    setPending(kind);
+    setError(false);
+    (kind === "accept" ? acceptFriendRequest(request.id) : declineFriendRequest(request.id))
+      .then(onDone)
+      .catch(() => setError(true))
+      .finally(() => setPending(null));
+  }
+
+  return (
+    <div className="friend-row friend-row--request">
+      <div className="friend-row__avatar">
+        {requester?.avatar ? (
+          <img src={requester.avatar} alt="" className="avatar avatar--sm" loading="lazy" />
+        ) : (
+          <span className="avatar avatar--sm" style={tintStyle(colorFor(requester?.id ?? request.id))}>
+            {initialOf(name)}
+          </span>
+        )}
+      </div>
+      <div className="friend-row__body">
+        <p className="friend-row__name">{name}</p>
+        <p className="friend-row__sub">
+          {error ? t("social.requests.error") : requester ? friendTag(requester) : ""}
+        </p>
+      </div>
+      <div className="friend-row__actions">
+        <button
+          type="button"
+          className="icon-button icon-button--primary"
+          onClick={() => run("accept")}
+          disabled={pending !== null}
+          aria-label={t("social.requests.accept", { name })}
+        >
+          <CheckIcon size={18} />
+        </button>
+        <button
+          type="button"
+          className="icon-button"
+          onClick={() => run("decline")}
+          disabled={pending !== null}
+          aria-label={t("social.requests.decline", { name })}
+        >
+          <XIcon size={18} />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function FriendsTab({ refreshKey }: { refreshKey: number }) {
+  const { t } = useTranslation();
+  const friends = useApi(() => listFriends(), [refreshKey]);
+  const requests = useApi(() => listFriendRequests(), [refreshKey]);
   const reqCount = requests.data?.length ?? 0;
+
+  function reloadAll() {
+    requests.reload();
+    friends.reload();
+  }
 
   return (
     <>
       {reqCount > 0 && (
-        <div className="request-banner">
-          <span className="request-banner__count">{reqCount}</span>
-          <div className="request-banner__body">
-            <p className="request-banner__title">{t("social.requestsTitle")}</p>
-            <p className="request-banner__sub">
-              {t("social.requestsSub", { count: reqCount })}
-            </p>
+        <>
+          <div className="request-banner">
+            <span className="request-banner__count">{reqCount}</span>
+            <div className="request-banner__body">
+              <p className="request-banner__title">{t("social.requestsTitle")}</p>
+              <p className="request-banner__sub">
+                {t("social.requestsSub", { count: reqCount })}
+              </p>
+            </div>
           </div>
-          <span className="chevron">
-            <ChevronIcon size={18} />
-          </span>
-        </div>
+          {requests.data?.map((request) => (
+            <FriendRequestRow key={request.id} request={request} onDone={reloadAll} />
+          ))}
+        </>
       )}
 
       <p className="section-label">
@@ -349,6 +423,8 @@ export function SocialScreen() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const [tab, setTab] = useSearchParamState<Tab>("tab", TABS, "amis");
+  const [adding, setAdding] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   return (
     <div className="screen">
@@ -360,7 +436,7 @@ export function SocialScreen() {
           <button
             className="icon-button icon-button--primary"
             aria-label={t("social.addFriend")}
-            onClick={() => navigate("/players")}
+            onClick={() => (isAuthenticated ? setAdding(true) : navigate("/players"))}
           >
             <UserPlusIcon size={20} />
           </button>
@@ -389,9 +465,19 @@ export function SocialScreen() {
       </div>
 
       {tab === "amis" && <RegistryLink />}
-      {tab === "amis" && (isAuthenticated ? <FriendsTab /> : <AuthGate />)}
+      {tab === "amis" && (isAuthenticated ? <FriendsTab refreshKey={refreshKey} /> : <AuthGate />)}
       {tab === "groups" && (isAuthenticated ? <GroupsTab /> : <AuthGate />)}
       {tab === "lairs" && <LairsTab />}
+
+      {adding && (
+        <AddFriendSheet
+          onClose={() => setAdding(false)}
+          onAdded={() => {
+            setTab("amis");
+            setRefreshKey((key) => key + 1);
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 {
   "name": "joutes-mobile",
   "private": true,
-  "version": "0.55.0",
+  "version": "0.56.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -19,6 +19,7 @@
     "@tauri-apps/plugin-fs": "^2",
     "@tauri-apps/plugin-http": "^2",
     "@tauri-apps/plugin-opener": "^2",
+    "fuse.js": "^7.5.0",
     "i18next": "^26.3.6",
     "i18next-browser-languagedetector": "^8.2.1",
     "qrcode": "^1.5.4",
@@ -27,7 +28,8 @@
     "react-i18next": "^17.0.10",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.6.0",
-    "remark-gfm": "^4.0.1"
+    "remark-gfm": "^4.0.1",
+    "tesseract.js": "^7.0.0"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.12.4",
