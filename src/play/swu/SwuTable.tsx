@@ -625,7 +625,7 @@ export function SwuTable({ feed, cards, home, afterResult, note }: SwuTableProps
         </div>
       </div>
       <div className="swu-mine">{band(mine)}</div>
-      {layout !== "portrait" && fan}
+      {layout === "tablet" && fan}
     </div>
   );
 
@@ -816,7 +816,10 @@ export function SwuTable({ feed, cards, home, afterResult, note }: SwuTableProps
             <b>{view.round}</b>
           </div>
         </nav>
-        <main className="pt-center">{scene}</main>
+        <main className="pt-center">
+          <div className="pt-board-scroll">{scene}</div>
+          <div className="swu-fan-dock">{fan}</div>
+        </main>
         <aside className={cx("pt-panel", !panel.open && "pt-panel--folded")}>{panelBody}</aside>
         {sheets}
       </div>

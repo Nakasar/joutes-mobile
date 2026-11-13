@@ -1797,23 +1797,60 @@
   padding: 0.3rem 0;
 }
 
-/* La main ne montre que le haut de ses cartes : un toucher la lève. */
+/* La main ne montre que le haut de ses cartes : un toucher la lève. Elle reste
+   sous la table, jamais par-dessus : la table rétrécit et défile au-dessus. */
+.pt--landscape .pt-center {
+  display: flex;
+  flex-direction: column;
+}
+.pt--landscape .pt-board-scroll {
+  flex: 1;
+  height: auto;
+  min-height: 0;
+  padding-bottom: 0.6rem;
+}
 .pt-hand--peek {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 15;
+  flex: none;
+  max-height: 3.6rem;
+  overflow: hidden;
   padding: 0;
-  transform: translateY(calc(100% - 4.2rem));
-  transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
-  background: linear-gradient(to top, rgba(4, 18, 27, 0.95) 40%, rgba(4, 18, 27, 0));
+  border-top: 1px solid var(--border);
+  background: rgba(4, 18, 27, 0.95);
+  transition: max-height 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.pt-hand--peek .pt-hand__title {
+  position: absolute;
+  top: 0.15rem;
+  left: 0.4rem;
+  z-index: 2;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(4, 18, 27, 0.85);
+  font-size: 0.68rem;
 }
 .pt-hand--peek .play-fan {
-  padding-top: 0.4rem;
+  justify-content: safe center;
+  padding: 0.5rem 1rem calc(0.9rem + env(safe-area-inset-bottom, 0px));
+}
+.pt-hand--peek .play-engrave {
+  display: none;
 }
 .pt-hand--up {
-  transform: none;
+  max-height: 11rem;
+}
+/* Le panneau couché : des bandeaux serrés, la question toujours visible en bas. */
+.pt--landscape .pt-band__cards .pt-card {
+  --w: 1.9rem;
+}
+.pt--landscape .pt-band__score {
+  font-size: 1.2rem;
+}
+.pt--landscape .pt-panel > .pt-prompt {
+  position: sticky;
+  bottom: -0.7rem;
+  margin: 0 -0.7rem -0.7rem;
+  padding: 0.5rem 0.7rem 0.7rem;
+  background: linear-gradient(to bottom, rgba(10, 27, 37, 0), #0a1b25 0.6rem);
 }
 
 /* ---------- Tablette ---------- */
@@ -1958,7 +1995,7 @@
   text-align: left;
   cursor: pointer;
 }
-.play-seat__deck span {
+.play-seat__deck > .muted {
   flex: 1;
   min-width: 0;
   overflow: hidden;
@@ -2108,6 +2145,7 @@
 }
 .play-split {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
 }
 @media (min-width: 1024px) {
@@ -2118,6 +2156,7 @@
 }
 .play-games {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.6rem;
 }
 .play-game {
@@ -2139,8 +2178,11 @@
   border-radius: 12px;
 }
 .play-game__body {
+  display: flex;
   flex: 1;
   min-width: 0;
+  flex-direction: column;
+  gap: 0.15rem;
 }
 .play-game__name {
   font-family: var(--font-display);
@@ -2268,9 +2310,6 @@
 }
 .play-room-invite .play-code {
   font-size: 1.2rem;
-}
-.play-screen .play-seat__deck .muted {
-  flex: 1;
 }
 
 /* Debout : la main tient entre la table et le panneau des questions. */

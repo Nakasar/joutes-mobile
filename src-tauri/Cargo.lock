@@ -1954,7 +1954,7 @@ dependencies = [
 
 [[package]]
 name = "joutes-mobile"
-version = "0.57.0"
+version = "0.57.1"
 dependencies = [
  "jni",
  "serde",
