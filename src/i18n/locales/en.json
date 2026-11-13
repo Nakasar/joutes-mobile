@@ -142,7 +142,8 @@
       "openOn": "Open on {{platform}}"
     },
     "play": "Play",
-    "meta": "Meta"
+    "meta": "Meta",
+    "tracker": "Game tracker"
   },
   "events": {
     "title": "Events",
@@ -259,7 +260,15 @@
     "productsTitle": "Miniatures and boxes",
     "productsAction": "This game's products",
     "productGameStats_one": "{{owned}}/{{total}} miniatures · {{copies}} copy",
-    "productGameStats_other": "{{owned}}/{{total}} miniatures · {{copies}} copies"
+    "productGameStats_other": "{{owned}}/{{total}} miniatures · {{copies}} copies",
+    "sets": {
+      "title": "By set",
+      "count_one": "{{count}} set",
+      "count_other": "{{count}} sets",
+      "hint": "Tap a set to show only its cards.",
+      "master": "Master set",
+      "game": "Game set"
+    }
   },
   "products": {
     "fallbackTitle": "Products",
@@ -380,7 +389,6 @@
       "sellListAction": "Group sale list",
       "showcaseAction": "Showcase",
       "rhythm": "The group's rhythm",
-      "manageOnWeb": "Inviting, promoting and removing members are done on the website.",
       "views": {
         "etabli": "Workbench",
         "sessions": "Sessions",
@@ -656,7 +664,20 @@
     "signingIn": "Signing in…",
     "changeEmail": "Change email address",
     "errorSendCode": "Couldn't send the code.",
-    "errorInvalidCode": "Invalid code."
+    "errorInvalidCode": "Invalid code.",
+    "app": {
+      "or": "or",
+      "discord": "Sign in with Discord",
+      "haveCode": "I already have a code from the website",
+      "subtitle": "Sign in through the website",
+      "step1": "Open the website's sign-in page and sign in with Discord or your usual account.",
+      "step2": "The website shows an 8-character code.",
+      "step3": "Come back here and type it in.",
+      "openSite": "Open the website page",
+      "codeLabel": "Code shown by the website",
+      "invalid": "This code is invalid or has expired. Reload the website page to get a new one.",
+      "useEmail": "Sign in by e-mail"
+    }
   },
   "rules": {
     "title": "Rules",
@@ -801,7 +822,12 @@
       "game": "Game",
       "gamePlaceholder": "Pick a game",
       "visibility": "Visibility",
-      "submit": "Create"
+      "submit": "Create",
+      "import": "Import from Piltover Archive (optional)",
+      "importPlaceholder": "Deck link or code",
+      "importHint": "Recognised cards join the deck; the others will be listed.",
+      "importInvalid": "This is neither a Piltover Archive link nor a deck code.",
+      "importEmpty": "No card from this deck was recognised."
     },
     "text": {
       "edit": "Edit the list",
@@ -868,7 +894,10 @@
       "card": "Illustrated by {{name}}.",
       "legend": "The legend illustrates the deck. Pick another card below.",
       "none": "Pick a card of the deck to illustrate it.",
-      "remove": "Clear the choice"
+      "remove": "Clear the choice",
+      "uploadAction": "Upload an image",
+      "uploading": "Uploading…",
+      "removeUpload": "Remove the image"
     },
     "comments": {
       "space": "Thread: {{space}}",
@@ -1013,6 +1042,25 @@
       "infos": {
         "visibilityNow": "saved right away"
       }
+    },
+    "results": {
+      "title": "Tournament results",
+      "placementOf": "{{place}} of {{count}}",
+      "version": "version {{version}}",
+      "private": "Private"
+    },
+    "cardnexus": {
+      "action": "Buy the deck on CardNexus",
+      "partial": "{{matched}} of {{total}} cards are on sale on CardNexus."
+    },
+    "shareGroup": {
+      "open": "Share to a group",
+      "title": "Share to a group",
+      "hint": "The deck joins the group's library: its members can read and comment on it.",
+      "noGroups": "You're not a member of any group.",
+      "action": "Share",
+      "shared": "Shared",
+      "refused": "The group refused this deck."
     }
   },
   "deck": {
@@ -1741,7 +1789,25 @@
     "leaveAction": "Leave tournament",
     "searchPlaceholder": "Search a tournament…",
     "searchAction": "Search a tournament",
-    "error": "Tournaments could not be loaded."
+    "error": "Tournaments could not be loaded.",
+    "announcements": {
+      "title": "Announcements",
+      "urgent": "Urgent",
+      "all_one": "See the announcement",
+      "all_other": "See all {{count}} announcements"
+    },
+    "bracket": {
+      "title": "Top cut bracket",
+      "empty": "The bracket will appear with the first round.",
+      "final": "Final",
+      "semiFinals": "Semi-finals",
+      "quarterFinals": "Quarter-finals",
+      "roundOf16": "Round of 16",
+      "roundOf32": "Round of 32",
+      "upcoming": "Upcoming",
+      "toBeDetermined": "To be determined",
+      "bye": "Bye, advances automatically"
+    }
   },
   "tournamentForm": {
     "title": "My information",
@@ -2083,5 +2149,119 @@
     "combos": "Domain combinations",
     "topCut": "Tournament top cut",
     "openLocator": "View on the locator"
+  },
+  "tracker": {
+    "title": "Game tracker",
+    "description": "Each player's points, energy and power, no connection needed. The game is kept if you close the app.",
+    "addPlayer": "Add a player",
+    "removePlayer": "Remove this player",
+    "reset": "New game",
+    "resetConfirm": "Reset every counter to zero?",
+    "resetAction": "Reset",
+    "defaultName": "Player {{number}}",
+    "nameLabel": "Player {{number}} name",
+    "score": "Points",
+    "energy": "Energy",
+    "power": "Power",
+    "legend": "Legend",
+    "legendPlaceholder": "Search for a legend…",
+    "legendEmpty": "No legend found.",
+    "clearLegend": "Remove the legend"
+  },
+  "groupManage": {
+    "create": {
+      "action": "Create a group",
+      "title": "Create a group",
+      "hint": "You'll be its founder. Images, visibility and invitations are set from the group afterwards.",
+      "submit": "Create the group"
+    },
+    "fields": {
+      "name": "Name",
+      "description": "Description",
+      "tagline": "Showcase tagline",
+      "taglinePlaceholder": "Gaming group · Thionville",
+      "logo": "Emblem",
+      "banner": "Banner",
+      "visibility": "Visibility"
+    },
+    "visibility": {
+      "public": "Public",
+      "private": "Private",
+      "publicHint": "The group is listed in the roll and its showcase can be read without an account.",
+      "privateHint": "Only members can see the group."
+    },
+    "chooseImage": "Choose an image",
+    "uploading": "Uploading…",
+    "removeImage": "Remove the image",
+    "settings": {
+      "open": "Group settings",
+      "title": "Group settings",
+      "moreOnWeb": "Links, rhythm and accent colour are set on the website."
+    },
+    "invite": {
+      "title": "Invite a player",
+      "placeholder": "name#1234 or e-mail",
+      "submit": "Invite",
+      "sent": "Invitation sent to {{who}}.",
+      "notFound": "No player has this tag or e-mail.",
+      "conflict": "This player is already a member or already invited."
+    },
+    "members": {
+      "promote": "Make admin",
+      "demote": "Remove admin",
+      "remove": "Remove from group",
+      "confirmRemove": "Confirm removal"
+    },
+    "invitations": {
+      "title_one": "One group invitation",
+      "title_other": "{{count}} group invitations",
+      "accept": "Join"
+    }
+  },
+  "profileEdit": {
+    "open": "Edit my profile",
+    "title": "My profile",
+    "identity": "Name and avatar",
+    "displayName": "Name",
+    "tag": "Your tag: {{tag}}",
+    "changeAvatar": "Change avatar",
+    "removeAvatar": "Remove",
+    "uploading": "Uploading…",
+    "saved": "Saved.",
+    "location": "My area",
+    "locationHint": "Used to suggest venues and events near you.",
+    "locationPlaceholder": "City or postcode",
+    "removeLocation": "Remove",
+    "notifications": "Notifications",
+    "moreOnWeb": "Showcase, price preference, integrations and subscription are set on the website.",
+    "notif": {
+      "discordNotLinked": "Link a Discord account from the website first.",
+      "emails": {
+        "weekly": {
+          "title": "Weekly digest by e-mail",
+          "hint": "This week's events near you."
+        },
+        "platform": {
+          "title": "Joutes news by e-mail",
+          "hint": "Platform announcements, rarely."
+        }
+      },
+      "app": {
+        "weekly": {
+          "title": "Weekly digest in the app",
+          "hint": "The same digest, as a notification."
+        },
+        "push": {
+          "title": "Push notifications",
+          "hint": "Tournaments, trades, groups and friends, on your devices."
+        }
+      },
+      "discord": {
+        "dm": {
+          "title": "Discord direct messages",
+          "hint": "Also get your notifications from the Joutes bot."
+        }
+      }
+    }
   }
 }

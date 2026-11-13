@@ -8,7 +8,7 @@ import {
   removeCollectionCard,
   undoCollectionBatch,
 } from "../api/collection";
-import type { CollectionItem, CollectionValue } from "../api/types";
+import type { CollectionItem, CollectionValue, SetCompletion } from "../api/types";
 import { getGame } from "../api/games";
 import { AddCollectionCopySheet } from "../components/AddCollectionCopySheet";
 import { AddSetSheet } from "../components/AddSetSheet";
@@ -18,6 +18,7 @@ import { CollectionTransferSheet } from "../components/CollectionTransferSheet";
 import { CardImage } from "../components/CardImage";
 import { CardPriceTag } from "../components/CardPriceTag";
 import { CollectionValueCard } from "../components/CollectionValueCard";
+import { SetCompletionList } from "../components/SetCompletionList";
 import {
   ArrowLeftRightIcon,
   BoxIcon,
@@ -77,6 +78,8 @@ function CollectionGameContent({
   const [gameValue, setGameValue] = useState<CollectionValue | undefined>();
   /** Exemplaires possédés, doublons compris : c'est sur eux que porte la valeur. */
   const [copies, setCopies] = useState(0);
+  /** Avancement par extension, calculé avec le total du jeu. */
+  const [setStats, setSetStats] = useState<SetCompletion[]>([]);
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [setCodes, setSetCodes] = useState<string[]>([]);
@@ -133,6 +136,7 @@ function CollectionGameContent({
           setMasterTotal(response.stats.masterTotal);
           setGameValue(response.stats.value);
           setCopies(response.stats.copies);
+          setSetStats(response.stats.sets ?? []);
         }
       })
       .catch((err: unknown) => {
@@ -309,6 +313,24 @@ function CollectionGameContent({
             const { value } = await recomputeGameCollectionValue(gameSlug, groupId);
             setGameValue(value);
           }}
+        />
+      )}
+
+      {gameTotal > 0 && (
+        <SetCompletionList
+          gameSlug={gameSlug}
+          sets={setStats}
+          activeSetCode={shown.setCode}
+          onSelect={(code) =>
+            setSearchInput(
+              withFieldToken(
+                searchInput,
+                fields,
+                "set",
+                shown.setCode?.toUpperCase() === code.toUpperCase() ? "" : code,
+              ),
+            )
+          }
         />
       )}
 

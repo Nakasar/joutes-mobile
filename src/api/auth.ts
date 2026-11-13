@@ -18,6 +18,21 @@ export function signInWithOtp(email: string, otp: string): Promise<unknown> {
   return api.post(endpoints.auth.signInWithOtp, { email, otp });
 }
 
+/**
+ * Connexion par un code de la page « Se connecter dans l'app » du site
+ * (`/app-login`), ouverte dans le navigateur : c'est le chemin des comptes
+ * Discord, que l'app ne sait pas ouvrir elle-même. Le code sert une fois ;
+ * le serveur pose le cookie de la session du navigateur.
+ */
+export function signInWithAppCode(code: string): Promise<unknown> {
+  return api.post(endpoints.auth.verifyAppCode, { token: normalizeAppCode(code) });
+}
+
+/** « abcd-efgh » → « ABCDEFGH » : la forme que le site a générée. */
+export function normalizeAppCode(input: string): string {
+  return input.replace(/[\s-]/g, "").toUpperCase();
+}
+
 export function signOut(): Promise<unknown> {
   return api.post(endpoints.auth.signOut, {});
 }

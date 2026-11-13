@@ -5,6 +5,7 @@ import {
   copyDeck,
   deleteDeck,
   getDeck,
+  getDeckExtras,
   getDeckCards,
   setDeckFavorite,
 } from "../api/decks";
@@ -20,8 +21,13 @@ import { DeckCostCurve } from "../components/DeckCostCurve";
 import { DeckLegalityBadge, DeckSizeLabel, DeckVisibilityBadge } from "../components/DeckBadges";
 import { DeckTextSheet } from "../components/DeckTextSheet";
 import { DeckVisibilitySheet } from "../components/DeckVisibilitySheet";
+import {
+  DeckCardnexusButton,
+  DeckResultsCard,
+  ShareDeckToGroupSheet,
+} from "../components/DeckExtrasSection";
 import { DeckZoneCards } from "../components/DeckZoneCards";
-import { StarIcon, TextListIcon, TrashIcon } from "../components/icons";
+import { StarIcon, TextListIcon, TrashIcon, UsersIcon } from "../components/icons";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { deckCoverPosition, resolveDeckCover } from "../lib/deck-cover";
@@ -65,8 +71,12 @@ export function DeckDetailScreen() {
   const [actionError, setActionError] = useState<string | null>(null);
   const [textOpen, setTextOpen] = useState(false);
   const [visibilityOpen, setVisibilityOpen] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
 
   const loaded = useApi(() => getDeck(deckId), [deckId]);
+  // Résultats en tournoi et lien CardNexus : une lecture d'appoint, dont
+  // l'échec laisse simplement la fiche sans ces sections.
+  const extras = useApi(() => getDeckExtras(deckId).catch(() => null), [deckId]);
   useEffect(() => {
     if (loaded.data) setDeck(loaded.data);
   }, [loaded.data]);
@@ -231,6 +241,8 @@ export function DeckDetailScreen() {
               )}
 
               <DeckCostCurve cards={deck.cards} zones={zones} cardsById={cardsById} />
+
+              <DeckResultsCard extras={extras.data ?? null} />
             </>
           )}
 
@@ -292,11 +304,17 @@ export function DeckDetailScreen() {
               {isAuthor ? t("decks.text.edit") : t("decks.text.view")}
             </button>
 
+            <DeckCardnexusButton extras={extras.data ?? null} />
+
             {isAuthor ? (
               <>
                 <Link to={`/decks/${deck.id}/edit`} className="btn btn--grad btn--block">
                   {t("decks.build")}
                 </Link>
+                <button className="btn btn--outline btn--block" onClick={() => setShareOpen(true)}>
+                  <UsersIcon size={16} />
+                  {t("decks.shareGroup.open")}
+                </button>
                 <button
                   className="btn btn--outline btn--block"
                   onClick={() => setVisibilityOpen(true)}
@@ -327,6 +345,10 @@ export function DeckDetailScreen() {
           onSaved={setDeck}
           onClose={() => setTextOpen(false)}
         />
+      )}
+
+      {shareOpen && deck && (
+        <ShareDeckToGroupSheet deckId={deck.id} onClose={() => setShareOpen(false)} />
       )}
 
       {visibilityOpen && deck && (

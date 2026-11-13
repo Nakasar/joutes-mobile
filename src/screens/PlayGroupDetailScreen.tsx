@@ -13,6 +13,8 @@ import { BackHeader } from "../components/BackHeader";
 import { CollectionValueCard } from "../components/CollectionValueCard";
 import { CreateSessionSheet } from "../components/CreateSessionSheet";
 import { GroupDecksView } from "../components/GroupDecksView";
+import { InviteMemberForm, MemberActions } from "../components/GroupMembersManager";
+import { PlayGroupSettingsSheet } from "../components/PlayGroupSettingsSheet";
 import { GroupMetaView } from "../components/GroupMetaView";
 import { GroupTournamentsView } from "../components/GroupTournamentsView";
 import { SessionCard } from "../components/SessionCard";
@@ -59,6 +61,7 @@ function PlayGroupDetailContent({ groupId }: { groupId: string }) {
   const { user } = useAuth();
   const [view, setView] = useSearchParamState<View>("view", VIEWS, "etabli");
   const [creating, setCreating] = useState(false);
+  const [editingSettings, setEditingSettings] = useState(false);
 
   const group = useApi(() => getPlayGroup(groupId), [groupId]);
   const overview = useApi(() => getPlayGroupCollectionOverview(groupId), [groupId]);
@@ -384,7 +387,7 @@ function PlayGroupDetailContent({ groupId }: { groupId: string }) {
                   t("social.friendDefault");
                 const color = colorFor(member.userId ?? name);
                 return (
-                  <div key={member.userId ?? name} className="friend-row">
+                  <div key={member.userId ?? name} className="friend-row friend-row--wrap">
                     {member.user?.avatar ? (
                       <img
                         src={member.user.avatar}
@@ -405,19 +408,43 @@ function PlayGroupDetailContent({ groupId }: { groupId: string }) {
                         })}
                       </p>
                     </div>
+                    {canManage && (
+                      <MemberActions
+                        playGroupId={groupId}
+                        member={member}
+                        myRole={role}
+                        myUserId={user?.id}
+                        onChanged={group.reload}
+                      />
+                    )}
                   </div>
                 );
               })}
-              {/* Inviter, promouvoir, exclure : l'API existe, mais ce sont des
-                  gestes irréversibles dont la confirmation se lit mal au pouce.
-                  Ils restent sur le web, et l'écran le dit plutôt que de
-                  laisser chercher. */}
+              {/* Inviter, promouvoir, retirer : pour le fondateur et les
+                  admins. Le retrait se confirme d'un second geste. */}
               {canManage && (
-                <p className="status muted">{t("social.groupDetail.manageOnWeb")}</p>
+                <>
+                  <InviteMemberForm playGroupId={groupId} />
+                  <button
+                    type="button"
+                    className="btn btn--outline btn--block"
+                    onClick={() => setEditingSettings(true)}
+                  >
+                    {t("groupManage.settings.open")}
+                  </button>
+                </>
               )}
             </>
           )}
         </>
+      )}
+
+      {editingSettings && group.data && (
+        <PlayGroupSettingsSheet
+          group={group.data}
+          onClose={() => setEditingSettings(false)}
+          onSaved={group.reload}
+        />
       )}
 
       {creating && (

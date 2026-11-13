@@ -233,3 +233,96 @@ export interface ExploreParams {
 export function explorePlayGroups(params: ExploreParams = {}): Promise<ExploreResponse> {
   return api.get<ExploreResponse>(endpoints.playGroups.explore, { ...params });
 }
+
+// ---- Gestion du groupe ----
+
+/** Oublie les fiches mémorisées d'un groupe et la liste de mes groupes. */
+function forgetGroup(playGroupId?: string) {
+  cacheDelete("social:groups");
+  if (playGroupId) cacheDelete(`social:group:${playGroupId}`);
+}
+
+/** Crée un groupe dont le compte connecté est le fondateur. */
+export async function createPlayGroup(input: {
+  name: string;
+  description?: string;
+}): Promise<PlayGroup> {
+  const { group } = await api.post<{ group: PlayGroup }>(endpoints.playGroups.list, input);
+  forgetGroup();
+  return group;
+}
+
+/**
+ * Réglages du groupe : chaque clé est facultative, une chaîne vide efface le
+ * champ (sauf le nom). Réservé au fondateur et aux admins.
+ */
+export interface PlayGroupSettingsInput {
+  name?: string;
+  description?: string;
+  tagline?: string;
+  logo?: string;
+  banner?: string;
+  visibility?: "public" | "private";
+}
+
+export async function updatePlayGroupSettings(
+  playGroupId: string,
+  input: PlayGroupSettingsInput,
+): Promise<PlayGroup> {
+  const { group } = await api.patch<{ group: PlayGroup }>(
+    endpoints.playGroups.detail(playGroupId),
+    input,
+  );
+  forgetGroup(playGroupId);
+  return group;
+}
+
+/** Téléverse une image du groupe et rend son adresse, à enregistrer ensuite. */
+export async function uploadPlayGroupImage(playGroupId: string, file: File): Promise<string> {
+  const form = new FormData();
+  form.append("file", file);
+  const { url } = await api.upload<{ url: string }>(endpoints.playGroups.images(playGroupId), form);
+  return url;
+}
+
+/** Invite un joueur par son tag (`pseudo#1234`) ou son e-mail. */
+export async function invitePlayGroupMember(playGroupId: string, userIdentifier: string): Promise<void> {
+  await api.post(endpoints.playGroups.members(playGroupId), { userIdentifier });
+}
+
+/** Promeut un membre admin, ou le ramène membre. Réservé au fondateur. */
+export async function setPlayGroupMemberRole(
+  playGroupId: string,
+  userId: string,
+  role: "admin" | "member",
+): Promise<void> {
+  await api.patch(endpoints.playGroups.member(playGroupId, userId), { role });
+  forgetGroup(playGroupId);
+}
+
+/** Retire un membre du groupe. */
+export async function removePlayGroupMember(playGroupId: string, userId: string): Promise<void> {
+  await api.delete(endpoints.playGroups.member(playGroupId, userId));
+  forgetGroup(playGroupId);
+}
+
+/** Une invitation à rejoindre un groupe, reçue par le compte connecté. */
+export interface PlayGroupInvitation {
+  id: string;
+  playGroupId: string;
+  playGroupName: string;
+  invitedById: string;
+  createdAt: string;
+}
+
+export function listMyPlayGroupInvitations(): Promise<PlayGroupInvitation[]> {
+  return api
+    .get<{ invitations: PlayGroupInvitation[] }>(endpoints.playGroups.invitations)
+    .then((r) => r.invitations ?? []);
+}
+
+export async function acceptPlayGroupInvitation(invitationId: string): Promise<PlayGroup> {
+  const { group } = await api.post<{ group: PlayGroup }>(endpoints.playGroups.invitation(invitationId));
+  forgetGroup(group.id);
+  return group;
+}

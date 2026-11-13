@@ -1378,6 +1378,8 @@ export interface DeckInput {
   legendCardId?: string;
   /** La carte qui illustre le deck ; `""` retire le choix. */
   coverCardId?: string;
+  /** Image déposée par `POST /decks/{id}/cover` ; la chaîne vide la retire. */
+  coverImageUrl?: string;
   visibility?: DeckVisibility;
   /**
    * La `version` que le client croyait à jour, sur un `PATCH`.
@@ -2993,4 +2995,32 @@ export interface DeckCommentsResponse {
   lastReadAt?: string;
   authors: Record<string, { name: string; avatar?: string }>;
   comments: DeckComment[];
+}
+
+/** Un résultat en tournoi lié à un deck, tel que la fiche le montre. */
+export interface DeckResultView {
+  id: string;
+  source: string;
+  name: string;
+  date: string;
+  visibility?: string;
+  placement?: number;
+  playerCount?: number;
+  topCut?: number;
+  deckVersion?: number;
+  record?: string;
+  /** Chemin du portail joueur d'un tournoi Joutes, pour l'auteur du résultat. */
+  tournamentHref?: string;
+}
+
+/** Le lien d'achat CardNexus d'un deck : absent quand aucune carte n'y est vendue. */
+export interface DeckCardnexusOrder {
+  url?: string;
+  matched: number;
+  total: number;
+}
+
+export interface DeckExtras {
+  results: DeckResultView[];
+  cardnexusOrder: DeckCardnexusOrder | null;
 }

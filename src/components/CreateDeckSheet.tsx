@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { createDeck } from "../api/decks";
+import { createDeck, updateDeck } from "../api/decks";
+import { checkDeck } from "../api/deck-checker";
+import { deckListToCards, isPiltoverImport, normalizePiltoverInput } from "../lib/deck-import";
 import { listGames } from "../api/games";
 import type { DeckVisibility } from "../api/types";
 import { DECK_VISIBILITIES } from "../api/types";
@@ -26,22 +28,50 @@ export function CreateDeckSheet({ onClose }: { onClose: () => void }) {
   const [name, setName] = useState("");
   const [gameId, setGameId] = useState("");
   const [visibility, setVisibility] = useState<DeckVisibility>("private");
+  /** Lien ou code Piltover Archive, pour un deck Riftbound. */
+  const [importInput, setImportInput] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const isRiftbound =
+    (games.data ?? []).find((game) => game._id === gameId)?.slug === "riftbound";
 
   async function submit() {
     const trimmed = name.trim();
     if (!trimmed || !gameId) return;
 
+    const source = isRiftbound ? importInput.trim() : "";
+    if (source && !isPiltoverImport(source)) {
+      setError(t("decks.create.importInvalid"));
+      return;
+    }
+
     setSaving(true);
     setError(null);
     try {
+      // Le deck importé se lit d'abord : un lien mort ne doit pas laisser
+      // derrière lui un deck vide créé pour rien.
+      const imported = source
+        ? deckListToCards((await checkDeck("riftbound", normalizePiltoverInput(source))).deck)
+        : null;
+      if (imported && imported.count === 0) {
+        setError(t("decks.create.importEmpty"));
+        setSaving(false);
+        return;
+      }
       const deck = await createDeck({ name: trimmed, gameId, visibility });
+      if (imported) {
+        await updateDeck(deck.id, { cards: imported.cards });
+      }
       // On ouvre le deck qu'on vient de créer : c'est là qu'on va le
       // construire. Recharger la liste qu'on quitte ne servirait personne — elle
-      // se relit d'elle-même au retour.
+      // se relit d'elle-même au retour. Un import incomplet ouvre les cartes.
       onClose();
-      navigate(`/decks/${deck.id}`);
+      navigate(
+        imported && imported.unmatched.length > 0
+          ? `/decks/${deck.id}?tab=cards`
+          : `/decks/${deck.id}`,
+      );
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : t("common.error"));
       setSaving(false);
@@ -78,6 +108,20 @@ export function CreateDeckSheet({ onClose }: { onClose: () => void }) {
               ))}
             </select>
           </label>
+
+          {isRiftbound && (
+            <label className="field">
+              <span className="field__label">{t("decks.create.import")}</span>
+              <input
+                value={importInput}
+                autoCapitalize="none"
+                autoCorrect="off"
+                onChange={(e) => setImportInput(e.currentTarget.value)}
+                placeholder={t("decks.create.importPlaceholder")}
+              />
+              <span className="muted">{t("decks.create.importHint")}</span>
+            </label>
+          )}
 
           <label className="field">
             <span className="field__label">{t("decks.create.visibility")}</span>

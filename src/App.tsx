@@ -27,6 +27,8 @@ import { LairDetailScreen } from "./screens/LairDetailScreen";
 import { LairsScreen } from "./screens/LairsScreen";
 import { LoginScreen } from "./screens/LoginScreen";
 import { MetaTournamentScreen } from "./screens/MetaTournamentScreen";
+import { TrackerScreen } from "./screens/TrackerScreen";
+import { ProfileEditScreen } from "./screens/ProfileEditScreen";
 import { MySellListScreen } from "./screens/MySellListScreen";
 import { NewsDetailScreen } from "./screens/NewsDetailScreen";
 import { NewsScreen } from "./screens/NewsScreen";
@@ -143,6 +145,7 @@ function Shell() {
                 />
                 <Route path="/games/:gameSlug/social" element={<GameSocialScreen />} />
                 <Route path="/games/:gameSlug/meta" element={<GameMetaScreen />} />
+                <Route path="/games/riftbound/tracker" element={<TrackerScreen />} />
                 <Route
                   path="/games/:gameSlug/meta/tournaments/:date/:slug"
                   element={<MetaTournamentScreen />}
@@ -248,6 +251,7 @@ function Shell() {
                 <Route path="/search" element={<SearchScreen />} />
                 <Route path="/notifications" element={<NotificationsScreen />} />
                 <Route path="/settings" element={<SettingsScreen />} />
+                <Route path="/settings/profile" element={<ProfileEditScreen />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </main>
