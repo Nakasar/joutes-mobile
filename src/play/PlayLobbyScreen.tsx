@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
+import { Link, Navigate, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import {
   createTable,
@@ -25,7 +26,8 @@ import { DOMAIN_HEX } from "../engine/told-text";
 import { BOT_LEVELS, ENGINE_MODES, modePlayers, type BotLevel, type EngineDeckList, type EngineMode } from "../engine/types";
 import { DeckPicker, withDeckProblems } from "./DeckPicker";
 import { HostPanel, type HostKit } from "./HostPanel";
-import { BotIcon, EyeIcon, GlobeIcon, ServerIcon } from "./icons";
+import { beatenLevels, readHistory, writeLastSetup, type SoloMeta } from "./history";
+import { BackIcon, BotIcon, CheckIcon, ChevronDownIcon, EyeIcon, GlobeIcon, PlayIcon, ServerIcon } from "./icons";
 import { readSwuSave, writeSwuSave, type SwuSave } from "./swu/useSwuSoloGame";
 import { useSwuTableCards } from "./swu/useSwuTableCards";
 import { usePlayT } from "./t";
@@ -37,8 +39,6 @@ import { remotePath } from "./remote";
 /** Qui joue : moi contre l'IA, des IA entre elles (je regarde), en ligne, ou sur un serveur. */
 type Opponent = "ai" | "watch" | "online" | "host";
 
-/** Couleurs des sièges, dans l'ordre de la table. */
-const SEAT_COLORS = ["#2bb7dc", "#f05a7e", "#f5b041", "#8e7cf0"];
 
 export function randomSeed(): number {
   return Math.floor(Math.random() * 2 ** 31) + 1;
@@ -53,6 +53,9 @@ type PickerCards = Record<string, { name: string; image?: string; domains?: stri
 /** Ce que chaque jeu apporte à la page : ses modes, ses decks automatiques, sa partie contre l'IA. */
 type LobbyKit<L extends object> = {
   game: PlayGame;
+  gameName: string;
+  /** La légende (le leader à SWU) d'un deck, pour son illustration. */
+  legendOf: (deck: L) => string | null;
   lobby: RiftboundLobby | SwuLobby;
   /** Les modes de jeu (Riftbound) ; absent, une seule façon de jouer à deux. */
   modes: EngineMode[] | null;
@@ -76,6 +79,7 @@ type LobbyKit<L extends object> = {
     bots: (BotLevel | null)[];
     watching: boolean;
     openLists: boolean;
+    meta: SoloMeta;
   }) => Promise<void>;
   hostConfig: (mode: EngineMode, players: { name: string; deck: L }[]) => unknown;
   hostNeedDeck: string;
@@ -118,6 +122,8 @@ function RiftboundLobbyScreen() {
 
   const kit: LobbyKit<EngineDeckList> = {
     game: "riftbound",
+    gameName: "Riftbound",
+    legendOf: (deck) => deck.legend,
     lobby,
     modes: ENGINE_MODES,
     legends: lobby.legends,
@@ -144,11 +150,12 @@ function RiftboundLobbyScreen() {
       writeSoloSave(null);
       setSaved(null);
     },
-    startSolo: async ({ mode, players, bots, watching, openLists }) => {
+    startSolo: async ({ mode, players, bots, watching, openLists, meta }) => {
       const engine = await loadEngine();
       const save: SoloSave = {
         seat: watching ? null : 0,
         bots,
+        meta,
         record: {
           config: {
             mode,
@@ -163,6 +170,7 @@ function RiftboundLobbyScreen() {
       // Le moteur refuse ici une configuration qu'il ne sait pas jouer, avant d'ouvrir la table.
       engine.Table.restore(JSON.stringify(save.record), JSON.stringify(bots)).free();
       writeSoloSave(save);
+      if (!watching) writeLastSetup("riftbound", { bots, record: save.record, meta });
       navigate("/play/riftbound/solo");
     },
     hostConfig: (mode, players) => ({ mode, players }),
@@ -183,6 +191,8 @@ function SwuLobbyScreen() {
 
   const kit: LobbyKit<SwuDeckList> = {
     game: "swu",
+    gameName: "Star Wars: Unlimited",
+    legendOf: (deck) => deck.leader,
     lobby,
     modes: null,
     legends: lobby.leaders,
@@ -215,17 +225,19 @@ function SwuLobbyScreen() {
       writeSwuSave(null);
       setSaved(null);
     },
-    startSolo: async ({ players, bots, watching }) => {
+    startSolo: async ({ players, bots, watching, meta }) => {
       const engine = await loadSwuEngine();
       const save: SwuSave = {
         seat: watching ? null : 0,
         bots,
+        meta,
         record: { config: { players }, seed: randomSeed(), actions: [] },
       };
       const table = new engine.SwuTable(JSON.stringify(save.record.config), save.record.seed, JSON.stringify(bots));
       save.record = JSON.parse(table.record()) as SwuSave["record"];
       table.free();
       writeSwuSave(save);
+      if (!watching) writeLastSetup("swu", { bots, record: { ...save.record, actions: [] }, meta });
       navigate("/play/swu/solo");
     },
     hostConfig: (_mode, players) => ({ players }),
@@ -253,11 +265,16 @@ function LobbyShell({ title, failed, onRetry }: { title: string; failed: boolean
 
 function LobbyView<L extends object>({ kit }: { kit: LobbyKit<L> }) {
   const t = usePlayT("Play");
+  const { t: th } = useTranslation();
   const navigate = useNavigate();
   const { toast, node } = useToast();
   const { lobby, game } = kit;
   const [mode, setMode] = useState<EngineMode>("duel");
-  const [opponent, setOpponent] = useState<Opponent>("ai");
+  const [searchParams] = useSearchParams();
+  const [opponent, setOpponent] = useState<Opponent>(() => {
+    const way = searchParams.get("way");
+    return way === "online" || way === "host" || way === "watch" ? way : "ai";
+  });
   const [choice, setChoice] = useState<DeckChoice | null>(null);
   const [botDecks, setBotDecks] = useState<BotDeckChoice[]>([]);
   const [botLevels, setBotLevels] = useState<BotLevel[]>([]);
@@ -265,6 +282,9 @@ function LobbyView<L extends object>({ kit }: { kit: LobbyKit<L> }) {
   const [found, setFound] = useState<Record<string, LobbyDeck<unknown>>>({});
   const [busy, setBusy] = useState(false);
   const [code, setCode] = useState("");
+  const [othersOpen, setOthersOpen] = useState(false);
+  const history = useMemo(() => readHistory().filter((entry) => entry.game === kit.game), [kit.game]);
+  const beaten = useMemo(() => beatenLevels(kit.game, history), [kit.game, history]);
 
   const decks = lobby.decks as LobbyDeck<unknown>[];
   const watching = opponent === "watch";
@@ -281,24 +301,43 @@ function LobbyView<L extends object>({ kit }: { kit: LobbyKit<L> }) {
     return kit.autoDeck(picked.kind === "auto" ? picked.legend : null);
   };
 
+  /** Le nom et l'illustration d'un deck choisi, pour l'accueil et l'historique. */
+  const describe = (picked: BotDeckChoice | null, deck: L): { name: string; image?: string } => {
+    const legend = kit.legendOf(deck);
+    const legendName = legend ? (kit.cards[legend]?.name ?? legend) : "";
+    const image = legend ? kit.cards[legend]?.image : undefined;
+    if (picked?.kind === "deck") return { name: deckById(picked.deckId)?.name ?? legendName, image };
+    return { name: legendName || t("deck.random"), image };
+  };
+
   const startSolo = async () => {
     setBusy(true);
     try {
       const players: { name: string; deck: L }[] = [];
       const bots: (BotLevel | null)[] = [];
+      const described: { name: string; image?: string }[] = [];
       if (!watching) {
         const deck = await listOf(choice);
         if (!deck) throw new Error(t("error.INVALID_DECK"));
         players.push({ name: me, deck });
         bots.push(null);
+        described.push(describe(choice, deck));
       }
       for (let seat = players.length; seat < seatCount; seat++) {
         const deck = await listOf(botDeckOf(seat));
         if (!deck) throw new Error(t("error.INVALID_DECK"));
         players.push({ name: t("lobby.botName", { number: watching ? seat + 1 : seat }), deck });
         bots.push(botLevelOf(seat));
+        described.push(describe(botDeckOf(seat), deck));
       }
-      await kit.startSolo({ mode, players, bots, watching, openLists });
+      const meta: SoloMeta = {
+        deckName: described[0]?.name,
+        image: described[0]?.image,
+        opponentName: described[1]?.name,
+        opponentImage: described[1]?.image,
+        startedAt: Date.now(),
+      };
+      await kit.startSolo({ mode, players, bots, watching, openLists, meta });
     } catch (error) {
       toast(error instanceof Error ? error.message : String(error), "error");
       setBusy(false);
@@ -325,8 +364,11 @@ function LobbyView<L extends object>({ kit }: { kit: LobbyKit<L> }) {
     { key: "host", icon: <ServerIcon size={18} />, title: t("lobby.host"), hint: t("lobby.hostHint") },
   ];
 
-  const picker = (seat: number, name: string, bot: boolean) => (
+  const picker = (seat: number, name: string, bot: boolean, label?: string, tone?: "me" | "ai") => (
     <DeckPicker
+      variant={label ? "hero" : "row"}
+      label={label}
+      tone={tone}
       title={t("deck.of", { name })}
       decks={decks}
       legends={kit.legends}
@@ -384,9 +426,76 @@ function LobbyView<L extends object>({ kit }: { kit: LobbyKit<L> }) {
     </div>
   );
 
+  // L'illustration du haut : la légende de mon deck, sinon celle d'une IA, sinon une du jeu.
+  const imageOf = (picked: BotDeckChoice | null): string | undefined => {
+    if (!picked || picked.kind === "random") return undefined;
+    const legend = picked.kind === "deck" ? deckById(picked.deckId)?.legend : picked.legend;
+    return legend ? kit.cards[legend]?.image : undefined;
+  };
+  const heroImage =
+    imageOf(watching ? botDeckOf(0) : choice) ??
+    imageOf(botDeckOf(1)) ??
+    kit.legends.map((legend) => kit.cards[legend]?.image).find(Boolean);
+
+  // Le défi proposé sous l'IA : ce qu'on a déjà battu, et le palier suivant.
+  const nextUnbeaten = BOT_LEVELS.find((level) => !beaten.has(level));
+  const challengeOf = (level: BotLevel): string => {
+    const wins = history.filter((entry) => entry.outcome === "won" && entry.level === level).length;
+    const name = t(`level.${level}`);
+    if (wins > 0) {
+      const done = th("playHub.lobby.winsAtLevel", { count: wins, level: name });
+      return nextUnbeaten ? `${done} ${th("playHub.lobby.nextChallenge", { level: t(`level.${nextUnbeaten}`) })}` : done;
+    }
+    if (beaten.size === 0) return th("playHub.lobby.firstChallenge", { level: name });
+    return nextUnbeaten ? th("playHub.lobby.nextChallenge", { level: t(`level.${nextUnbeaten}`) }) : th("playHub.lobby.allBeaten");
+  };
+
+  const levels = (seat: number, name: string) => (
+    <div className="play-segment" role="group" aria-label={t("lobby.levelOf", { name })}>
+      {BOT_LEVELS.map((value) => (
+        <button
+          key={value}
+          type="button"
+          aria-pressed={botLevelOf(seat) === value}
+          className={`play-segment__item${botLevelOf(seat) === value ? " play-segment__item--active" : ""}${value === "hard" ? " play-segment__item--gold" : ""}`}
+          onClick={() =>
+            setBotLevels((previous) => {
+              const copy = [...previous];
+              copy[seat] = value;
+              return copy;
+            })
+          }
+        >
+          {t(`level.${value}`)}
+          {beaten.has(value) && (
+            <span className="play-segment__check" aria-label={th("playHub.lobby.beaten")}>
+              <CheckIcon size={13} />
+            </span>
+          )}
+        </button>
+      ))}
+    </div>
+  );
+
+  const solo = opponent === "ai" || watching;
+  const botSeats = Array.from({ length: seatCount }, (_, seat) => seat).filter((seat) => watching || seat > 0);
+  const others: { key: Opponent; icon: ReactNode; title: string; hint: string }[] = [
+    opponent !== "ai" ? opponents[0] : null,
+    ...opponents.slice(1),
+  ].filter((entry): entry is (typeof opponents)[number] => entry !== null);
+
   return (
-    <div className="screen play-screen">
-      <BackHeader title={game === "swu" ? t("lobby.titleSwu") : t("title")} />
+    <div className="screen play-screen play-lobby">
+      <header className="play-hero" style={heroImage ? ({ "--hero": `url("${heroImage}")` } as CSSProperties) : undefined}>
+        <button type="button" className="play-hero__back" aria-label={th("common.back")} onClick={() => navigate(-1)}>
+          <BackIcon size={20} />
+        </button>
+        <div className="play-hero__titles">
+          <p className="play-hero__game">{kit.gameName}</p>
+          <h1 className="play-hero__title">{th("playHub.lobby.newGame")}</h1>
+        </div>
+      </header>
+
       <div className="play-split">
         <div className="play-screen">
           {kit.saved && (
@@ -405,101 +514,65 @@ function LobbyView<L extends object>({ kit }: { kit: LobbyKit<L> }) {
           )}
 
           {kit.modes && (
-            <section className="play-section">
-              <h2 className="play-section__title">{t("lobby.modeTitle")}</h2>
-              <div className="chip-row play-chips">
-                {kit.modes.map((value) => (
-                  <button
-                    key={value}
-                    type="button"
-                    aria-pressed={mode === value}
-                    className={`chip-filter${mode === value ? " chip-filter--active" : ""}`}
-                    onClick={() => setMode(value)}
-                  >
-                    {t(`mode.${value}`)}
-                  </button>
-                ))}
-              </div>
-              <p className="muted play-small">{t(`modeHint.${mode}`)}</p>
-            </section>
-          )}
-
-          <section className="play-section">
-            <h2 className="play-section__title">{kit.whoTitle}</h2>
-            <div className="play-modes play-modes--four">
-              {opponents.map((entry) => (
+            <div className="play-formats" role="group" aria-label={t("lobby.modeTitle")}>
+              {kit.modes.map((value) => (
                 <button
-                  key={entry.key}
+                  key={value}
                   type="button"
-                  aria-pressed={opponent === entry.key}
-                  className={`play-mode${opponent === entry.key ? " play-mode--active" : ""}`}
-                  onClick={() => setOpponent(entry.key)}
+                  aria-pressed={mode === value}
+                  title={t(`mode.${value}`)}
+                  className={`play-format${mode === value ? " play-format--active" : ""}`}
+                  onClick={() => setMode(value)}
                 >
-                  {entry.icon}
-                  <b>{entry.title}</b>
-                  <span>{entry.hint}</span>
+                  {th(`playHub.lobby.modeShort.${value}`)}
                 </button>
               ))}
             </div>
+          )}
 
-            {!watching && (
-              <SeatRow color={SEAT_COLORS[0]} name={me} you={t("lobby.youBadge")}>
-                {picker(0, me, false)}
-              </SeatRow>
-            )}
-            {(opponent === "ai" || watching) &&
-              Array.from({ length: seatCount }, (_, seat) => seat)
-                .filter((seat) => watching || seat > 0)
-                .map((seat) => {
-                  const name = t("lobby.botName", { number: watching ? seat + 1 : seat });
-                  return (
-                    <SeatRow key={seat} color={SEAT_COLORS[seat]} name={name} bot>
-                      {picker(seat, name, true)}
-                      <div className="play-levels" role="group" aria-label={t("lobby.levelOf", { name })}>
-                        {BOT_LEVELS.map((value) => (
-                          <button
-                            key={value}
-                            type="button"
-                            aria-pressed={botLevelOf(seat) === value}
-                            className={`play-level${botLevelOf(seat) === value ? " play-level--active" : ""}`}
-                            onClick={() =>
-                              setBotLevels((previous) => {
-                                const copy = [...previous];
-                                copy[seat] = value;
-                                return copy;
-                              })
-                            }
-                          >
-                            {t(`level.${value}`)}
-                          </button>
-                        ))}
-                      </div>
-                    </SeatRow>
-                  );
-                })}
+          {opponent !== "ai" && (
+            <p className="play-way">
+              {opponents.find((entry) => entry.key === opponent)?.icon}
+              <b>{opponents.find((entry) => entry.key === opponent)?.title}</b>
+              <span className="muted">{opponents.find((entry) => entry.key === opponent)?.hint}</span>
+            </p>
+          )}
 
-            {!lobby.signedIn && signIn(t("lobby.signInForDecks"))}
-            <p className="muted play-small">{kit.sets}</p>
-          </section>
+          <div className="play-versus">
+            {!watching &&
+              picker(0, me, false, th("playHub.lobby.you"), "me")}
+            {solo &&
+              botSeats.map((seat, index) => {
+                const name = t("lobby.botName", { number: watching ? seat + 1 : seat });
+                return (
+                  <div key={seat} className="play-versus__item">
+                    {(!watching || index > 0) && (
+                      <span className="play-versus__badge" aria-hidden>
+                        {th("playHub.lobby.vs")}
+                      </span>
+                    )}
+                    <div className="play-opponent">
+                      {picker(seat, name, true, seatCount > 2 || watching ? name : th("playHub.lobby.ai"), "ai")}
+                      {levels(seat, name)}
+                      {!watching && index === 0 && <p className="muted play-small">{challengeOf(botLevelOf(seat))}</p>}
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
 
-          {(opponent === "ai" || watching) && (
-            <section className="play-section">
+          {!lobby.signedIn && signIn(t("lobby.signInForDecks"))}
+
+          {solo && (
+            <>
               {watching && <p className="muted play-small">{kit.watchInfo}</p>}
               {game === "riftbound" && (
                 <div className="play-toggle-row">
                   <Toggle checked={openLists} onChange={setOpenLists} label={t("lobby.openLists")} hint={t("lobby.openListsHint")} />
                 </div>
               )}
-              <button
-                type="button"
-                className="btn btn--grad btn--block"
-                disabled={busy || (!watching && !choice)}
-                onClick={() => void startSolo()}
-              >
-                {busy ? t("status.loading") : watching ? t("lobby.startWatch") : t("lobby.startSolo")}
-              </button>
               {kit.saved && <p className="muted play-small">{t("lobby.replaces")}</p>}
-            </section>
+            </>
           )}
 
           {opponent === "online" && (
@@ -554,6 +627,38 @@ function LobbyView<L extends object>({ kit }: { kit: LobbyKit<L> }) {
               />
             </section>
           )}
+
+          <section className={`play-others${othersOpen ? " play-others--open" : ""}`}>
+            <button type="button" className="play-others__head" aria-expanded={othersOpen} onClick={() => setOthersOpen((open) => !open)}>
+              <b className="pt-grow">{th("playHub.lobby.otherWays")}</b>
+              <span className="muted play-small">{th("playHub.lobby.otherWaysHint")}</span>
+              <ChevronDownIcon size={16} />
+            </button>
+            {othersOpen && (
+              <div className="play-others__list">
+                {others.map((entry) => (
+                  <button
+                    key={entry.key}
+                    type="button"
+                    aria-pressed={opponent === entry.key}
+                    className={`play-other${opponent === entry.key ? " play-other--active" : ""}`}
+                    onClick={() => {
+                      setOpponent(entry.key);
+                      setOthersOpen(false);
+                    }}
+                  >
+                    <span className="play-other__icon">{entry.icon}</span>
+                    <span className="play-deck__body">
+                      <b>{entry.key === "ai" ? th("playHub.lobby.vsAi") : entry.title}</b>
+                      <span className="muted play-small">{entry.hint}</span>
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </section>
+
+          <p className="muted play-small">{kit.sets}</p>
         </div>
 
         <div className="play-screen">
@@ -564,36 +669,22 @@ function LobbyView<L extends object>({ kit }: { kit: LobbyKit<L> }) {
           </section>
         </div>
       </div>
-      {node}
-    </div>
-  );
-}
 
-function SeatRow({
-  color,
-  name,
-  you,
-  bot = false,
-  children,
-}: {
-  color: string;
-  name: string;
-  you?: string;
-  bot?: boolean;
-  children: ReactNode;
-}) {
-  return (
-    <div className="play-seat">
-      <span className="play-seat__icon" style={{ color }}>
-        {bot ? <BotIcon size={18} /> : <span className="pt-dot" style={{ background: color, width: 12, height: 12 }} />}
-      </span>
-      <div className="play-seat__body">
-        <span className="play-seat__name">
-          {name}
-          {you && <span className="chip play-you">{you}</span>}
-        </span>
-        {children}
-      </div>
+      {solo && (
+        <div className="play-launch">
+          <button
+            type="button"
+            className="play-launch__button"
+            disabled={busy || (!watching && !choice)}
+            onClick={() => void startSolo()}
+          >
+            <PlayIcon size={18} />
+            {busy ? t("status.loading") : watching ? t("lobby.startWatch") : t("lobby.startSolo")}
+          </button>
+          {!watching && <p className="play-launch__note">{th("playHub.lobby.offlineNote")}</p>}
+        </div>
+      )}
+      {node}
     </div>
   );
 }

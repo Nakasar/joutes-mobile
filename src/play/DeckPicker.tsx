@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import type { BotDeckChoice, LobbyDeck } from "../api/play";
 import { DOMAIN_HEX } from "../engine/told-text";
@@ -55,6 +56,11 @@ type DeckPickerProps<D extends PickerDeck> = {
   colors?: Record<string, string>;
   /** Propose « Au hasard » (pour une IA). */
   allowRandom?: boolean;
+  /** `hero` : une grande carte avec l'illustration de la légende (le lancement d'une partie). */
+  variant?: "row" | "hero";
+  /** Au-dessus du nom, en variante `hero` (« Toi », « IA »). */
+  label?: string;
+  tone?: "me" | "ai";
 };
 
 const SEARCH_DELAY_MS = 300;
@@ -77,8 +83,12 @@ export function DeckPicker<D extends PickerDeck>({
   texts = {},
   colors = DOMAIN_HEX,
   allowRandom = false,
+  variant = "row",
+  label,
+  tone = "me",
 }: DeckPickerProps<D>) {
   const t = usePlayT("Play");
+  const { t: tr } = useTranslation();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [found, setFound] = useState<{ query: string; decks: D[] } | null>(null);
@@ -206,10 +216,35 @@ export function DeckPicker<D extends PickerDeck>({
 
   return (
     <>
-      <button type="button" className="play-seat__deck" aria-label={title} onClick={() => setOpen(true)}>
-        {selected ? <OptionBody option={selected} cards={cards} colors={colors} /> : <span className="muted">{t("deck.placeholder")}</span>}
-        <ChevronDownIcon size={16} />
-      </button>
+      {variant === "hero" ? (
+        <button type="button" className={`play-pick play-pick--${tone}`} aria-label={title} onClick={() => setOpen(true)}>
+          <span aria-hidden className={`play-pick__art${selected?.key === "random" ? " play-option__thumb--random" : ""}`}>
+            {selected?.legend && cards[selected.legend]?.image ? (
+              <img src={cards[selected.legend]!.image} alt="" loading="lazy" />
+            ) : (
+              <ShuffleIcon size={18} />
+            )}
+          </span>
+          <span className="play-pick__body">
+            {label && <span className="play-pick__label">{label}</span>}
+            <span className="play-pick__name">{selected?.name ?? t("deck.placeholder")}</span>
+            {selected && <span className="play-pick__sub">{selected.hint}</span>}
+            {selected && selected.domains.length > 0 && (
+              <span className="play-option__domains" aria-hidden>
+                {selected.domains.slice(0, 3).map((domain) => (
+                  <span key={domain} className="pt-dot" style={{ background: colors[domain] ?? "#64748b" }} />
+                ))}
+              </span>
+            )}
+          </span>
+          <span className="play-pick__change">{tr("playHub.lobby.change")}</span>
+        </button>
+      ) : (
+        <button type="button" className="play-seat__deck" aria-label={title} onClick={() => setOpen(true)}>
+          {selected ? <OptionBody option={selected} cards={cards} colors={colors} /> : <span className="muted">{t("deck.placeholder")}</span>}
+          <ChevronDownIcon size={16} />
+        </button>
+      )}
       {open && (
         <Sheet title={title} onClose={() => setOpen(false)} theme="app" className="play-picker">
           <div className="search-field play-picker__search">

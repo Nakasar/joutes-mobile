@@ -24,6 +24,7 @@ import { ASPECT_HEX, swuPickerCards } from "../engine/swu/cards";
 import { DOMAIN_HEX } from "../engine/told-text";
 import { BOT_LEVELS } from "../engine/types";
 import { DeckPicker } from "./DeckPicker";
+import { GameOver, type FinishedGame } from "./GameOver";
 import { BotIcon, CloseIcon, UserIcon } from "./icons";
 import { remoteSocketUrl } from "./remote";
 import { RiftboundTable } from "./RiftboundTable";
@@ -100,27 +101,46 @@ function RiftboundSolo() {
 
   const replay = () => {
     // Même configuration, nouvelle graine : une autre partie avec les mêmes decks.
-    const next: SoloSave = { ...save, record: { ...save.record, seed: newSeed(), actions: [] } };
+    const next: SoloSave = {
+      ...save,
+      meta: save.meta && { ...save.meta, startedAt: Date.now() },
+      record: { ...save.record, seed: newSeed(), actions: [] },
+    };
     writeSoloSave(next);
     setSave(next);
+  };
+  const toLobby = () => {
+    writeSoloSave(null);
+    navigate(home, { replace: true });
   };
   const after = (
     <div className="pt-row-wrap">
       <button type="button" className="pt-btn pt-btn--grad" onClick={replay}>
         {t("result.replay")}
       </button>
-      <button
-        type="button"
-        className="pt-btn"
-        onClick={() => {
-          writeSoloSave(null);
-          navigate(home, { replace: true });
-        }}
-      >
+      <button type="button" className="pt-btn" onClick={toLobby}>
         {t("result.toLobby")}
       </button>
     </div>
   );
+
+  const view = feed.update?.view;
+  const mine = save.seat ?? 0;
+  const others = view ? view.points.filter((_, index) => index !== mine) : [];
+  const finished: FinishedGame | null =
+    view?.result
+      ? {
+          game: "riftbound",
+          seed: save.record.seed,
+          seat: save.seat,
+          bots: save.bots,
+          meta: save.meta,
+          winners: view.result.winners,
+          turn: view.turn,
+          score: [view.points[mine] ?? 0, others.length ? Math.max(...others) : 0],
+          legend: save.record.config.players[mine]?.deck.legend ?? null,
+        }
+      : null;
 
   // Une partie gardée que le moteur ne sait plus rouvrir (il a changé depuis).
   if (feed.status === "error" && !feed.update) {
@@ -149,7 +169,7 @@ function RiftboundSolo() {
             }
           : undefined
       }
-      afterResult={after}
+      afterResult={finished ? <GameOver finished={finished} onReplay={replay} onChangeDeck={toLobby} /> : after}
     />
   );
 }
@@ -174,27 +194,52 @@ function SwuSolo() {
   }
 
   const replay = () => {
-    const next: SwuSave = { ...save, record: { ...save.record, seed: newSeed(), actions: [] } };
+    const next: SwuSave = {
+      ...save,
+      meta: save.meta && { ...save.meta, startedAt: Date.now() },
+      record: { ...save.record, seed: newSeed(), actions: [] },
+    };
     writeSwuSave(next);
     setSave(next);
+  };
+  const toLobby = () => {
+    writeSwuSave(null);
+    navigate(home, { replace: true });
   };
   const after = (
     <div className="pt-row-wrap pt-row-wrap--center">
       <button type="button" className="pt-btn pt-btn--grad" onClick={replay}>
         {t("result.replay")}
       </button>
-      <button
-        type="button"
-        className="pt-btn"
-        onClick={() => {
-          writeSwuSave(null);
-          navigate(home, { replace: true });
-        }}
-      >
+      <button type="button" className="pt-btn" onClick={toLobby}>
         {t("result.toLobby")}
       </button>
     </div>
   );
+
+  const view = feed.update?.view;
+  const mine = save.seat ?? 0;
+  const left = (index: number) => {
+    const base = view?.players.find((player) => player.seat === index)?.base;
+    return base ? Math.max(0, base.hp - base.damage) : 0;
+  };
+  const result = view?.result as { winners?: unknown } | null | undefined;
+  const winners = Array.isArray(result?.winners) ? (result.winners as number[]) : [];
+  const finished: FinishedGame | null =
+    view && result
+      ? {
+          game: "swu",
+          seed: save.record.seed,
+          seat: save.seat,
+          bots: save.bots,
+          meta: save.meta,
+          winners,
+          draw: winners.length > 1,
+          turn: view.round,
+          score: [left(mine), left(mine === 0 ? 1 : 0)],
+          legend: save.record.config.players[mine]?.deck.leader ?? null,
+        }
+      : null;
 
   if (feed.status === "error" && !feed.update) {
     return (
@@ -205,7 +250,15 @@ function SwuSolo() {
     );
   }
 
-  return <SwuTable key={`${save.record.seed}`} feed={feed} cards={cards} home={home} afterResult={after} />;
+  return (
+    <SwuTable
+      key={`${save.record.seed}`}
+      feed={feed}
+      cards={cards}
+      home={home}
+      afterResult={finished ? <GameOver finished={finished} onReplay={replay} onChangeDeck={toLobby} /> : after}
+    />
+  );
 }
 
 // ---------------------------------------------------------------------------

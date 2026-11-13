@@ -1,3 +1,4 @@
+import type { SoloMeta } from "./history";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { appendJournal, type GameFeed } from "./game-feed";
@@ -12,6 +13,8 @@ export type SoloSave = {
   seat: number | null;
   bots: (BotLevel | null)[];
   record: EngineRecord;
+  /** Le deck et l'IA choisis, pour l'accueil et l'historique. */
+  meta?: SoloMeta;
 };
 
 export const SOLO_STORAGE_KEY = "joutes.play.solo";
