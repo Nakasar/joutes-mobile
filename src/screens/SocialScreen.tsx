@@ -2,7 +2,12 @@ import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { listGames } from "../api/games";
-import { listPlayGroups } from "../api/play-groups";
+import {
+  acceptPlayGroupInvitation,
+  listMyPlayGroupInvitations,
+  listPlayGroups,
+} from "../api/play-groups";
+import { CreatePlayGroupSheet } from "../components/CreatePlayGroupSheet";
 import {
   acceptFriendRequest,
   declineFriendRequest,
@@ -20,6 +25,7 @@ import {
   PinIcon,
   RepeatIcon,
   SwordsIcon,
+  PlusIcon,
   UserPlusIcon,
   UsersIcon,
   XIcon,
@@ -340,6 +346,24 @@ function GroupRollEntry({ group, gameNames }: { group: PlayGroup; gameNames: str
 function GroupsTab() {
   const { t } = useTranslation();
   const groups = useApi(() => listPlayGroups());
+  const invitations = useApi(() => listMyPlayGroupInvitations());
+  const [creating, setCreating] = useState(false);
+  const [accepting, setAccepting] = useState<string | null>(null);
+  const [inviteError, setInviteError] = useState<string | null>(null);
+
+  async function accept(invitationId: string) {
+    setAccepting(invitationId);
+    setInviteError(null);
+    try {
+      await acceptPlayGroupInvitation(invitationId);
+      invitations.reload();
+      groups.reload();
+    } catch (err: unknown) {
+      setInviteError(err instanceof Error ? err.message : t("common.error"));
+    } finally {
+      setAccepting(null);
+    }
+  }
   const games = useApi(() => listGames());
   const gameName = useMemo(() => {
     const map = new Map<string, string>();
@@ -369,6 +393,28 @@ function GroupsTab() {
           </span>
         </Link>
 
+        {(invitations.data?.length ?? 0) > 0 && (
+          <section className="card group-invitations">
+            <p className="section-label" style={{ marginTop: 0 }}>
+              {t("groupManage.invitations.title", { count: invitations.data?.length ?? 0 })}
+            </p>
+            {invitations.data?.map((invitation) => (
+              <div key={invitation.id} className="group-invitations__row">
+                <span className="group-invitations__name">{invitation.playGroupName}</span>
+                <button
+                  type="button"
+                  className="btn btn--grad"
+                  disabled={accepting !== null}
+                  onClick={() => void accept(invitation.id)}
+                >
+                  {accepting === invitation.id ? t("common.saving") : t("groupManage.invitations.accept")}
+                </button>
+              </div>
+            ))}
+            {inviteError && <p className="form-error">{inviteError}</p>}
+          </section>
+        )}
+
         <Movement
           section
           title={t("social.myGroups")}
@@ -395,7 +441,18 @@ function GroupsTab() {
               .filter((name): name is string => Boolean(name))}
           />
         ))}
+
+        <button
+          type="button"
+          className="btn btn--outline btn--block"
+          style={{ marginTop: 12 }}
+          onClick={() => setCreating(true)}
+        >
+          <PlusIcon size={16} />
+          {t("groupManage.create.action")}
+        </button>
       </div>
+      {creating && <CreatePlayGroupSheet onClose={() => setCreating(false)} />}
     </>
   );
 }

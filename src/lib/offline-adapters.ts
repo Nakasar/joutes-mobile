@@ -166,7 +166,8 @@ export function offlineSearchCards(
     .join(" ")
     .trim()
     .toLowerCase();
-  const setCode = params.setCode || parsed.setCode;
+  // « * » demande toutes les extensions au site : hors ligne, c'est déjà le cas.
+  const setCode = (params.setCode === "*" ? "" : params.setCode) || parsed.setCode;
   const type = params.type || parsed.type;
 
   const filtered = all.filter((c) => {

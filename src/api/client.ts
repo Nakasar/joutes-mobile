@@ -77,7 +77,10 @@ class ApiClient {
     const headers: Record<string, string> = {
       Accept: "application/json",
     };
-    if (options.body !== undefined) {
+    // Un envoi de fichier part tel quel : le transport pose lui-même le
+    // `multipart/form-data` et sa frontière.
+    const isForm = typeof FormData !== "undefined" && options.body instanceof FormData;
+    if (options.body !== undefined && !isForm) {
       headers["Content-Type"] = "application/json";
     }
     // La protection CSRF de Better Auth exige un Origin de confiance sur les
@@ -101,8 +104,11 @@ class ApiClient {
         method,
         headers,
         credentials: "include",
-        body:
-          options.body !== undefined ? JSON.stringify(options.body) : undefined,
+        body: isForm
+          ? (options.body as FormData)
+          : options.body !== undefined
+            ? JSON.stringify(options.body)
+            : undefined,
       });
     } catch (error) {
       throw new ApiError(
@@ -163,6 +169,11 @@ class ApiClient {
 
   patch<T>(path: string, body?: unknown, headers?: Record<string, string>): Promise<T> {
     return this.request<T>("PATCH", path, { body, headers });
+  }
+
+  /** Envoie un formulaire (fichier compris) en `multipart/form-data`. */
+  upload<T>(path: string, form: FormData): Promise<T> {
+    return this.request<T>("POST", path, { body: form });
   }
 
   delete<T>(path: string, query?: QueryParams): Promise<T> {

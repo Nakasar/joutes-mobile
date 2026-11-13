@@ -142,7 +142,8 @@
       "openOn": "Auf {{platform}} öffnen"
     },
     "play": "Spielen",
-    "meta": "Meta"
+    "meta": "Meta",
+    "tracker": "Spielverlauf"
   },
   "events": {
     "title": "Events",
@@ -259,7 +260,15 @@
     "productsTitle": "Miniaturen und Boxen",
     "productsAction": "Die Produkte dieses Spiels",
     "productGameStats_one": "{{owned}}/{{total}} Miniaturen · {{copies}} Exemplar",
-    "productGameStats_other": "{{owned}}/{{total}} Miniaturen · {{copies}} Exemplare"
+    "productGameStats_other": "{{owned}}/{{total}} Miniaturen · {{copies}} Exemplare",
+    "sets": {
+      "title": "Nach Erweiterung",
+      "count_one": "{{count}} Erweiterung",
+      "count_other": "{{count}} Erweiterungen",
+      "hint": "Tippe auf eine Erweiterung, um nur ihre Karten zu zeigen.",
+      "master": "Master-Set",
+      "game": "Game-Set"
+    }
   },
   "products": {
     "fallbackTitle": "Produkte",
@@ -380,7 +389,6 @@
       "sellListAction": "Verkaufsliste der Gruppe",
       "showcaseAction": "Schaufenster",
       "rhythm": "Der Rhythmus der Gruppe",
-      "manageOnWeb": "Einladen, befördern und entfernen erfolgen auf der Website.",
       "views": {
         "etabli": "Werkbank",
         "sessions": "Sitzungen",
@@ -656,7 +664,20 @@
     "signingIn": "Anmeldung…",
     "changeEmail": "E-Mail-Adresse ändern",
     "errorSendCode": "Code konnte nicht gesendet werden.",
-    "errorInvalidCode": "Ungültiger Code."
+    "errorInvalidCode": "Ungültiger Code.",
+    "app": {
+      "or": "oder",
+      "discord": "Mit Discord anmelden",
+      "haveCode": "Ich habe schon einen Code der Website",
+      "subtitle": "Anmeldung über die Website",
+      "step1": "Öffne die Anmeldeseite der Website und melde dich mit Discord oder deinem üblichen Konto an.",
+      "step2": "Die Website zeigt einen Code mit 8 Zeichen.",
+      "step3": "Komm hierher zurück und gib ihn ein.",
+      "openSite": "Seite der Website öffnen",
+      "codeLabel": "Code der Website",
+      "invalid": "Dieser Code ist ungültig oder abgelaufen. Lade die Seite der Website neu für einen neuen.",
+      "useEmail": "Per E-Mail anmelden"
+    }
   },
   "rules": {
     "title": "Regeln",
@@ -801,7 +822,12 @@
       "game": "Spiel",
       "gamePlaceholder": "Spiel wählen",
       "visibility": "Sichtbarkeit",
-      "submit": "Erstellen"
+      "submit": "Erstellen",
+      "import": "Aus Piltover Archive importieren (optional)",
+      "importPlaceholder": "Deck-Link oder Code",
+      "importHint": "Erkannte Karten kommen ins Deck; die anderen werden aufgelistet.",
+      "importInvalid": "Das ist weder ein Piltover-Archive-Link noch ein Deck-Code.",
+      "importEmpty": "Keine Karte dieses Decks wurde erkannt."
     },
     "text": {
       "edit": "Liste bearbeiten",
@@ -868,7 +894,10 @@
       "card": "Illustriert von {{name}}.",
       "legend": "Die Legende illustriert das Deck. Wähle unten eine andere Karte.",
       "none": "Wähle eine Karte des Decks als Illustration.",
-      "remove": "Auswahl entfernen"
+      "remove": "Auswahl entfernen",
+      "uploadAction": "Bild hochladen",
+      "uploading": "Wird hochgeladen…",
+      "removeUpload": "Bild entfernen"
     },
     "comments": {
       "space": "Thread: {{space}}",
@@ -1013,6 +1042,25 @@
       "infos": {
         "visibilityNow": "wird sofort gespeichert"
       }
+    },
+    "results": {
+      "title": "Turnierergebnisse",
+      "placementOf": "{{place}} von {{count}}",
+      "version": "Version {{version}}",
+      "private": "Privat"
+    },
+    "cardnexus": {
+      "action": "Deck bei CardNexus kaufen",
+      "partial": "{{matched}} von {{total}} Karten sind bei CardNexus erhältlich."
+    },
+    "shareGroup": {
+      "open": "In einer Gruppe teilen",
+      "title": "In einer Gruppe teilen",
+      "hint": "Das Deck kommt in die Bibliothek der Gruppe: Ihre Mitglieder können es lesen und kommentieren.",
+      "noGroups": "Du bist in keiner Gruppe Mitglied.",
+      "action": "Teilen",
+      "shared": "Geteilt",
+      "refused": "Die Gruppe hat dieses Deck abgelehnt."
     }
   },
   "deck": {
@@ -1741,7 +1789,25 @@
     "leaveAction": "Turnier verlassen",
     "searchPlaceholder": "Turnier suchen…",
     "searchAction": "Turnier suchen",
-    "error": "Die Turniere konnten nicht geladen werden."
+    "error": "Die Turniere konnten nicht geladen werden.",
+    "announcements": {
+      "title": "Ankündigungen",
+      "urgent": "Dringend",
+      "all_one": "Ankündigung ansehen",
+      "all_other": "Alle {{count}} Ankündigungen ansehen"
+    },
+    "bracket": {
+      "title": "Top-Cut-Baum",
+      "empty": "Der Turnierbaum erscheint mit der ersten Runde.",
+      "final": "Finale",
+      "semiFinals": "Halbfinale",
+      "quarterFinals": "Viertelfinale",
+      "roundOf16": "Achtelfinale",
+      "roundOf32": "Sechzehntelfinale",
+      "upcoming": "Folgt",
+      "toBeDetermined": "Noch offen",
+      "bye": "Freilos, automatisch weiter"
+    }
   },
   "tournamentForm": {
     "title": "Meine Angaben",
@@ -2083,5 +2149,119 @@
     "combos": "Domänenkombinationen",
     "topCut": "Top Cut des Turniers",
     "openLocator": "Im Locator ansehen"
+  },
+  "tracker": {
+    "title": "Spielverlauf",
+    "description": "Punkte, Energie und Macht jedes Spielers, ohne Verbindung. Die Partie bleibt gespeichert, wenn du die App schließt.",
+    "addPlayer": "Spieler hinzufügen",
+    "removePlayer": "Diesen Spieler entfernen",
+    "reset": "Neue Partie",
+    "resetConfirm": "Alle Zähler auf null setzen?",
+    "resetAction": "Zurücksetzen",
+    "defaultName": "Spieler {{number}}",
+    "nameLabel": "Name von Spieler {{number}}",
+    "score": "Punkte",
+    "energy": "Energie",
+    "power": "Macht",
+    "legend": "Legende",
+    "legendPlaceholder": "Legende suchen…",
+    "legendEmpty": "Keine Legende gefunden.",
+    "clearLegend": "Legende entfernen"
+  },
+  "groupManage": {
+    "create": {
+      "action": "Gruppe gründen",
+      "title": "Gruppe gründen",
+      "hint": "Du wirst ihr Gründer. Bilder, Sichtbarkeit und Einladungen stellst du danach in der Gruppe ein.",
+      "submit": "Gruppe gründen"
+    },
+    "fields": {
+      "name": "Name",
+      "description": "Beschreibung",
+      "tagline": "Slogan der Vitrine",
+      "taglinePlaceholder": "Spielgruppe · Thionville",
+      "logo": "Wappen",
+      "banner": "Banner",
+      "visibility": "Sichtbarkeit"
+    },
+    "visibility": {
+      "public": "Öffentlich",
+      "private": "Privat",
+      "publicHint": "Die Gruppe steht in der Liste und ihre Vitrine ist ohne Konto lesbar.",
+      "privateHint": "Nur Mitglieder sehen die Gruppe."
+    },
+    "chooseImage": "Bild wählen",
+    "uploading": "Wird hochgeladen…",
+    "removeImage": "Bild entfernen",
+    "settings": {
+      "open": "Gruppeneinstellungen",
+      "title": "Gruppeneinstellungen",
+      "moreOnWeb": "Links, Rhythmus und Akzentfarbe stellst du auf der Website ein."
+    },
+    "invite": {
+      "title": "Spieler einladen",
+      "placeholder": "name#1234 oder E-Mail",
+      "submit": "Einladen",
+      "sent": "Einladung an {{who}} gesendet.",
+      "notFound": "Kein Spieler hat diesen Tag oder diese E-Mail.",
+      "conflict": "Dieser Spieler ist schon Mitglied oder bereits eingeladen."
+    },
+    "members": {
+      "promote": "Zum Admin machen",
+      "demote": "Admin entziehen",
+      "remove": "Aus der Gruppe entfernen",
+      "confirmRemove": "Entfernen bestätigen"
+    },
+    "invitations": {
+      "title_one": "Eine Gruppeneinladung",
+      "title_other": "{{count}} Gruppeneinladungen",
+      "accept": "Beitreten"
+    }
+  },
+  "profileEdit": {
+    "open": "Profil bearbeiten",
+    "title": "Mein Profil",
+    "identity": "Name und Avatar",
+    "displayName": "Name",
+    "tag": "Dein Tag: {{tag}}",
+    "changeAvatar": "Avatar ändern",
+    "removeAvatar": "Entfernen",
+    "uploading": "Wird hochgeladen…",
+    "saved": "Gespeichert.",
+    "location": "Mein Ort",
+    "locationHint": "Damit schlagen wir Orte und Events in deiner Nähe vor.",
+    "locationPlaceholder": "Stadt oder Postleitzahl",
+    "removeLocation": "Entfernen",
+    "notifications": "Benachrichtigungen",
+    "moreOnWeb": "Vitrine, Preisquelle, Integrationen und Abo stellst du auf der Website ein.",
+    "notif": {
+      "discordNotLinked": "Verknüpfe zuerst ein Discord-Konto auf der Website.",
+      "emails": {
+        "weekly": {
+          "title": "Wochenübersicht per E-Mail",
+          "hint": "Die Events der Woche in deiner Nähe."
+        },
+        "platform": {
+          "title": "Neuigkeiten von Joutes per E-Mail",
+          "hint": "Ankündigungen der Plattform, selten."
+        }
+      },
+      "app": {
+        "weekly": {
+          "title": "Wochenübersicht in der App",
+          "hint": "Dieselbe Übersicht als Benachrichtigung."
+        },
+        "push": {
+          "title": "Push-Benachrichtigungen",
+          "hint": "Turniere, Tausch, Gruppen und Freunde auf deinen Geräten."
+        }
+      },
+      "discord": {
+        "dm": {
+          "title": "Discord-Direktnachrichten",
+          "hint": "Benachrichtigungen auch vom Joutes-Bot erhalten."
+        }
+      }
+    }
   }
 }

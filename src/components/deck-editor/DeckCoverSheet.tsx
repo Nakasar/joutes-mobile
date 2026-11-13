@@ -1,11 +1,15 @@
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { uploadDeckCover } from "../../api/decks";
 import { CachedImage } from "../CachedImage";
 import type { DeckCardInfo } from "../../lib/deck-contents";
 import { deckCoverPosition, type resolveDeckCover } from "../../lib/deck-cover";
 
 /**
- * Choisir la carte qui illustre le deck — le bouton « Couverture » du site.
- * Le choix part avec « Enregistrer », comme le reste de l'éditeur.
+ * Choisir la carte qui illustre le deck — le bouton « Couverture » du site —
+ * ou déposer sa propre image, qui prime sur la carte. Le choix part avec
+ * « Enregistrer », comme le reste de l'éditeur ; l'image, elle, est déposée
+ * tout de suite, mais rien ne l'affiche avant l'enregistrement.
  */
 export function DeckCoverSheet({
   cover,
@@ -13,6 +17,9 @@ export function DeckCoverSheet({
   cardsById,
   coverCardId,
   onChoose,
+  deckId,
+  uploaded,
+  onUpload,
   onClose,
 }: {
   cover: ReturnType<typeof resolveDeckCover>;
@@ -20,9 +27,29 @@ export function DeckCoverSheet({
   cardsById: Map<string, DeckCardInfo>;
   coverCardId: string | null;
   onChoose: (cardId: string | null) => void;
+  deckId: string;
+  /** L'image déposée retenue, ou `null` sans image. */
+  uploaded: string | null;
+  onUpload: (url: string | null) => void;
   onClose: () => void;
 }) {
   const { t } = useTranslation();
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function pick(file: File | undefined) {
+    if (!file) return;
+    setUploading(true);
+    setError(null);
+    try {
+      onUpload(await uploadDeckCover(deckId, file));
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : t("common.error"));
+    } finally {
+      setUploading(false);
+    }
+  }
 
   return (
     <div className="sheet-overlay" onClick={onClose}>
@@ -49,11 +76,34 @@ export function DeckCoverSheet({
                       ? t("decks.cover.legend")
                       : t("decks.cover.none")}
               </p>
-              {coverCardId && (
+              {coverCardId && !uploaded && (
                 <button className="btn btn--outline" onClick={() => onChoose(null)}>
                   {t("decks.cover.remove")}
                 </button>
               )}
+              <button
+                className="btn btn--outline"
+                disabled={uploading}
+                onClick={() => fileRef.current?.click()}
+              >
+                {uploading ? t("decks.cover.uploading") : t("decks.cover.uploadAction")}
+              </button>
+              {uploaded && (
+                <button className="btn btn--ghost" onClick={() => onUpload(null)}>
+                  {t("decks.cover.removeUpload")}
+                </button>
+              )}
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/png,image/jpeg,image/webp,image/gif"
+                hidden
+                onChange={(e) => {
+                  void pick(e.currentTarget.files?.[0]);
+                  e.currentTarget.value = "";
+                }}
+              />
+              {error && <p className="form-error">{error}</p>}
             </div>
           </div>
           {candidates.length > 0 && (

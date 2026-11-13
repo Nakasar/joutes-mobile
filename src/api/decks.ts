@@ -2,6 +2,7 @@ import { api } from "./client";
 import { endpoints } from "./endpoints";
 import type {
   Deck,
+  DeckExtras,
   DeckInput,
   DeckLegendFacet,
   DeckVisibility,
@@ -156,3 +157,17 @@ export async function deleteDeck(deckId: string): Promise<void> {
 export function copyDeck(deckId: string): Promise<Deck> {
   return api.post<Deck>(endpoints.decks.copy(deckId));
 }
+
+/** Dépose une image de couverture et rend son adresse, à inscrire par un `PATCH`. */
+export async function uploadDeckCover(deckId: string, file: File): Promise<string> {
+  const form = new FormData();
+  form.append("file", file);
+  const { url } = await api.upload<{ url: string }>(endpoints.decks.cover(deckId), form);
+  return url;
+}
+
+/** Résultats en tournoi liés au deck, et lien d'achat CardNexus. */
+export function getDeckExtras(deckId: string): Promise<DeckExtras> {
+  return api.get<DeckExtras>(endpoints.decks.extras(deckId));
+}
+

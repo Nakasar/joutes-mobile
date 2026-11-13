@@ -8,6 +8,8 @@ export const endpoints = {
     sendOtp: "/auth/email-otp/send-verification-otp",
     /** Better Auth — connexion avec le code OTP reçu. */
     signInWithOtp: "/auth/sign-in/email-otp",
+    /** Better Auth — échange du code affiché par la page /app-login du site. */
+    verifyAppCode: "/auth/one-time-token/verify",
     signOut: "/auth/sign-out",
     getSession: "/auth/get-session",
   },
@@ -144,12 +146,27 @@ export const endpoints = {
     tournaments: (playGroupId: string) => `/play-groups/${playGroupId}/tournaments`,
     /** La méta du groupe : `jeu`, `ext` (extension ou `tout`), `membre`, `comparer=0`. */
     meta: (playGroupId: string) => `/play-groups/${playGroupId}/meta`,
+    /** Inviter un joueur (POST `userIdentifier` : tag ou e-mail). */
+    members: (playGroupId: string) => `/play-groups/${playGroupId}/members`,
+    /** Changer le rôle (PATCH `role`) ou retirer (DELETE) un membre, par son id de compte. */
+    member: (playGroupId: string, userId: string) =>
+      `/play-groups/${playGroupId}/members/${encodeURIComponent(userId)}`,
+    /** Téléverser l'emblème ou la bannière (POST multipart `file`). */
+    images: (playGroupId: string) => `/play-groups/${playGroupId}/images`,
+    /** Mes invitations en attente ; les accepter (POST sur l'invitation). */
+    invitations: "/play-groups/invitations",
+    invitation: (invitationId: string) =>
+      `/play-groups/invitations/${encodeURIComponent(invitationId)}`,
   },
   decks: {
     list: "/decks",
     detail: (deckId: string) => `/decks/${deckId}`,
     /** « Copier chez moi » : la copie arrive toujours privée. */
     copy: (deckId: string) => `/decks/${deckId}/copy`,
+    /** Déposer l'image de couverture (POST multipart `file`) ; un PATCH l'inscrit ensuite. */
+    cover: (deckId: string) => `/decks/${deckId}/cover`,
+    /** Résultats en tournoi liés au deck et lien d'achat CardNexus. */
+    extras: (deckId: string) => `/decks/${deckId}/extras`,
     /**
      * Légendes réellement jouées par les decks publiés, avec leur nombre de
      * decks : la facette de la librairie sort de ce qui est publié, pas du
@@ -247,6 +264,10 @@ export const endpoints = {
     myGameFavorite: (idOrSlug: string) => `/users/me/games/${idOrSlug}/favorite`,
     /** Permissions effectives du compte connecté (publication de policies…). */
     myPermissions: "/users/me/permissions",
+    /** Le profil modifiable : pseudo, avatar, localité, notifications (GET, PATCH). */
+    myProfile: "/users/me/profile",
+    /** Dépôt d'une image du compte (POST multipart `file`, `kind=avatar`). */
+    myUpload: "/users/me/upload",
     /** Le registre de la communauté : les comptes qui ont ouvert leur vitrine. */
     list: "/users",
     /** Le classement des succès, et le rang de l'appelant. */

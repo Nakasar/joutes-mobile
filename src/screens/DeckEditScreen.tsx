@@ -119,6 +119,8 @@ export function DeckEditScreen() {
   const [matchups, setMatchups] = useState<DeckMatchup[]>([]);
   /** La carte désignée pour la couverture ; `null` = aucune (la légende prend le relais). */
   const [coverCardId, setCoverCardId] = useState<string | null>(null);
+  /** Image de couverture déposée ; `undefined` tant qu'on n'y a pas touché. */
+  const [coverImageUrl, setCoverImageUrl] = useState<string | null | undefined>(undefined);
   const [visibility, setVisibility] = useState<DeckVisibility | undefined>(undefined);
   const [dirty, setDirty] = useState(false);
   const [savedAt, setSavedAt] = useState<Date | null>(null);
@@ -381,6 +383,8 @@ export function DeckEditScreen() {
         matchups: matchups.filter((matchup) => matchup.name.trim()),
         // Une chaîne vide retire le choix : le serveur retombe sur la légende.
         coverCardId: coverCardId ?? "",
+        // Seulement si on y a touché : l'absence laisse l'image en place.
+        ...(coverImageUrl !== undefined ? { coverImageUrl: coverImageUrl ?? "" } : {}),
         expectedVersion: versionRef.current,
       });
       versionRef.current = saved.version ?? versionRef.current;
@@ -427,7 +431,8 @@ export function DeckEditScreen() {
     {
       coverCardId: coverCardId ?? undefined,
       legendCardId: loaded.data?.legendCardId,
-      coverImageUrl: loaded.data?.coverImageUrl,
+      coverImageUrl:
+        coverImageUrl !== undefined ? (coverImageUrl ?? undefined) : loaded.data?.coverImageUrl,
       coverImage: loaded.data?.coverImage,
     },
     known,
@@ -745,6 +750,14 @@ export function DeckEditScreen() {
           coverCardId={coverCardId}
           onChoose={(cardId) => {
             setCoverCardId(cardId);
+            setDirty(true);
+          }}
+          deckId={deckId}
+          uploaded={
+            coverImageUrl !== undefined ? coverImageUrl : (loaded.data?.coverImageUrl ?? null)
+          }
+          onUpload={(url) => {
+            setCoverImageUrl(url);
             setDirty(true);
           }}
           onClose={() => setCoverOpen(false)}

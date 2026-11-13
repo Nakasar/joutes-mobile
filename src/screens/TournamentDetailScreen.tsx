@@ -16,6 +16,7 @@ import type {
   TournamentDetail,
   TournamentGameResult,
   TournamentHistory,
+  TournamentAnnouncementPublic,
   TournamentLiveState,
   TournamentMatch,
   TournamentMatchStatus,
@@ -51,6 +52,7 @@ import {
   formatDeadlineDate,
   serverNowMs,
 } from "../lib/tournament-deadline";
+import { TournamentBracket } from "../components/TournamentBracket";
 import { presetStats, type MatchStatDefinition } from "../lib/tournament-presets";
 
 const TABS = ["match", "standings", "info"] as const;
@@ -107,6 +109,7 @@ function PortalHeader({
   deadlineAt,
   state,
   serverOffsetMs,
+  onShowAnnouncements,
 }: {
   name: string;
   roundLabel: string | null;
@@ -119,6 +122,8 @@ function PortalHeader({
   /** État public du tournoi, chargé une seule fois par l'écran. */
   state: TournamentLiveState | null;
   serverOffsetMs: number;
+  /** Ouvre la liste de toutes les annonces (onglet Infos). */
+  onShowAnnouncements: () => void;
 }) {
   const { t, i18n } = useTranslation();
   useTick(1000);
@@ -179,6 +184,11 @@ function PortalHeader({
           <MegaphoneIcon size={18} />
           <p className="portal-announce__text">{announcement.message}</p>
         </div>
+      )}
+      {(state?.announcements.length ?? 0) > 1 && (
+        <button type="button" className="portal-announce__more" onClick={onShowAnnouncements}>
+          {t("tournaments.announcements.all", { count: state?.announcements.length ?? 0 })}
+        </button>
       )}
 
       {meLabel && (
@@ -906,6 +916,7 @@ function FormCard({
 
 /** Onglet « Tournoi » : ce qu'on se demande entre deux matchs. */
 function InfoTab({
+  announcements,
   tournamentId,
   detail,
   flatRounds,
@@ -916,6 +927,8 @@ function InfoTab({
   dropError,
   onLeave,
 }: {
+  /** Toutes les annonces de l'organisation, la plus récente d'abord. */
+  announcements: TournamentAnnouncementPublic[];
   tournamentId: string;
   detail: TournamentDetail;
   flatRounds: FlatRound[];
@@ -958,6 +971,28 @@ function InfoTab({
     <>
       {myPlayerId && detail.registrationForm && (
         <FormCard tournamentId={tournamentId} myPlayerId={myPlayerId} syncKey={syncKey} />
+      )}
+
+      {announcements.length > 0 && (
+        <div className="card">
+          <h2 className="card__title">
+            {t("tournaments.announcements.title")} ({announcements.length})
+          </h2>
+          <ul className="announce-list">
+            {announcements.map((a) => (
+              <li
+                key={a.id}
+                className={`announce-list__item${a.level === "urgent" ? " announce-list__item--urgent" : ""}`}
+              >
+                <p className="announce-list__text">{a.message}</p>
+                <p className="muted announce-list__date">
+                  {a.level === "urgent" && `${t("tournaments.announcements.urgent")} · `}
+                  {formatDateTime(a.createdAt)}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
 
       {hasPracticalInfo && (
@@ -1199,6 +1234,7 @@ export function TournamentDetailScreen() {
             deadlineAt={currentRound?.round.deadlineAt}
             state={liveState}
             serverOffsetMs={serverOffsetMs}
+            onShowAnnouncements={() => setTab("info")}
           />
 
           <div className="segmented" style={{ marginBottom: 16 }}>
@@ -1270,16 +1306,34 @@ export function TournamentDetailScreen() {
             ) : standings.error ? (
               <StatusView error={standings.error} onRetry={standings.reload} />
             ) : (
+              <>
+                {(history.data?.phases ?? [])
+                  .filter(({ phase, rounds }) => phase.type === "bracket" && rounds.length > 0)
+                  .map(({ phase, rounds }) => (
+                    <div key={phase.id} className="card">
+                      <h2 className="card__title">
+                        {t("tournaments.bracket.title")} · {phase.name}
+                      </h2>
+                      <TournamentBracket
+                        rounds={rounds}
+                        playerName={playerName}
+                        myPlayerId={myPlayerId}
+                        currentRoundId={currentRound?.round.id}
+                      />
+                    </div>
+                  ))}
               <StandingsTab
                 liveStandings={standings.data ?? []}
                 flatRounds={flatRounds}
                 statColumns={presetStats(activePhase?.statsPresetKey)}
                 myPlayerId={myPlayerId}
               />
+              </>
             ))}
 
           {tab === "info" && (
             <InfoTab
+              announcements={liveState?.announcements ?? []}
               tournamentId={tournamentId}
               detail={detail.data}
               flatRounds={flatRounds}

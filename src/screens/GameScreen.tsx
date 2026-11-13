@@ -9,6 +9,7 @@ import { GameLinks } from "../components/GameLinks";
 import { GameLiveCard } from "../components/GameLiveCard";
 import { SocialPostCard } from "../components/SocialPostCard";
 import {
+  AwardIcon,
   BackIcon,
   BookIcon,
   BoxIcon,
@@ -134,6 +135,15 @@ export function GameScreen() {
         to: `/games/${gameSlug}/meta`,
         icon: <TrophyIcon size={21} />,
         label: t("gameHub.meta"),
+      });
+    }
+    // Le compteur de points du site, entièrement local : rien à activer.
+    if (gameSlug === "riftbound") {
+      list.push({
+        key: "tracker",
+        to: "/games/riftbound/tracker",
+        icon: <AwardIcon size={21} />,
+        label: t("gameHub.tracker"),
       });
     }
     if (game.features?.deckChecker) {

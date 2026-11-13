@@ -89,6 +89,9 @@ export function SettingsScreen() {
                 {t("profile.viewMineAction")}
               </Link>
             )}
+            <Link to="/settings/profile" className="btn btn--outline btn--block" style={{ marginTop: 8 }}>
+              {t("profileEdit.open")}
+            </Link>
             <button
               className="btn btn--danger"
               style={{ marginTop: 12 }}
