@@ -5,7 +5,8 @@ import type { Worker as TesseractWorker } from "tesseract.js";
 // Le moteur de lecture est servi par l'app elle-même : la CSP n'autorise aucun
 // script venu d'ailleurs, et le scan doit marcher sans dépendre d'un CDN pour le code.
 import tesseractWorkerUrl from "tesseract.js/dist/worker.min.js?url";
-import tesseractCoreUrl from "tesseract.js-core/tesseract-core-simd-lstm.wasm.js?url";
+import tesseractCoreSimdUrl from "tesseract.js-core/tesseract-core-simd-lstm.wasm.js?url";
+import tesseractCoreUrl from "tesseract.js-core/tesseract-core-lstm.wasm.js?url";
 import { aiMatchCard, getScannerSetCards, type ScannerSetCard } from "../api/boosters";
 import { CardImage } from "./CardImage";
 import { CrossIcon, FlashlightIcon, PlusIcon, SparklesIcon, StarIcon } from "./icons";
@@ -30,6 +31,25 @@ const FRAMES_TO_CONFIRM = 2;
 // demander au joueur de choisir.
 const FRAMES_BEFORE_DOUBT = 3;
 const FRAME = { cardAspect: CARD_ASPECT } as const;
+
+/**
+ * Un `corePath` qui désigne un fichier est chargé tel quel par tesseract.js,
+ * sans sa détection SIMD : c'est donc à nous de choisir la variante. Le module
+ * ci-dessous n'est valide que si la webview connaît le SIMD de WebAssembly
+ * (même test que `wasm-feature-detect`) ; sans lui (iOS < 16.4, vieilles
+ * Android System WebView), le moteur sans SIMD prend le relais.
+ */
+const SIMD_PROBE = new Uint8Array([
+  0, 97, 115, 109, 1, 0, 0, 0, 1, 5, 1, 96, 0, 1, 123, 3, 2, 1, 0, 10, 10, 1, 8, 0, 65, 0, 253, 15, 253, 98, 11,
+]);
+
+function tesseractCorePath(): string {
+  try {
+    return WebAssembly.validate(SIMD_PROBE) ? tesseractCoreSimdUrl : tesseractCoreUrl;
+  } catch {
+    return tesseractCoreUrl;
+  }
+}
 
 type Phase = "loading" | "scanning" | "doubt" | "ai" | "error";
 type Added = { entryId: string; card: ScannerSetCard; foil: boolean };
@@ -93,6 +113,9 @@ export function BoosterScanner({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const workerRef = useRef<TesseractWorker | null>(null);
+  // Lecture en cours : arrêter le moteur au milieu d'une lecture fait planter
+  // tesseract.js (`postMessage` sur un worker déjà fermé).
+  const recognizingRef = useRef<Promise<unknown> | null>(null);
   const foilRef = useRef(foil);
   foilRef.current = foil;
   // L'écran du booster se redessine à chaque ajout : la boucle de lecture ne
@@ -175,7 +198,7 @@ export function BoosterScanner({
         const { createWorker, PSM } = await import("tesseract.js");
         const worker = await createWorker("eng", undefined, {
           workerPath: tesseractWorkerUrl,
-          corePath: tesseractCoreUrl,
+          corePath: tesseractCorePath(),
           // Un worker lancé depuis un blob: ne pourrait pas charger le moteur
           // servi par l'app (CSP `script-src 'self'`).
           workerBlobURL: false,
@@ -203,7 +226,10 @@ export function BoosterScanner({
       cancelled = true;
       streamRef.current?.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
-      void workerRef.current?.terminate();
+      const worker = workerRef.current;
+      void Promise.resolve(recognizingRef.current)
+        .catch(() => undefined)
+        .then(() => worker?.terminate());
       workerRef.current = null;
     };
   }, [gameSlug, setCode, lang, fail]);
@@ -304,7 +330,9 @@ export function BoosterScanner({
           drawCard(video, canvasRef.current, { ...FRAME, maxWidth: OCR_MAX_WIDTH })
         ) {
           try {
-            const result = await worker.recognize(canvasRef.current);
+            const reading = worker.recognize(canvasRef.current);
+            recognizingRef.current = reading;
+            const result = await reading;
             if (stopped) break;
             await handleText(result.data.text ?? "");
           } catch (err) {

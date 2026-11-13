@@ -210,7 +210,8 @@
       "preRegisteredText": "L'organisation doit encore confirmer votre place.",
       "leave": "Se désinscrire",
       "leaveConfirm": "Confirmer : libérer ma place",
-      "error": "L'inscription n'a pas pu être modifiée."
+      "error": "L'inscription n'a pas pu être modifiée.",
+      "full": "L'évènement vient d'être complet : rejoignez la liste d'attente."
     }
   },
   "highlights": {
@@ -587,11 +588,12 @@
       "codeNotFound": "Ce code ami ne correspond à aucun joueur.",
       "userNotFound": "Aucun joueur ne porte ce tag.",
       "alreadyFriends": "Vous êtes déjà amis.",
-      "alreadyPending": "Vous êtes déjà amis, ou une demande attend déjà.",
+      "alreadyPending": "Une demande attend déjà sa réponse.",
       "self": "C'est votre propre compte.",
       "invalidQr": "Ce QR code n'est pas un code ami Joutes.",
       "scanUnavailable": "Scan indisponible ou accès à la caméra refusé.",
-      "error": "L'ajout n'a pas pu se faire."
+      "error": "L'ajout n'a pas pu se faire.",
+      "invalidCode": "Ce code ami n'est pas valide."
     }
   },
   "notifications": {

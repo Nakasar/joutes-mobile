@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { ApiError } from "../api/client";
 import { registerToEvent, unregisterFromEvent } from "../api/events";
 import type { JoutesEvent } from "../api/types";
 
@@ -45,7 +46,12 @@ export function EventRegistrationCard({ event, userId, onChange }: EventRegistra
         onChange();
       })
       .catch((err: unknown) => {
-        setError(err instanceof Error ? err.message : t("events.registration.error"));
+        // 409 : l'évènement a changé depuis l'affichage (complet, déjà
+        // inscrit, inscriptions fermées). On le relit : complet, la carte
+        // laisse place à celle de la liste d'attente.
+        const full = err instanceof ApiError && (err.body as { full?: boolean } | undefined)?.full === true;
+        setError(t(full ? "events.registration.full" : "events.registration.error"));
+        if (err instanceof ApiError && err.status === 409) onChange();
       })
       .finally(() => setPending(false));
   }

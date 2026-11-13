@@ -11,23 +11,22 @@ export function friendCodeUrl(webUrl: string, code: string): string {
 
 /**
  * Extrait un code ami d'une saisie ou d'un QR : le lien `…/friends/add/{code}`
- * ou le code seul, en majuscules ou non. `null` sinon — la saisie est alors
- * un tag `pseudo#1234`.
+ * (casse libre), ou le code seul tel qu'il s'affiche, en majuscules. `null`
+ * sinon — la saisie est alors un pseudo ou un tag `pseudo#1234` : un pseudo
+ * de huit lettres en minuscules (« superman ») ne doit pas passer pour un code.
  */
 export function parseFriendCodeInput(raw: string): string | null {
   const trimmed = raw.trim();
   if (!trimmed) return null;
 
-  let candidate = trimmed;
   try {
     const url = new URL(trimmed);
     const match = url.pathname.match(/\/friends\/add\/([^/]+)\/?$/);
     if (!match) return null;
-    candidate = match[1];
+    const code = match[1].toUpperCase();
+    return FRIEND_CODE_PATTERN.test(code) ? code : null;
   } catch {
     // Pas une URL : la saisie est peut-être le code lui-même.
   }
-
-  const normalized = candidate.toUpperCase();
-  return FRIEND_CODE_PATTERN.test(normalized) ? normalized : null;
+  return FRIEND_CODE_PATTERN.test(trimmed) ? trimmed : null;
 }

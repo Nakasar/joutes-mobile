@@ -29,6 +29,8 @@ import { currentLocale } from "../i18n";
 import { formatMoney } from "../lib/prices";
 
 const SEARCH_DELAY_MS = 300;
+/** Longueur maximale d'une note, comme `BOOSTER_NOTE_MAX_LENGTH` du site. */
+const BOOSTER_NOTE_MAX_LENGTH = 500;
 
 function toInput(card: Card, foil: boolean): BoosterCardInput {
   return {
@@ -309,6 +311,7 @@ export function BoosterScreen() {
         <span className="visually-hidden">{t("boosters.note")}</span>
         <textarea
           rows={3}
+          maxLength={BOOSTER_NOTE_MAX_LENGTH}
           value={note}
           onChange={(e) => {
             setNote(e.currentTarget.value);
@@ -323,7 +326,11 @@ export function BoosterScreen() {
           type="button"
           className="btn btn--outline btn--block"
           disabled={busy !== null}
-          onClick={() => run("note", () => updateBooster(boosterId, { note: note.trim() || null }))}
+          onClick={() =>
+            run("note", () =>
+              updateBooster(boosterId, { note: note.trim() || null }).then(() => setNoteSaved(true)),
+            )
+          }
         >
           {t("boosters.saveNote")}
         </button>

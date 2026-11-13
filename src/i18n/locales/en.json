@@ -210,7 +210,8 @@
       "preRegisteredText": "The organisers still have to confirm your seat.",
       "leave": "Unregister",
       "leaveConfirm": "Confirm: free my seat",
-      "error": "Your registration could not be changed."
+      "error": "Your registration could not be changed.",
+      "full": "The event just filled up: join the waitlist."
     }
   },
   "highlights": {
@@ -587,11 +588,12 @@
       "codeNotFound": "This friend code matches no player.",
       "userNotFound": "No player has this tag.",
       "alreadyFriends": "You are already friends.",
-      "alreadyPending": "You are already friends, or a request is already pending.",
+      "alreadyPending": "A request is already waiting for an answer.",
       "self": "This is your own account.",
       "invalidQr": "This QR code is not a Joutes friend code.",
       "scanUnavailable": "Scan unavailable or camera access denied.",
-      "error": "The friend could not be added."
+      "error": "The friend could not be added.",
+      "invalidCode": "This friend code isn't valid."
     }
   },
   "notifications": {

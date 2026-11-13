@@ -210,7 +210,8 @@
       "preRegisteredText": "L'organizzazione deve ancora confermare il tuo posto.",
       "leave": "Annulla iscrizione",
       "leaveConfirm": "Conferma: libera il mio posto",
-      "error": "Non è stato possibile modificare l'iscrizione."
+      "error": "Non è stato possibile modificare l'iscrizione.",
+      "full": "L'evento si è appena riempito: iscriviti alla lista d'attesa."
     }
   },
   "highlights": {
@@ -587,11 +588,12 @@
       "codeNotFound": "Questo codice amico non corrisponde a nessun giocatore.",
       "userNotFound": "Nessun giocatore ha questo tag.",
       "alreadyFriends": "Siete già amici.",
-      "alreadyPending": "Siete già amici, o una richiesta è già in attesa.",
+      "alreadyPending": "Una richiesta è già in attesa di risposta.",
       "self": "È il tuo account.",
       "invalidQr": "Questo QR code non è un codice amico Joutes.",
       "scanUnavailable": "Scansione non disponibile o accesso alla fotocamera negato.",
-      "error": "Non è stato possibile aggiungere l'amico."
+      "error": "Non è stato possibile aggiungere l'amico.",
+      "invalidCode": "Questo codice amico non è valido."
     }
   },
   "notifications": {

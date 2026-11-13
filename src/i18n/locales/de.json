@@ -210,7 +210,8 @@
       "preRegisteredText": "Die Organisation muss deinen Platz noch bestätigen.",
       "leave": "Abmelden",
       "leaveConfirm": "Bestätigen: Platz freigeben",
-      "error": "Die Anmeldung konnte nicht geändert werden."
+      "error": "Die Anmeldung konnte nicht geändert werden.",
+      "full": "Das Event ist gerade voll geworden: trag dich in die Warteliste ein."
     }
   },
   "highlights": {
@@ -587,11 +588,12 @@
       "codeNotFound": "Dieser Freundescode gehört zu keinem Spieler.",
       "userNotFound": "Kein Spieler hat diesen Tag.",
       "alreadyFriends": "Ihr seid bereits befreundet.",
-      "alreadyPending": "Ihr seid bereits befreundet, oder eine Anfrage wartet schon.",
+      "alreadyPending": "Eine Anfrage wartet bereits auf Antwort.",
       "self": "Das ist dein eigenes Konto.",
       "invalidQr": "Dieser QR-Code ist kein Joutes-Freundescode.",
       "scanUnavailable": "Scannen nicht verfügbar oder Kamerazugriff verweigert.",
-      "error": "Der Freund konnte nicht hinzugefügt werden."
+      "error": "Der Freund konnte nicht hinzugefügt werden.",
+      "invalidCode": "Dieser Freundescode ist ungültig."
     }
   },
   "notifications": {

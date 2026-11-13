@@ -50,11 +50,22 @@ export function AddFriendSheet({ onClose, onAdded }: { onClose: () => void; onAd
     };
   }, []);
 
+  /**
+   * Le code HTTP ne suffit pas : `POST /friends` rend 409 pour « déjà amis »
+   * comme pour « demande en attente », et 400 pour soi-même comme pour une
+   * saisie invalide. Le message du serveur (en français) les départage.
+   */
   function errorMessage(err: unknown, byCode: boolean): string {
     if (err instanceof ApiError) {
+      const message = String((err.body as { error?: unknown } | undefined)?.error ?? err.message);
       if (err.status === 404) return t(byCode ? "social.add.codeNotFound" : "social.add.userNotFound");
-      if (err.status === 409) return t(byCode ? "social.add.alreadyFriends" : "social.add.alreadyPending");
-      if (err.status === 400) return t("social.add.self");
+      if (err.status === 409) {
+        return t(/déjà amis/i.test(message) ? "social.add.alreadyFriends" : "social.add.alreadyPending");
+      }
+      if (err.status === 400) {
+        if (/vous-même/i.test(message)) return t("social.add.self");
+        if (byCode) return t("social.add.invalidCode");
+      }
     }
     return t("social.add.error");
   }
@@ -66,12 +77,17 @@ export function AddFriendSheet({ onClose, onAdded }: { onClose: () => void; onAd
     setSaving(true);
     setError(null);
     setOutcome(null);
+    const byTag = () => sendFriendRequest(input).then((): Outcome => ({ kind: "requested" }));
     const request: Promise<Outcome> = code
-      ? addFriendByCode(code).then((r) => ({
-          kind: "added" as const,
-          name: r.friend.displayName || r.friend.username || code,
-        }))
-      : sendFriendRequest(input).then(() => ({ kind: "requested" as const }));
+      ? addFriendByCode(code)
+          .then((r): Outcome => ({ kind: "added", name: r.friend.displayName || r.friend.username || code }))
+          .catch((err: unknown) => {
+            // Un pseudo de huit lettres en majuscules ressemble à un code :
+            // code inconnu, on tente la demande par pseudo.
+            if (err instanceof ApiError && err.status === 404 && code === input) return byTag();
+            throw err;
+          })
+      : byTag();
     request
       .then((result) => {
         setOutcome(result);
