@@ -59,7 +59,8 @@
       "ALREADY_SEATED": "Du sitzt bereits an diesem Tisch.",
       "NOT_FULL": "Es sind noch Plätze frei.",
       "NOT_WAITING": "Die Partie wurde bereits gestartet.",
-      "SERVER": "Der Spielserver hat nicht geantwortet. Versuche es gleich noch einmal."
+      "SERVER": "Der Spielserver hat nicht geantwortet. Versuche es gleich noch einmal.",
+      "SUBSCRIPTION": "Online-Partien erstellen ist Abonnenten von Joutes Pro und Joutes Expert vorbehalten."
     },
     "card": {
       "hidden": "Verdeckte Karte",
@@ -491,6 +492,12 @@
         "exhaust": "erschöpft",
         "both": "erschöpft, dann recycelt",
         "recycle": "recycelt"
+      }
+    },
+    "upsell": {
+      "host": {
+        "title": "Eine Partie hosten: Joutes Pro oder Joutes Expert",
+        "body": "Einen Online-Tisch erstellen oder eine Partie auf deinem eigenen Server starten ist Abonnenten von Joutes Pro und Joutes Expert auf joutes.app vorbehalten. Dem Tisch eines Freundes beitreten bleibt kostenlos: gib seinen Code ein oder scanne seinen QR-Code."
       }
     }
   },

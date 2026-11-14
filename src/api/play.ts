@@ -84,6 +84,13 @@ export type TableState = {
   access: TableAccess | null;
 };
 
+/**
+ * Ce que l'abonnement ouvre dans Jouer (voir `PlayAccess` de joutes-app) :
+ * héberger une partie (Pro ou Expert), simuler un deck (Expert). Absent d'un
+ * site plus ancien que l'app : tout reste alors proposé, et le serveur tranche.
+ */
+export type PlayAccess = { canHost: boolean; canSimulate: boolean };
+
 export type RiftboundLobby = {
   signedIn: boolean;
   name: string | null;
@@ -92,6 +99,7 @@ export type RiftboundLobby = {
   tables: GameTableSummary[];
   /** Légendes autour desquelles un deck automatique existe. */
   legends: string[];
+  access?: PlayAccess;
 };
 
 export type SwuLobby = {
@@ -102,6 +110,7 @@ export type SwuLobby = {
   tables: GameTableSummary[];
   leaders: string[];
   bases: string[];
+  access?: PlayAccess;
 };
 
 export type Lobby = { game: "riftbound"; lobby: RiftboundLobby } | { game: "swu"; lobby: SwuLobby };

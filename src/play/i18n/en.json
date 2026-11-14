@@ -59,7 +59,8 @@
       "ALREADY_SEATED": "You are already seated at this table.",
       "NOT_FULL": "Some seats are still free.",
       "NOT_WAITING": "The game has already started.",
-      "SERVER": "The game server did not answer. Try again in a moment."
+      "SERVER": "The game server did not answer. Try again in a moment.",
+      "SUBSCRIPTION": "Creating an online game is reserved for Joutes Pro and Joutes Expert subscribers."
     },
     "card": {
       "hidden": "Hidden card",
@@ -491,6 +492,12 @@
         "exhaust": "exhausted",
         "both": "exhausted then recycled",
         "recycle": "recycled"
+      }
+    },
+    "upsell": {
+      "host": {
+        "title": "Host a game: Joutes Pro or Joutes Expert",
+        "body": "Creating an online table or starting a game on your own server is reserved for Joutes Pro and Joutes Expert subscribers, on joutes.app. Joining a friend's table stays free: enter their code or scan their QR code."
       }
     }
   },
