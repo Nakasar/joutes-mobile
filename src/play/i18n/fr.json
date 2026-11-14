@@ -59,7 +59,8 @@
       "ALREADY_SEATED": "Vous êtes déjà assis à cette table.",
       "NOT_FULL": "Il reste des sièges libres.",
       "NOT_WAITING": "La partie a déjà été lancée.",
-      "SERVER": "Le serveur de parties n'a pas répondu. Réessayez dans un instant."
+      "SERVER": "Le serveur de parties n'a pas répondu. Réessayez dans un instant.",
+      "SUBSCRIPTION": "Créer une partie en ligne est réservé aux abonnés Joutes Pro et Joutes Expert."
     },
     "card": {
       "hidden": "Carte cachée",
@@ -491,6 +492,12 @@
         "exhaust": "épuisée",
         "both": "épuisée puis recyclée",
         "recycle": "recyclée"
+      }
+    },
+    "upsell": {
+      "host": {
+        "title": "Héberger une partie : Joutes Pro ou Joutes Expert",
+        "body": "Créer une table en ligne ou lancer une partie sur votre serveur est réservé aux abonnés Joutes Pro et Joutes Expert, sur joutes.app. Rejoindre la table d'un ami reste gratuit : entrez son code ou scannez son QR code."
       }
     }
   },

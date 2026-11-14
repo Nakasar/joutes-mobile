@@ -293,6 +293,16 @@ function LobbyView<L extends object>({ kit }: { kit: LobbyKit<L> }) {
   const botLevelOf = (seat: number): BotLevel => botLevels[seat] ?? "normal";
   const deckById = (id: string) => decks.find((deck) => deck.id === id) ?? found[id];
   const me = lobby.name ?? t("lobby.you");
+  // Héberger une partie est réservé à Joutes Pro et Expert ; le serveur refuse
+  // de toute façon (code SUBSCRIPTION). Pas de lien d'achat dans l'app : les
+  // boutiques d'applications l'encadrent, l'abonnement se prend sur joutes.app.
+  const canHost = lobby.access?.canHost ?? true;
+  const hostUpsell = (
+    <div className="play-upsell">
+      <b>{t("upsell.host.title")}</b>
+      <p className="muted play-small">{t("upsell.host.body")}</p>
+    </div>
+  );
   const search = useMemo(() => (query: string) => searchPlayDecks<LobbyDeck<unknown>>(game, query), [game]);
 
   const listOf = async (picked: BotDeckChoice | null): Promise<L | null> => {
@@ -583,14 +593,18 @@ function LobbyView<L extends object>({ kit }: { kit: LobbyKit<L> }) {
                 signIn(t("lobby.signInForOnline"))
               ) : (
                 <>
-                  <button
-                    type="button"
-                    className="btn btn--grad btn--block"
-                    disabled={busy || !choice}
-                    onClick={() => void createOnline()}
-                  >
-                    {t("lobby.createTable")}
-                  </button>
+                  {canHost ? (
+                    <button
+                      type="button"
+                      className="btn btn--grad btn--block"
+                      disabled={busy || !choice}
+                      onClick={() => void createOnline()}
+                    >
+                      {t("lobby.createTable")}
+                    </button>
+                  ) : (
+                    hostUpsell
+                  )}
                   <label className="field">
                     <span className="field__label">{t("lobby.joinLabel")}</span>
                     <div className="pt-row">
@@ -617,7 +631,9 @@ function LobbyView<L extends object>({ kit }: { kit: LobbyKit<L> }) {
             </section>
           )}
 
-          {opponent === "host" && (
+          {opponent === "host" && !canHost && <section className="play-section">{hostUpsell}</section>}
+
+          {opponent === "host" && canHost && (
             <section className="play-section">
               <HostPanel<L>
                 hostName={me}

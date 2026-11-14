@@ -1909,6 +1909,19 @@
   flex-direction: column;
   gap: 0.6rem;
 }
+/* Une fonctionnalité réservée à un abonnement (héberger une partie). */
+.play-upsell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid rgb(139 92 246 / 0.45);
+  border-radius: 12px;
+  background: rgb(139 92 246 / 0.08);
+}
+.play-upsell p {
+  margin: 0;
+}
 .play-section__title {
   margin: 0;
   font-family: var(--font-display);
