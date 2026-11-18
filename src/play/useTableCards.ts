@@ -10,7 +10,7 @@ import { ENGINE_VERSION } from "../engine/version";
  * Avec la version du moteur, elle entre dans l'adresse : la réponse se garde une
  * heure dans le navigateur, et un déploiement ne doit pas servir l'ancienne.
  */
-const TABLE_CARDS_SHAPE = 2;
+const TABLE_CARDS_SHAPE = 3;
 
 let shared: Promise<TableCards> | undefined;
 

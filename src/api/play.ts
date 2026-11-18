@@ -168,3 +168,57 @@ export const addBot = (game: PlayGame, id: string, level: BotLevel) => tableActi
 export const leaveSeat = (game: PlayGame, id: string, seat: number, name: string) =>
   tableAction(game, id, "leave", { seat, name });
 export const startTable = (game: PlayGame, id: string) => tableAction(game, id, "start", {});
+
+// ---------------------------------------------------------------------------
+// Scellé et draft en ligne : la salle d'attente tenue par joutes-app
+// (`/api/games/{jeu}/play/events/…`), puis l'évènement sur le serveur de parties.
+
+export type LimitedTimers = { pick: number; build: number };
+
+export type LimitedEventSummary = {
+  id: string;
+  gameSlug: string;
+  kind: "sealed" | "draft";
+  /** L'extension de chaque booster, dans l'ordre d'ouverture. */
+  packs: string[];
+  /** Le nombre de places autour de la table. */
+  players: number;
+  timers: LimitedTimers;
+  status: "waiting" | "playing" | "cancelled";
+  seats: { name: string; bot?: BotLevel; host: boolean }[];
+  createdAt: string;
+  startedAt?: string;
+};
+
+export type LimitedEventState = {
+  event: LimitedEventSummary;
+  seat: number | null;
+  isHost: boolean;
+  signedIn: boolean;
+  /** `ws` : l'adresse de l'évènement, ticket compris ; `server` : celle du serveur, où s'ouvrent les tables. */
+  access: { event: string; ws: string; server: string } | null;
+};
+
+export function listLimitedEvents(game: PlayGame) {
+  return call(() => api.get<PlayResult<{ events: LimitedEventSummary[] }>>(`${base(game)}/events`));
+}
+
+export function createLimitedEvent(
+  game: PlayGame,
+  options: { kind: "sealed" | "draft"; packs: string[]; players: number; timers: LimitedTimers },
+) {
+  return call(() => api.post<PlayResult<{ id: string }>>(`${base(game)}/events`, { options }));
+}
+
+export function readLimitedEvent(game: PlayGame, id: string) {
+  return call(() => api.get<PlayResult<{ state: LimitedEventState }>>(`${base(game)}/events/${encodeURIComponent(id)}`));
+}
+
+const eventAction = (game: PlayGame, id: string, action: string, body: object) =>
+  call(() => api.post<PlayResult>(`${base(game)}/events/${encodeURIComponent(id)}/${action}`, body));
+
+export const joinLimitedEvent = (game: PlayGame, id: string) => eventAction(game, id, "join", {});
+export const addLimitedBot = (game: PlayGame, id: string, level: BotLevel) => eventAction(game, id, "bots", { level });
+export const leaveLimitedSeat = (game: PlayGame, id: string, seat: number, name: string) =>
+  eventAction(game, id, "leave", { seat, name });
+export const startLimitedEvent = (game: PlayGame, id: string) => eventAction(game, id, "start", {});

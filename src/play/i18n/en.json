@@ -606,6 +606,292 @@
       "fortify": "Fortify"
     }
   },
+  "Limited": {
+    "loading": "Loading the event…",
+    "none": "No sealed or draft event in progress.",
+    "broken": "This event was saved by an earlier version of the engine and can no longer be resumed.",
+    "brokenLeave": "Abandon and go back to the lobby",
+    "out": "You are out of the event.",
+    "title": {
+      "sealed": "Sealed",
+      "draft": "Draft"
+    },
+    "subtitle": "{players} players · {sets} boosters",
+    "blankBattlefield": "Blank battlefield",
+    "noLegend": "No Legend",
+    "champion": "champion",
+    "cost": "cost {energy}",
+    "might": "might {might}",
+    "rarity": {
+      "common": "Common",
+      "uncommon": "Uncommon",
+      "rare": "Rare",
+      "epic": "Epic"
+    },
+    "foil": "Foil",
+    "inspect": "View {name} larger",
+    "noText": "This card has no text.",
+    "curveLabel": "Cost curve: {list}",
+    "step": {
+      "draft": "Draft",
+      "open": "Opening",
+      "build": "Deck building",
+      "match": "Match"
+    },
+    "quit": "Quit",
+    "quitTitle": "Quit the event?",
+    "quitBody": "Your boosters, your deck and the match in progress will be lost.",
+    "quitConfirm": "Quit the event",
+    "quitCancel": "Stay",
+    "format": {
+      "title": "1. Format",
+      "constructed": "Constructed",
+      "constructedHint": "Everyone brings their own deck.",
+      "sealed": "Sealed",
+      "sealedHint": "Open 6 boosters and build a deck from them.",
+      "draft": "Draft",
+      "draftHint": "Take a card, pass the pack, then build."
+    },
+    "resume": {
+      "sealed": "Sealed event in progress",
+      "draft": "Draft in progress",
+      "hint": "{players} players. It resumes where you left it.",
+      "discard": "Abandon this event"
+    },
+    "setup": {
+      "loading": "Loading boosters…",
+      "failed": "The engine could not be loaded. Reload the page to try again.",
+      "boostersTitle": "2. Boosters",
+      "boostersSealed": "Each player opens {boosters} boosters of {size} cards and builds a deck of at least {min} cards.",
+      "boostersDraft": "Each player gets {boosters} boosters. Take a card, pass the rest to your neighbour, down to the last one ({size} cards per booster). The deck has at least {min} cards.",
+      "set": "Set",
+      "booster": "Booster {number}",
+      "mixed": "Mix sets",
+      "mixedHint": "Choose the set of each booster, in opening order.",
+      "whoTitle": "3. Who plays?",
+      "players": "Number of players",
+      "playersSealed": "You and {bots, plural, one {# AI} other {# AIs}}. You face one of them.",
+      "playersDraft": "You and {bots, plural, one {# AI} other {# AIs}} around the table. The more players, the further packs travel.",
+      "level": "AI level",
+      "levelHint": "The level applies to their picks, their deck and their play.",
+      "oneMatch": "After deck building, you play a one-game match against one opponent.",
+      "startSealed": "Open the boosters",
+      "startDraft": "Start the draft",
+      "replaces": "This replaces the event in progress.",
+      "whereAi": "Against AIs",
+      "whereAiHint": "Everything runs in your browser.",
+      "whereOnlineHint": "Create an event and invite by link.",
+      "whereHostHint": "An event hosted by you or an organizer.",
+      "noLimit": "No limit",
+      "seconds": "{count} s",
+      "minutes": "{count} min",
+      "timers": "Timer",
+      "pickDelay": "Time per pick",
+      "buildDelay": "Deck building time",
+      "timersHint": "When time runs out, the server picks or builds for the player.",
+      "playersOnline": "The number of seats. You will invite players and add AIs in the waiting room.",
+      "oneMatchOnline": "After deck building, everyone plays a one-game match against one opponent.",
+      "create": "Create the event",
+      "signIn": "Sign in to create or join an online event.",
+      "mineWaiting": "waiting · {players, plural, one {# player} other {# players}}",
+      "minePlaying": "in progress · {players, plural, one {# player} other {# players}}",
+      "mineOpen": "Open",
+      "join": "Join an event",
+      "joinPlaceholder": "Event code or link",
+      "joinButton": "Join"
+    },
+    "seat": {
+      "picking": "picking",
+      "waiting": "waiting for a pack",
+      "building": "building",
+      "ready": "deck submitted",
+      "out": "out",
+      "away": "disconnected"
+    },
+    "sealed": {
+      "booster": "Booster {number} · {set}",
+      "title": "Booster {number} of {boosters} ({set})",
+      "next": "Next booster",
+      "skip": "Open them all",
+      "build": "Build my deck",
+      "poolTitle": "My pool: {count} of {total} cards",
+      "rares": "{count, plural, =0 {No rare or better card yet.} one {# rare or better card.} other {# rare or better cards.}}"
+    },
+    "draft": {
+      "title": "Booster {round} of {rounds} · pick {pick} of {size}",
+      "titleWaiting": "Booster {round} of {rounds}",
+      "passNext": "{set} boosters. The pack then goes to the next player.",
+      "passPrevious": "{set} boosters. The pack then goes to the previous player.",
+      "sort": "Sort the pack",
+      "sortBy": {
+        "rarity": "Rarity",
+        "domain": "Domain",
+        "cost": "Cost"
+      },
+      "look": "Look at {name}",
+      "take": "Take this card",
+      "hint": "Click to select a card, double-click to take it right away.",
+      "waiting": "The other players are picking. The next pack is on its way.",
+      "selected": "Selected card",
+      "none": "Click a card in the pack to read its text.",
+      "picks": "My picks ({count})",
+      "noPicks": "Your cards will appear here.",
+      "titleLeaders": "Leaders · pick {pick} of {size}",
+      "titleLeadersWaiting": "Leaders",
+      "leadersNext": "Everyone takes a leader, then passes the others to the next player. Boosters come after.",
+      "leadersPrevious": "Everyone takes a leader, then passes the others to the previous player. Boosters come after."
+    },
+    "build": {
+      "pool": "Pool ({count})",
+      "kindFilter": "Filter by type",
+      "kind": {
+        "all": "All",
+        "unit": "Units",
+        "spell": "Spells",
+        "gear": "Gear",
+        "other": "Legends and battlefields"
+      },
+      "domainFilter": "Filter by domain",
+      "poolEmpty": "No card in the pool matches these filters.",
+      "add": "Add {name} to the deck",
+      "remove": "Remove {name} from the deck",
+      "hint": "Click a card to add it to the deck. Dimmed cards would add a fourth domain.",
+      "deck": "My deck",
+      "identity": "{count} of 3 domains",
+      "champion": "Chosen champion",
+      "noChampion": "No chosen champion",
+      "championHint": "Add a champion to the deck to be able to choose it.",
+      "chosen": "chosen champion",
+      "main": "Main deck",
+      "mainCount": "{count} of at least {min}",
+      "mainEmpty": "Click cards in the pool to add them.",
+      "runes": "Runes ({count} of {total})",
+      "runesAuto": "Split for me",
+      "runesEmpty": "Runes will follow your deck's domains.",
+      "runesFollow": "Runes are split according to your deck's costs.",
+      "runesByHand": "You are splitting the runes yourself.",
+      "runeLess": "One fewer {domain} rune",
+      "runeMore": "One more {domain} rune",
+      "battlefields": "Battlefields",
+      "battlefieldsHint": "A battlefield from the pool replaces a blank one.",
+      "legal": "Legal deck",
+      "problems": "{count, plural, one {# issue to fix} other {# issues to fix}}",
+      "checked": "Checked by the engine against the limited rules.",
+      "suggest": "Build for me",
+      "noSuggestion": "The engine cannot find a legal deck with this pool.",
+      "submit": "Submit my deck",
+      "waiting": "Deck submitted. The other players are finishing theirs."
+    },
+    "match": {
+      "toResults": "See the summary"
+    },
+    "results": {
+      "won": "Victory!",
+      "lost": "Defeat",
+      "draw": "Draw",
+      "pending": "Match in progress",
+      "bye": "No opponent this time",
+      "against": "Against {name}",
+      "replay": "Replay this match",
+      "replayHint": "A rematch does not change the event result.",
+      "leave": "End the event",
+      "tables": "Tables",
+      "table": "Table {number}",
+      "playing": "in progress…",
+      "tableDraw": "draw",
+      "tableWon": "{name} won",
+      "byeOf": "{name} had no opponent.",
+      "deck": "My deck ({count} cards)",
+      "over": "Event finished"
+    },
+    "room": {
+      "title": {
+        "sealed": "Online sealed",
+        "draft": "Online draft"
+      },
+      "settings": "{players} seats · {sets} boosters",
+      "timersDraft": "Time per pick: {pick}. Deck building time: {build}.",
+      "timersSealed": "Deck building time: {build}.",
+      "invite": "Share this page's link to invite players. The game server opens the boosters: everyone only sees their own cards.",
+      "cancelled": "This event was cancelled.",
+      "cancel": "Cancel the event",
+      "needTwo": "At least two players are needed",
+      "start": "Start with {count} players",
+      "freeHint": "Seats still free at the start stay empty.",
+      "join": "Join this event",
+      "signIn": "Sign in to take a seat.",
+      "joinHint": "You will receive your boosters when the event starts.",
+      "sit": "Take a seat"
+    },
+    "online": {
+      "unreachable": "Unable to join the event.",
+      "unreachableHint": "The game server is not responding, or the invitation has expired. Reload the page to try again.",
+      "quitBody": "You forfeit the event: the server will no longer wait for you and your match will be lost.",
+      "quitWatching": "You can come back with the same link.",
+      "reconnecting": "Connection lost. Trying again…",
+      "watching": "You are watching this event. The players' cards stay hidden.",
+      "tableOpening": "Your table is opening…",
+      "timeLeft": "Time left: {time}",
+      "error": {
+        "NOT_FOUND": "This event does not exist.",
+        "FORBIDDEN": "Only the event host can do that.",
+        "FULL": "The event is full.",
+        "ALREADY_SEATED": "You already have a seat in this event.",
+        "NOT_FULL": "At least two players are needed.",
+        "NOT_WAITING": "The event has already started."
+      }
+    },
+    "swu": {
+      "aspectWord": "Aspect",
+      "aspect": {
+        "vigilance": "Vigilance",
+        "command": "Command",
+        "aggression": "Aggression",
+        "cunning": "Cunning",
+        "heroism": "Heroism",
+        "villainy": "Villainy"
+      },
+      "kind": {
+        "leader": "Leader",
+        "base": "Base",
+        "unit": "Unit",
+        "event": "Event",
+        "upgrade": "Upgrade"
+      },
+      "rarity": {
+        "common": "Common",
+        "uncommon": "Uncommon",
+        "rare": "Rare",
+        "legendary": "Legendary",
+        "special": "Special"
+      },
+      "cost": "cost {cost}",
+      "hp": "{hp} HP",
+      "boostersSealed": "Each player opens {boosters} boosters of {size} cards and builds a deck of at least {min} cards around a leader and a base.",
+      "boostersDraft": "Each player gets {boosters} boosters. Leaders are drafted first, one per booster. Then take a card and pass the rest to your neighbour, down to the last one ({size} cards per booster). The deck has at least {min} cards.",
+      "build": {
+        "kind": {
+          "all": "All",
+          "unit": "Units",
+          "event": "Events",
+          "upgrade": "Upgrades",
+          "leader": "Leaders"
+        },
+        "aspectFilter": "Filter by aspect",
+        "penalty": "+{count} cost",
+        "penaltyTitle": "Aspect penalty: {count} more",
+        "penalized": "{count, plural, one {# card costs more} other {# cards cost more}}: their aspects are neither your leader's nor your base's.",
+        "chooseLeader": "Choose {name} as leader",
+        "hint": "Click a card to add it to the deck, or to choose a leader. A dimmed card costs 2 more for each aspect that neither your leader nor your base provides.",
+        "noLeader": "Choose a leader from the pool",
+        "noBase": "Choose a base",
+        "basesOpened": "Bases from your boosters",
+        "basesCommon": "Common bases of the set",
+        "baseHint": "Every common base of the set is available to you.",
+        "main": "Deck"
+      }
+    }
+  },
   "Mobile": {
     "Play": {
       "hand": {
@@ -659,6 +945,41 @@
       "ask": {
         "pickTarget": "Tap the target: whatever is circled in red is allowed.",
         "turnHint": "{ready, plural, =0 {No ready resource} one {# ready resource} other {# ready resources}} · tap a card to play it, attack or use your leader. Long press: see the card large."
+      }
+    },
+    "Limited": {
+      "entry": {
+        "title": "Sealed and draft",
+        "hint": "Open boosters, build a deck from them, then play a match."
+      },
+      "setup": {
+        "boostersTitle": "Boosters",
+        "whoTitle": "Who is playing?",
+        "whereAiHint": "Everything runs on your device.",
+        "failed": "The engine could not be loaded. Close this screen and open it again to retry."
+      },
+      "draft": {
+        "hint": "Tap a card to look at it, then “Take this card”.",
+        "none": "Tap a card in the pack to read its text.",
+        "showPicks": "My picks ({count})"
+      },
+      "build": {
+        "hint": "Tap a card to add it to the deck, the magnifier to read it. Dimmed cards would add a fourth domain.",
+        "mainEmpty": "Tap cards in the pool to add them.",
+        "tabs": "Pool or deck",
+        "tabDeck": "Deck ({count})"
+      },
+      "swu": {
+        "build": {
+          "hint": "Tap a card to add it to the deck, or to choose a leader. A dimmed card costs 2 more for each aspect neither your leader nor your base provides."
+        }
+      },
+      "room": {
+        "invite": "Share the event link to invite players. The game server opens the boosters: everyone only sees their own cards.",
+        "share": "Share the link"
+      },
+      "online": {
+        "unreachableHint": "The game server is not responding, or the invitation has expired. Go back to the lobby and try again."
       }
     }
   }

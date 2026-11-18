@@ -83,7 +83,16 @@ type Table = InstanceType<SwuBrowserEngine["SwuTable"]>;
  * navigateur. Le journal de la partie est réécrit après chaque coup : recharger
  * la page la reprend. `cards` sert à retrouver une carte par son numéro du moteur.
  */
-export function useSwuSoloGame(save: SwuSave | null, cards: SwuTableCards): SwuFeed {
+export function useSwuSoloGame(
+  save: SwuSave | null,
+  cards: SwuTableCards,
+  // `onSave` : où garder la partie ailleurs que dans la sauvegarde des parties contre l'IA (un match de scellé).
+  options: { onSave?: (save: SwuSave) => void } = {},
+): SwuFeed {
+  const store = useRef(options.onSave);
+  useEffect(() => {
+    store.current = options.onSave;
+  });
   const table = useRef<Table | null>(null);
   const seen = useRef(0);
   const known = useRef(new Map<number, string>());
@@ -120,7 +129,9 @@ export function useSwuSoloGame(save: SwuSave | null, cards: SwuTableCards): SwuF
         setJournal((previous) => (told.length === 0 ? previous : [...previous, ...told]));
         // Une partie reprise ne se raconte pas depuis le début.
         if (opening) setToldFrom(next.seq);
-        writeSwuSave({ ...save, record: JSON.parse(current.record()) as SwuRecord });
+        const kept = { ...save, record: JSON.parse(current.record()) as SwuRecord };
+        if (store.current) store.current(kept);
+        else writeSwuSave(kept);
         setTick((value) => value + 1);
       } catch (cause) {
         setError(cause instanceof Error ? cause.message : String(cause));

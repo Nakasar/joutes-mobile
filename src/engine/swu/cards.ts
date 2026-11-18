@@ -7,7 +7,7 @@
  * français, le moteur en anglais.
  */
 
-import type { SwuAspect, SwuKind } from "./types";
+import type { SwuAspect, SwuKind, SwuRarity } from "./types";
 
 const JOUTES_ID = /^([A-Za-z0-9]+?)-(T?)(\d+)$/;
 
@@ -49,6 +49,7 @@ export type SwuTableCard = {
   hp: number;
   aspects: SwuAspect[];
   arena: "ground" | "space" | null;
+  rarity?: SwuRarity;
   /** Faux pour une carte que le moteur ne sait pas jouer. */
   playable: boolean;
 };

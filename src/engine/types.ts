@@ -35,6 +35,8 @@ export type EngineConfig = {
   allow_unimplemented?: boolean;
   /** Les IA connaissent les cartes du deck adverse (ni leur ordre, ni la main). */
   open_decklists?: boolean;
+  /** Scellé ou draft : les decks suivent les règles du limité. Absent en construit. */
+  format?: "constructed" | "sealed" | "draft";
 };
 
 export type EngineLoc = { Base: number } | { Bf: number };
@@ -206,6 +208,8 @@ export type EngineCard = {
   code: string;
   name: string;
   kind: "unit" | "gear" | "spell" | "rune" | "legend" | "battlefield";
+  /** Absente pour les jetons, les runes et les cartes hors boosters. */
+  rarity?: "common" | "uncommon" | "rare" | "epic";
   champion: boolean;
   signature: boolean;
   token: boolean;

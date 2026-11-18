@@ -256,6 +256,23 @@ export function swu_judge_review(record, upto, last) {
 }
 
 /**
+ * Les extensions de Star Wars: Unlimited dont on peut ouvrir des boosters.
+ * @returns {string}
+ */
+export function swu_booster_sets() {
+    let deferred1_0;
+    let deferred1_1;
+    try {
+        const ret = wasm.swu_booster_sets();
+        deferred1_0 = ret[0];
+        deferred1_1 = ret[1];
+        return getStringFromWasm0(ret[0], ret[1]);
+    } finally {
+        wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+    }
+}
+
+/**
  * Version du moteur.
  * @returns {string}
  */
@@ -269,6 +286,231 @@ export function version() {
         return getStringFromWasm0(ret[0], ret[1]);
     } finally {
         wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+    }
+}
+
+const SwuLimitedEventFinalization = (typeof FinalizationRegistry === 'undefined')
+    ? { register: () => {}, unregister: () => {} }
+    : new FinalizationRegistry(ptr => wasm.__wbg_swulimitedevent_free(ptr >>> 0, 1));
+/**
+ * Un évènement de scellé ou de draft de Star Wars: Unlimited tenu dans le navigateur : celui qui le tient
+ * voit toutes les cartes, chaque joueur ne reçoit que sa vue (`view`).
+ */
+export class SwuLimitedEvent {
+
+    static __wrap(ptr) {
+        ptr = ptr >>> 0;
+        const obj = Object.create(SwuLimitedEvent.prototype);
+        obj.__wbg_ptr = ptr;
+        SwuLimitedEventFinalization.register(obj, obj.__wbg_ptr, obj);
+        return obj;
+    }
+
+    __destroy_into_raw() {
+        const ptr = this.__wbg_ptr;
+        this.__wbg_ptr = 0;
+        SwuLimitedEventFinalization.unregister(this);
+        return ptr;
+    }
+
+    free() {
+        const ptr = this.__destroy_into_raw();
+        wasm.__wbg_swulimitedevent_free(ptr, 0);
+    }
+    /**
+     * L'action d'un humain : `{"type":"pick","code":…,"foil":…}`, `{"type":"submit","deck":…}`,
+     * `{"type":"auto"}` (un robot choisit pour lui) ou `{"type":"forfeit"}`.
+     * @param {number} seat
+     * @param {string} action
+     */
+    act(seat, action) {
+        const ptr0 = passStringToWasm0(action, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ret = wasm.swulimitedevent_act(this.__wbg_ptr, seat, ptr0, len0);
+        if (ret[1]) {
+            throw takeFromExternrefTable0(ret[0]);
+        }
+    }
+    /**
+     * `settings` (JSON) : `kind` (`"sealed"` ou `"draft"`), `packs` (l'extension de
+     * chaque booster) et `players` (`name`, et `bot` : un niveau ou `null`).
+     * @param {string} settings
+     * @param {number} seed
+     */
+    constructor(settings, seed) {
+        const ptr0 = passStringToWasm0(settings, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ret = wasm.swulimitedevent_new(ptr0, len0, seed);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        this.__wbg_ptr = ret[0] >>> 0;
+        SwuLimitedEventFinalization.register(this, this.__wbg_ptr, this);
+        return this;
+    }
+    /**
+     * La partie d'un match : `config`, `seed` et `bots`, à donner tels quels à `SwuTable`.
+     * `null` tant que les matchs ne sont pas connus.
+     * @param {number} index
+     * @returns {string}
+     */
+    game(index) {
+        let deferred1_0;
+        let deferred1_1;
+        try {
+            const ret = wasm.swulimitedevent_game(this.__wbg_ptr, index);
+            deferred1_0 = ret[0];
+            deferred1_1 = ret[1];
+            return getStringFromWasm0(ret[0], ret[1]);
+        } finally {
+            wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+        }
+    }
+    /**
+     * L'évènement vu d'un siège (0, 1…), d'un spectateur (-1) ou d'un arbitre (-2).
+     * @param {number} seat
+     * @returns {string}
+     */
+    view(seat) {
+        let deferred1_0;
+        let deferred1_1;
+        try {
+            const ret = wasm.swulimitedevent_view(this.__wbg_ptr, seat);
+            deferred1_0 = ret[0];
+            deferred1_1 = ret[1];
+            return getStringFromWasm0(ret[0], ret[1]);
+        } finally {
+            wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+        }
+    }
+    /**
+     * Les problèmes d'un deck pour ce joueur (liste vide s'il est légal).
+     * @param {number} seat
+     * @param {string} deck
+     * @returns {string}
+     */
+    check(seat, deck) {
+        let deferred3_0;
+        let deferred3_1;
+        try {
+            const ptr0 = passStringToWasm0(deck, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+            const len0 = WASM_VECTOR_LEN;
+            const ret = wasm.swulimitedevent_check(this.__wbg_ptr, seat, ptr0, len0);
+            var ptr2 = ret[0];
+            var len2 = ret[1];
+            if (ret[3]) {
+                ptr2 = 0; len2 = 0;
+                throw takeFromExternrefTable0(ret[2]);
+            }
+            deferred3_0 = ptr2;
+            deferred3_1 = len2;
+            return getStringFromWasm0(ptr2, len2);
+        } finally {
+            wasm.__wbindgen_free(deferred3_0, deferred3_1, 1);
+        }
+    }
+    /**
+     * Le journal complet : réglages, graine et tout ce qui s'est passé.
+     * @returns {string}
+     */
+    record() {
+        let deferred1_0;
+        let deferred1_1;
+        try {
+            const ret = wasm.swulimitedevent_record(this.__wbg_ptr);
+            deferred1_0 = ret[0];
+            deferred1_1 = ret[1];
+            return getStringFromWasm0(ret[0], ret[1]);
+        } finally {
+            wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+        }
+    }
+    /**
+     * Inscrit le résultat d'un match : le siège du vainqueur, ou -1 pour une nulle.
+     * @param {number} index
+     * @param {number} winner
+     */
+    report(index, winner) {
+        const ret = wasm.swulimitedevent_report(this.__wbg_ptr, index, winner);
+        if (ret[1]) {
+            throw takeFromExternrefTable0(ret[0]);
+        }
+    }
+    /**
+     * Rouvre un évènement depuis son journal (`record()`).
+     * @param {string} record
+     * @returns {SwuLimitedEvent}
+     */
+    static restore(record) {
+        const ptr0 = passStringToWasm0(record, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ret = wasm.swulimitedevent_restore(ptr0, len0);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        return SwuLimitedEvent.__wrap(ret[0]);
+    }
+    /**
+     * Confie un siège à un robot (`level` : `"normal"`…) ou le rend à un humain (`null`).
+     * @param {number} seat
+     * @param {string} level
+     */
+    set_bot(seat, level) {
+        const ptr0 = passStringToWasm0(level, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ret = wasm.swulimitedevent_set_bot(this.__wbg_ptr, seat, ptr0, len0);
+        if (ret[1]) {
+            throw takeFromExternrefTable0(ret[0]);
+        }
+    }
+    /**
+     * Un deck proposé à ce joueur (« Construire pour moi »), ou `null`.
+     * @param {number} seat
+     * @returns {string}
+     */
+    suggest(seat) {
+        let deferred1_0;
+        let deferred1_1;
+        try {
+            const ret = wasm.swulimitedevent_suggest(this.__wbg_ptr, seat);
+            deferred1_0 = ret[0];
+            deferred1_1 = ret[1];
+            return getStringFromWasm0(ret[0], ret[1]);
+        } finally {
+            wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+        }
+    }
+    /**
+     * Fait faire un choix à un robot qui en a un à faire. Rend son siège, ou -1.
+     * @returns {number}
+     */
+    bot_step() {
+        const ret = wasm.swulimitedevent_bot_step(this.__wbg_ptr);
+        return ret;
+    }
+    /**
+     * Joue un match entre deux robots et inscrit son résultat. Synchrone et parfois
+     * long (voir `simulate`) : l'appeler depuis un Web Worker.
+     * @param {number} index
+     * @returns {string}
+     */
+    simulate(index) {
+        let deferred2_0;
+        let deferred2_1;
+        try {
+            const ret = wasm.swulimitedevent_simulate(this.__wbg_ptr, index);
+            var ptr1 = ret[0];
+            var len1 = ret[1];
+            if (ret[3]) {
+                ptr1 = 0; len1 = 0;
+                throw takeFromExternrefTable0(ret[2]);
+            }
+            deferred2_0 = ptr1;
+            deferred2_1 = len1;
+            return getStringFromWasm0(ptr1, len1);
+        } finally {
+            wasm.__wbindgen_free(deferred2_0, deferred2_1, 1);
+        }
     }
 }
 

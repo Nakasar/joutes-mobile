@@ -41,6 +41,7 @@ import { PlayersScreen } from "./screens/PlayersScreen";
 import { PlayScreen } from "./screens/PlayScreen";
 import { PlayLobbyScreen } from "./play/PlayLobbyScreen";
 import { RemoteGameScreen, SoloGameScreen, TableRoomScreen } from "./play/PlayGameScreens";
+import { LimitedGameScreen, LimitedRoomScreen, LimitedSetupScreen } from "./play/limited/LimitedScreens";
 import { PoliciesListScreen } from "./screens/PoliciesListScreen";
 import { PolicyDetailScreen } from "./screens/PolicyDetailScreen";
 import { QuizScreen } from "./screens/QuizScreen";
@@ -83,7 +84,11 @@ function Shell() {
     matchPath("/decks/:deckId/edit", location.pathname) !== null ||
     matchPath("/play/:gameSlug/solo", location.pathname) !== null ||
     matchPath("/play/:gameSlug/remote", location.pathname) !== null ||
-    matchPath("/play/:gameSlug/tables/:tableId", location.pathname) !== null;
+    matchPath("/play/:gameSlug/tables/:tableId", location.pathname) !== null ||
+    // Un scellé ou un draft tient sa propre barre d'action au bas de l'écran.
+    matchPath("/play/:gameSlug/limited", location.pathname) !== null ||
+    matchPath("/play/:gameSlug/limited/events/:eventId", location.pathname) !== null ||
+    matchPath("/play/:gameSlug/limited/new", location.pathname) !== null;
 
   if (!ready) {
     return (
@@ -198,6 +203,9 @@ function Shell() {
                 <Route path="/play/:gameSlug/solo" element={<SoloGameScreen />} />
                 <Route path="/play/:gameSlug/remote" element={<RemoteGameScreen />} />
                 <Route path="/play/:gameSlug/tables/:tableId" element={<TableRoomScreen />} />
+                <Route path="/play/:gameSlug/limited" element={<LimitedGameScreen />} />
+                <Route path="/play/:gameSlug/limited/new" element={<LimitedSetupScreen />} />
+                <Route path="/play/:gameSlug/limited/events/:eventId" element={<LimitedRoomScreen />} />
                 <Route
                   path="/game-matches/:matchId"
                   element={<GameMatchDetailScreen />}

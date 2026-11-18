@@ -606,6 +606,292 @@
       "fortify": "Fortificare"
     }
   },
+  "Limited": {
+    "loading": "Caricamento dell'evento…",
+    "none": "Nessun sealed o draft in corso.",
+    "broken": "Questo evento è stato salvato da una versione precedente del motore e non può più essere ripreso.",
+    "brokenLeave": "Abbandona e torna alla lobby",
+    "out": "Sei uscito dall'evento.",
+    "title": {
+      "sealed": "Sealed",
+      "draft": "Draft"
+    },
+    "subtitle": "{players} giocatori · buste {sets}",
+    "blankBattlefield": "Campo di battaglia vuoto",
+    "noLegend": "Senza Leggenda",
+    "champion": "campione",
+    "cost": "costo {energy}",
+    "might": "potenza {might}",
+    "rarity": {
+      "common": "Comune",
+      "uncommon": "Non comune",
+      "rare": "Rara",
+      "epic": "Epica"
+    },
+    "foil": "Foil",
+    "inspect": "Ingrandisci {name}",
+    "noText": "Questa carta non ha testo.",
+    "curveLabel": "Curva dei costi: {list}",
+    "step": {
+      "draft": "Draft",
+      "open": "Apertura",
+      "build": "Costruzione",
+      "match": "Match"
+    },
+    "quit": "Esci",
+    "quitTitle": "Uscire dall'evento?",
+    "quitBody": "Le tue buste, il tuo mazzo e il match in corso andranno persi.",
+    "quitConfirm": "Esci dall'evento",
+    "quitCancel": "Resta",
+    "format": {
+      "title": "1. Formato",
+      "constructed": "Costruito",
+      "constructedHint": "Ognuno porta il proprio mazzo.",
+      "sealed": "Sealed",
+      "sealedHint": "Apri 6 buste e costruisci un mazzo con quelle.",
+      "draft": "Draft",
+      "draftHint": "Prendi una carta, passa il pacchetto, poi costruisci."
+    },
+    "resume": {
+      "sealed": "Sealed in corso",
+      "draft": "Draft in corso",
+      "hint": "{players} giocatori. Riprende da dove l'hai lasciato.",
+      "discard": "Abbandona questo evento"
+    },
+    "setup": {
+      "loading": "Caricamento delle buste…",
+      "failed": "Non è stato possibile caricare il motore. Ricarica la pagina per riprovare.",
+      "boostersTitle": "2. Buste",
+      "boostersSealed": "Ogni giocatore apre {boosters} buste da {size} carte e costruisce un mazzo di almeno {min} carte.",
+      "boostersDraft": "Ogni giocatore riceve {boosters} buste. Si prende una carta e si passa il resto al vicino, fino all'ultima ({size} carte per busta). Il mazzo ha almeno {min} carte.",
+      "set": "Espansione",
+      "booster": "Busta {number}",
+      "mixed": "Mescola le espansioni",
+      "mixedHint": "Scegli l'espansione di ogni busta, in ordine di apertura.",
+      "whoTitle": "3. Chi gioca?",
+      "players": "Numero di giocatori",
+      "playersSealed": "Tu e {bots, plural, one {# IA} other {# IA}}. Ne affronti una.",
+      "playersDraft": "Tu e {bots, plural, one {# IA} other {# IA}} attorno al tavolo. Più giocatori ci sono, più i pacchetti girano.",
+      "level": "Livello delle IA",
+      "levelHint": "Il livello vale per le loro scelte, il loro mazzo e il loro gioco.",
+      "oneMatch": "Dopo la costruzione giochi un match di una partita contro un avversario.",
+      "startSealed": "Apri le buste",
+      "startDraft": "Inizia il draft",
+      "replaces": "Questo sostituisce l'evento in corso.",
+      "whereAi": "Contro le IA",
+      "whereAiHint": "Tutto si gioca nel tuo browser.",
+      "whereOnlineHint": "Crea un evento e invita tramite link.",
+      "whereHostHint": "Un evento ospitato da te o da un organizzatore.",
+      "noLimit": "Senza limite",
+      "seconds": "{count} s",
+      "minutes": "{count} min",
+      "timers": "Timer",
+      "pickDelay": "Tempo per scelta",
+      "buildDelay": "Tempo di costruzione",
+      "timersHint": "Allo scadere del tempo, il server sceglie o costruisce al posto del giocatore.",
+      "playersOnline": "Il numero di posti. Inviterai i giocatori e aggiungerai le IA nella sala d'attesa.",
+      "oneMatchOnline": "Dopo la costruzione, ognuno gioca un match in una partita contro un avversario.",
+      "create": "Crea l'evento",
+      "signIn": "Accedi per creare un evento online o parteciparvi.",
+      "mineWaiting": "in attesa · {players, plural, one {# giocatore} other {# giocatori}}",
+      "minePlaying": "in corso · {players, plural, one {# giocatore} other {# giocatori}}",
+      "mineOpen": "Apri",
+      "join": "Partecipa a un evento",
+      "joinPlaceholder": "Codice o link dell'evento",
+      "joinButton": "Partecipa"
+    },
+    "seat": {
+      "picking": "sceglie",
+      "waiting": "aspetta un pacchetto",
+      "building": "costruisce",
+      "ready": "mazzo consegnato",
+      "out": "uscito",
+      "away": "disconnesso"
+    },
+    "sealed": {
+      "booster": "Busta {number} · {set}",
+      "title": "Busta {number} di {boosters} ({set})",
+      "next": "Busta successiva",
+      "skip": "Apri tutto",
+      "build": "Costruisci il mio mazzo",
+      "poolTitle": "La mia riserva: {count} carte su {total}",
+      "rares": "{count, plural, =0 {Ancora nessuna carta rara o migliore.} one {# carta rara o migliore.} other {# carte rare o migliori.}}"
+    },
+    "draft": {
+      "title": "Busta {round} di {rounds} · scelta {pick} di {size}",
+      "titleWaiting": "Busta {round} di {rounds}",
+      "passNext": "Buste {set}. Il pacchetto passa poi al giocatore successivo.",
+      "passPrevious": "Buste {set}. Il pacchetto passa poi al giocatore precedente.",
+      "sort": "Ordina il pacchetto",
+      "sortBy": {
+        "rarity": "Rarità",
+        "domain": "Dominio",
+        "cost": "Costo"
+      },
+      "look": "Guarda {name}",
+      "take": "Prendi questa carta",
+      "hint": "Un clic seleziona una carta, un doppio clic la prende subito.",
+      "waiting": "Gli altri giocatori stanno scegliendo. Il prossimo pacchetto sta arrivando.",
+      "selected": "Carta selezionata",
+      "none": "Clicca su una carta del pacchetto per leggerne il testo.",
+      "picks": "Le mie scelte ({count})",
+      "noPicks": "Le tue carte appariranno qui.",
+      "titleLeaders": "Leader · scelta {pick} di {size}",
+      "titleLeadersWaiting": "Leader",
+      "leadersNext": "Ognuno prende un leader, poi passa gli altri al giocatore successivo. Le buste arrivano dopo.",
+      "leadersPrevious": "Ognuno prende un leader, poi passa gli altri al giocatore precedente. Le buste arrivano dopo."
+    },
+    "build": {
+      "pool": "Riserva ({count})",
+      "kindFilter": "Filtra per tipo",
+      "kind": {
+        "all": "Tutto",
+        "unit": "Unità",
+        "spell": "Magie",
+        "gear": "Equipaggiamenti",
+        "other": "Leggende e campi di battaglia"
+      },
+      "domainFilter": "Filtra per dominio",
+      "poolEmpty": "Nessuna carta della riserva corrisponde a questi filtri.",
+      "add": "Aggiungi {name} al mazzo",
+      "remove": "Rimuovi {name} dal mazzo",
+      "hint": "Un clic aggiunge una carta al mazzo. Le carte attenuate aggiungerebbero un quarto dominio.",
+      "deck": "Il mio mazzo",
+      "identity": "{count} di 3 domini",
+      "champion": "Campione scelto",
+      "noChampion": "Senza campione scelto",
+      "championHint": "Aggiungi un campione al mazzo per poterlo scegliere.",
+      "chosen": "campione scelto",
+      "main": "Mazzo principale",
+      "mainCount": "{count} su almeno {min}",
+      "mainEmpty": "Clicca sulle carte della riserva per aggiungerle.",
+      "runes": "Rune ({count} di {total})",
+      "runesAuto": "Distribuisci per me",
+      "runesEmpty": "Le rune seguiranno i domini del tuo mazzo.",
+      "runesFollow": "Le rune sono distribuite in base ai costi del tuo mazzo.",
+      "runesByHand": "Stai distribuendo le rune da te.",
+      "runeLess": "Una runa {domain} in meno",
+      "runeMore": "Una runa {domain} in più",
+      "battlefields": "Campi di battaglia",
+      "battlefieldsHint": "Un campo di battaglia della riserva prende il posto di uno vuoto.",
+      "legal": "Mazzo legale",
+      "problems": "{count, plural, one {# punto da correggere} other {# punti da correggere}}",
+      "checked": "Verificato dal motore secondo le regole del limited.",
+      "suggest": "Costruisci per me",
+      "noSuggestion": "Il motore non trova un mazzo legale con questa riserva.",
+      "submit": "Conferma il mio mazzo",
+      "waiting": "Mazzo consegnato. Gli altri giocatori stanno finendo il loro."
+    },
+    "match": {
+      "toResults": "Vedi il riepilogo"
+    },
+    "results": {
+      "won": "Vittoria!",
+      "lost": "Sconfitta",
+      "draw": "Pareggio",
+      "pending": "Match in corso",
+      "bye": "Nessun avversario stavolta",
+      "against": "Contro {name}",
+      "replay": "Rigioca questo match",
+      "replayHint": "Una rivincita non cambia il risultato dell'evento.",
+      "leave": "Termina l'evento",
+      "tables": "I tavoli",
+      "table": "Tavolo {number}",
+      "playing": "in corso…",
+      "tableDraw": "pareggio",
+      "tableWon": "vittoria di {name}",
+      "byeOf": "{name} non aveva un avversario.",
+      "deck": "Il mio mazzo ({count} carte)",
+      "over": "Evento terminato"
+    },
+    "room": {
+      "title": {
+        "sealed": "Sealed online",
+        "draft": "Draft online"
+      },
+      "settings": "{players} posti · buste {sets}",
+      "timersDraft": "Tempo per scelta: {pick}. Tempo di costruzione: {build}.",
+      "timersSealed": "Tempo di costruzione: {build}.",
+      "invite": "Condividi il link di questa pagina per invitare i giocatori. Il server di gioco apre le buste: ognuno vede solo le proprie carte.",
+      "cancelled": "Questo evento è stato annullato.",
+      "cancel": "Annulla l'evento",
+      "needTwo": "Servono almeno due giocatori",
+      "start": "Avvia con {count} giocatori",
+      "freeHint": "I posti ancora liberi all'avvio restano vuoti.",
+      "join": "Partecipa a questo evento",
+      "signIn": "Accedi per prendere posto.",
+      "joinHint": "Riceverai le tue buste all'avvio.",
+      "sit": "Prendi posto"
+    },
+    "online": {
+      "unreachable": "Impossibile raggiungere l'evento.",
+      "unreachableHint": "Il server di gioco non risponde, oppure l'invito è scaduto. Ricarica la pagina per riprovare.",
+      "quitBody": "Abbandoni l'evento: il server non ti aspetterà più e il tuo match sarà perso.",
+      "quitWatching": "Potrai tornare con lo stesso link.",
+      "reconnecting": "Connessione persa. Nuovo tentativo in corso…",
+      "watching": "Stai guardando questo evento. Le carte dei giocatori restano nascoste.",
+      "tableOpening": "Il tuo tavolo si sta aprendo…",
+      "timeLeft": "Tempo rimasto: {time}",
+      "error": {
+        "NOT_FOUND": "Questo evento non esiste.",
+        "FORBIDDEN": "Solo l'host dell'evento può farlo.",
+        "FULL": "L'evento è al completo.",
+        "ALREADY_SEATED": "Hai già un posto in questo evento.",
+        "NOT_FULL": "Servono almeno due giocatori.",
+        "NOT_WAITING": "L'evento è già stato avviato."
+      }
+    },
+    "swu": {
+      "aspectWord": "Aspetto",
+      "aspect": {
+        "vigilance": "Vigilanza",
+        "command": "Comando",
+        "aggression": "Aggressività",
+        "cunning": "Astuzia",
+        "heroism": "Eroismo",
+        "villainy": "Malvagità"
+      },
+      "kind": {
+        "leader": "Leader",
+        "base": "Base",
+        "unit": "Unità",
+        "event": "Evento",
+        "upgrade": "Miglioria"
+      },
+      "rarity": {
+        "common": "Comune",
+        "uncommon": "Non comune",
+        "rare": "Rara",
+        "legendary": "Leggendaria",
+        "special": "Speciale"
+      },
+      "cost": "costo {cost}",
+      "hp": "{hp} PV",
+      "boostersSealed": "Ogni giocatore apre {boosters} buste da {size} carte e costruisce un mazzo di almeno {min} carte attorno a un leader e a una base.",
+      "boostersDraft": "Ogni giocatore riceve {boosters} buste. Prima si draftano i leader, uno per busta. Poi si prende una carta e si passa il resto al vicino, fino all'ultima ({size} carte per busta). Il mazzo ha almeno {min} carte.",
+      "build": {
+        "kind": {
+          "all": "Tutto",
+          "unit": "Unità",
+          "event": "Eventi",
+          "upgrade": "Migliorie",
+          "leader": "Leader"
+        },
+        "aspectFilter": "Filtra per aspetto",
+        "penalty": "+{count} di costo",
+        "penaltyTitle": "Penalità di aspetto: {count} in più",
+        "penalized": "{count, plural, one {# carta costa di più} other {# carte costano di più}}: i loro aspetti non sono né del leader né della base.",
+        "chooseLeader": "Scegli {name} come leader",
+        "hint": "Un clic aggiunge una carta al mazzo, o sceglie un leader. Una carta attenuata costa 2 in più per ogni aspetto che né il leader né la base forniscono.",
+        "noLeader": "Scegli un leader dalla riserva",
+        "noBase": "Scegli una base",
+        "basesOpened": "Basi delle tue buste",
+        "basesCommon": "Basi comuni dell'espansione",
+        "baseHint": "Tutte le basi comuni dell'espansione sono a tua disposizione.",
+        "main": "Mazzo"
+      }
+    }
+  },
   "Mobile": {
     "Play": {
       "hand": {
@@ -659,6 +945,41 @@
       "ask": {
         "pickTarget": "Tocca il bersaglio: ciò che è cerchiato di rosso è consentito.",
         "turnHint": "{ready, plural, =0 {Nessuna risorsa pronta} one {# risorsa pronta} other {# risorse pronte}} · tocca una carta per giocarla, attaccare o usare il tuo leader. Pressione lunga: la carta in grande."
+      }
+    },
+    "Limited": {
+      "entry": {
+        "title": "Sealed e draft",
+        "hint": "Apri le buste, costruisci un mazzo e gioca una partita."
+      },
+      "setup": {
+        "boostersTitle": "Buste",
+        "whoTitle": "Chi gioca?",
+        "whereAiHint": "Tutto si gioca sul tuo dispositivo.",
+        "failed": "Non è stato possibile caricare il motore. Chiudi questa schermata e riaprila per riprovare."
+      },
+      "draft": {
+        "hint": "Tocca una carta per guardarla, poi «Prendi questa carta».",
+        "none": "Tocca una carta della busta per leggerne il testo.",
+        "showPicks": "Le mie scelte ({count})"
+      },
+      "build": {
+        "hint": "Tocca una carta per aggiungerla al mazzo, la lente per leggerla. Le carte attenuate aggiungerebbero un quarto dominio.",
+        "mainEmpty": "Tocca le carte della riserva per aggiungerle.",
+        "tabs": "Riserva o mazzo",
+        "tabDeck": "Mazzo ({count})"
+      },
+      "swu": {
+        "build": {
+          "hint": "Tocca una carta per aggiungerla al mazzo, o per scegliere un leader. Una carta attenuata costa 2 in più per ogni aspetto che né il leader né la base forniscono."
+        }
+      },
+      "room": {
+        "invite": "Condividi il link dell'evento per invitare i giocatori. Il server di gioco apre le buste: ognuno vede solo le proprie carte.",
+        "share": "Condividi il link"
+      },
+      "online": {
+        "unreachableHint": "Il server di gioco non risponde, o l'invito è scaduto. Torna alla lobby e riprova."
       }
     }
   }
