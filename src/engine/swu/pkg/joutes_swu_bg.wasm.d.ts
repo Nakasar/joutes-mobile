@@ -1,14 +1,28 @@
 /* tslint:disable */
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
+export const __wbg_swulimitedevent_free: (a: number, b: number) => void;
 export const __wbg_swutable_free: (a: number, b: number) => void;
 export const swu_auto_deck: (a: number, b: number, c: number, d: number, e: number) => [number, number];
+export const swu_booster_sets: () => [number, number];
 export const swu_catalog: () => [number, number];
 export const swu_judge_review: (a: number, b: number, c: number, d: number) => [number, number, number, number];
 export const swu_judge_simulate: (a: number, b: number, c: number, d: number) => [number, number, number, number];
 export const swu_random_config: (a: number) => [number, number];
 export const swu_simulate: (a: number, b: number, c: number, d: number, e: number) => [number, number, number, number];
 export const swu_validate_deck: (a: number, b: number) => [number, number, number, number];
+export const swulimitedevent_act: (a: number, b: number, c: number, d: number) => [number, number];
+export const swulimitedevent_bot_step: (a: number) => number;
+export const swulimitedevent_check: (a: number, b: number, c: number, d: number) => [number, number, number, number];
+export const swulimitedevent_game: (a: number, b: number) => [number, number];
+export const swulimitedevent_new: (a: number, b: number, c: number) => [number, number, number];
+export const swulimitedevent_record: (a: number) => [number, number];
+export const swulimitedevent_report: (a: number, b: number, c: number) => [number, number];
+export const swulimitedevent_restore: (a: number, b: number) => [number, number, number];
+export const swulimitedevent_set_bot: (a: number, b: number, c: number, d: number) => [number, number];
+export const swulimitedevent_simulate: (a: number, b: number) => [number, number, number, number];
+export const swulimitedevent_suggest: (a: number, b: number) => [number, number];
+export const swulimitedevent_view: (a: number, b: number) => [number, number];
 export const swutable_act: (a: number, b: number, c: number, d: number) => [number, number, number];
 export const swutable_bot_step: (a: number) => number;
 export const swutable_is_bot: (a: number, b: number) => number;

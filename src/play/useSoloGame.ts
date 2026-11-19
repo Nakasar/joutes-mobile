@@ -63,7 +63,15 @@ type Table = InstanceType<BrowserEngine["Table"]>;
  * Une partie contre l'IA, jouée entièrement dans le navigateur. Le journal de
  * la partie est réécrit après chaque coup : recharger la page la reprend.
  */
-export function useSoloGame(save: SoloSave | null, options: { hands?: boolean } = {}): GameFeed {
+export function useSoloGame(
+  save: SoloSave | null,
+  // `onSave` : où garder la partie ailleurs que dans la sauvegarde des parties contre l'IA (un match de scellé).
+  options: { hands?: boolean; onSave?: (save: SoloSave) => void } = {},
+): GameFeed {
+  const store = useRef(options.onSave);
+  useEffect(() => {
+    store.current = options.onSave;
+  });
   const table = useRef<Table | null>(null);
   const seen = useRef(0);
   const [status, setStatus] = useState<GameFeed["status"]>("loading");
@@ -90,7 +98,9 @@ export function useSoloGame(save: SoloSave | null, options: { hands?: boolean } 
       seen.current = next.seq;
       setUpdate(next);
       setJournal((previous) => appendJournal(previous, next.events));
-      writeSoloSave({ ...save, record: JSON.parse(current.record()) as EngineRecord });
+      const kept = { ...save, record: JSON.parse(current.record()) as EngineRecord };
+      if (store.current) store.current(kept);
+      else writeSoloSave(kept);
       setTick((value) => value + 1);
     } catch (cause) {
       // Le moteur a levé une erreur : la dire plutôt que de laisser la table figée.

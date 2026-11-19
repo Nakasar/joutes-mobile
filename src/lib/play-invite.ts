@@ -14,6 +14,8 @@ export type PlayInvite =
   | { kind: "match"; matchId: string }
   /** Une table en ligne du mode Jouer ; `game` est nul pour un code seul, qui ne dit pas son jeu. */
   | { kind: "table"; game: "riftbound" | "swu" | null; id: string }
+  /** Un scellé ou un draft en ligne. */
+  | { kind: "limited"; game: "riftbound" | "swu"; id: string }
   /** Une partie sur le serveur d'un hôte (mode hôte). */
   | { kind: "remote"; game: "riftbound" | "swu"; server: string; ticket: string };
 
@@ -51,14 +53,21 @@ function playGameOf(segment: string | undefined): "riftbound" | "swu" | null {
 /**
  * Une invitation du mode Jouer : le lien d'une table du site
  * (`/games/{jeu}/play/table?id=…`, préfixe de langue toléré), le lien d'une
- * partie hébergée (`/games/{jeu}/play/remote#server=…&ticket=…`), ou le code
- * d'une table seul.
+ * partie hébergée (`/games/{jeu}/play/remote#server=…&ticket=…`), le lien d'un
+ * scellé ou d'un draft en ligne (`/games/{jeu}/play/limited/room?id=…`), ou le
+ * code d'une table seul.
  */
 function parseTableInput(raw: string): PlayInvite | null {
   const trimmed = raw.trim();
   if (!trimmed) return null;
   try {
     const url = new URL(trimmed);
+    const room = url.pathname.match(/\/games\/([a-z0-9-]+)\/play\/limited\/room\/?$/);
+    const roomGame = playGameOf(room?.[1]);
+    if (room && roomGame) {
+      const id = url.searchParams.get("id")?.toLowerCase() ?? "";
+      return /^[a-z0-9]{4,32}$/.test(id) ? { kind: "limited", game: roomGame, id } : null;
+    }
     const match = url.pathname.match(/\/games\/([a-z0-9-]+)\/play\/(table|remote)\/?$/);
     const game = playGameOf(match?.[1]);
     if (!match || !game) return null;

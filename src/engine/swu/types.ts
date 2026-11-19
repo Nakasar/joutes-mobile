@@ -18,6 +18,8 @@ export type SwuKind =
 
 export type SwuAspect = "vigilance" | "command" | "aggression" | "cunning" | "heroism" | "villainy";
 
+export type SwuRarity = "common" | "uncommon" | "rare" | "legendary" | "special";
+
 /** Une carte du catalogue du moteur (`swu_catalog`). */
 export type SwuEngineCard = {
   id: number;
@@ -25,6 +27,7 @@ export type SwuEngineCard = {
   name: string;
   subtitle?: string | null;
   kind: SwuKind;
+  rarity?: SwuRarity | null;
   unique: boolean;
   aspects: SwuAspect[];
   traits: string[];
@@ -41,7 +44,8 @@ export type SwuEngineCard = {
 /** Un deck au format Premier : un leader, une base, et le reste. */
 export type SwuDeckList = { leader: string; base: string; cards: string[] };
 
-export type SwuConfig = { players: { name: string; deck: SwuDeckList }[] };
+/** `limited` : la partie d'un scellé ou d'un draft, où un deck suit les règles du limité (règle 10). */
+export type SwuConfig = { players: { name: string; deck: SwuDeckList }[]; limited?: boolean };
 
 export type SwuAction =
   | { type: "play"; card: number; on?: number }

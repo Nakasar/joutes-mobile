@@ -6,7 +6,7 @@ import type { SwuTableCards } from "../../engine/swu/cards";
 import { SWU_ENGINE_VERSION } from "../../engine/swu/version";
 
 /** Change quand la forme des cartes change : elle entre dans l'adresse, gardée une heure par le navigateur. */
-const SWU_TABLE_CARDS_SHAPE = 1;
+const SWU_TABLE_CARDS_SHAPE = 2;
 
 let shared: Promise<SwuTableCards> | undefined;
 

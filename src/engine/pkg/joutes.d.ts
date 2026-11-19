@@ -26,10 +26,6 @@ export function random_config(mode_name: string, seed: number): string;
  */
 export function simulate(config: string, seed: number, bots: string): string;
 /**
- * Version du moteur.
- */
-export function version(): string;
-/**
  * Arbitrage : construit la situation décrite (JSON, voir `joutes_judge::Scenario`),
  * y déroule les choix (`steps` : liste JSON d'indices) et rend le rapport.
  */
@@ -39,6 +35,73 @@ export function judge_simulate(scenario: string, steps: string): string;
  * (-1 = jusqu'au bout) et raconte les `last` dernières actions.
  */
 export function judge_review(record: string, upto: number, last: number): string;
+/**
+ * Les extensions dont on peut ouvrir des boosters (scellé et draft).
+ */
+export function booster_sets(): string;
+/**
+ * Version du moteur.
+ */
+export function version(): string;
+/**
+ * Un évènement de scellé ou de draft tenu dans le navigateur : celui qui le tient
+ * voit toutes les cartes, chaque joueur ne reçoit que sa vue (`view`).
+ */
+export class LimitedEvent {
+  free(): void;
+  /**
+   * L'action d'un humain : `{"type":"pick","code":…,"foil":…}`, `{"type":"submit","deck":…}`,
+   * `{"type":"auto"}` (un robot choisit pour lui) ou `{"type":"forfeit"}`.
+   */
+  act(seat: number, action: string): void;
+  /**
+   * `settings` (JSON) : `kind` (`"sealed"` ou `"draft"`), `packs` (l'extension de
+   * chaque booster) et `players` (`name`, et `bot` : un niveau ou `null`).
+   */
+  constructor(settings: string, seed: number);
+  /**
+   * La partie d'un match : `config`, `seed` et `bots`, à donner tels quels à `Table`.
+   * `null` tant que les matchs ne sont pas connus.
+   */
+  game(index: number): string;
+  /**
+   * L'évènement vu d'un siège (0, 1…), d'un spectateur (-1) ou d'un arbitre (-2).
+   */
+  view(seat: number): string;
+  /**
+   * Les problèmes d'un deck pour ce joueur (liste vide s'il est légal).
+   */
+  check(seat: number, deck: string): string;
+  /**
+   * Le journal complet : réglages, graine et tout ce qui s'est passé.
+   */
+  record(): string;
+  /**
+   * Inscrit le résultat d'un match : le siège du vainqueur, ou -1 pour une nulle.
+   */
+  report(index: number, winner: number): void;
+  /**
+   * Rouvre un évènement depuis son journal (`record()`).
+   */
+  static restore(record: string): LimitedEvent;
+  /**
+   * Confie un siège à un robot (`level` : `"normal"`…) ou le rend à un humain (`null`).
+   */
+  set_bot(seat: number, level: string): void;
+  /**
+   * Un deck proposé à ce joueur (« Construire pour moi »), ou `null`.
+   */
+  suggest(seat: number): string;
+  /**
+   * Fait faire un choix à un robot qui en a un à faire. Rend son siège, ou -1.
+   */
+  bot_step(): number;
+  /**
+   * Joue un match entre deux robots et inscrit son résultat. Synchrone et parfois
+   * long (voir `simulate`) : l'appeler depuis un Web Worker.
+   */
+  simulate(index: number): string;
+}
 /**
  * Une partie tenue dans le navigateur.
  */
@@ -86,11 +149,25 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
+  readonly __wbg_limitedevent_free: (a: number, b: number) => void;
   readonly __wbg_table_free: (a: number, b: number) => void;
   readonly auto_deck: (a: number, b: number, c: number) => [number, number];
+  readonly booster_sets: () => [number, number];
   readonly catalog: () => [number, number];
   readonly judge_review: (a: number, b: number, c: number, d: number) => [number, number, number, number];
   readonly judge_simulate: (a: number, b: number, c: number, d: number) => [number, number, number, number];
+  readonly limitedevent_act: (a: number, b: number, c: number, d: number) => [number, number];
+  readonly limitedevent_bot_step: (a: number) => number;
+  readonly limitedevent_check: (a: number, b: number, c: number, d: number) => [number, number, number, number];
+  readonly limitedevent_game: (a: number, b: number) => [number, number];
+  readonly limitedevent_new: (a: number, b: number, c: number) => [number, number, number];
+  readonly limitedevent_record: (a: number) => [number, number];
+  readonly limitedevent_report: (a: number, b: number, c: number) => [number, number];
+  readonly limitedevent_restore: (a: number, b: number) => [number, number, number];
+  readonly limitedevent_set_bot: (a: number, b: number, c: number, d: number) => [number, number];
+  readonly limitedevent_simulate: (a: number, b: number) => [number, number, number, number];
+  readonly limitedevent_suggest: (a: number, b: number) => [number, number];
+  readonly limitedevent_view: (a: number, b: number) => [number, number];
   readonly random_config: (a: number, b: number, c: number) => [number, number, number, number];
   readonly simulate: (a: number, b: number, c: number, d: number, e: number) => [number, number, number, number];
   readonly table_act: (a: number, b: number, c: number, d: number) => [number, number, number];

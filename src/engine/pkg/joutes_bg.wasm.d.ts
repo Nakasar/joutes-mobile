@@ -1,11 +1,25 @@
 /* tslint:disable */
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
+export const __wbg_limitedevent_free: (a: number, b: number) => void;
 export const __wbg_table_free: (a: number, b: number) => void;
 export const auto_deck: (a: number, b: number, c: number) => [number, number];
+export const booster_sets: () => [number, number];
 export const catalog: () => [number, number];
 export const judge_review: (a: number, b: number, c: number, d: number) => [number, number, number, number];
 export const judge_simulate: (a: number, b: number, c: number, d: number) => [number, number, number, number];
+export const limitedevent_act: (a: number, b: number, c: number, d: number) => [number, number];
+export const limitedevent_bot_step: (a: number) => number;
+export const limitedevent_check: (a: number, b: number, c: number, d: number) => [number, number, number, number];
+export const limitedevent_game: (a: number, b: number) => [number, number];
+export const limitedevent_new: (a: number, b: number, c: number) => [number, number, number];
+export const limitedevent_record: (a: number) => [number, number];
+export const limitedevent_report: (a: number, b: number, c: number) => [number, number];
+export const limitedevent_restore: (a: number, b: number) => [number, number, number];
+export const limitedevent_set_bot: (a: number, b: number, c: number, d: number) => [number, number];
+export const limitedevent_simulate: (a: number, b: number) => [number, number, number, number];
+export const limitedevent_suggest: (a: number, b: number) => [number, number];
+export const limitedevent_view: (a: number, b: number) => [number, number];
 export const random_config: (a: number, b: number, c: number) => [number, number, number, number];
 export const simulate: (a: number, b: number, c: number, d: number, e: number) => [number, number, number, number];
 export const table_act: (a: number, b: number, c: number, d: number) => [number, number, number];

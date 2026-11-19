@@ -40,6 +40,7 @@ export type TableCard = {
   domains: string[];
   champion?: boolean;
   token?: boolean;
+  rarity?: "common" | "uncommon" | "rare" | "epic";
   /** Faux pour une carte que le moteur ne sait pas jouer. */
   playable: boolean;
   /** Le numéro de la carte dans le moteur (le `def` de ses évènements). */

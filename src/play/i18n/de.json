@@ -606,6 +606,294 @@
       "fortify": "Befestigen"
     }
   },
+  "Limited": {
+    "loading": "Event wird geladen…",
+    "none": "Kein Sealed oder Draft im Gange.",
+    "broken": "Dieses Event wurde von einer früheren Version der Engine gespeichert und kann nicht mehr fortgesetzt werden.",
+    "brokenLeave": "Aufgeben und zur Lobby zurückkehren",
+    "out": "Du bist aus dem Event ausgeschieden.",
+    "title": {
+      "sealed": "Sealed",
+      "draft": "Draft"
+    },
+    "subtitle": "{players} Spieler · Booster {sets}",
+    "blankBattlefield": "Leeres Schlachtfeld",
+    "noLegend": "Ohne Legende",
+    "champion": "Champion",
+    "cost": "Kosten {energy}",
+    "might": "Macht {might}",
+    "rarity": {
+      "common": "Gewöhnlich",
+      "uncommon": "Ungewöhnlich",
+      "rare": "Selten",
+      "epic": "Episch"
+    },
+    "foil": "Foil",
+    "inspect": "{name} vergrößern",
+    "noText": "Diese Karte hat keinen Text.",
+    "curveLabel": "Kostenkurve: {list}",
+    "step": {
+      "draft": "Draft",
+      "open": "Öffnen",
+      "build": "Deckbau",
+      "match": "Match"
+    },
+    "quit": "Verlassen",
+    "quitTitle": "Event verlassen?",
+    "quitBody": "Deine Booster, dein Deck und das laufende Match gehen verloren.",
+    "quitConfirm": "Event verlassen",
+    "quitCancel": "Bleiben",
+    "format": {
+      "title": "1. Format",
+      "constructed": "Constructed",
+      "constructedHint": "Jeder bringt sein eigenes Deck mit.",
+      "sealed": "Sealed",
+      "sealedHint": "Öffne 6 Booster und baue daraus ein Deck.",
+      "draft": "Draft",
+      "draftHint": "Nimm eine Karte, gib das Pack weiter, dann baue."
+    },
+    "resume": {
+      "sealed": "Sealed im Gange",
+      "draft": "Draft im Gange",
+      "hint": "{players} Spieler. Es geht dort weiter, wo du aufgehört hast.",
+      "discard": "Dieses Event aufgeben"
+    },
+    "setup": {
+      "loading": "Booster werden geladen…",
+      "failed": "Die Engine konnte nicht geladen werden. Lade die Seite neu, um es erneut zu versuchen.",
+      "boostersTitle": "2. Booster",
+      "boostersSealed": "Jeder Spieler öffnet {boosters} Booster mit {size} Karten und baut ein Deck mit mindestens {min} Karten.",
+      "boostersDraft": "Jeder Spieler erhält {boosters} Booster. Man nimmt eine Karte und gibt den Rest an den Nachbarn weiter, bis zur letzten ({size} Karten pro Booster). Das Deck hat mindestens {min} Karten.",
+      "set": "Set",
+      "booster": "Booster {number}",
+      "mixed": "Sets mischen",
+      "mixedHint": "Das Set jedes Boosters in der Reihenfolge des Öffnens wählen.",
+      "whoTitle": "3. Wer spielt?",
+      "players": "Anzahl der Spieler",
+      "playersSealed": "Du und {bots, plural, one {# KI} other {# KIs}}. Du trittst gegen eine davon an.",
+      "playersDraft": "Du und {bots, plural, one {# KI} other {# KIs}} am Tisch. Je mehr Spieler, desto weiter wandern die Packs.",
+      "level": "Stufe der KIs",
+      "levelHint": "Die Stufe gilt für ihre Kartenwahl, ihr Deck und ihr Spiel.",
+      "oneMatch": "Nach dem Deckbau spielst du ein Match mit einer Partie gegen einen Gegner.",
+      "startSealed": "Booster öffnen",
+      "startDraft": "Draft beginnen",
+      "replaces": "Das ersetzt das laufende Event.",
+      "whereAi": "Gegen KIs",
+      "whereAiHint": "Alles läuft in deinem Browser.",
+      "whereOnlineHint": "Erstelle ein Event und lade per Link ein.",
+      "whereHostHint": "Ein Event, das du oder ein Veranstalter hostet.",
+      "noLimit": "Ohne Limit",
+      "seconds": "{count} s",
+      "minutes": "{count} Min.",
+      "timers": "Timer",
+      "pickDelay": "Zeit pro Pick",
+      "buildDelay": "Zeit für den Deckbau",
+      "timersHint": "Läuft die Zeit ab, wählt oder baut der Server anstelle des Spielers.",
+      "playersOnline": "Die Anzahl der Plätze. Im Warteraum lädst du Spieler ein und fügst KIs hinzu.",
+      "oneMatchOnline": "Nach dem Deckbau spielt jeder ein Match über eine Partie gegen einen Gegner.",
+      "create": "Event erstellen",
+      "signIn": "Melde dich an, um ein Online-Event zu erstellen oder beizutreten.",
+      "mineWaiting": "wartet · {players, plural, one {# Spieler} other {# Spieler}}",
+      "minePlaying": "läuft · {players, plural, one {# Spieler} other {# Spieler}}",
+      "mineFinished": "beendet · {players, plural, one {# Spieler} other {# Spieler}}",
+      "mineOpen": "Öffnen",
+      "join": "Einem Event beitreten",
+      "joinPlaceholder": "Code oder Link des Events",
+      "joinButton": "Beitreten"
+    },
+    "seat": {
+      "picking": "wählt",
+      "waiting": "wartet auf ein Pack",
+      "building": "baut",
+      "ready": "Deck abgegeben",
+      "out": "ausgeschieden",
+      "away": "getrennt"
+    },
+    "sealed": {
+      "booster": "Booster {number} · {set}",
+      "title": "Booster {number} von {boosters} ({set})",
+      "next": "Nächster Booster",
+      "skip": "Alle öffnen",
+      "build": "Mein Deck bauen",
+      "poolTitle": "Mein Pool: {count} von {total} Karten",
+      "rares": "{count, plural, =0 {Noch keine seltene oder bessere Karte.} one {# seltene oder bessere Karte.} other {# seltene oder bessere Karten.}}"
+    },
+    "draft": {
+      "title": "Booster {round} von {rounds} · Wahl {pick} von {size}",
+      "titleWaiting": "Booster {round} von {rounds}",
+      "passNext": "Booster {set}. Das Pack geht danach an den nächsten Spieler.",
+      "passPrevious": "Booster {set}. Das Pack geht danach an den vorherigen Spieler.",
+      "sort": "Pack sortieren",
+      "sortBy": {
+        "rarity": "Seltenheit",
+        "domain": "Domäne",
+        "cost": "Kosten"
+      },
+      "look": "{name} ansehen",
+      "take": "Diese Karte nehmen",
+      "hint": "Ein Klick wählt eine Karte aus, ein Doppelklick nimmt sie sofort.",
+      "waiting": "Die anderen Spieler wählen. Das nächste Pack kommt gleich.",
+      "selected": "Ausgewählte Karte",
+      "none": "Klicke auf eine Karte im Pack, um ihren Text zu lesen.",
+      "picks": "Meine Wahl ({count})",
+      "noPicks": "Deine Karten erscheinen hier.",
+      "titleLeaders": "Anführer · Wahl {pick} von {size}",
+      "titleLeadersWaiting": "Anführer",
+      "leadersNext": "Jeder nimmt einen Anführer und gibt die anderen an den nächsten Spieler weiter. Danach kommen die Booster.",
+      "leadersPrevious": "Jeder nimmt einen Anführer und gibt die anderen an den vorherigen Spieler weiter. Danach kommen die Booster."
+    },
+    "build": {
+      "pool": "Pool ({count})",
+      "kindFilter": "Nach Typ filtern",
+      "kind": {
+        "all": "Alle",
+        "unit": "Einheiten",
+        "spell": "Zauber",
+        "gear": "Ausrüstung",
+        "other": "Legenden und Schlachtfelder"
+      },
+      "domainFilter": "Nach Domäne filtern",
+      "poolEmpty": "Keine Karte im Pool passt zu diesen Filtern.",
+      "add": "{name} zum Deck hinzufügen",
+      "remove": "{name} aus dem Deck entfernen",
+      "hint": "Ein Klick fügt eine Karte zum Deck hinzu. Abgeblendete Karten würden eine vierte Domäne hinzufügen.",
+      "deck": "Mein Deck",
+      "identity": "{count} von 3 Domänen",
+      "champion": "Gewählter Champion",
+      "noChampion": "Ohne gewählten Champion",
+      "championHint": "Füge dem Deck einen Champion hinzu, um ihn wählen zu können.",
+      "chosen": "gewählter Champion",
+      "main": "Hauptdeck",
+      "mainCount": "{count} von mindestens {min}",
+      "mainEmpty": "Klicke auf Karten im Pool, um sie hinzuzufügen.",
+      "runes": "Runen ({count} von {total})",
+      "runesAuto": "Für mich verteilen",
+      "runesEmpty": "Die Runen folgen den Domänen deines Decks.",
+      "runesFollow": "Die Runen werden nach den Kosten deines Decks verteilt.",
+      "runesByHand": "Du verteilst die Runen selbst.",
+      "runeLess": "Eine {domain}-Rune weniger",
+      "runeMore": "Eine {domain}-Rune mehr",
+      "battlefields": "Schlachtfelder",
+      "battlefieldsHint": "Ein Schlachtfeld aus dem Pool ersetzt ein leeres.",
+      "legal": "Deck regelkonform",
+      "problems": "{count, plural, one {# Punkt zu beheben} other {# Punkte zu beheben}}",
+      "checked": "Von der Engine nach den Limited-Regeln geprüft.",
+      "suggest": "Für mich bauen",
+      "noSuggestion": "Die Engine findet mit diesem Pool kein regelkonformes Deck.",
+      "submit": "Mein Deck abgeben",
+      "waiting": "Deck abgegeben. Die anderen Spieler stellen ihres fertig."
+    },
+    "match": {
+      "toResults": "Zur Übersicht"
+    },
+    "results": {
+      "won": "Sieg!",
+      "lost": "Niederlage",
+      "draw": "Unentschieden",
+      "pending": "Match läuft",
+      "bye": "Diesmal kein Gegner",
+      "against": "Gegen {name}",
+      "replay": "Dieses Match erneut spielen",
+      "replayHint": "Eine Revanche ändert das Ergebnis des Events nicht.",
+      "leave": "Event beenden",
+      "tables": "Die Tische",
+      "table": "Tisch {number}",
+      "playing": "läuft…",
+      "tableDraw": "Unentschieden",
+      "tableWon": "Sieg für {name}",
+      "byeOf": "{name} hatte keinen Gegner.",
+      "deck": "Mein Deck ({count} Karten)",
+      "over": "Event beendet"
+    },
+    "room": {
+      "title": {
+        "sealed": "Sealed online",
+        "draft": "Draft online"
+      },
+      "settings": "{players} Plätze · Booster {sets}",
+      "timersDraft": "Zeit pro Pick: {pick}. Zeit für den Deckbau: {build}.",
+      "timersSealed": "Zeit für den Deckbau: {build}.",
+      "invite": "Teile den Link dieser Seite, um Spieler einzuladen. Der Spielserver öffnet die Booster: Jeder sieht nur seine eigenen Karten.",
+      "cancelled": "Dieses Event wurde abgesagt.",
+      "cancel": "Event absagen",
+      "needTwo": "Mindestens zwei Spieler nötig",
+      "start": "Mit {count} Spielern starten",
+      "freeHint": "Beim Start noch freie Plätze bleiben leer.",
+      "join": "Diesem Event beitreten",
+      "signIn": "Melde dich an, um Platz zu nehmen.",
+      "joinHint": "Du erhältst deine Booster beim Start.",
+      "sit": "Platz nehmen"
+    },
+    "online": {
+      "unreachable": "Dem Event kann nicht beigetreten werden.",
+      "unreachableHint": "Der Spielserver antwortet nicht oder die Einladung ist abgelaufen. Lade die Seite neu, um es erneut zu versuchen.",
+      "quitBody": "Du gibst das Event auf: Der Server wartet nicht mehr auf dich und dein Match ist verloren.",
+      "quitWatching": "Du kannst über denselben Link zurückkommen.",
+      "reconnecting": "Verbindung verloren. Neuer Versuch…",
+      "watching": "Du schaust diesem Event zu. Die Karten der Spieler bleiben verborgen.",
+      "tableOpening": "Dein Tisch wird geöffnet…",
+      "opponentLeft": "Dein Gegner hat das Event verlassen: Das Match geht an dich.",
+      "timeLeft": "Verbleibende Zeit: {time}",
+      "error": {
+        "NOT_FOUND": "Dieses Event existiert nicht.",
+        "FORBIDDEN": "Nur der Host des Events kann das tun.",
+        "FULL": "Das Event ist voll.",
+        "ALREADY_SEATED": "Du hast bereits einen Platz in diesem Event.",
+        "NOT_FULL": "Mindestens zwei Spieler sind nötig.",
+        "NOT_WAITING": "Das Event wurde bereits gestartet."
+      }
+    },
+    "swu": {
+      "aspectWord": "Aspekt",
+      "aspect": {
+        "vigilance": "Wachsamkeit",
+        "command": "Kommando",
+        "aggression": "Aggression",
+        "cunning": "List",
+        "heroism": "Heldentum",
+        "villainy": "Schurkentum"
+      },
+      "kind": {
+        "leader": "Anführer",
+        "base": "Basis",
+        "unit": "Einheit",
+        "event": "Ereignis",
+        "upgrade": "Aufwertung"
+      },
+      "rarity": {
+        "common": "Gewöhnlich",
+        "uncommon": "Ungewöhnlich",
+        "rare": "Selten",
+        "legendary": "Legendär",
+        "special": "Spezial"
+      },
+      "cost": "Kosten {cost}",
+      "hp": "{hp} LP",
+      "boostersSealed": "Jeder Spieler öffnet {boosters} Booster mit {size} Karten und baut ein Deck mit mindestens {min} Karten um einen Anführer und eine Basis.",
+      "boostersDraft": "Jeder Spieler erhält {boosters} Booster. Zuerst werden die Anführer gedraftet, einer pro Booster. Dann nimmt man eine Karte und gibt den Rest an den Nachbarn weiter, bis zur letzten ({size} Karten pro Booster). Das Deck hat mindestens {min} Karten.",
+      "build": {
+        "kind": {
+          "all": "Alle",
+          "unit": "Einheiten",
+          "event": "Ereignisse",
+          "upgrade": "Aufwertungen",
+          "leader": "Anführer"
+        },
+        "aspectFilter": "Nach Aspekt filtern",
+        "penalty": "+{count} Kosten",
+        "penaltyTitle": "Aspektstrafe: {count} mehr",
+        "penalized": "{count, plural, one {# Karte kostet mehr} other {# Karten kosten mehr}}: Ihre Aspekte gehören weder zum Anführer noch zur Basis.",
+        "chooseLeader": "{name} als Anführer wählen",
+        "hint": "Ein Klick fügt eine Karte zum Deck hinzu oder wählt einen Anführer. Eine abgeblendete Karte kostet 2 mehr für jeden Aspekt, den weder Anführer noch Basis liefern.",
+        "noLeader": "Wähle einen Anführer aus dem Pool",
+        "noBase": "Wähle eine Basis",
+        "basesOpened": "Basen aus deinen Boostern",
+        "basesCommon": "Gewöhnliche Basen der Erweiterung",
+        "baseHint": "Alle gewöhnlichen Basen der Erweiterung stehen dir zur Verfügung.",
+        "main": "Deck"
+      }
+    }
+  },
   "Mobile": {
     "Play": {
       "hand": {
@@ -659,6 +947,41 @@
       "ask": {
         "pickTarget": "Tippe auf das Ziel: Rot umrandet ist erlaubt.",
         "turnHint": "{ready, plural, =0 {Keine bereite Ressource} one {# bereite Ressource} other {# bereite Ressourcen}} · tippe auf eine Karte, um sie zu spielen, anzugreifen oder deinen Anführer zu nutzen. Lange drücken: Karte groß."
+      }
+    },
+    "Limited": {
+      "entry": {
+        "title": "Sealed und Draft",
+        "hint": "Öffne Booster, baue daraus ein Deck und spiele dann ein Match."
+      },
+      "setup": {
+        "boostersTitle": "Booster",
+        "whoTitle": "Wer spielt?",
+        "whereAiHint": "Alles läuft auf deinem Gerät.",
+        "failed": "Die Engine konnte nicht geladen werden. Schließe diesen Bildschirm und öffne ihn erneut."
+      },
+      "draft": {
+        "hint": "Tippe auf eine Karte, um sie anzusehen, dann auf „Diese Karte nehmen“.",
+        "none": "Tippe auf eine Karte im Stapel, um ihren Text zu lesen.",
+        "showPicks": "Meine Picks ({count})"
+      },
+      "build": {
+        "hint": "Tippe auf eine Karte, um sie ins Deck zu legen, auf die Lupe, um sie zu lesen. Abgeblendete Karten würden eine vierte Domäne hinzufügen.",
+        "mainEmpty": "Tippe auf Karten im Pool, um sie hinzuzufügen.",
+        "tabs": "Pool oder Deck",
+        "tabDeck": "Deck ({count})"
+      },
+      "swu": {
+        "build": {
+          "hint": "Tippe auf eine Karte, um sie ins Deck zu legen oder einen Anführer zu wählen. Eine abgeblendete Karte kostet 2 mehr pro Aspekt, den weder dein Anführer noch deine Basis liefert."
+        }
+      },
+      "room": {
+        "invite": "Teile den Link des Events, um Spieler einzuladen. Der Spielserver öffnet die Booster: Jeder sieht nur seine eigenen Karten.",
+        "share": "Link teilen"
+      },
+      "online": {
+        "unreachableHint": "Der Spielserver antwortet nicht, oder die Einladung ist abgelaufen. Geh zurück zur Lobby und versuche es erneut."
       }
     }
   }

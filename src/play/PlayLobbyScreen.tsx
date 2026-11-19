@@ -19,6 +19,8 @@ import {
 } from "../api/play";
 import { BackHeader } from "../components/BackHeader";
 import { loadEngine } from "../engine/browser";
+import { LIMITED_STORAGE_KEY, readLimitedSave, writeLimitedSave } from "../engine/limited";
+import { SWU_LIMITED_STORAGE_KEY } from "../engine/swu/limited-profile";
 import { loadSwuEngine } from "../engine/swu/browser";
 import { ASPECT_HEX, swuPickerCards, type SwuTableCards } from "../engine/swu/cards";
 import type { SwuDeckList } from "../engine/swu/types";
@@ -30,6 +32,7 @@ import { beatenLevels, readHistory, writeLastSetup, type SoloMeta } from "./hist
 import { BackIcon, BotIcon, CheckIcon, ChevronDownIcon, EyeIcon, GlobeIcon, PlayIcon, ServerIcon } from "./icons";
 import { readSwuSave, writeSwuSave, type SwuSave } from "./swu/useSwuSoloGame";
 import { useSwuTableCards } from "./swu/useSwuTableCards";
+import "./limited/limited.css";
 import { usePlayT } from "./t";
 import { Toggle, useToast } from "./ui";
 import { readSoloSave, writeSoloSave, type SoloSave } from "./useSoloGame";
@@ -283,6 +286,10 @@ function LobbyView<L extends object>({ kit }: { kit: LobbyKit<L> }) {
   const [busy, setBusy] = useState(false);
   const [code, setCode] = useState("");
   const [othersOpen, setOthersOpen] = useState(false);
+  const tl = usePlayT("Limited");
+  // Le scellé ou le draft contre des IA gardé sur l'appareil.
+  const limitedKey = kit.game === "swu" ? SWU_LIMITED_STORAGE_KEY : LIMITED_STORAGE_KEY;
+  const [limited, setLimited] = useState(() => readLimitedSave<unknown, unknown>(limitedKey)?.record.settings ?? null);
   const history = useMemo(() => readHistory().filter((entry) => entry.game === kit.game), [kit.game]);
   const beaten = useMemo(() => beatenLevels(kit.game, history), [kit.game, history]);
 
@@ -523,6 +530,28 @@ function LobbyView<L extends object>({ kit }: { kit: LobbyKit<L> }) {
             </section>
           )}
 
+          {limited && (
+            <section className="play-resume">
+              <b>{tl(`resume.${limited.kind}`)}</b>
+              <span className="muted">{tl("resume.hint", { players: limited.players.length })}</span>
+              <div className="pt-row-wrap">
+                <button type="button" className="btn btn--grad" onClick={() => navigate(`/play/${game}/limited`)}>
+                  {t("lobby.resume")}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn--ghost"
+                  onClick={() => {
+                    writeLimitedSave(null, limitedKey);
+                    setLimited(null);
+                  }}
+                >
+                  {tl("resume.discard")}
+                </button>
+              </div>
+            </section>
+          )}
+
           {kit.modes && (
             <div className="play-formats" role="group" aria-label={t("lobby.modeTitle")}>
               {kit.modes.map((value) => (
@@ -643,6 +672,20 @@ function LobbyView<L extends object>({ kit }: { kit: LobbyKit<L> }) {
               />
             </section>
           )}
+
+          <section className="play-section">
+            <h2 className="play-section__title">{tl("entry.title")}</h2>
+            <div className="lim-entry">
+              <Link to={`/play/${game}/limited/new?kind=sealed`}>
+                <b>{tl("format.sealed")}</b>
+                <span className="muted play-small">{tl("format.sealedHint")}</span>
+              </Link>
+              <Link to={`/play/${game}/limited/new?kind=draft`}>
+                <b>{tl("format.draft")}</b>
+                <span className="muted play-small">{tl("format.draftHint")}</span>
+              </Link>
+            </div>
+          </section>
 
           <section className={`play-others${othersOpen ? " play-others--open" : ""}`}>
             <button type="button" className="play-others__head" aria-expanded={othersOpen} onClick={() => setOthersOpen((open) => !open)}>

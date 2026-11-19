@@ -58,6 +58,11 @@ export function JoinPlaySheet({
       navigate(remotePath(invite.game, invite.server, invite.ticket));
       return;
     }
+    if (invite.kind === "limited") {
+      onClose();
+      navigate(`/play/${invite.game}/limited/events/${invite.id}`);
+      return;
+    }
     if (invite.kind === "table") {
       if (invite.game) {
         onClose();
@@ -153,7 +158,7 @@ export function JoinPlaySheet({
               ? invite.code
               : invite.kind === "match"
                 ? invite.matchId
-                : invite.kind === "table"
+                : invite.kind === "table" || invite.kind === "limited"
                   ? invite.id
                   : invite.server,
         );
