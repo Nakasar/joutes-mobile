@@ -184,7 +184,8 @@ export type LimitedEventSummary = {
   /** Le nombre de places autour de la table. */
   players: number;
   timers: LimitedTimers;
-  status: "waiting" | "playing" | "cancelled";
+  /** `finished` : le serveur de parties a joué tous les matchs. */
+  status: "waiting" | "playing" | "finished" | "cancelled";
   seats: { name: string; bot?: BotLevel; host: boolean }[];
   createdAt: string;
   startedAt?: string;

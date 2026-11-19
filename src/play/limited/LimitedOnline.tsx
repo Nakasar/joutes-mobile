@@ -12,6 +12,7 @@ import {
   type PlayResult,
 } from "../../api/play";
 import { BackHeader } from "../../components/BackHeader";
+import { config } from "../../config";
 import { matchOf } from "../../engine/limited";
 import { BOT_LEVELS, type BotLevel } from "../../engine/types";
 import { BotIcon, CloseIcon, ShareIcon, UserIcon } from "../icons";
@@ -30,7 +31,7 @@ const POLL_MS = 3000;
 
 /** Le lien d'un évènement, celui du site : il s'ouvre aussi dans un navigateur, et l'app le reconnaît. */
 export function limitedEventLink(game: PlayGame, id: string): string {
-  return `https://joutes.app/games/${game}/play/limited/room?id=${id}`;
+  return `${config.webUrl}/games/${game}/play/limited/room?id=${id}`;
 }
 
 /**
@@ -120,7 +121,7 @@ export function LimitedRoom<D, C, R extends MatchRecord, G>({
   const { event } = state;
   if (event.status === "cancelled") return closed(t("room.cancelled"));
 
-  if (event.status === "playing") {
+  if (event.status === "playing" || event.status === "finished") {
     return (
       <OnlineLimited
         kit={kit}
@@ -381,6 +382,9 @@ function OnlineLimited<D, C, R extends MatchRecord, G>({
   const subtitle = t("subtitle", { players: view.seats.length, sets: [...new Set(view.packs)].join(", ") });
   const mine = seat === null ? null : matchOf(view, seat);
   const over = view.phase === "done" || (view.phase === "play" && (!mine || mine.match.done));
+  // L'adversaire a quitté en plein match : le match est à moi, sa table n'ira pas plus loin.
+  const opponentLeft =
+    !!mine && mine.match.done && mine.match.seats.some((other) => other !== seat && view.seats[other]?.out);
 
   const leave = () => {
     writeDraft(storageKey, null);
@@ -512,7 +516,7 @@ function OnlineLimited<D, C, R extends MatchRecord, G>({
   }
 
   // Les matchs : le mien sur la table du serveur, puis le bilan.
-  if (kit.OnlineMatch && mine && feed.table && (atTable || !mine.match.done) && !summary) {
+  if (kit.OnlineMatch && mine && feed.table && (atTable || !mine.match.done) && !summary && !opponentLeft) {
     return (
       <>
         <Seated onSeated={() => setAtTable(true)} />
@@ -538,6 +542,11 @@ function OnlineLimited<D, C, R extends MatchRecord, G>({
   return page(
     "match",
     <>
+      {opponentLeft && (
+        <p className="lim-notice" role="status">
+          {t("online.opponentLeft")}
+        </p>
+      )}
       {mine && !mine.match.done && !feed.table && (
         <p className="lim-empty" role="status">
           {t("online.tableOpening")}

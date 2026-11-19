@@ -1,7 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
-export const version: () => [number, number];
 export const __wbg_limitedevent_free: (a: number, b: number) => void;
 export const __wbg_table_free: (a: number, b: number) => void;
 export const auto_deck: (a: number, b: number, c: number) => [number, number];
@@ -34,6 +33,7 @@ export const table_seq: (a: number) => number;
 export const table_to_act: (a: number) => number;
 export const table_update: (a: number, b: number, c: number) => [number, number];
 export const validate_deck: (a: number, b: number) => [number, number, number, number];
+export const version: () => [number, number];
 export const __wbindgen_export_0: WebAssembly.Table;
 export const __wbindgen_free: (a: number, b: number, c: number) => void;
 export const __wbindgen_malloc: (a: number, b: number) => number;

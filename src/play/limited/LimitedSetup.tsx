@@ -311,7 +311,7 @@ export function LimitedSetup({ profile, game, kind }: { profile: LimitedProfile;
                     <li key={event.id} className="lim-seat-row">
                       <b>{t(`room.title.${event.kind}`)}</b>
                       <span className="muted lim-small">
-                        {t(event.status === "waiting" ? "setup.mineWaiting" : "setup.minePlaying", {
+                        {t(event.status === "waiting" ? "setup.mineWaiting" : event.status === "finished" ? "setup.mineFinished" : "setup.minePlaying", {
                           players: event.seats.length,
                         })}
                       </span>

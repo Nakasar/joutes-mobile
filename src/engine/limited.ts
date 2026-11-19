@@ -58,7 +58,17 @@ export type LimitedView<D = EngineDeckList> = {
 };
 
 /** Le journal d'un évènement : de quoi le rouvrir à l'identique. */
-export type LimitedRecord = { version: number; settings: LimitedSettings; seed: number; log: unknown[] };
+/**
+ * Le journal d'un évènement. `packs` : les boosters ouverts, gardés pour qu'une
+ * mise à jour du moteur ne change pas ce qu'un évènement en cours a tiré.
+ */
+export type LimitedRecord = {
+  version: number;
+  settings: LimitedSettings;
+  seed: number;
+  log: unknown[];
+  packs?: { code: string; foil?: boolean }[][][];
+};
 
 /** La partie d'un match, telle que `LimitedEvent.game` la rend. */
 export type LimitedGame<C = EngineConfig> = { config: C; seed: number; bots: (BotLevel | null)[] };

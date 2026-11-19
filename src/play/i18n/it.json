@@ -695,6 +695,7 @@
       "signIn": "Accedi per creare un evento online o parteciparvi.",
       "mineWaiting": "in attesa · {players, plural, one {# giocatore} other {# giocatori}}",
       "minePlaying": "in corso · {players, plural, one {# giocatore} other {# giocatori}}",
+      "mineFinished": "terminato · {players, plural, one {# giocatore} other {# giocatori}}",
       "mineOpen": "Apri",
       "join": "Partecipa a un evento",
       "joinPlaceholder": "Codice o link dell'evento",
@@ -831,6 +832,7 @@
       "reconnecting": "Connessione persa. Nuovo tentativo in corso…",
       "watching": "Stai guardando questo evento. Le carte dei giocatori restano nascoste.",
       "tableOpening": "Il tuo tavolo si sta aprendo…",
+      "opponentLeft": "Il tuo avversario ha lasciato l'evento: la partita è tua.",
       "timeLeft": "Tempo rimasto: {time}",
       "error": {
         "NOT_FOUND": "Questo evento non esiste.",

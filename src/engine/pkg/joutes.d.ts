@@ -1,10 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Version du moteur.
- */
-export function version(): string;
-/**
  * Toutes les cartes connues du moteur, avec leur niveau de prise en charge.
  */
 export function catalog(): string;
@@ -43,6 +39,10 @@ export function judge_review(record: string, upto: number, last: number): string
  * Les extensions dont on peut ouvrir des boosters (scellé et draft).
  */
 export function booster_sets(): string;
+/**
+ * Version du moteur.
+ */
+export function version(): string;
 /**
  * Un évènement de scellé ou de draft tenu dans le navigateur : celui qui le tient
  * voit toutes les cartes, chaque joueur ne reçoit que sa vue (`view`).
@@ -149,7 +149,6 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
-  readonly version: () => [number, number];
   readonly __wbg_limitedevent_free: (a: number, b: number) => void;
   readonly __wbg_table_free: (a: number, b: number) => void;
   readonly auto_deck: (a: number, b: number, c: number) => [number, number];
@@ -182,6 +181,7 @@ export interface InitOutput {
   readonly table_to_act: (a: number) => number;
   readonly table_update: (a: number, b: number, c: number) => [number, number];
   readonly validate_deck: (a: number, b: number) => [number, number, number, number];
+  readonly version: () => [number, number];
   readonly __wbindgen_export_0: WebAssembly.Table;
   readonly __wbindgen_free: (a: number, b: number, c: number) => void;
   readonly __wbindgen_malloc: (a: number, b: number) => number;

@@ -695,6 +695,7 @@
       "signIn": "Sign in to create or join an online event.",
       "mineWaiting": "waiting · {players, plural, one {# player} other {# players}}",
       "minePlaying": "in progress · {players, plural, one {# player} other {# players}}",
+      "mineFinished": "finished · {players, plural, one {# player} other {# players}}",
       "mineOpen": "Open",
       "join": "Join an event",
       "joinPlaceholder": "Event code or link",
@@ -831,6 +832,7 @@
       "reconnecting": "Connection lost. Trying again…",
       "watching": "You are watching this event. The players' cards stay hidden.",
       "tableOpening": "Your table is opening…",
+      "opponentLeft": "Your opponent left the event: the match is yours.",
       "timeLeft": "Time left: {time}",
       "error": {
         "NOT_FOUND": "This event does not exist.",

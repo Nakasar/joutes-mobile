@@ -311,6 +311,15 @@ function useBotMatches<D, G>(feed: LimitedFeed<D, G>, open: () => Worker): void 
       // Une partie que le moteur n'a pas su finir compte comme nulle : l'évènement ne reste pas bloqué.
       report(next, summary?.finished ? matchWinner(match, summary.winners) : null);
     };
+    // Un worker qui ne se charge pas ou plante ne répond jamais : le match compte
+    // comme nul, et le prochain match repart sur un worker neuf.
+    current.onerror = current.onmessageerror = () => {
+      if (running.current !== next) return;
+      running.current = null;
+      current.terminate();
+      if (worker.current === current) worker.current = null;
+      report(next, null);
+    };
     current.postMessage({ id: next, config: job.config, seed: job.seed, bots: job.bots });
   }, [next, view, game, report, open]);
 }

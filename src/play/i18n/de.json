@@ -695,6 +695,7 @@
       "signIn": "Melde dich an, um ein Online-Event zu erstellen oder beizutreten.",
       "mineWaiting": "wartet · {players, plural, one {# Spieler} other {# Spieler}}",
       "minePlaying": "läuft · {players, plural, one {# Spieler} other {# Spieler}}",
+      "mineFinished": "beendet · {players, plural, one {# Spieler} other {# Spieler}}",
       "mineOpen": "Öffnen",
       "join": "Einem Event beitreten",
       "joinPlaceholder": "Code oder Link des Events",
@@ -831,6 +832,7 @@
       "reconnecting": "Verbindung verloren. Neuer Versuch…",
       "watching": "Du schaust diesem Event zu. Die Karten der Spieler bleiben verborgen.",
       "tableOpening": "Dein Tisch wird geöffnet…",
+      "opponentLeft": "Dein Gegner hat das Event verlassen: Das Match geht an dich.",
       "timeLeft": "Verbleibende Zeit: {time}",
       "error": {
         "NOT_FOUND": "Dieses Event existiert nicht.",

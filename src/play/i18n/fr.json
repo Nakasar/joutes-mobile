@@ -695,6 +695,7 @@
       "signIn": "Connectez-vous pour créer ou rejoindre un évènement en ligne.",
       "mineWaiting": "en attente · {players, plural, one {# joueur} other {# joueurs}}",
       "minePlaying": "en cours · {players, plural, one {# joueur} other {# joueurs}}",
+      "mineFinished": "terminé · {players, plural, one {# joueur} other {# joueurs}}",
       "mineOpen": "Ouvrir",
       "join": "Rejoindre un évènement",
       "joinPlaceholder": "Code ou lien de l'évènement",
@@ -831,6 +832,7 @@
       "reconnecting": "Connexion perdue. Nouvelle tentative en cours…",
       "watching": "Vous regardez cet évènement. Les cartes des joueurs restent cachées.",
       "tableOpening": "Votre table s'ouvre…",
+      "opponentLeft": "Votre adversaire a quitté l'évènement : le match vous revient.",
       "timeLeft": "Temps restant : {time}",
       "error": {
         "NOT_FOUND": "Cet évènement n'existe pas.",
