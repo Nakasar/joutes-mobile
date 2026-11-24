@@ -2198,6 +2198,23 @@
     "exit": "Tisch verlassen",
     "winner": "{name} gewinnt",
     "minutes": "{minutes} Min.",
+    "lookup": {
+      "button": "Karte suchen",
+      "title": "Karte suchen",
+      "placeholder": "Kartenname",
+      "rulings": "Errata und Rulings",
+      "none": "Keine Errata und kein Ruling zu dieser Karte.",
+      "loading": "Wird geladen",
+      "error": "Diese Karte konnte nicht geladen werden.",
+      "deprecated": "Veraltet",
+      "source": "Quelle",
+      "fullCard": "Vollständige Kartenseite öffnen",
+      "types": {
+        "errata": "Errata",
+        "clarification": "Klarstellung",
+        "ruling": "Ruling"
+      }
+    },
     "rb": {
       "mode": {
         "duel": "Duell",

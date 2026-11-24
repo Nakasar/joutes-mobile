@@ -2198,6 +2198,23 @@
     "exit": "Leave the table",
     "winner": "{name} wins",
     "minutes": "{minutes} min",
+    "lookup": {
+      "button": "Look up a card",
+      "title": "Look up a card",
+      "placeholder": "Card name",
+      "rulings": "Errata and rulings",
+      "none": "No errata or ruling for this card.",
+      "loading": "Loading",
+      "error": "Could not load this card.",
+      "deprecated": "Outdated",
+      "source": "Source",
+      "fullCard": "Open the full card page",
+      "types": {
+        "errata": "Errata",
+        "clarification": "Clarification",
+        "ruling": "Ruling"
+      }
+    },
     "rb": {
       "mode": {
         "duel": "Duel",
