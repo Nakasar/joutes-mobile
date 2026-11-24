@@ -32,6 +32,7 @@ import {
   DeckSelect,
   GameMenu,
   LastEvent,
+  LookupButton,
   companionFonts,
   useCompanion,
   useCompanionDecks,
@@ -265,9 +266,12 @@ export function RiftboundCompanion() {
   ) : (
     <div className="flex h-[124px] w-full items-center gap-2">
       {fieldButtons.length > 0 ? fieldButtons : <p className="flex-1 text-center text-xs cmp-muted">{t("rb.noField")}</p>}
-      <div className="flex w-[78px] flex-none flex-col items-center gap-1.5">
-        <div className="cmp-title text-sm">{t("rb.turn", { turn: state.turn })}</div>
-        <button type="button" className="h-9 w-[78px] rounded-full text-[11.5px] font-bold" style={{ background: "var(--cmp-accent-strong)", color: "var(--cmp-on-accent)" }} onClick={() => play(endRiftboundTurn)}>
+      <div className="flex w-[96px] flex-none flex-col items-center gap-1.5">
+        <div className="flex items-center gap-1.5">
+          <div className="cmp-title whitespace-nowrap text-sm">{t("rb.turn", { turn: state.turn })}</div>
+          <LookupButton size={28} />
+        </div>
+        <button type="button" className="h-9 w-full rounded-full text-[11.5px] font-bold" style={{ background: "var(--cmp-accent-strong)", color: "var(--cmp-on-accent)" }} onClick={() => play(endRiftboundTurn)}>
           {t("rb.endTurn")}
         </button>
         <div className="flex gap-1.5">
@@ -284,6 +288,7 @@ export function RiftboundCompanion() {
 
   return (
     <CompanionTable
+      game="riftbound"
       theme="rb"
       count={state.players.length}
       band

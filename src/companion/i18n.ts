@@ -76,3 +76,9 @@ function formatArgument(body: string, values: Record<string, string | number>, l
   const branch = branches.get(`=${count}`) ?? branches.get(category) ?? branches.get("other") ?? "";
   return formatIcu(branch.split("#").join(String(count)), values, lang);
 }
+
+/** La langue de l'interface, comme `useLocale` de next-intl sur le site. */
+export function useLocale(): string {
+  const { i18n } = useTranslation();
+  return i18n.resolvedLanguage ?? i18n.language ?? "fr";
+}

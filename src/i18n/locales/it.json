@@ -2198,6 +2198,23 @@
     "exit": "Lascia il tavolo",
     "winner": "{name} vince",
     "minutes": "{minutes} min",
+    "lookup": {
+      "button": "Cerca una carta",
+      "title": "Cerca una carta",
+      "placeholder": "Nome della carta",
+      "rulings": "Errata e ruling",
+      "none": "Nessun errata né ruling per questa carta.",
+      "loading": "Caricamento",
+      "error": "Impossibile caricare questa carta.",
+      "deprecated": "Obsoleto",
+      "source": "Fonte",
+      "fullCard": "Apri la scheda completa",
+      "types": {
+        "errata": "Errata",
+        "clarification": "Chiarimento",
+        "ruling": "Ruling"
+      }
+    },
     "rb": {
       "mode": {
         "duel": "Duello",

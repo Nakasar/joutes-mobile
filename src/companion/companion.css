@@ -595,6 +595,35 @@
   @keyframes cmp-fade { 0%, 75% { opacity: 1; } 100% { opacity: 0; } }
 }
 
+/* Trois boutons ronds se partagent la largeur de la bande SWU. */
+.cmp-swu-hubtools .cmp-round { width: auto; min-width: 0; flex: 1 1 0; }
+
+/* La loupe : une carte et ses rulings, sans quitter la table. */
+.cmp-lookup { gap: 12px; min-height: 60%; }
+/* Dans la loupe, les résultats poussent la fiche au lieu de flotter dessus. */
+.cmp-lookup .cmp-results { position: static; margin-top: 6px; max-height: none; box-shadow: none; }
+.cmp-lookup-image { width: 34%; max-width: 160px; border-radius: 8px; box-shadow: 0 6px 18px rgb(0 0 0 / 0.5); flex: none; }
+.cmp-lookup-image[data-landscape="true"] { width: 52%; max-width: 240px; }
+.cmp-ruling {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1px solid var(--cmp-line);
+  border-radius: 12px;
+  background: var(--cmp-surface);
+}
+.cmp-swu .cmp-ruling { border-radius: 2px; }
+.cmp-ruling[data-deprecated="true"] { opacity: 0.55; }
+.cmp-ruling .cmp-pill[data-type="errata"] { background: #b3412f; color: #fff4ef; }
+.cmp-ruling .cmp-pill[data-type="clarification"] { background: #2f6db3; color: #eef6ff; }
+.cmp-ruling-text { font-size: 13.5px; line-height: 1.45; }
+.cmp-ruling-text p + p, .cmp-ruling-text ul, .cmp-ruling-text ol { margin-top: 6px; }
+.cmp-ruling-text ul { list-style: disc; padding-left: 18px; }
+.cmp-ruling-text ol { list-style: decimal; padding-left: 18px; }
+.cmp-ruling-text strong { font-weight: 700; }
+.cmp-link { color: var(--cmp-accent-ink); text-decoration: underline; text-underline-offset: 2px; }
+
 /* Le leader en bouton n'apparaît que dans une place trop basse pour sa carte. */
 .cmp-swu-deploy { display: none; }
 /* Téléphone en paysage : chaque place n'a qu'une bande de hauteur. Les PV et
@@ -632,4 +661,4 @@
 }
 
 /* Écran du compagnon dans l’app : un peu d’air sous le sous-titre. */
-.companion-screen > .cmp { margin-top: 12px; }
+.companion-screen > .cmp:not(.cmp-screen) { margin-top: 12px; }

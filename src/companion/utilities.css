@@ -128,6 +128,9 @@
   :is(.cmp, .cmp *).hidden {
     display: none;
   }
+  :is(.cmp, .cmp *).inline-flex {
+    display: inline-flex;
+  }
   :is(.cmp, .cmp *).table {
     display: table;
   }
@@ -236,11 +239,11 @@
   :is(.cmp, .cmp *).w-\[70\%\] {
     width: 70%;
   }
-  :is(.cmp, .cmp *).w-\[78px\] {
-    width: 78px;
+  :is(.cmp, .cmp *).w-\[96px\] {
+    width: 96px;
   }
-  :is(.cmp, .cmp *).w-\[104px\] {
-    width: 104px;
+  :is(.cmp, .cmp *).w-\[124px\] {
+    width: 124px;
   }
   :is(.cmp, .cmp *).w-auto {
     width: auto;
@@ -302,6 +305,9 @@
   }
   :is(.cmp, .cmp *).items-center {
     align-items: center;
+  }
+  :is(.cmp, .cmp *).items-start {
+    align-items: flex-start;
   }
   :is(.cmp, .cmp *).justify-between {
     justify-content: space-between;
@@ -477,6 +483,10 @@
   :is(.cmp, .cmp *).leading-snug {
     --tw-leading: 1.375;
     line-height: 1.375;
+  }
+  :is(.cmp, .cmp *).leading-tight {
+    --tw-leading: 1.25;
+    line-height: 1.25;
   }
   :is(.cmp, .cmp *).font-bold {
     --tw-font-weight: 700;

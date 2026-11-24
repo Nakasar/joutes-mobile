@@ -28,6 +28,7 @@ import {
   CardThumb,
   CompanionTable,
   GameMenu,
+  LookupButton,
   companionFonts,
   useCompanion,
   useLockedScroll,
@@ -221,6 +222,7 @@ export function MtgCompanion() {
 
   return (
     <CompanionTable
+      game="mtg"
       theme="mtg"
       count={state.players.length}
       band={false}
@@ -231,6 +233,7 @@ export function MtgCompanion() {
               <Undo2 className="h-4 w-4" />
             </button>
           )}
+          {!compact && <LookupButton className="h-10 w-10" />}
           <button type="button" className="cmp-round cmp-round-main" onClick={() => setMenu(true)} aria-label={t("menu")}>
             <Menu className="h-6 w-6" />
           </button>

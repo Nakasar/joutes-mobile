@@ -2198,6 +2198,23 @@
     "exit": "Quitter la table",
     "winner": "{name} l'emporte",
     "minutes": "{minutes} min",
+    "lookup": {
+      "button": "Chercher une carte",
+      "title": "Chercher une carte",
+      "placeholder": "Nom de la carte",
+      "rulings": "Erratas et rulings",
+      "none": "Aucun errata ni ruling pour cette carte.",
+      "loading": "Chargement",
+      "error": "Impossible de charger la fiche de cette carte.",
+      "deprecated": "Obsolète",
+      "source": "Source",
+      "fullCard": "Voir la fiche complète",
+      "types": {
+        "errata": "Errata",
+        "clarification": "Clarification",
+        "ruling": "Ruling"
+      }
+    },
     "rb": {
       "mode": {
         "duel": "Duel",

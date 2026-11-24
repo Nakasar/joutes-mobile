@@ -29,6 +29,7 @@ import {
   DeckSelect,
   GameMenu,
   LastEvent,
+  LookupButton,
   companionFonts,
   useCompanion,
   useCompanionDecks,
@@ -213,11 +214,12 @@ export function SwuCompanion() {
         <div className="text-[10px] tracking-[0.3em] cmp-muted" style={{ fontFamily: "var(--cmp-mono)" }}>{t("swu.round")}</div>
         <div className="text-4xl font-bold leading-none" style={{ fontFamily: "var(--cmp-mono)", color: "#5cc8ff", textShadow: "0 0 12px #5cc8ff" }}>{state.round}</div>
       </div>
-      <div className="cmp-swu-hubtools flex w-[104px] flex-col gap-1.5">
+      <div className="cmp-swu-hubtools flex w-[124px] flex-col gap-1.5">
         <button type="button" className="h-9 rounded-[2px] text-[10.5px] font-bold tracking-wider" style={{ background: "#5cc8ff", color: "#02060c", fontFamily: "var(--cmp-mono)" }} onClick={() => play(nextSwuRound)}>
           {t("swu.regroup")}
         </button>
         <div className="flex gap-1.5">
+          <LookupButton className="h-8 flex-1" />
           <button type="button" className="cmp-round h-8 flex-1" onClick={undo} disabled={!canUndo} aria-label={t("undo")}>
             <Undo2 className="h-4 w-4" />
           </button>
@@ -231,6 +233,7 @@ export function SwuCompanion() {
 
   return (
     <CompanionTable
+      game="swu"
       theme="swu"
       count={state.players.length}
       band
