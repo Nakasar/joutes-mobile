@@ -28,6 +28,7 @@ import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { colorFor, initialOf, tintStyle } from "../lib/game-visuals";
 import { useAuth } from "../store/auth";
+import { isCompanionGame } from "../companion/state";
 
 interface FeatureLink {
   key: string;
@@ -137,13 +138,13 @@ export function GameScreen() {
         label: t("gameHub.meta"),
       });
     }
-    // Le compteur de points du site, entièrement local : rien à activer.
-    if (gameSlug === "riftbound") {
+    // Le compagnon de partie du site, entièrement local : rien à activer.
+    if (isCompanionGame(gameSlug)) {
       list.push({
-        key: "tracker",
-        to: "/games/riftbound/tracker",
+        key: "companion",
+        to: `/games/${gameSlug}/companion`,
         icon: <AwardIcon size={21} />,
-        label: t("gameHub.tracker"),
+        label: t("gameHub.companion"),
       });
     }
     if (game.features?.deckChecker) {

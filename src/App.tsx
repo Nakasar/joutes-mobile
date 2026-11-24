@@ -27,7 +27,7 @@ import { LairDetailScreen } from "./screens/LairDetailScreen";
 import { LairsScreen } from "./screens/LairsScreen";
 import { LoginScreen } from "./screens/LoginScreen";
 import { MetaTournamentScreen } from "./screens/MetaTournamentScreen";
-import { TrackerScreen } from "./screens/TrackerScreen";
+import { CompanionScreen } from "./screens/CompanionScreen";
 import { ProfileEditScreen } from "./screens/ProfileEditScreen";
 import { MySellListScreen } from "./screens/MySellListScreen";
 import { NewsDetailScreen } from "./screens/NewsDetailScreen";
@@ -150,7 +150,9 @@ function Shell() {
                 />
                 <Route path="/games/:gameSlug/social" element={<GameSocialScreen />} />
                 <Route path="/games/:gameSlug/meta" element={<GameMetaScreen />} />
-                <Route path="/games/riftbound/tracker" element={<TrackerScreen />} />
+                <Route path="/games/:gameSlug/companion" element={<CompanionScreen />} />
+                {/* L'ancien suivi de partie est devenu le compagnon : la partie en cours est reprise. */}
+                <Route path="/games/riftbound/tracker" element={<Navigate to="/games/riftbound/companion" replace />} />
                 <Route
                   path="/games/:gameSlug/meta/tournaments/:date/:slug"
                   element={<MetaTournamentScreen />}
