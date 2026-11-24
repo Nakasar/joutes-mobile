@@ -2095,6 +2095,11 @@
     }
   },
   "meta": {
+    "upsell": {
+      "title": "The meta: Joutes Expert",
+      "body": "Played cards, staples, winrates and tournament details are reserved for Joutes Expert subscribers, on joutes.app.",
+      "groupBody": "The group's meta, what its members play in tournaments and their head-to-heads, is reserved for Joutes Expert subscribers, on joutes.app."
+    },
     "title": "Meta",
     "titleFor": "Meta · {{game}}",
     "tournament": "Tournament",

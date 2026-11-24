@@ -6,6 +6,7 @@ import { useApi } from "../hooks/useApi";
 import { currentLocale } from "../i18n";
 import { domainColor, percentFormatter, placementLabel, pointsDelta, shortLegend } from "../lib/group-game";
 import { CachedImage } from "./CachedImage";
+import { MetaUpsell } from "./MetaUpsell";
 import { StatusView } from "./StatusView";
 
 /**
@@ -37,12 +38,16 @@ export function GroupMetaView({
 
   return (
     <>
-      <StatusView
-        loading={meta.loading && !page}
-        error={meta.error}
-        onRetry={meta.reload}
-        empty={page && !page.game ? t("social.groupMeta.empty") : undefined}
-      />
+      {meta.errorCode === "SUBSCRIPTION" ? (
+        <MetaUpsell group />
+      ) : (
+        <StatusView
+          loading={meta.loading && !page}
+          error={meta.error}
+          onRetry={meta.reload}
+          empty={page && !page.game ? t("social.groupMeta.empty") : undefined}
+        />
+      )}
 
       {page?.game && (
         <>

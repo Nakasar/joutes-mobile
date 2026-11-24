@@ -2095,6 +2095,11 @@
     }
   },
   "meta": {
+    "upsell": {
+      "title": "Das Meta: Joutes Expert",
+      "body": "Gespielte Karten, Staples, Winrates und Turnierdetails sind Abonnenten von Joutes Expert vorbehalten, auf joutes.app.",
+      "groupBody": "Das Meta der Gruppe, was ihre Mitglieder auf Turnieren spielen und ihre direkten Duelle, ist Abonnenten von Joutes Expert vorbehalten, auf joutes.app."
+    },
     "title": "Meta",
     "titleFor": "Meta · {{game}}",
     "tournament": "Turnier",

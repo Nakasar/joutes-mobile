@@ -6,6 +6,11 @@ interface UseApiResult<T> {
   data: T | null;
   loading: boolean;
   error: string | null;
+  /**
+   * Le code d'erreur de l'API (`code` du corps), quand elle en donne un — par
+   * exemple `SUBSCRIPTION` pour une fonctionnalité réservée à un abonnement.
+   */
+  errorCode: string | null;
   reload: () => void;
 }
 
@@ -24,6 +29,7 @@ export function useApi<T>(
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [errorCode, setErrorCode] = useState<string | null>(null);
   const [tick, setTick] = useState(0);
   const { generation } = useNetworkStatus();
   const fnRef = useRef(fn);
@@ -56,6 +62,7 @@ export function useApi<T>(
     if (!silent) {
       setLoading(true);
       setError(null);
+      setErrorCode(null);
     }
     fnRef
       .current()
@@ -64,9 +71,11 @@ export function useApi<T>(
         dataRef.current = result;
         setData(result);
         setError(null);
+        setErrorCode(null);
       })
       .catch((err: unknown) => {
         if (cancelled || silent) return;
+        setErrorCode(apiErrorCode(err));
         setError(
           err instanceof ApiError || err instanceof Error
             ? err.message
@@ -86,5 +95,12 @@ export function useApi<T>(
 
   const reload = useCallback(() => setTick((t) => t + 1), []);
 
-  return { data, loading, error, reload };
+  return { data, loading, error, errorCode, reload };
+}
+
+/** Le `code` du corps d'une erreur de l'API, s'il y en a un. */
+export function apiErrorCode(err: unknown): string | null {
+  if (!(err instanceof ApiError)) return null;
+  const body = err.body as { code?: unknown } | null | undefined;
+  return typeof body?.code === "string" ? body.code : null;
 }

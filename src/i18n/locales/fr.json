@@ -2095,6 +2095,11 @@
     }
   },
   "meta": {
+    "upsell": {
+      "title": "La méta : Joutes Expert",
+      "body": "Les cartes jouées, les staples, les winrates et le détail des tournois sont réservés aux abonnés Joutes Expert, sur joutes.app.",
+      "groupBody": "La méta du groupe, ce que jouent ses membres en tournoi et leurs confrontations, est réservée aux abonnés Joutes Expert, sur joutes.app."
+    },
     "title": "Méta",
     "titleFor": "Méta · {{game}}",
     "tournament": "Tournoi",
