@@ -5,6 +5,7 @@ import { getGameMeta, type GameMetaParams, type GameMetaResponse, type MetaAppDe
 import { BackHeader } from "../components/BackHeader";
 import { CachedImage } from "../components/CachedImage";
 import { CaretIcon, ChevronIcon } from "../components/icons";
+import { MetaUpsell } from "../components/MetaUpsell";
 import { StatusView } from "../components/StatusView";
 import { Tabs } from "../components/Tabs";
 import { useApi } from "../hooks/useApi";
@@ -38,12 +39,16 @@ export function GameMetaScreen() {
     <div className="screen">
       <BackHeader title={page ? t("meta.titleFor", { game: page.game.name }) : t("meta.title")} />
 
-      <StatusView
-        loading={meta.loading && !page}
-        error={meta.error}
-        onRetry={meta.reload}
-        empty={page && page.totalDecks === 0 ? t("meta.empty") : undefined}
-      />
+      {meta.errorCode === "SUBSCRIPTION" ? (
+        <MetaUpsell />
+      ) : (
+        <StatusView
+          loading={meta.loading && !page}
+          error={meta.error}
+          onRetry={meta.reload}
+          empty={page && page.totalDecks === 0 ? t("meta.empty") : undefined}
+        />
+      )}
 
       {page && page.totalDecks > 0 && (
         <>

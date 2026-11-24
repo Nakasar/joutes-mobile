@@ -4,6 +4,7 @@ import { getMetaTournament } from "../api/meta";
 import { BackHeader } from "../components/BackHeader";
 import { CachedImage } from "../components/CachedImage";
 import { ExternalLinkIcon } from "../components/icons";
+import { MetaUpsell } from "../components/MetaUpsell";
 import { StatusView } from "../components/StatusView";
 import { useApi } from "../hooks/useApi";
 import { currentLocale } from "../i18n";
@@ -26,7 +27,11 @@ export function MetaTournamentScreen() {
   return (
     <div className="screen">
       <BackHeader title={page?.source ?? t("meta.tournament")} />
-      <StatusView loading={tournament.loading && !page} error={tournament.error} onRetry={tournament.reload} />
+      {tournament.errorCode === "SUBSCRIPTION" ? (
+        <MetaUpsell />
+      ) : (
+        <StatusView loading={tournament.loading && !page} error={tournament.error} onRetry={tournament.reload} />
+      )}
 
       {page && (
         <>
