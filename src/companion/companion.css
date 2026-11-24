@@ -1,0 +1,635 @@
+/*
+ * Copie du thème du compagnon du site (joutes-app, components/companion).
+ * Les polices viennent de la feuille Google Fonts de l'app (index.html).
+ */
+.cmp {
+  --font-engrave: Cinzel;
+  --font-grimoire: "Cormorant Garamond";
+}
+
+/*
+ * Compagnon de partie : trois habillages, un par jeu.
+ *
+ * Riftbound reprend le bois et le laiton de la table de jeu, Star Wars:
+ * Unlimited l'Holotable de la table SWU, Magic un grimoire sombre avec une
+ * couleur de mana par joueur. Tout passe par les jetons --cmp-* : les écrans
+ * ne connaissent que ces noms.
+ */
+
+.cmp {
+  --cmp-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: var(--cmp-ink);
+  font-family: var(--cmp-font-body, inherit);
+}
+
+.cmp-rb {
+  --cmp-bg: radial-gradient(90% 50% at 50% 0%, #3a2a1c 0%, #140d08 60%, #070504 100%);
+  --cmp-seat: radial-gradient(80% 70% at 50% 60%, #3a2a1c 0%, #140d08 70%);
+  --cmp-ink: #efe6d2;
+  --cmp-muted: #b9a684;
+  --cmp-accent: #c9a45a;
+  --cmp-accent-ink: #f1dca4;
+  --cmp-accent-strong: linear-gradient(180deg, #e3c37a, #a8843f);
+  --cmp-on-accent: #1d120a;
+  --cmp-line: #7a5f2c;
+  --cmp-surface: rgb(0 0 0 / 0.3);
+  --cmp-band: repeating-linear-gradient(92deg, rgb(255 255 255 / 0.04) 0 2px, transparent 2px 9px), #3a2416;
+  --cmp-font-title: var(--font-engrave), Georgia, serif;
+  --cmp-radius: 14px;
+}
+
+.cmp-swu {
+  --cmp-bg: radial-gradient(80% 45% at 50% 0%, #0b2b44 0%, #02060c 70%);
+  --cmp-seat: #02060c;
+  --cmp-ink: #d6e8f2;
+  --cmp-muted: #8fb3c7;
+  --cmp-accent: #5cc8ff;
+  --cmp-accent-ink: #9fe3ff;
+  --cmp-accent-strong: #5cc8ff;
+  --cmp-on-accent: #02060c;
+  --cmp-line: rgb(92 200 255 / 0.45);
+  --cmp-surface: rgb(6 20 34 / 0.85);
+  --cmp-band: linear-gradient(180deg, #061422, #0a2236 50%, #061422);
+  --cmp-font-title: var(--cmp-mono);
+  --cmp-radius: 2px;
+}
+
+.cmp-mtg {
+  --cmp-bg: radial-gradient(100% 50% at 50% 0%, #2a2133 0%, #15121a 65%, #0c0a0f 100%);
+  --cmp-seat: #15121a;
+  --cmp-ink: #ece3cf;
+  --cmp-muted: #a99d86;
+  --cmp-accent: #d8c38f;
+  --cmp-accent-ink: #efe3c2;
+  --cmp-accent-strong: linear-gradient(180deg, #efdcab, #b99c5c);
+  --cmp-on-accent: #15121a;
+  --cmp-line: #5b4a33;
+  --cmp-surface: rgb(255 255 255 / 0.04);
+  --cmp-band: #0c0a0f;
+  --cmp-font-title: var(--font-grimoire), Georgia, serif;
+  --cmp-radius: 999px;
+}
+
+/* ---- Préparation ---- */
+
+.cmp-setup {
+  background: var(--cmp-bg);
+  border-radius: 20px;
+  border: 1px solid var(--cmp-line);
+  padding: 16px;
+  max-width: 34rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cmp-title {
+  font-family: var(--cmp-font-title);
+  font-weight: 700;
+  color: var(--cmp-accent-ink);
+  letter-spacing: 0.03em;
+}
+.cmp-swu .cmp-title { letter-spacing: 0.1em; text-transform: uppercase; text-shadow: 0 0 10px rgb(92 200 255 / 0.6); }
+
+.cmp-label {
+  font-size: 11px;
+  color: var(--cmp-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.cmp-swu .cmp-label { font-family: var(--cmp-mono); letter-spacing: 0.18em; }
+
+.cmp-muted { color: var(--cmp-muted); }
+
+.cmp-segments {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 4px;
+  padding: 4px;
+  border-radius: calc(var(--cmp-radius) + 2px);
+  background: var(--cmp-surface);
+  border: 1px solid var(--cmp-line);
+}
+.cmp-mtg .cmp-segments { border-radius: 16px; }
+.cmp-segment {
+  min-height: 44px;
+  border-radius: var(--cmp-radius);
+  border: 0;
+  background: none;
+  color: var(--cmp-ink);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.15;
+  padding: 4px 6px;
+  cursor: pointer;
+}
+.cmp-mtg .cmp-segment { border-radius: 12px; }
+.cmp-segment small { display: block; font-weight: 400; font-size: 10.5px; opacity: 0.85; }
+.cmp-segment[aria-pressed="true"] { background: var(--cmp-accent-strong); color: var(--cmp-on-accent); }
+
+.cmp-player {
+  border-radius: 16px;
+  padding: 12px;
+  border: 1px solid color-mix(in srgb, var(--who) 55%, transparent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--who) 12%, transparent), rgb(0 0 0 / 0.35));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cmp-swu .cmp-player {
+  border: 0;
+  border-left: 3px solid var(--who);
+  border-radius: 0;
+  background: var(--cmp-surface);
+  box-shadow: -6px 0 14px -6px var(--who);
+}
+/* Le coin coupé de l'holotable est dessiné, pas découpé : un clip-path
+   rognerait aussi la liste des résultats de recherche. */
+.cmp-swu .cmp-player::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  background: linear-gradient(225deg, #02060c 50%, color-mix(in srgb, var(--who) 60%, transparent) 50%, color-mix(in srgb, var(--who) 60%, transparent) calc(50% + 1px), transparent calc(50% + 1px));
+  pointer-events: none;
+}
+.cmp-swu .cmp-player { position: relative; }
+.cmp-mtg .cmp-player { background: var(--cmp-surface); border-color: #3a3040; }
+/* La liste des résultats passe au-dessus du joueur suivant. */
+.cmp-player:focus-within { position: relative; z-index: 31; }
+
+.cmp-name {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: 0;
+  border-bottom: 1px dashed transparent;
+  color: var(--cmp-ink);
+  font-weight: 700;
+  font-size: 16px;
+  padding: 4px 0;
+}
+.cmp-name:focus { outline: none; border-bottom-color: var(--cmp-line); }
+.cmp-name::placeholder { color: var(--cmp-muted); }
+.cmp-swu .cmp-name { font-family: var(--cmp-mono); color: var(--who); letter-spacing: 0.06em; text-transform: uppercase; }
+
+.cmp-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--who); flex: none; }
+
+.cmp-button {
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid var(--cmp-line);
+  background: var(--cmp-surface);
+  color: var(--cmp-accent-ink);
+  font-weight: 600;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.cmp-swu .cmp-button { border-radius: 2px; font-family: var(--cmp-mono); letter-spacing: 0.06em; }
+.cmp-mtg .cmp-button { border-radius: 999px; }
+.cmp-button:disabled { opacity: 0.45; cursor: default; }
+.cmp-button[aria-pressed="true"] { background: color-mix(in srgb, var(--cmp-accent) 18%, transparent); border-color: var(--cmp-accent); color: var(--cmp-ink); }
+
+.cmp-start {
+  min-height: 54px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--cmp-accent-strong);
+  color: var(--cmp-on-accent);
+  font-family: var(--cmp-font-title);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+}
+.cmp-swu .cmp-start { border-radius: 0; letter-spacing: 0.16em; box-shadow: 0 0 24px rgb(92 200 255 / 0.55); clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px)); }
+.cmp-mtg .cmp-start { border-radius: 999px; font-size: 20px; }
+
+.cmp-card-slot {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  background: rgb(0 0 0 / 0.35);
+  box-shadow: 0 0 0 1px var(--cmp-line), 0 6px 14px rgb(0 0 0 / 0.6);
+  flex: none;
+}
+.cmp-card-slot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+.cmp-search {
+  position: relative;
+}
+.cmp-search-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 10px;
+  border-radius: 10px;
+  border: 1px dashed var(--cmp-line);
+  color: var(--cmp-muted);
+}
+.cmp-swu .cmp-search-field { border-radius: 2px; border-style: solid; }
+.cmp-search-field input { flex: 1; min-width: 0; background: none; border: 0; color: var(--cmp-ink); font-size: 13px; outline: none; }
+.cmp-results {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 18rem;
+  overflow-y: auto;
+  border-radius: 12px;
+  border: 1px solid var(--cmp-line);
+  background: #111;
+  box-shadow: 0 16px 40px rgb(0 0 0 / 0.6);
+}
+.cmp-result {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border: 0;
+  border-bottom: 1px solid rgb(255 255 255 / 0.06);
+  background: none;
+  color: var(--cmp-ink);
+  text-align: left;
+  cursor: pointer;
+}
+.cmp-result:hover, .cmp-result:focus-visible { background: rgb(255 255 255 / 0.06); }
+.cmp-result img { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; flex: none; }
+
+/* ---- À la table ---- */
+
+.cmp-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  background: var(--cmp-band);
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+.cmp-mtg.cmp-screen { gap: 8px; padding: 8px; background: #0c0a0f; }
+
+/* Une place à table : la boîte intérieure pivote vers son joueur. */
+.cmp-seat {
+  position: relative;
+  container-type: size;
+  overflow: hidden;
+  min-width: 0;
+  min-height: 0;
+  background: var(--cmp-seat);
+}
+.cmp-mtg .cmp-seat { border-radius: 20px; }
+.cmp-seat-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100cqw;
+  height: 100cqh;
+  transform: translate(-50%, -50%) rotate(var(--turn, 0deg));
+  container-type: size;
+}
+.cmp-seat[data-side="true"] .cmp-seat-inner { width: 100cqh; height: 100cqw; }
+
+.cmp-hub {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--cmp-band);
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.6), 0 -8px 20px rgb(0 0 0 / 0.5), 0 8px 20px rgb(0 0 0 / 0.5);
+}
+.cmp-swu .cmp-hub { border-top: 1px solid var(--cmp-line); border-bottom: 1px solid var(--cmp-line); box-shadow: 0 0 24px rgb(92 200 255 / 0.18); }
+.cmp-hub-float {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.cmp-round {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--cmp-line);
+  background: rgb(0 0 0 / 0.4);
+  color: var(--cmp-accent-ink);
+  display: grid;
+  place-items: center;
+  flex: none;
+  cursor: pointer;
+}
+.cmp-round-main {
+  width: 56px;
+  height: 56px;
+  border: 0;
+  background: var(--cmp-accent-strong);
+  color: var(--cmp-on-accent);
+  box-shadow: 0 0 0 5px var(--cmp-band-solid, #0c0a0f);
+}
+.cmp-swu .cmp-round { border-radius: 2px; }
+
+.cmp-pill {
+  font-family: var(--cmp-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--cmp-accent);
+  color: var(--cmp-on-accent);
+  white-space: nowrap;
+}
+.cmp-swu .cmp-pill { border-radius: 2px; box-shadow: 0 0 12px var(--cmp-accent); }
+
+.cmp-toast {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  max-width: calc(100% - 24px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 11.5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #1d120a;
+  border: 1px solid var(--cmp-accent);
+  color: var(--cmp-accent-ink);
+  pointer-events: none;
+}
+.cmp-swu .cmp-toast { background: #061422; border-radius: 2px; font-family: var(--cmp-mono); }
+
+/* Le menu de la partie : une feuille droite, pour tout le monde. */
+.cmp-sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: rgb(0 0 0 / 0.72);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.cmp-sheet {
+  width: 100%;
+  max-width: 34rem;
+  max-height: 85%;
+  overflow-y: auto;
+  background: var(--cmp-bg);
+  border: 1px solid var(--cmp-line);
+  border-bottom: 0;
+  border-radius: 20px 20px 0 0;
+  padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.cmp-swu .cmp-sheet { border-radius: 0; }
+
+.cmp-over {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  background: rgb(0 0 0 / 0.9);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px;
+  text-align: center;
+  overflow-y: auto;
+}
+
+/* ---- Riftbound ---- */
+
+.cmp-rb-score {
+  width: min(34cqw, 40cqh);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 50% 35%, #4a3620, #1d120a 70%);
+  box-shadow: 0 0 0 3px #c9a45a, 0 0 0 7px #1d120a, 0 0 0 8px #7a5f2c, 0 14px 30px rgb(0 0 0 / 0.7);
+  font-family: var(--cmp-font-title);
+  line-height: 1;
+}
+.cmp-rb-score strong { display: block; font-weight: 900; font-size: min(17cqw, 20cqh); color: #f6e3b0; text-shadow: 0 2px 0 #7a5f2c; }
+.cmp-rb-score span { display: block; font-family: var(--cmp-mono); font-size: 10px; color: var(--cmp-muted); margin-top: 2px; text-align: center; }
+
+.cmp-pip { height: 8px; flex: 1; max-width: 28px; border-radius: 2px; background: rgb(255 255 255 / 0.08); }
+.cmp-pip[data-on="true"] { background: var(--who); box-shadow: 0 0 8px var(--who); }
+
+.cmp-rb-act {
+  min-height: 44px;
+  border-radius: 12px;
+  border: 1px solid #7a5f2c;
+  background: linear-gradient(180deg, rgb(201 164 90 / 0.18), rgb(0 0 0 / 0.3));
+  color: #f1dca4;
+  font-family: var(--cmp-font-title);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.cmp-field {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  min-height: 84px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #0f2a2c;
+  box-shadow: 0 0 0 2px var(--who, #7a5f2c);
+  cursor: pointer;
+}
+.cmp-field img { width: 100%; height: 100%; object-fit: cover; opacity: 0.85; }
+.cmp-field .cmp-flag {
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  font-family: var(--cmp-font-title);
+  font-weight: 700;
+  font-size: 11px;
+  padding: 3px 7px;
+  border-radius: 3px 3px 3px 0;
+  background: var(--who, #9c8b6c);
+  color: #120c06;
+}
+.cmp-field .cmp-field-name {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 4px 6px;
+  font-size: 11px;
+  text-align: left;
+  background: linear-gradient(0deg, rgb(0 0 0 / 0.85), transparent);
+  color: #efe6d2;
+}
+
+/* ---- Star Wars: Unlimited ---- */
+
+.cmp-swu-band {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: rgb(6 20 34 / 0.85);
+  border-left: 3px solid var(--who);
+  box-shadow: -6px 0 14px -6px var(--who);
+  font-family: var(--cmp-mono);
+  font-size: 11.5px;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+}
+.cmp-swu-hp { font-family: var(--cmp-mono); font-weight: 700; font-size: min(22cqw, 26cqh); line-height: 0.9; color: #d6f2ff; text-shadow: 0 0 18px #d6f2ff; }
+.cmp-swu-hp[data-low="true"] { color: #ff5a4d; text-shadow: 0 0 18px #ff5a4d; }
+.cmp-swu-cell { flex: 1; max-width: 6px; height: 12px; border-radius: 1px; background: rgb(92 200 255 / 0.12); }
+.cmp-swu-cell[data-on="true"] { background: var(--who); }
+.cmp-swu-cell[data-on="true"][data-low="true"] { background: #ff5a4d; }
+.cmp-swu-hit {
+  min-height: 48px;
+  border-radius: 2px;
+  font-family: var(--cmp-mono);
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  border: 1px solid rgb(255 90 77 / 0.6);
+  background: rgb(60 10 8 / 0.6);
+  color: #ffb4a8;
+}
+.cmp-swu-hit[data-heal="true"] { border-color: var(--cmp-line); background: rgb(6 20 34 / 0.8); color: #9fe3ff; font-weight: 500; font-size: 13px; }
+.cmp-swu-toggle {
+  min-height: 36px;
+  border-radius: 2px;
+  border: 1px solid rgb(92 200 255 / 0.4);
+  background: rgb(6 20 34 / 0.8);
+  color: #7fb4cf;
+  font-family: var(--cmp-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+.cmp-swu-toggle[aria-pressed="true"] { background: rgb(92 200 255 / 0.18); color: #d6f2ff; }
+.cmp-swu-init {
+  width: 66px;
+  height: 66px;
+  flex: none;
+  border-radius: 50%;
+  border: 2px solid #5cc8ff;
+  background: radial-gradient(circle, rgb(92 200 255 / 0.35), rgb(2 6 12 / 0.9) 70%);
+  color: #9fe3ff;
+  font-family: var(--cmp-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  box-shadow: 0 0 20px rgb(92 200 255 / 0.5);
+  cursor: pointer;
+}
+
+/* ---- Magic ---- */
+
+.cmp-mtg-life {
+  font-family: var(--cmp-font-title);
+  font-weight: 700;
+  font-size: min(42cqh, 34cqw);
+  line-height: 0.85;
+  color: #fbf3df;
+  text-shadow: 0 6px 30px rgb(0 0 0 / 0.6);
+}
+.cmp-mtg-half {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  border: 0;
+  background: none;
+  color: rgb(251 243 223 / 0.4);
+  display: flex;
+  align-items: center;
+  font-size: 26px;
+  cursor: pointer;
+}
+.cmp-mtg-half:active { background: rgb(255 255 255 / 0.05); }
+.cmp-mtg-chip {
+  min-width: 40px;
+  min-height: 36px;
+  padding: 0 10px;
+  border-radius: 10px;
+  border: 1px solid var(--chip, rgb(255 255 255 / 0.18));
+  background: rgb(0 0 0 / 0.35);
+  color: #fbf3df;
+  font-weight: 700;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+}
+.cmp-mtg-out { filter: grayscale(0.8) brightness(0.55); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .cmp-toast { animation: cmp-fade 2.4s ease forwards; }
+  @keyframes cmp-fade { 0%, 75% { opacity: 1; } 100% { opacity: 0; } }
+}
+
+/* Le leader en bouton n'apparaît que dans une place trop basse pour sa carte. */
+.cmp-swu-deploy { display: none; }
+/* Téléphone en paysage : chaque place n'a qu'une bande de hauteur. Les PV et
+   les coups se rangent sur une ligne, la carte du leader devient un bouton. */
+@container (max-height: 230px) {
+  .cmp-swu-label, .cmp-swu-cells, .cmp-swu-leader { display: none; }
+  .cmp-swu-deploy { display: block; }
+  .cmp-swu-body { gap: 8px; }
+  .cmp-swu-main { flex-direction: row; gap: 10px; }
+  .cmp-swu-hp { font-size: min(14cqw, 34cqh); }
+  .cmp-swu-hits { flex: 1; }
+  .cmp-swu-hit { min-height: 40px; }
+  .cmp-swu-side { justify-content: center; gap: 4px; }
+  .cmp-swu-toggle { min-height: 28px; }
+}
+
+/* Écran bas (téléphone en paysage) : la bande du milieu rend de la hauteur aux joueurs. */
+@media (max-height: 500px) {
+  .cmp-swu-hubrow { height: 52px; }
+  .cmp-swu-hubtools { width: auto; flex-direction: row; align-items: center; }
+  .cmp-swu-hubtools > button { padding-inline: 12px; }
+  .cmp-swu-hubtools > div > .cmp-round { width: 36px; flex: none; }
+  /* Qui a l'initiative se lit déjà sur sa place : le jeton garde son seul titre. */
+  .cmp-swu-init { width: 48px; height: 48px; font-size: 9px; }
+  .cmp-swu-init br, .cmp-swu-init span { display: none; }
+}
+
+/* App mobile : la table passe au-dessus de la barre d'onglets et évite l'encoche. */
+.cmp-screen {
+  z-index: 200;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+.cmp-mtg.cmp-screen {
+  padding: calc(8px + env(safe-area-inset-top)) calc(8px + env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) calc(8px + env(safe-area-inset-left));
+}
+
+/* Écran du compagnon dans l’app : un peu d’air sous le sous-titre. */
+.companion-screen > .cmp { margin-top: 12px; }
